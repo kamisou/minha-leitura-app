@@ -21,24 +21,9 @@ class HomeScreen extends HookWidget {
       body: PageView(
         controller: pageController,
         children: const [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 50,
-            ),
-            child: BooksHomePage(),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 50,
-            ),
-            child: BooksHomePage(),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 50,
-            ),
-            child: BooksHomePage(),
-          ),
+          BooksHomePage(),
+          BooksHomePage(),
+          BooksHomePage(),
         ],
       ),
       bottomSheet: NavBarHome(

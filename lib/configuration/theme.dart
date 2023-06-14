@@ -44,6 +44,10 @@ final ThemeData _theme = ThemeData(
       fontFamily: _fontFamily,
       fontWeight: FontWeight.w700,
     ),
+    headlineMedium: TextStyle(
+      fontFamily: _fontFamily,
+      fontWeight: FontWeight.w700,
+    ),
   ),
   useMaterial3: true,
 );
