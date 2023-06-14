@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../../shared/presentation/widgets/appbar_user_content.dart';
+import '../../../shared/presentation/widgets/navbar_home.dart';
 import '../pages/books_home_page.dart';
 
 class HomeScreen extends HookWidget {
@@ -39,6 +40,11 @@ class HomeScreen extends HookWidget {
             child: BooksHomePage(),
           ),
         ],
+      ),
+      bottomSheet: NavBarHome(
+        controller: pageController,
+        // TODO: utilizar classe de ícones svg customizada
+        icons: const ['bars', 'home', 'book'],
       ),
     );
   }

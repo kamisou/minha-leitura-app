@@ -65,7 +65,7 @@ android {
             keyAlias keyProperties['keyAlias']
             keyPassword keyProperties['keyPassword']
             storePassword keyProperties['storePassword']
-            storeFile keyProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storeFile keyProperties['storeFile'] ? file(keyProperties['storeFile']) : null
         }
     }
 
