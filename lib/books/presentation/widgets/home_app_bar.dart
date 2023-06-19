@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class AppBarUserContent extends HookWidget {
-  const AppBarUserContent({
+import '../../../profile/domain/models/user.dart';
+import '../../../profile/presentation/hooks/use_user_initials.dart';
+
+class HomeAppBar extends HookWidget {
+  const HomeAppBar({
     super.key,
-    required this.userName,
-    this.avatarUrl,
+    required this.user,
     this.maxInitialLetters = 2,
   });
 
-  final String userName;
-
-  final String? avatarUrl;
+  final User user;
 
   final int maxInitialLetters;
 
   @override
   Widget build(BuildContext context) {
-    final initials = useMemoized(
-      () => userName.split(' ').take(maxInitialLetters).map((e) => e[0]).join(),
-      [userName, maxInitialLetters],
-    );
+    final initials = useUserInitials(user);
 
     return Row(
       children: [
         CircleAvatar(
-          foregroundImage: avatarUrl != null ? NetworkImage(avatarUrl!) : null,
+          foregroundImage: user.avatar != null
+              ? NetworkImage(
+                  user.avatar!,
+                )
+              : null,
           child: Text(
             initials,
             style: const TextStyle(fontWeight: FontWeight.w700),
@@ -40,7 +41,7 @@ class AppBarUserContent extends HookWidget {
                 style: Theme.of(context).textTheme.titleMedium,
                 children: [
                   TextSpan(
-                    text: userName,
+                    text: user.name,
                     style: const TextStyle(fontWeight: FontWeight.w700),
                   ),
                 ],

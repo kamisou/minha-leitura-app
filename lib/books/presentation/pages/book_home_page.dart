@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../../../profile/domain/models/user.dart';
+import '../widgets/home_app_bar.dart';
 import '../../domain/models/book.dart';
-import 'book_carrousel_content.dart';
-import 'greeting_content.dart';
+import 'content/book_carrousel_content.dart';
+import 'content/greeting_content.dart';
 
 class BookHomePage extends StatelessWidget {
   const BookHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // TODO: use real book listing
     const books = [
       Book(
         id: 1,
@@ -36,14 +39,19 @@ class BookHomePage extends StatelessWidget {
       ),
     ];
 
+    // TODO: use real app user
+    const user = User(name: 'João Marcos Kaminoski de Souza');
+
     return Column(
       children: [
+        AppBar(
+          title: const HomeAppBar(user: user),
+        ),
         Expanded(
           child: books.isEmpty
               ? const GreetingContent()
               : BookCarrouselContent(books: books),
         ),
-        const SizedBox(height: 84),
       ],
     );
   }

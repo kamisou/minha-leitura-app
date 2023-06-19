@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'books/presentation/screens/books_home_screen.dart';
+import 'configuration/pages.dart';
+import 'configuration/theme.dart';
 
-part 'configuration/theme.dart';
-
-class App extends StatelessWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeManagerProvider);
+    final pages = ref.watch(pagesProvider);
+
     return MaterialApp(
-      home: const HomeScreen(),
-      theme: _theme,
+      home: Navigator(
+        pages: pages,
+        onPopPage: (route, result) => route.didPop(result),
+      ),
+      theme: theme,
     );
   }
 }

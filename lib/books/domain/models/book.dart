@@ -1,15 +1,14 @@
-class Book {
-  const Book({
-    required this.id,
-    required this.coverArt,
-    required this.title,
-    required this.pageCount,
-    required this.pagesRead,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  final int id;
-  final String coverArt;
-  final String title;
-  final int pageCount;
-  final int pagesRead;
+part 'book.freezed.dart';
+
+@freezed
+class Book with _$Book {
+  const factory Book({
+    required int id,
+    required String coverArt,
+    required String title,
+    required int pageCount,
+    required int pagesRead,
+  }) = _Book;
 }

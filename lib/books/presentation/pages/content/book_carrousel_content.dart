@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../../../shared/presentation/hooks/use_page_notifier.dart';
-import '../../domain/models/book.dart';
-import '../widgets/book_details.dart';
+import '../../../../shared/presentation/hooks/use_page_notifier.dart';
+import '../../../../shared/presentation/widgets/loading_network_image.dart';
+import '../../../domain/models/book.dart';
+import '../../widgets/book_details.dart';
 
 class BookCarrouselContent extends HookWidget {
   BookCarrouselContent({
@@ -51,25 +52,34 @@ class BookCarrouselContent extends HookWidget {
           child: PageView.builder(
             controller: pageController,
             itemCount: books.length,
+            physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => AspectRatio(
               aspectRatio: 0.7,
               child: Center(
-                child: Container(
-                  clipBehavior: Clip.antiAlias,
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                child: LoadingNetworkImage(
+                  src: books[index].coverArt,
+                  builder: (image) => Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
+                    child: image,
                   ),
-                  child: Image.network(books[index].coverArt),
                 ),
               ),
             ),
           ),
         ),
         const SizedBox(height: 28),
-        BookDetails(book: books[page.value]),
+        ValueListenableBuilder(
+          valueListenable: page,
+          builder: (context, value, child) => BookDetails(
+            book: books[page.value],
+          ),
+        ),
       ],
     );
   }
