@@ -32,18 +32,22 @@ class AppBarUserContent extends HookWidget {
           ),
         ),
         const SizedBox(width: 10),
-        RichText(
-          text: TextSpan(
-            text: 'Olá, ',
-            style: Theme.of(context).textTheme.titleMedium,
-            children: [
-              TextSpan(
-                text: userName,
-                style: const TextStyle(fontWeight: FontWeight.w700),
+        Expanded(
+          child: FittedBox(
+            child: RichText(
+              text: TextSpan(
+                text: 'Olá, ',
+                style: Theme.of(context).textTheme.titleMedium,
+                children: [
+                  TextSpan(
+                    text: userName,
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ],
               ),
-            ],
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-          overflow: TextOverflow.ellipsis,
         ),
       ],
     );

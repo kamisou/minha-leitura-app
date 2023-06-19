@@ -28,7 +28,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/icons/compiled/
     - assets/vectors/compiled/
 
   fonts:

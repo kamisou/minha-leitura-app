@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:vector_graphics/vector_graphics.dart';
 
 class NavBarHome extends HookWidget {
   const NavBarHome({
@@ -12,7 +10,7 @@ class NavBarHome extends HookWidget {
 
   final PageController controller;
 
-  final List<String> icons;
+  final List<IconData> icons;
 
   @override
   Widget build(BuildContext context) {
@@ -101,20 +99,15 @@ class NavBarHome extends HookWidget {
                       alignment: Alignment.center,
                       width: iconSize,
                       height: iconSize,
-                      child: SvgPicture(
-                        AssetBytesLoader(
-                          'assets/icons/compiled/${icons[index]}.svg.vec',
-                        ),
-                        colorFilter: ColorFilter.mode(
-                          index == page.value.round()
-                              ? Color.lerp(
-                                  const Color(0xFFB7BCBF),
-                                  Theme.of(context).colorScheme.onPrimary,
-                                  distance,
-                                )!
-                              : const Color(0xFFB7BCBF),
-                          BlendMode.srcIn,
-                        ),
+                      child: Icon(
+                        icons[index],
+                        color: index == page.value.round()
+                            ? Color.lerp(
+                                const Color(0xFFB7BCBF),
+                                Theme.of(context).colorScheme.onPrimary,
+                                distance,
+                              )!
+                            : const Color(0xFFB7BCBF),
                       ),
                     ),
                   ),
