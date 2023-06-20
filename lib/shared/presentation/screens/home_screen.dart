@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../../books/presentation/pages/book_home_page.dart';
-import '../../../profile/presentation/pages/profile_page.dart';
+import '../../../profile/presentation/pages/options_page.dart';
 import '../widgets/navbar_home.dart';
 
 class HomeScreen extends HookWidget {
@@ -21,7 +21,7 @@ class HomeScreen extends HookWidget {
               controller: pageController,
               physics: const NeverScrollableScrollPhysics(),
               children: const [
-                ProfilePage(),
+                OptionsPage(),
                 BookHomePage(),
                 BookHomePage(),
               ],

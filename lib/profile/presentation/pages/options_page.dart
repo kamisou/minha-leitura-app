@@ -4,11 +4,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../../authentication/data/repositories/auth_repository.dart';
-import '../hooks/use_user_initials.dart';
+import '../../../shared/presentation/hooks/use_user_initials.dart';
 import '../widgets/profile_menu_option.dart';
 
-class ProfilePage extends HookConsumerWidget {
-  const ProfilePage({super.key});
+class OptionsPage extends HookConsumerWidget {
+  const OptionsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
