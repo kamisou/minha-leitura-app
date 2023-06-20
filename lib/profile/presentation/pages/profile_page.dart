@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:unicons/unicons.dart';
 
-import '../../domain/models/user.dart';
+import '../../../authentication/data/repositories/auth_repository.dart';
 import '../hooks/use_user_initials.dart';
 import '../widgets/profile_menu_option.dart';
 
@@ -11,17 +12,12 @@ class ProfilePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: use real app user
-    const user = User(name: 'João Marcos Kaminoski de Souza');
-
+    final user = ref.watch(authRepositoryProvider).requireValue!;
     final initials = useUserInitials(user);
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 40,
-          vertical: 32,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
         child: Column(
           children: [
             DecoratedBox(
@@ -69,8 +65,7 @@ class ProfilePage extends HookConsumerWidget {
             ProfileMenuOption(
               icon: UniconsLine.exit,
               label: 'Sair',
-              // TODO: go to login screen
-              onTap: () {},
+              onTap: () => context.go('/login'),
             ),
           ],
         ),

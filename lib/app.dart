@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'configuration/pages.dart';
+import 'configuration/router.dart';
 import 'configuration/theme.dart';
 
 class App extends ConsumerWidget {
@@ -10,13 +10,10 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeManagerProvider);
-    final pages = ref.watch(pagesProvider);
+    final router = ref.watch(routerProvider);
 
-    return MaterialApp(
-      home: Navigator(
-        pages: pages,
-        onPopPage: (route, result) => route.didPop(result),
-      ),
+    return MaterialApp.router(
+      routerConfig: router,
       theme: theme,
     );
   }

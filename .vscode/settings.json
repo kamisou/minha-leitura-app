@@ -10,6 +10,7 @@
         "**/*.freezed.dart": true,
         ".dart_tool/": true,
         "build/": true,
+        ".flutter-plugins*": true,
         ".metadata": true,
         "custom_lint.log": true,
         "pubspec.lock": true,

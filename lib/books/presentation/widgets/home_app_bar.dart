@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../../../profile/domain/models/user.dart';
+import '../../../authentication/domain/models/user.dart';
 import '../../../profile/presentation/hooks/use_user_initials.dart';
 
 class HomeAppBar extends HookWidget {
