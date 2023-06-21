@@ -24,6 +24,9 @@ class ThemeManager extends _$ThemeManager {
     required String fontFamily,
   }) {
     return ThemeData(
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.white,
+      ),
       brightness: Brightness.light,
       colorScheme: ColorScheme.light(
         onSurfaceVariant: const Color(0xFF313539),
@@ -31,6 +34,7 @@ class ThemeManager extends _$ThemeManager {
         primary: primaryColor,
         surface: const Color(0x19A49A99),
       ),
+      disabledColor: const Color(0xFFE6E6E6),
       dividerTheme: const DividerThemeData(space: 42),
       inputDecorationTheme: InputDecorationTheme(
         border: MaterialStateOutlineInputBorder.resolveWith(

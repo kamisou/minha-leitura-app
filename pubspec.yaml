@@ -22,6 +22,7 @@ dependencies:
   json_annotation: ^4.8.1
   json_serializable: ^6.7.0
   riverpod_annotation: ^2.1.1
+  transparent_image: ^2.0.1
   unicons: ^2.1.1
   vector_graphics: ^1.1.6
 

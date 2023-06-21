@@ -7,7 +7,7 @@ import '../dto/login_dto.dart';
 
 part 'auth_repository.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AuthRepository extends _$AuthRepository {
   static const String _tokenKey = 'access_token';
 

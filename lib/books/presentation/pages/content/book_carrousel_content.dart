@@ -54,9 +54,9 @@ class BookCarrouselContent extends HookWidget {
             itemCount: books.length,
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) => AspectRatio(
-              aspectRatio: 0.7,
-              child: Center(
+            itemBuilder: (context, index) => Center(
+              child: AspectRatio(
+                aspectRatio: 0.7,
                 child: LoadingNetworkImage(
                   src: books[index].coverArt,
                   builder: (image) => Container(
