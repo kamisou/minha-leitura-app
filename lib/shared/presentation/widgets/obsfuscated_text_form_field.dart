@@ -4,10 +4,22 @@ import 'package:unicons/unicons.dart';
 class ObfuscatedTextFormField extends StatefulWidget {
   const ObfuscatedTextFormField({
     super.key,
+    this.onChanged,
+    this.onFieldSubmitted,
+    this.textInputAction,
+    this.validator,
     this.decoration = const InputDecoration(),
   });
 
   final InputDecoration decoration;
+
+  final void Function(String value)? onChanged;
+
+  final void Function(String value)? onFieldSubmitted;
+
+  final TextInputAction? textInputAction;
+
+  final String? Function(String? value)? validator;
 
   @override
   State<ObfuscatedTextFormField> createState() =>
@@ -20,7 +32,6 @@ class _ObfuscatedTextFormFieldState extends State<ObfuscatedTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: _obfuscated,
       decoration: widget.decoration.copyWith(
         suffixIcon: GestureDetector(
           onTap: () => setState(() => _obfuscated = !_obfuscated),
@@ -29,6 +40,11 @@ class _ObfuscatedTextFormFieldState extends State<ObfuscatedTextFormField> {
           ),
         ),
       ),
+      obscureText: _obfuscated,
+      onChanged: widget.onChanged,
+      onFieldSubmitted: widget.onFieldSubmitted,
+      textInputAction: widget.textInputAction,
+      validator: widget.validator,
     );
   }
 }

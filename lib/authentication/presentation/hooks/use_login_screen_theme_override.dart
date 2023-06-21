@@ -5,10 +5,7 @@ ThemeData useLoginScreenThemeOverride(ThemeData baseTheme) {
   return use(
     _LoginThemeData(
       themeData: baseTheme.copyWith(
-        textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: Colors.white,
-          selectionHandleColor: Colors.white,
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         inputDecorationTheme: InputDecorationTheme(
           border: MaterialStateOutlineInputBorder.resolveWith(
             (states) {
@@ -28,16 +25,38 @@ ThemeData useLoginScreenThemeOverride(ThemeData baseTheme) {
           ),
           fillColor: const Color(0x19FFFFFF),
           filled: true,
+          errorStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: baseTheme.textTheme.labelMedium?.fontFamily,
+          ),
           hintStyle: TextStyle(
             color: Colors.white,
             fontFamily: baseTheme.textTheme.bodyLarge?.fontFamily,
           ),
           suffixIconColor: Colors.white,
         ),
+        filledButtonTheme: FilledButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: const MaterialStatePropertyAll(Colors.white),
+            foregroundColor: MaterialStatePropertyAll(baseTheme.primaryColor),
+            textStyle: MaterialStatePropertyAll(
+              TextStyle(
+                fontFamily: baseTheme.textTheme.bodyLarge?.fontFamily,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.white,
+          selectionHandleColor: Colors.white,
+        ),
         textTheme: TextTheme(
           bodyLarge: TextStyle(
             fontFamily: baseTheme.textTheme.bodyLarge?.fontFamily,
             color: Colors.white,
+            fontSize: 16,
           ),
         ),
       ),
