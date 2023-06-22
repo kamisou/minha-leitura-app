@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../shared/presentation/hooks/use_snackbar_error_listener.dart';
 import '../../widgets/login_form.dart';
+import '../controllers/login_controller.dart';
 import '../hooks/use_login_screen_theme_override.dart';
 
-class LoginScreen extends HookWidget {
+class LoginScreen extends HookConsumerWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final themeOverride = useLoginScreenThemeOverride(Theme.of(context));
+
+    useSnackbarErrorListener(
+      ref,
+      provider: loginControllerProvider,
+      message: 'A senha ou e-mail estão incorretos.',
+    );
 
     return Scaffold(
       body: Stack(

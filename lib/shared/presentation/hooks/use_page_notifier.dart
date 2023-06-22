@@ -23,7 +23,7 @@ ValueNotifier<int> usePageNotifier(PageController pageController) {
     pageController.addListener(listener);
 
     return () => pageController.removeListener(listener);
-  }, [pageController]);
+  });
 
   return page;
 }

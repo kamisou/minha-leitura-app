@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../shared/presentation/widgets/obsfuscated_text_form_field.dart';
+import '../data/dto/login_dto.dart';
 import '../domain/value_objects/email.dart';
 import '../domain/value_objects/password.dart';
 import '../presentation/controllers/login_controller.dart';
@@ -69,8 +70,12 @@ class LoginForm extends HookConsumerWidget {
           ObfuscatedTextFormField(
             decoration: const InputDecoration(hintText: 'Senha'),
             onChanged: (value) => loginForm.dispatch(Password(value)),
-            onFieldSubmitted: (value) =>
-                _login(context, ref, formKey.value.currentState!),
+            onFieldSubmitted: (value) => _login(
+              context,
+              ref,
+              formKey.value.currentState!,
+              loginForm.state,
+            ),
             validator: (value) => switch (Password.validate(value)) {
               PasswordError() => 'Informe uma senha',
               _ => null,
@@ -90,8 +95,12 @@ class LoginForm extends HookConsumerWidget {
               ),
               if (!ref.watch(loginControllerProvider).isLoading)
                 FilledButton(
-                  onPressed: () =>
-                      _login(context, ref, formKey.value.currentState!),
+                  onPressed: () => _login(
+                    context,
+                    ref,
+                    formKey.value.currentState!,
+                    loginForm.state,
+                  ),
                   child: const Text('Entrar'),
                 ),
             ],
@@ -101,14 +110,19 @@ class LoginForm extends HookConsumerWidget {
     );
   }
 
-  void _login(BuildContext context, WidgetRef ref, FormState form) {
+  void _login(
+    BuildContext context,
+    WidgetRef ref,
+    FormState form,
+    LoginDTO data,
+  ) {
     if (!form.validate()) {
       return;
     }
 
     ref
         .read(loginControllerProvider.notifier)
-        .login()
+        .login(data)
         .then((value) => context.go('/'));
   }
 }

@@ -34,20 +34,19 @@ class HomeAppBar extends HookWidget {
         ),
         const SizedBox(width: 10),
         Expanded(
-          child: FittedBox(
-            child: RichText(
-              text: TextSpan(
-                text: 'Olá, ',
-                style: Theme.of(context).textTheme.titleMedium,
-                children: [
-                  TextSpan(
-                    text: user.name,
-                    style: const TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
-              overflow: TextOverflow.ellipsis,
+          child: RichText(
+            text: TextSpan(
+              text: 'Olá, ',
+              style: Theme.of(context).textTheme.titleMedium,
+              children: [
+                TextSpan(
+                  text: user.name,
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+              ],
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],

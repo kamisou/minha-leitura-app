@@ -29,6 +29,8 @@ class ThemeManager extends _$ThemeManager {
       ),
       brightness: Brightness.light,
       colorScheme: ColorScheme.light(
+        inverseSurface: const Color(0xFF202020),
+        onInverseSurface: Colors.white,
         onSurfaceVariant: const Color(0xFF313539),
         outlineVariant: const Color(0xFFDDE0E4),
         primary: primaryColor,
@@ -64,6 +66,9 @@ class ThemeManager extends _$ThemeManager {
             BorderSide(color: primaryColor),
           ),
         ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
       ),
       textTheme: TextTheme(
         // 16

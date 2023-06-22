@@ -8,14 +8,14 @@ part 'login_controller.g.dart';
 @riverpod
 class LoginController extends _$LoginController {
   @override
-  Future<LoginDTO> build() async {
-    return const LoginDTO();
+  Future<void> build() async {
+    return;
   }
 
-  Future<void> login() async {
-    state = await AsyncValue.guard(() async {
-      await ref.read(authRepositoryProvider.notifier).login(state.value!);
-      return const LoginDTO();
-    });
+  Future<void> login(LoginDTO data) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(
+      () => ref.read(authRepositoryProvider.notifier).login(data),
+    );
   }
 }

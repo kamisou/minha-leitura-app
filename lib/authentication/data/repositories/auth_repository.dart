@@ -25,16 +25,14 @@ class AuthRepository extends _$AuthRepository {
   }
 
   Future<void> login(LoginDTO data) async {
-    state = await AsyncValue.guard(() async {
-      final dynamic response = await ref
-          .read(restApiProvider)
-          .post('/user/login', body: data.toJson());
-      final accessToken = response['access_token'] as String;
+    final dynamic response = await ref
+        .read(restApiProvider)
+        .post('/user/login', body: data.toJson());
+    final accessToken = response['access_token'] as String;
 
-      ref.read(secureStorageProvider).write(_tokenKey, accessToken);
+    ref.read(secureStorageProvider).write(_tokenKey, accessToken);
 
-      return _getUser();
-    });
+    state = AsyncData(await _getUser());
   }
 
   void _authorize(String accessToken) {
