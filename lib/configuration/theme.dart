@@ -67,10 +67,15 @@ class ThemeManager extends _$ThemeManager {
           ),
         ),
       ),
-      snackBarTheme: SnackBarThemeData(
+      snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
       ),
       textTheme: TextTheme(
+        // 14
+        bodyMedium: TextStyle(
+          fontFamily: fontFamily,
+          fontWeight: FontWeight.w400,
+        ),
         // 16
         bodyLarge: TextStyle(
           fontFamily: fontFamily,

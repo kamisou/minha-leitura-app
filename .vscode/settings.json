@@ -13,7 +13,7 @@
         ".flutter-plugins*": true,
         ".metadata": true,
         "custom_lint.log": true,
-        "pubspec.lock": true,
+        "pubspec.lock": true
     },
     "[dart]": {
         "editor.formatOnSave": true,

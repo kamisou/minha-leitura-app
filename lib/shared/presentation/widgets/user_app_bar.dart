@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../../authentication/domain/models/user.dart';
-import '../../../shared/presentation/hooks/use_user_initials.dart';
+import '../hooks/use_user_initials.dart';
 
-class HomeAppBar extends HookWidget {
-  const HomeAppBar({
+class UserAppBar extends HookWidget {
+  const UserAppBar({
     super.key,
     required this.user,
     this.maxInitialLetters = 2,

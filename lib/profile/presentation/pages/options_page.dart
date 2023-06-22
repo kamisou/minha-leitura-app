@@ -54,6 +54,12 @@ class OptionsPage extends HookConsumerWidget {
                   ),
                   const Divider(),
                   ProfileMenuOption(
+                    icon: UniconsLine.bell_school,
+                    label: 'Suas Turmas',
+                    onTap: () => context.go('/classes'),
+                  ),
+                  const Divider(),
+                  ProfileMenuOption(
                     icon: UniconsLine.setting,
                     label: 'Ajustes',
                     // TODO: go to settings screen

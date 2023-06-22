@@ -48,7 +48,7 @@ class NavBarHome extends HookWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(36),
+          top: Radius.circular(28),
         ),
         color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: const [

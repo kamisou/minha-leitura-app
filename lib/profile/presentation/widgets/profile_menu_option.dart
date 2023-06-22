@@ -25,11 +25,13 @@ class ProfileMenuOption extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
           ),
           const SizedBox(width: 16),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontSize: 18,
-                ),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontSize: 18,
+                  ),
+            ),
           ),
         ],
       ),

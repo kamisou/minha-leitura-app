@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../authentication/data/repositories/auth_repository.dart';
 import '../../data/repositories/book_repository.dart';
-import '../widgets/home_app_bar.dart';
+import '../../../shared/presentation/widgets/user_app_bar.dart';
 import 'content/book_carrousel_content.dart';
 import 'content/greeting_content.dart';
 
@@ -15,7 +15,7 @@ class BookHomePage extends ConsumerWidget {
     return Column(
       children: [
         AppBar(
-          title: HomeAppBar(
+          title: UserAppBar(
             user: ref.watch(authRepositoryProvider).requireValue!,
           ),
         ),

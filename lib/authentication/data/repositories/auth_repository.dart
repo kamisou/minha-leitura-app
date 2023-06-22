@@ -13,15 +13,17 @@ class AuthRepository extends _$AuthRepository {
 
   @override
   Future<User?> build() async {
-    final accessToken = await ref.read(secureStorageProvider).read(_tokenKey);
+    // final accessToken = await ref.read(secureStorageProvider).read(_tokenKey);
 
-    if (accessToken == null) {
-      return null;
-    }
+    // if (accessToken == null) {
+    //   return null;
+    // }
 
-    _authorize(accessToken);
+    // _authorize(accessToken);
 
-    return _getUser();
+    // return _getUser();
+
+    return const User(name: 'João Marcos Kaminoski de Souza');
   }
 
   Future<void> login(LoginDTO data) async {

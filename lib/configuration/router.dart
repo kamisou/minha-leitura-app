@@ -3,6 +3,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../authentication/data/repositories/auth_repository.dart';
 import '../authentication/presentation/screens/login_screen.dart';
+import '../classes/presentation/screens/classes_screen.dart';
+import '../classes/presentation/screens/join_class_screen.dart';
 import '../profile/presentation/screens/profile_screen.dart';
 import '../shared/presentation/screens/home_screen.dart';
 
@@ -28,6 +30,16 @@ Raw<GoRouter> router(RouterRef ref) {
           GoRoute(
             path: 'profile',
             builder: (context, state) => const ProfileScreen(),
+          ),
+          GoRoute(
+            path: 'classes',
+            builder: (context, state) => const ClassesScreen(),
+            routes: [
+              GoRoute(
+                path: 'join',
+                builder: (context, state) => const JoinClassScreen(),
+              ),
+            ],
           ),
         ],
       ),
