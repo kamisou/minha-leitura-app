@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/authentication/data/repositories/auth_repository.dart';
+import 'package:reading/profile/presentation/widgets/profile_menu_option.dart';
+import 'package:reading/shared/presentation/hooks/use_user_initials.dart';
 import 'package:unicons/unicons.dart';
-
-import '../../../authentication/data/repositories/auth_repository.dart';
-import '../../../shared/presentation/hooks/use_user_initials.dart';
-import '../widgets/profile_menu_option.dart';
 
 class OptionsPage extends HookConsumerWidget {
   const OptionsPage({super.key});
@@ -49,7 +48,7 @@ class OptionsPage extends HookConsumerWidget {
                   ProfileMenuOption(
                     icon: UniconsLine.user_check,
                     label: 'Meus Dados',
-                    // TODO: go to my data screen
+                    // TODO(kamisou): ir para tela de meus dados
                     onTap: () {},
                   ),
                   const Divider(),
@@ -62,7 +61,7 @@ class OptionsPage extends HookConsumerWidget {
                   ProfileMenuOption(
                     icon: UniconsLine.setting,
                     label: 'Ajustes',
-                    // TODO: go to settings screen
+                    // TODO(kamisou): ir para tela de ajustes
                     onTap: () {},
                   ),
                 ],

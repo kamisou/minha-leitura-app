@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../authentication/data/repositories/auth_repository.dart';
-import '../../data/repositories/book_repository.dart';
-import '../../../shared/presentation/widgets/user_app_bar.dart';
-import 'content/book_carrousel_content.dart';
-import 'content/greeting_content.dart';
+import 'package:reading/authentication/data/repositories/auth_repository.dart';
+import 'package:reading/books/data/repositories/book_repository.dart';
+import 'package:reading/books/presentation/pages/content/book_carrousel_content.dart';
+import 'package:reading/books/presentation/pages/content/greeting_content.dart';
+import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
 
 class BookHomePage extends ConsumerWidget {
   const BookHomePage({super.key});

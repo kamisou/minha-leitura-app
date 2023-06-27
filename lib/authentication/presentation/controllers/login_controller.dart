@@ -1,7 +1,6 @@
+import 'package:reading/authentication/data/dto/login_dto.dart';
+import 'package:reading/authentication/data/repositories/auth_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../data/dto/login_dto.dart';
-import '../../data/repositories/auth_repository.dart';
 
 part 'login_controller.g.dart';
 

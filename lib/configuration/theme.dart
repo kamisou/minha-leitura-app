@@ -41,7 +41,7 @@ class ThemeManager extends _$ThemeManager {
       inputDecorationTheme: InputDecorationTheme(
         border: MaterialStateOutlineInputBorder.resolveWith(
           (states) {
-            final Color color = states.contains(MaterialState.focused)
+            final color = states.contains(MaterialState.focused)
                 ? primaryColor
                 : const Color(0xFFA39A99);
 

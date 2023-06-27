@@ -9,7 +9,7 @@ ThemeData useLoginScreenThemeOverride(ThemeData baseTheme) {
         inputDecorationTheme: InputDecorationTheme(
           border: MaterialStateOutlineInputBorder.resolveWith(
             (states) {
-              final Color color = states.contains(MaterialState.focused)
+              final color = states.contains(MaterialState.focused)
                   ? Colors.white
                   : Colors.transparent;
 

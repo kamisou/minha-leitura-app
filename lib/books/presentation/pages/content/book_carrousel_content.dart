@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-
-import '../../../../shared/presentation/hooks/use_page_notifier.dart';
-import '../../../../shared/presentation/widgets/loading_network_image.dart';
-import '../../../domain/models/book.dart';
-import '../../widgets/book_details.dart';
+import 'package:reading/books/domain/models/book.dart';
+import 'package:reading/books/presentation/widgets/book_details.dart';
+import 'package:reading/shared/presentation/hooks/use_page_notifier.dart';
+import 'package:reading/shared/presentation/widgets/loading_network_image.dart';
 
 class BookCarrouselContent extends HookWidget {
   BookCarrouselContent({
     super.key,
     required this.books,
-  }) : assert(books.isNotEmpty);
+  }) : assert(books.isNotEmpty, 'The book carrousel cannot be empty!');
 
   final List<Book> books;
 
@@ -53,7 +52,6 @@ class BookCarrouselContent extends HookWidget {
             controller: pageController,
             itemCount: books.length,
             physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) => Center(
               child: AspectRatio(
                 aspectRatio: 0.7,

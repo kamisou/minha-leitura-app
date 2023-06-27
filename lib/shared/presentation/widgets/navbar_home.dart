@@ -8,30 +8,33 @@ class NavBarHome extends HookWidget {
     required this.icons,
   });
 
+  static const double _iconSize = 48;
+
   final PageController controller;
 
   final List<IconData> icons;
 
   @override
   Widget build(BuildContext context) {
-    const double iconSize = 48;
-
-    final page = useState(0.0);
-    final pixels = useState(0.0);
+    final page = useState<double>(0);
+    final pixels = useState<double>(0);
     final distance = useMemoized(
       () => 2 * (0.5 - (page.value - page.value.truncate())).abs(),
       [page, pixels],
     );
 
-    final controllerListener = useCallback(() {
-      if (!controller.hasClients && !controller.position.hasPixels) {
-        return;
-      }
+    final controllerListener = useCallback(
+      () {
+        if (!controller.hasClients && !controller.position.hasPixels) {
+          return;
+        }
 
-      pixels.value =
-          controller.position.pixels / controller.position.maxScrollExtent;
-      page.value = controller.page!;
-    }, [controller]);
+        pixels.value =
+            controller.position.pixels / controller.position.maxScrollExtent;
+        page.value = controller.page!;
+      },
+      [controller],
+    );
 
     useEffect(
       () {
@@ -56,7 +59,6 @@ class NavBarHome extends HookWidget {
             blurRadius: 16,
             color: Color(0x1A000000),
             offset: Offset(0, -4),
-            spreadRadius: 0,
           ),
         ],
       ),
@@ -70,22 +72,21 @@ class NavBarHome extends HookWidget {
           clipBehavior: Clip.none,
           children: [
             Positioned(
-              left: pixels.value * (constraints.maxWidth - iconSize),
-              width: iconSize,
-              height: iconSize,
+              left: pixels.value * (constraints.maxWidth - _iconSize),
+              width: _iconSize,
+              height: _iconSize,
               child: Center(
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                     shape: BoxShape.circle,
                   ),
-                  width: iconSize,
-                  height: iconSize,
+                  width: _iconSize,
+                  height: _iconSize,
                 ),
               ),
             ),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 for (int index = 0; index < icons.length; index += 1)
@@ -97,8 +98,8 @@ class NavBarHome extends HookWidget {
                     ),
                     child: Container(
                       alignment: Alignment.center,
-                      width: iconSize,
-                      height: iconSize,
+                      width: _iconSize,
+                      height: _iconSize,
                       child: Icon(
                         icons[index],
                         color: index == page.value.round()

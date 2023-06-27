@@ -12,6 +12,7 @@
         "build/": true,
         ".flutter-plugins*": true,
         ".metadata": true,
+        ".vscode": true,
         "custom_lint.log": true,
         "pubspec.lock": true
     },

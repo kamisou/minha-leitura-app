@@ -1,9 +1,8 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:reading/configuration/configuration.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../configuration/configuration.dart';
 
 part 'rest_api.g.dart';
 
@@ -18,9 +17,6 @@ RestApi restApi(RestApiRef ref) {
 typedef Json = Map<String, dynamic>;
 
 class RestApi {
-  final Dio _dio;
-  final String _authScheme;
-
   RestApi({
     required String server,
     required String authScheme,
@@ -35,6 +31,10 @@ class RestApi {
           ),
         ),
         _authScheme = authScheme;
+
+  final Dio _dio;
+
+  final String _authScheme;
 
   void authorize(String token) {
     _dio.options.headers['authorization'] = '$_authScheme token';
@@ -66,13 +66,13 @@ class RestApi {
       name: 'RestApi',
     );
 
-    final Response<dynamic> response = switch (method) {
-      RestMethod.get => await _dio.get(
+    final response = switch (method) {
+      RestMethod.get => await _dio.get<dynamic>(
           path,
           data: body,
           queryParameters: query,
         ),
-      RestMethod.post => await _dio.post(
+      RestMethod.post => await _dio.post<dynamic>(
           path,
           data: body,
         ),

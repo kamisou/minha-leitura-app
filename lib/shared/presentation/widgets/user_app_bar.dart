@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../../../authentication/domain/models/user.dart';
-import '../hooks/use_user_initials.dart';
+import 'package:reading/authentication/domain/models/user.dart';
+import 'package:reading/shared/presentation/hooks/use_user_initials.dart';
 
 class UserAppBar extends HookWidget {
   const UserAppBar({

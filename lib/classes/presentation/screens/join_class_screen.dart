@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/code_input.dart';
+import 'package:reading/classes/presentation/widgets/code_input.dart';
 
 class JoinClassScreen extends StatelessWidget {
   const JoinClassScreen({super.key});

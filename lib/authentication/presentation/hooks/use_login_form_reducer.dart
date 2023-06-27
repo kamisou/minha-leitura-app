@@ -1,8 +1,8 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../../data/dto/login_dto.dart';
-import '../../domain/value_objects/email.dart';
-import '../../domain/value_objects/password.dart';
+import 'package:reading/authentication/data/dto/login_dto.dart';
+import 'package:reading/authentication/domain/value_objects/email.dart';
+import 'package:reading/authentication/domain/value_objects/password.dart';
 
 Store<LoginDTO, dynamic> useLoginFormReducer() {
   return useReducer(

@@ -1,9 +1,8 @@
+import 'package:reading/authentication/data/dto/login_dto.dart';
+import 'package:reading/authentication/domain/models/user.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
+import 'package:reading/shared/infrastructure/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../../shared/infrastructure/rest_api.dart';
-import '../../../shared/infrastructure/secure_storage.dart';
-import '../../domain/models/user.dart';
-import '../dto/login_dto.dart';
 
 part 'auth_repository.g.dart';
 
@@ -27,12 +26,13 @@ class AuthRepository extends _$AuthRepository {
   }
 
   Future<void> login(LoginDTO data) async {
-    final dynamic response = await ref
+    final response = await ref
         .read(restApiProvider)
-        .post('/user/login', body: data.toJson());
+        .post('/user/login', body: data.toJson()) as Map<String, dynamic>;
+
     final accessToken = response['access_token'] as String;
 
-    ref.read(secureStorageProvider).write(_tokenKey, accessToken);
+    await ref.read(secureStorageProvider).write(_tokenKey, accessToken);
 
     state = AsyncData(await _getUser());
   }

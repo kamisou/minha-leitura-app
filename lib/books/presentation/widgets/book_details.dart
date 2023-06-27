@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:reading/books/domain/models/book.dart';
 import 'package:unicons/unicons.dart';
-
-import '../../domain/models/book.dart';
 
 class BookDetails extends HookWidget {
   const BookDetails({

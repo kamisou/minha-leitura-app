@@ -1,12 +1,11 @@
 import 'package:go_router/go_router.dart';
+import 'package:reading/authentication/data/repositories/auth_repository.dart';
+import 'package:reading/authentication/presentation/screens/login_screen.dart';
+import 'package:reading/classes/presentation/screens/classes_screen.dart';
+import 'package:reading/classes/presentation/screens/join_class_screen.dart';
+import 'package:reading/profile/presentation/screens/profile_screen.dart';
+import 'package:reading/shared/presentation/screens/home_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../authentication/data/repositories/auth_repository.dart';
-import '../authentication/presentation/screens/login_screen.dart';
-import '../classes/presentation/screens/classes_screen.dart';
-import '../classes/presentation/screens/join_class_screen.dart';
-import '../profile/presentation/screens/profile_screen.dart';
-import '../shared/presentation/screens/home_screen.dart';
 
 part 'router.g.dart';
 

@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reading/books/domain/models/book.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../domain/models/book.dart';
 
 part 'book_repository.g.dart';
 
@@ -16,9 +15,9 @@ Future<List<Book>> myBooks(MyBooksRef ref) {
 }
 
 class BookRepository {
-  final Ref ref;
-
   const BookRepository(this.ref);
+
+  final Ref ref;
 
   Future<List<Book>> getMyBooks() async {
     // final dynamic response = await ref.read(restApiProvider).get('/user/books');

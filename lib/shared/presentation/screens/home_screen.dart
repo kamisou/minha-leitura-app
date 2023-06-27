@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:reading/books/presentation/pages/book_home_page.dart';
+import 'package:reading/profile/presentation/pages/options_page.dart';
+import 'package:reading/shared/presentation/widgets/navbar_home.dart';
 import 'package:unicons/unicons.dart';
-
-import '../../../books/presentation/pages/book_home_page.dart';
-import '../../../profile/presentation/pages/options_page.dart';
-import '../widgets/navbar_home.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({super.key});

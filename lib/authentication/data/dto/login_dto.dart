@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../domain/value_objects/email.dart';
-import '../../domain/value_objects/password.dart';
+import 'package:reading/authentication/domain/value_objects/email.dart';
+import 'package:reading/authentication/domain/value_objects/password.dart';
 
 part 'login_dto.freezed.dart';
 part 'login_dto.g.dart';

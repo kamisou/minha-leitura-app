@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../shared/presentation/widgets/obsfuscated_text_form_field.dart';
-import '../data/dto/login_dto.dart';
-import '../domain/value_objects/email.dart';
-import '../domain/value_objects/password.dart';
-import '../presentation/controllers/login_controller.dart';
-import '../presentation/hooks/use_login_form_reducer.dart';
+import 'package:reading/authentication/data/dto/login_dto.dart';
+import 'package:reading/authentication/domain/value_objects/email.dart';
+import 'package:reading/authentication/domain/value_objects/password.dart';
+import 'package:reading/authentication/presentation/controllers/login_controller.dart';
+import 'package:reading/authentication/presentation/hooks/use_login_form_reducer.dart';
+import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
 
 class LoginForm extends HookConsumerWidget {
   const LoginForm({super.key});
@@ -26,10 +25,10 @@ class LoginForm extends HookConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // TODO: add back when intro screen ready
+              // TODO(kamisou): adicionar botão para voltar para tela de intro
               const Icon(Icons.chevron_left),
               Text(
-                // TODO: create account
+                // TODO(kamisou): criar conta
                 'Criar conta',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.white,
@@ -86,7 +85,7 @@ class LoginForm extends HookConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                // TODO: recover password
+                // TODO(kamisou): recuperar senha
                 'Esqueci minha senha',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.white,
