@@ -3,8 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:unicons/unicons.dart';
 
-class BookDetails extends HookWidget {
-  const BookDetails({
+class BookSummary extends HookWidget {
+  const BookSummary({
     super.key,
     required this.book,
   });

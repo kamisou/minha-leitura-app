@@ -10,6 +10,7 @@ class Book with _$Book {
     required int id,
     required String coverArt,
     required String title,
+    required String author,
     required int pageCount,
     required int pagesRead,
   }) = _Book;

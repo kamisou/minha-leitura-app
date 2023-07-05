@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:reading/authentication/data/repositories/auth_repository.dart';
 import 'package:reading/authentication/presentation/screens/login_screen.dart';
+import 'package:reading/books/domain/models/book.dart';
+import 'package:reading/books/presentation/screens/book_details_screen.dart';
 import 'package:reading/classes/presentation/screens/classes_screen.dart';
 import 'package:reading/classes/presentation/screens/join_class_screen.dart';
 import 'package:reading/common/presentation/screens/home_screen.dart';
@@ -27,8 +29,10 @@ Raw<GoRouter> router(RouterRef ref) {
         builder: (context, state) => const HomeScreen(),
         routes: [
           GoRoute(
-            path: 'profile',
-            builder: (context, state) => const ProfileScreen(),
+            path: 'book',
+            builder: (context, state) => BookDetailsScreen(
+              book: state.extra! as Book,
+            ),
           ),
           GoRoute(
             path: 'classes',
@@ -39,6 +43,10 @@ Raw<GoRouter> router(RouterRef ref) {
                 builder: (context, state) => const JoinClassScreen(),
               ),
             ],
+          ),
+          GoRoute(
+            path: 'profile',
+            builder: (context, state) => const ProfileScreen(),
           ),
         ],
       ),

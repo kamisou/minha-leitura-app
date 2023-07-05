@@ -12,4 +12,5 @@ linter:
   rules:
     always_put_required_named_parameters_first: false
     avoid_positional_boolean_parameters: false
+    missing_whitespace_between_adjacent_strings: false
     public_member_api_docs: false

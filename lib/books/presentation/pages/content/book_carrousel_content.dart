@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/models/book.dart';
-import 'package:reading/books/presentation/widgets/book_details.dart';
+import 'package:reading/books/presentation/widgets/book_summary.dart';
 import 'package:reading/common/presentation/hooks/use_page_notifier.dart';
-import 'package:reading/common/presentation/widgets/loading_network_image.dart';
+import 'package:reading/common/presentation/widgets/book_cover.dart';
 
 class BookCarrouselContent extends HookWidget {
   BookCarrouselContent({
@@ -53,20 +54,9 @@ class BookCarrouselContent extends HookWidget {
             itemCount: books.length,
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) => Center(
-              child: AspectRatio(
-                aspectRatio: 0.7,
-                child: LoadingNetworkImage(
-                  src: books[index].coverArt,
-                  builder: (image) => Container(
-                    clipBehavior: Clip.antiAlias,
-                    decoration: ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    child: image,
-                  ),
-                ),
+              child: GestureDetector(
+                onTap: () => context.go('/book', extra: books[index]),
+                child: BookCover(url: books[index].coverArt),
               ),
             ),
           ),
@@ -74,7 +64,7 @@ class BookCarrouselContent extends HookWidget {
         const SizedBox(height: 28),
         ValueListenableBuilder(
           valueListenable: page,
-          builder: (context, value, child) => BookDetails(
+          builder: (context, value, child) => BookSummary(
             book: books[page.value],
           ),
         ),
