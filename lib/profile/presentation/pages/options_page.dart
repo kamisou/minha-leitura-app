@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/repositories/auth_repository.dart';
-import 'package:reading/profile/presentation/widgets/profile_menu_option.dart';
 import 'package:reading/common/presentation/hooks/use_user_initials.dart';
+import 'package:reading/profile/presentation/widgets/profile_menu_option.dart';
 import 'package:unicons/unicons.dart';
 
 class OptionsPage extends HookConsumerWidget {

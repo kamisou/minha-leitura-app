@@ -3,8 +3,8 @@ import 'package:reading/authentication/data/repositories/auth_repository.dart';
 import 'package:reading/authentication/presentation/screens/login_screen.dart';
 import 'package:reading/classes/presentation/screens/classes_screen.dart';
 import 'package:reading/classes/presentation/screens/join_class_screen.dart';
-import 'package:reading/profile/presentation/screens/profile_screen.dart';
 import 'package:reading/common/presentation/screens/home_screen.dart';
+import 'package:reading/profile/presentation/screens/profile_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router.g.dart';
