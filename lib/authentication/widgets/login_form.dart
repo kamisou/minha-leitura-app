@@ -7,7 +7,7 @@ import 'package:reading/authentication/domain/value_objects/email.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
 import 'package:reading/authentication/presentation/hooks/use_login_form_reducer.dart';
-import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
+import 'package:reading/common/presentation/widgets/obsfuscated_text_form_field.dart';
 
 class LoginForm extends HookConsumerWidget {
   const LoginForm({super.key});

@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
 import 'package:reading/authentication/presentation/hooks/use_login_screen_theme_override.dart';
 import 'package:reading/authentication/widgets/login_form.dart';
-import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
 
 class LoginScreen extends HookConsumerWidget {
   const LoginScreen({super.key});

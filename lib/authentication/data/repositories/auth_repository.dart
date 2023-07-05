@@ -1,7 +1,7 @@
 import 'package:reading/authentication/data/dto/login_dto.dart';
 import 'package:reading/authentication/domain/models/user.dart';
-import 'package:reading/shared/infrastructure/rest_api.dart';
-import 'package:reading/shared/infrastructure/secure_storage.dart';
+import 'package:reading/common/infrastructure/rest_api.dart';
+import 'package:reading/common/infrastructure/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository.g.dart';
