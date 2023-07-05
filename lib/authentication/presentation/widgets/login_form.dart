@@ -7,6 +7,7 @@ import 'package:reading/authentication/domain/value_objects/email.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
 import 'package:reading/authentication/presentation/hooks/use_login_form_reducer.dart';
+import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/common/presentation/widgets/obsfuscated_text_form_field.dart';
 
 class LoginForm extends HookConsumerWidget {
@@ -92,16 +93,16 @@ class LoginForm extends HookConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
               ),
-              if (!ref.watch(loginControllerProvider).isLoading)
-                FilledButton(
-                  onPressed: () => _login(
-                    context,
-                    ref,
-                    formKey.value.currentState!,
-                    loginForm.state,
-                  ),
-                  child: const Text('Entrar'),
+              ButtonProgressIndicator(
+                isLoading: ref.watch(loginControllerProvider).isLoading,
+                onPressed: () => _login(
+                  context,
+                  ref,
+                  formKey.value.currentState!,
+                  loginForm.state,
                 ),
+                child: const Text('Entrar'),
+              ),
             ],
           ),
         ],

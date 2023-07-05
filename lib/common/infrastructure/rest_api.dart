@@ -6,6 +6,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'rest_api.g.dart';
 
+typedef Json = Map<String, dynamic>;
+
 @riverpod
 RestApi restApi(RestApiRef ref) {
   return RestApi(
@@ -13,8 +15,6 @@ RestApi restApi(RestApiRef ref) {
     authScheme: ref.watch(configProvider).restApiAuthScheme,
   );
 }
-
-typedef Json = Map<String, dynamic>;
 
 class RestApi {
   RestApi({
@@ -83,3 +83,21 @@ class RestApi {
 }
 
 enum RestMethod { get, post }
+
+sealed class RestException {
+  const RestException();
+}
+
+class BadResponseRestException extends RestException {
+  const BadResponseRestException({
+    required this.code,
+    required this.message,
+  });
+
+  final int code;
+  final String message;
+}
+
+class NoResponseRestException extends RestException {
+  const NoResponseRestException();
+}

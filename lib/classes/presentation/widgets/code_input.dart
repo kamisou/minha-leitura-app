@@ -1,19 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CodeInput extends StatelessWidget {
+class CodeInput extends StatefulWidget {
   const CodeInput({
     super.key,
-    this.length = 6,
+    required this.length,
+    this.onChanged,
   });
 
   final int length;
+
+  final void Function(String value)? onChanged;
+
+  @override
+  State<CodeInput> createState() => _CodeInputState();
+}
+
+class _CodeInputState extends State<CodeInput> {
+  late List<String> digits;
+
+  @override
+  void initState() {
+    super.initState();
+    digits = List.filled(widget.length, '');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        for (int i = 0; i < length; i += 1)
+        for (int i = 0; i < widget.length; i += 1)
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -31,12 +47,17 @@ class CodeInput extends StatelessWidget {
                 maxLength: 1,
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
                 onChanged: (value) {
+                  digits[i] = value;
+
                   final focus = FocusManager.instance.primaryFocus;
+
                   if (value.isEmpty) {
                     focus?.previousFocus();
                   } else {
                     focus?.nextFocus();
                   }
+
+                  widget.onChanged?.call(digits.join());
                 },
                 showCursor: false,
                 textAlign: TextAlign.center,

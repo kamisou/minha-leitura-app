@@ -9,13 +9,14 @@ class BookDetails extends HookWidget {
     required this.book,
   });
 
+  static const _duration = Duration(milliseconds: 500);
+
+  static const _curve = Curves.easeInOutQuart;
+
   final Book book;
 
   @override
   Widget build(BuildContext context) {
-    const duration = Duration(milliseconds: 500);
-    const curve = Curves.easeInOutQuart;
-
     final percentageRead = useMemoized(
       () => book.pagesRead / book.pageCount * 100.0,
       [book.pageCount, book.pagesRead],
@@ -35,8 +36,8 @@ class BookDetails extends HookWidget {
                 height: 6,
               ),
               AnimatedPositioned(
-                duration: duration,
-                curve: curve,
+                duration: _duration,
+                curve: _curve,
                 left: 0,
                 width: percentageRead,
                 height: 6,
@@ -52,9 +53,9 @@ class BookDetails extends HookWidget {
         ),
         const SizedBox(height: 16),
         AnimatedSwitcher(
-          duration: duration,
-          switchInCurve: curve,
-          switchOutCurve: curve,
+          duration: _duration,
+          switchInCurve: _curve,
+          switchOutCurve: _curve,
           transitionBuilder: (child, animation) =>
               FadeTransition(opacity: animation, child: child),
           child: Column(

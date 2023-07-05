@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:reading/authentication/domain/value_objects/email.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
+import 'package:reading/common/infrastructure/rest_api.dart';
 
 part 'login_dto.freezed.dart';
 part 'login_dto.g.dart';
@@ -17,6 +18,5 @@ class LoginDTO with _$LoginDTO {
     Password password,
   }) = _LoginDTO;
 
-  factory LoginDTO.fromJson(Map<String, dynamic> json) =>
-      _$LoginDTOFromJson(json);
+  factory LoginDTO.fromJson(Json json) => _$LoginDTOFromJson(json);
 }

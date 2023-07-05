@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:reading/common/infrastructure/rest_api.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
@@ -10,5 +11,5 @@ class User with _$User {
     String? avatar,
   }) = _User;
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory User.fromJson(Json json) => _$UserFromJson(json);
 }

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:reading/common/infrastructure/rest_api.dart';
 
 part 'class.freezed.dart';
 part 'class.g.dart';
@@ -11,5 +12,5 @@ class Class with _$Class {
     required String name,
   }) = _Class;
 
-  factory Class.fromJson(Map<String, dynamic> json) => _$ClassFromJson(json);
+  factory Class.fromJson(Json json) => _$ClassFromJson(json);
 }

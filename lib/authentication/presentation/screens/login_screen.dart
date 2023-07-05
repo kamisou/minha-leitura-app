@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
 import 'package:reading/authentication/presentation/hooks/use_login_screen_theme_override.dart';
-import 'package:reading/authentication/widgets/login_form.dart';
+import 'package:reading/authentication/presentation/widgets/login_form.dart';
+import 'package:reading/common/infrastructure/rest_api.dart';
 import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
 
 class LoginScreen extends HookConsumerWidget {
@@ -15,7 +16,12 @@ class LoginScreen extends HookConsumerWidget {
     useSnackbarErrorListener(
       ref,
       provider: loginControllerProvider,
-      message: 'A senha ou e-mail estão incorretos.',
+      messageBuilder: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        NoResponseRestException() =>
+          'Você está sem acesso à internet. Tente novamente mais tarde.',
+        _ => null,
+      },
     );
 
     return Scaffold(

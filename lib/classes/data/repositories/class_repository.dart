@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/classes/domain/models/class.dart';
+import 'package:reading/common/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'class_repository.g.dart';
@@ -20,7 +21,7 @@ class ClassRepository {
   final Ref ref;
 
   Future<List<Class>> getMyClasses() async {
-    // final dynamic response = ref.read(restApiProvider).get('/user/books');
+    // final dynamic response = ref.read(restApiProvider).get('/user/classes');
     // return (response as List).cast<Json>().map(Class.fromJson).toList();
 
     return const [
@@ -35,5 +36,10 @@ class ClassRepository {
         name: 'Robótica',
       ),
     ];
+  }
+
+  Future<void> joinClass(String code) async {
+    await ref.read(restApiProvider).post('/user/classes/join');
+    ref.invalidate(myClassesProvider);
   }
 }

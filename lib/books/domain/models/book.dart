@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:reading/common/infrastructure/rest_api.dart';
 
 part 'book.freezed.dart';
 part 'book.g.dart';
@@ -13,5 +14,5 @@ class Book with _$Book {
     required int pagesRead,
   }) = _Book;
 
-  factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
+  factory Book.fromJson(Json json) => _$BookFromJson(json);
 }
