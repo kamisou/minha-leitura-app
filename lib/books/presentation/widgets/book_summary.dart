@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/books/domain/models/book.dart';
+import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
+import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:unicons/unicons.dart';
 
 class BookSummary extends HookWidget {
@@ -17,38 +19,15 @@ class BookSummary extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final percentageRead = useMemoized(
-      () => book.pagesRead / book.pageCount * 100.0,
-      [book.pageCount, book.pagesRead],
-    );
+    final percentageRead = useBookReadPercentage(book);
 
     return Column(
       children: [
         Center(
-          child: Stack(
-            children: [
-              Container(
-                decoration: ShapeDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(.2),
-                  shape: const StadiumBorder(),
-                ),
-                width: 100,
-                height: 6,
-              ),
-              AnimatedPositioned(
-                duration: _duration,
-                curve: _curve,
-                left: 0,
-                width: percentageRead,
-                height: 6,
-                child: DecoratedBox(
-                  decoration: ShapeDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    shape: const StadiumBorder(),
-                  ),
-                ),
-              ),
-            ],
+          child: AnimatedPercentageMeter(
+            percentage: percentageRead,
+            duration: _duration,
+            curve: _curve,
           ),
         ),
         const SizedBox(height: 16),
@@ -65,6 +44,7 @@ class BookSummary extends HookWidget {
                 book.title,
                 key: ValueKey(book.id),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      // TODO(kamisou): lidar com essa cor repetida
                       color: const Color(0xFF3B4149),
                       fontWeight: FontWeight.w700,
                     ),
