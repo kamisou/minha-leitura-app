@@ -1,15 +1,15 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
+import 'package:reading/books/presentation/pages/book_details_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/common/presentation/widgets/book_cover.dart';
 import 'package:unicons/unicons.dart';
 
-class BookDetailsScreen extends HookWidget {
+class BookDetailsScreen extends HookConsumerWidget {
   const BookDetailsScreen({
     super.key,
     required this.book,
@@ -18,39 +18,32 @@ class BookDetailsScreen extends HookWidget {
   final Book book;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final percentageRead = useBookReadPercentage(book);
 
     return Scaffold(
       body: ListView(
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.only(bottom: 32),
         children: [
           Stack(
             children: [
               Positioned(
                 left: 0,
                 right: 0,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 4,
-                      ),
-                    ),
-                  ),
-                  child: ImageFiltered(
-                    imageFilter: ImageFilter.blur(
-                      sigmaX: 5.5,
-                      sigmaY: 5.5,
-                    ),
-                    child: Image.network(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Image.network(
                       book.coverArt,
                       fit: BoxFit.cover,
-                      opacity: const AlwaysStoppedAnimation(0.6),
+                      opacity: const AlwaysStoppedAnimation(0.4),
                       height: MediaQuery.of(context).size.height * 0.2,
                     ),
-                  ),
+                    Container(
+                      height: 4,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ],
                 ),
               ),
               SafeArea(
@@ -130,11 +123,13 @@ class BookDetailsScreen extends HookWidget {
                   spacing: 16,
                   children: [
                     FilledButton.icon(
+                      // TODO(kamisou): definir meta
                       onPressed: () {},
                       icon: const Icon(UniconsLine.book_open),
                       label: const Text('Definir Meta'),
                     ),
                     OutlinedButton.icon(
+                      // TODO(kamisou): compartilhar livro
                       onPressed: () {},
                       icon: const Icon(UniconsLine.share_alt),
                       label: const Text('Compartilhar'),
@@ -144,6 +139,13 @@ class BookDetailsScreen extends HookWidget {
               ),
               const SizedBox(height: 38),
             ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: ref.watch(bookDetailsProvider(book.id)).maybeWhen(
+                  data: (data) => BookDetailsPage(book: data),
+                  orElse: () => const SizedBox(),
+                ),
           ),
         ],
       ),

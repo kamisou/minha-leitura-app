@@ -3,6 +3,7 @@ import 'package:reading/authentication/domain/models/user.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/models/book_note.dart';
+import 'package:reading/books/domain/models/book_reading.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'book_repository.g.dart';
@@ -20,6 +21,16 @@ Future<List<Book>> myBooks(MyBooksRef ref) {
 @riverpod
 Future<BookDetails> bookDetails(BookDetailsRef ref, int bookId) {
   return ref.watch(bookRepositoryProvider).getBookDetails(bookId);
+}
+
+@riverpod
+Future<List<BookNote>> bookNotes(BookNotesRef ref, int bookId) {
+  return ref.watch(bookRepositoryProvider).getBookNotes(bookId);
+}
+
+@riverpod
+Future<List<BookReading>> bookReadings(BookReadingsRef ref, int bookId) {
+  return ref.watch(bookRepositoryProvider).getBookReadings(bookId);
 }
 
 class BookRepository {
@@ -73,40 +84,68 @@ class BookRepository {
       currentPage: 36,
       dailyPageGoal: 10,
       started: DateTime.parse('2021-02-10'),
-      notes: [
-        BookNote(
-          title: 'Reflexão',
-          description:
-              'Ipsum sea dolore clita magna. Sit et dolor sit in invidunt lorem'
-              ' labore. Est invidunt at dolor tempor nonumy sit dolores ullamco'
-              'rper commodo. Lorem et tation ipsum eos dolor magna sanctus tinc'
-              'idunt vulputate erat lorem dolor sea dolore rebum. Justo invidun'
-              't gubergren diam ipsum dolores erat no lorem. Accusam eos ipsum '
-              'diam est ea lorem ipsum minim. Lorem diam nihil est ipsum elitr '
-              'ipsum voluptua. Nibh nonumy erat dolor lorem ipsum et. Lorem dia'
-              'm tempor ut sadipscing eos consequat kasd et diam ea vero diam i'
-              'psum gubergren no. Vel suscipit vero est tation eos duo nonumy e'
-              't sed. Et dolor et elitr et kasd sit velit rebum. Sanctus ut ea '
-              'sadipscing enim. Labore dolor at at nihil labore erat quis sea i'
-              'n et veniam et erat. Vulputate ex diam nonumy liber invidunt et '
-              'dolor lorem dolor et. Dignissim erat lorem eum rebum dolor accus'
-              'am. Diam ipsum clita sit et ea sea. Amet vulputate tation et iri'
-              'ure est ut est takimata est sea. Kasd amet lorem diam. Mazim eli'
-              'tr amet est sadipscing nibh rebum.',
-          author: const User(name: 'Guilherme'),
-          createdAt: DateTime.parse('2022-09-26T15:26:30.000Z'),
-          responses: [
-            BookNote(
-              title: 'Título XPTO',
-              description: 'Vel et sit dolor sit stet. Hendrerit volutpat autem'
-                  ' sea justo ut et quis lorem. Ut nonumy accusam nulla doming '
-                  'id et diam diam voluptua no dolor facilisi.',
-              author: const User(name: 'Fulano de Tal'),
-              createdAt: DateTime.parse('2022-09-26T15:26:30.000Z'),
-            ),
-          ],
-        ),
-      ],
     );
+  }
+
+  Future<List<BookNote>> getBookNotes(int bookId) async {
+    // final dynamic response =
+    //     await ref.read(restApiProvider).get('/book/$bookId/notes');
+    // return (response as List).cast<Json>().map(BookNote.fromJson).toList();
+
+    return [
+      BookNote(
+        title: 'Reflexão',
+        description:
+            'Ipsum sea dolore clita magna. Sit et dolor sit in invidunt lorem'
+            ' labore. Est invidunt at dolor tempor nonumy sit dolores ullamco'
+            'rper commodo. Lorem et tation ipsum eos dolor magna sanctus tinc'
+            'idunt vulputate erat lorem dolor sea dolore rebum. Justo invidun'
+            't gubergren diam ipsum dolores erat no lorem. Accusam eos ipsum '
+            'diam est ea lorem ipsum minim. Lorem diam nihil est ipsum elitr '
+            'ipsum voluptua. Nibh nonumy erat dolor lorem ipsum et. Lorem dia'
+            'm tempor ut sadipscing eos consequat kasd et diam ea vero diam i'
+            'psum gubergren no. Vel suscipit vero est tation eos duo nonumy e'
+            't sed. Et dolor et elitr et kasd sit velit rebum. Sanctus ut ea '
+            'sadipscing enim. Labore dolor at at nihil labore erat quis sea i'
+            'n et veniam et erat. Vulputate ex diam nonumy liber invidunt et '
+            'dolor lorem dolor et. Dignissim erat lorem eum rebum dolor accus'
+            'am. Diam ipsum clita sit et ea sea. Amet vulputate tation et iri'
+            'ure est ut est takimata est sea. Kasd amet lorem diam. Mazim eli'
+            'tr amet est sadipscing nibh rebum.',
+        author: const User(name: 'Guilherme'),
+        createdAt: DateTime.parse('2022-09-26T15:26:30.000Z'),
+        responses: [
+          BookNote(
+            title: 'Título XPTO',
+            description: 'Vel et sit dolor sit stet. Hendrerit volutpat autem'
+                ' sea justo ut et quis lorem. Ut nonumy accusam nulla doming '
+                'id et diam diam voluptua no dolor facilisi.',
+            author: const User(name: 'Fulano de Tal'),
+            createdAt: DateTime.parse('2022-09-26T15:26:30.000Z'),
+          ),
+        ],
+      ),
+    ];
+  }
+
+  Future<List<BookReading>> getBookReadings(int bookId) async {
+    // final dynamic response =
+    //     await ref.read(restApiProvider).get('/book/$bookId/readings');
+    // return (response as List).cast<Json>().map(BookNote.fromJson).toList();
+
+    return [
+      BookReading(
+        pages: 22,
+        date: DateTime.parse('2021-02-10T18:24:00.000Z'),
+      ),
+      BookReading(
+        pages: 9,
+        date: DateTime.parse('2021-02-09T19:11:00.000Z'),
+      ),
+      BookReading(
+        pages: 4,
+        date: DateTime.parse('2021-02-08T20:27:00.000Z'),
+      ),
+    ];
   }
 }

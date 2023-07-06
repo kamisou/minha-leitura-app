@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vector_graphics/vector_graphics.dart';
 
 class GreetingContent extends StatelessWidget {
@@ -48,9 +49,9 @@ class GreetingContent extends StatelessWidget {
         const SizedBox(height: 48),
         Center(
           child: OutlinedButton.icon(
-            onPressed: () {},
+            onPressed: () => context.go('/classes/join'),
             icon: const Icon(Icons.add),
-            label: const Text('Cadastre um Livro'),
+            label: const Text('Ingressar turma'),
           ),
         ),
       ],

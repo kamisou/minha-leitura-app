@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/common/infrastructure/rest_api.dart';
 
 part 'book_details.freezed.dart';
@@ -13,7 +12,6 @@ class BookDetails with _$BookDetails {
     required int currentPage,
     required int dailyPageGoal,
     required DateTime started,
-    required List<BookNote> notes,
   }) = _BookDetails;
 
   const BookDetails._();
