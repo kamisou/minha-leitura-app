@@ -1,6 +1,6 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import 'package:reading/authentication/domain/models/user.dart';
+import 'package:reading/profile/domain/models/user.dart';
 
 String useUserInitials(User user, {int initialsCount = 2}) {
   return useMemoized(

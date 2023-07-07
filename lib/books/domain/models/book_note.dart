@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:reading/authentication/domain/models/user.dart';
 import 'package:reading/common/infrastructure/rest_api.dart';
+import 'package:reading/profile/domain/models/user.dart';
 
 part 'book_note.freezed.dart';
 part 'book_note.g.dart';

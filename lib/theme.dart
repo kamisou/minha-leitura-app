@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reading/common/extensions/color_extension.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme.g.dart';
@@ -38,6 +39,23 @@ class ThemeManager extends _$ThemeManager {
       ),
       disabledColor: const Color(0xFFE6E6E6),
       dividerTheme: const DividerThemeData(space: 42),
+      extensions: const [
+        ColorExtension(
+          gray: MaterialColor(
+            0xFF3B4149,
+            {
+              100: Color(0xFFFAFAFA),
+              200: Color(0xFFE8EAED),
+              300: Color(0xFFB7BCBF),
+              400: Color(0xFF98A2A8),
+              500: Color(0xFF808E96),
+              600: Color(0xFF697B86),
+              700: Color(0xFF4D585F),
+              800: Color(0xFF3B4149),
+            },
+          ),
+        ),
+      ],
       inputDecorationTheme: InputDecorationTheme(
         border: MaterialStateOutlineInputBorder.resolveWith(
           (states) {
@@ -83,7 +101,6 @@ class ThemeManager extends _$ThemeManager {
         ),
         // 12
         labelMedium: TextStyle(
-          color: const Color(0xFF98A2A8),
           fontFamily: fontFamily,
           fontWeight: FontWeight.w600,
         ),
@@ -94,7 +111,6 @@ class ThemeManager extends _$ThemeManager {
         ),
         // 16
         titleMedium: TextStyle(
-          color: const Color(0xFF4D585F),
           fontFamily: fontFamily,
           fontWeight: FontWeight.w400,
         ),
@@ -105,7 +121,6 @@ class ThemeManager extends _$ThemeManager {
         ),
         // 24
         headlineSmall: TextStyle(
-          color: const Color(0xFF697B86),
           fontFamily: fontFamily,
           fontWeight: FontWeight.w700,
         ),

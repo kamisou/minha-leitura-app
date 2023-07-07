@@ -8,6 +8,7 @@ import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
 import 'package:reading/books/presentation/pages/book_details_page.dart';
 import 'package:reading/books/presentation/pages/book_notes_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
+import 'package:reading/common/extensions/color_extension.dart';
 import 'package:reading/common/presentation/widgets/book_cover.dart';
 import 'package:unicons/unicons.dart';
 
@@ -110,15 +111,14 @@ class BookDetailsScreen extends HookConsumerWidget {
                 Text(
                   book.title,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        // TODO(kamisou): lidar com essa cor repetida
-                        color: const Color(0xFF3B4149),
+                        color: Theme.of(context).colorExtension?.gray[800],
                         fontWeight: FontWeight.w700,
                       ),
                 ),
                 Text(
                   book.author,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFF808E96),
+                        color: Theme.of(context).colorExtension?.gray[500],
                         fontWeight: FontWeight.w700,
                       ),
                 ),

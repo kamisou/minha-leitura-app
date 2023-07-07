@@ -54,9 +54,15 @@ ThemeData useLoginScreenThemeOverride(ThemeData baseTheme) {
         ),
         textTheme: TextTheme(
           bodyLarge: TextStyle(
-            fontFamily: baseTheme.textTheme.bodyLarge?.fontFamily,
             color: Colors.white,
+            fontFamily: baseTheme.textTheme.bodyLarge?.fontFamily,
             fontSize: 16,
+          ),
+          headlineSmall: TextStyle(
+            color: Colors.white,
+            fontFamily: baseTheme.textTheme.headlineSmall?.fontFamily,
+            fontWeight: FontWeight.w700,
+            fontSize: 24,
           ),
         ),
       ),

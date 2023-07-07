@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reading/common/extensions/color_extension.dart';
 
 class BookDetailsTile extends StatelessWidget {
   const BookDetailsTile({
@@ -20,11 +21,11 @@ class BookDetailsTile extends StatelessWidget {
       children: [
         Container(
           decoration: ShapeDecoration(
-            color: const Color(0xFFFAFAFA),
+            color: Theme.of(context).colorExtension!.gray[100],
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-              side: const BorderSide(
-                color: Color(0xFFE8EAED),
+              side: BorderSide(
+                color: Theme.of(context).colorExtension!.gray[200]!,
               ),
             ),
           ),
@@ -32,8 +33,7 @@ class BookDetailsTile extends StatelessWidget {
           padding: const EdgeInsets.all(14),
           child: Icon(
             icon,
-            // TODO(kamisou): lidar com essa cor repetida
-            color: const Color(0xFF3B4149),
+            color: Theme.of(context).colorExtension?.gray[800],
           ),
         ),
         Column(
@@ -42,7 +42,7 @@ class BookDetailsTile extends StatelessWidget {
             Text(
               label,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: const Color(0xFF3B4149),
+                    color: Theme.of(context).colorExtension?.gray[800],
                     fontWeight: FontWeight.w600,
                   ),
             ),

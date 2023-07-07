@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:reading/common/extensions/color_extension.dart';
 import 'package:vector_graphics/vector_graphics.dart';
 
 class GreetingContent extends StatelessWidget {
@@ -36,14 +37,18 @@ class GreetingContent extends StatelessWidget {
         Text(
           'Que tal iniciar uma\n'
           'leitura agora mesmo?',
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: Theme.of(context).colorExtension?.gray[600],
+              ),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 16),
         Text(
           'Cadastrar seu primeiro livro para gerenciar o\n'
           'progresso de leitura, fazer anotações e muito mais!',
-          style: Theme.of(context).textTheme.labelMedium,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: Theme.of(context).colorExtension?.gray[400],
+              ),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 48),

@@ -1,26 +1,28 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:reading/configuration/configuration.dart';
+import 'package:reading/common/exceptions/rest_exception.dart';
+import 'package:reading/constants.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'rest_api.g.dart';
 
 typedef Json = Map<String, dynamic>;
 
+enum RestMethod { get, post }
+
 @riverpod
 RestApi restApi(RestApiRef ref) {
   return RestApi(
-    server: ref.watch(configProvider).restApiUrl,
-    authScheme: ref.watch(configProvider).restApiAuthScheme,
+    server: ref.watch(constantsProvider).restApiUrl,
   );
 }
 
 class RestApi {
   RestApi({
     required String server,
-    required String authScheme,
-  })  : _dio = Dio(
+  }) : _dio = Dio(
           BaseOptions(
             baseUrl: server,
             connectTimeout: const Duration(seconds: 5),
@@ -29,15 +31,12 @@ class RestApi {
               'content-type': 'application/json',
             },
           ),
-        ),
-        _authScheme = authScheme;
+        );
 
   final Dio _dio;
 
-  final String _authScheme;
-
-  void authorize(String token) {
-    _dio.options.headers['authorization'] = '$_authScheme token';
+  void authorize(String scheme, String token) {
+    _dio.options.headers['authorization'] = '$scheme token';
   }
 
   Future<dynamic> get(
@@ -66,38 +65,32 @@ class RestApi {
       name: 'RestApi',
     );
 
-    final response = switch (method) {
-      RestMethod.get => await _dio.get<dynamic>(
-          path,
-          data: body,
-          queryParameters: query,
-        ),
-      RestMethod.post => await _dio.post<dynamic>(
-          path,
-          data: body,
-        ),
-    };
+    try {
+      final response = switch (method) {
+        RestMethod.get => await _dio.get<dynamic>(
+            path,
+            data: body,
+            queryParameters: query,
+          ),
+        RestMethod.post => await _dio.post<dynamic>(
+            path,
+            data: body,
+          ),
+      };
 
-    return response.data;
+      return response.data;
+    } on DioException catch (e) {
+      switch (e.type) {
+        case DioExceptionType.badResponse:
+          throw BadResponseRestException(
+            code: e.response!.statusCode!,
+            message: e.response!.statusMessage!,
+          );
+        case _:
+          const NoResponseRestException();
+      }
+    } on SocketException {
+      throw const NoResponseRestException();
+    }
   }
-}
-
-enum RestMethod { get, post }
-
-sealed class RestException {
-  const RestException();
-}
-
-class BadResponseRestException extends RestException {
-  const BadResponseRestException({
-    required this.code,
-    required this.message,
-  });
-
-  final int code;
-  final String message;
-}
-
-class NoResponseRestException extends RestException {
-  const NoResponseRestException();
 }

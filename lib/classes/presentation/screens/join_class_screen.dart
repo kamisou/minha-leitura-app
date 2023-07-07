@@ -5,7 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:reading/classes/presentation/controllers/join_class_controller.dart';
 
 import 'package:reading/classes/presentation/widgets/code_input.dart';
-import 'package:reading/common/infrastructure/rest_api.dart';
+import 'package:reading/common/exceptions/rest_exception.dart';
+import 'package:reading/common/extensions/color_extension.dart';
 import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
 
@@ -46,7 +47,7 @@ class JoinClassScreen extends ConsumerWidget {
                 child: Text(
                   'Qual o código da turma?',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).textTheme.titleMedium?.color,
+                        color: Theme.of(context).colorExtension?.gray[800],
                       ),
                   textAlign: TextAlign.center,
                 ),

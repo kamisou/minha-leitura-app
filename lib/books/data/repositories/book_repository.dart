@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reading/authentication/domain/models/user.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
+import 'package:reading/profile/domain/models/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'book_repository.g.dart';

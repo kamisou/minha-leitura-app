@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
+import 'package:reading/common/extensions/color_extension.dart';
 import 'package:unicons/unicons.dart';
 
 class BookSummary extends HookWidget {
@@ -44,8 +45,7 @@ class BookSummary extends HookWidget {
                 book.title,
                 key: ValueKey(book.id),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      // TODO(kamisou): lidar com essa cor repetida
-                      color: const Color(0xFF3B4149),
+                      color: Theme.of(context).colorExtension?.gray[800],
                       fontWeight: FontWeight.w700,
                     ),
                 maxLines: 2,
@@ -58,13 +58,15 @@ class BookSummary extends HookWidget {
                 children: [
                   Icon(
                     UniconsLine.bookmark,
-                    color: Theme.of(context).textTheme.labelMedium?.color,
+                    color: Theme.of(context).colorExtension?.gray[400],
                     size: 14,
                   ),
                   const SizedBox(width: 6),
                   Text(
                     '${book.pagesRead} / ${book.pageCount} páginas lidas',
-                    style: Theme.of(context).textTheme.labelMedium,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: Theme.of(context).colorExtension?.gray[400],
+                        ),
                   ),
                 ],
               ),
