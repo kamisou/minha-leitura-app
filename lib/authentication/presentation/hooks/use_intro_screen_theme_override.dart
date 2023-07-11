@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-ThemeData useLoginScreenThemeOverride(ThemeData baseTheme) {
+ThemeData useIntroScreenThemeOverride(ThemeData baseTheme) {
   return use(
     _LoginThemeData(
       themeData: baseTheme.copyWith(
@@ -48,6 +48,23 @@ ThemeData useLoginScreenThemeOverride(ThemeData baseTheme) {
             ),
           ),
         ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: ButtonStyle(
+            side: const MaterialStatePropertyAll(
+              BorderSide(
+                color: Colors.white,
+              ),
+            ),
+            foregroundColor: const MaterialStatePropertyAll(Colors.white),
+            textStyle: MaterialStatePropertyAll(
+              TextStyle(
+                fontFamily: baseTheme.textTheme.bodyLarge?.fontFamily,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Colors.white,
           selectionHandleColor: Colors.white,
@@ -57,6 +74,10 @@ ThemeData useLoginScreenThemeOverride(ThemeData baseTheme) {
             color: Colors.white,
             fontFamily: baseTheme.textTheme.bodyLarge?.fontFamily,
             fontSize: 16,
+          ),
+          titleMedium: TextStyle(
+            fontFamily: baseTheme.textTheme.titleMedium?.fontFamily,
+            fontWeight: FontWeight.w400,
           ),
           headlineSmall: TextStyle(
             color: Colors.white,

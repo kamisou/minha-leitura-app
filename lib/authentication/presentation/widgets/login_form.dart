@@ -26,8 +26,10 @@ class LoginForm extends HookConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // TODO(kamisou): adicionar botão para voltar para tela de intro
-              const Icon(Icons.chevron_left),
+              GestureDetector(
+                onTap: () => context.go('/intro'),
+                child: const Icon(Icons.chevron_left),
+              ),
               Text(
                 // TODO(kamisou): criar conta
                 'Criar conta',
