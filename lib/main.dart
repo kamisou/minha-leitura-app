@@ -6,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 import 'package:reading/authentication/data/repositories/auth_repository.dart';
+import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/router.dart';
 import 'package:reading/theme.dart';
 
@@ -19,6 +20,7 @@ void main() async {
   await container
       .read(authRepositoryProvider.future)
       .catchError((error) => null);
+  await container.read(introSeenProvider.future);
 
   runApp(
     ProviderScope(

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/presentation/hooks/use_intro_screen_theme_override.dart';
 import 'package:reading/common/presentation/widgets/gradient_intro_background.dart';
+import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/intro/presentation/pages/intro_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:unicons/unicons.dart';
 
-class IntroScreen extends HookWidget {
+class IntroScreen extends HookConsumerWidget {
   const IntroScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final themeOverride = useIntroScreenThemeOverride(Theme.of(context));
     final pageController = usePageController();
 
@@ -50,23 +52,21 @@ class IntroScreen extends HookWidget {
                           controller: pageController,
                           children: const [
                             IntroPage(
-                              icon: UniconsThinline.clock,
+                              icon: FeatherIcons.clock,
                               title: 'Minha leitura',
                               body: 'Queremos te ajudar na criação do\n'
                                   'hábito da leitura, organizando e\n'
                                   'definindo metas para suas leituras',
                             ),
                             IntroPage(
-                              // TODO(kamisou): fix icon
-                              icon: UniconsThinline.bookmark,
+                              icon: FeatherIcons.book,
                               title: 'Simples assim',
                               body: 'Pegue seus livros, insira os dados,\n'
                                   'defina suas metas e acompanhe suas\n'
                                   'leituras.',
                             ),
                             IntroPage(
-                              // TODO(kamisou): fix icon
-                              icon: UniconsThinline.arrow_up_right,
+                              icon: FeatherIcons.trendingUp,
                               title: 'Prático assim',
                               body: 'Acompanhe seu desempenho e\n'
                                   'registre suas anotações. Ah, sempre\n'
@@ -75,8 +75,7 @@ class IntroScreen extends HookWidget {
                                   'leituras!',
                             ),
                             IntroPage(
-                              // TODO(kamisou): fix icon
-                              icon: UniconsThinline.process,
+                              icon: FeatherIcons.thumbsUp,
                               title: 'Rápido assim',
                               body: 'Faça seu cadastro em menos de 2\n'
                                   'minutos, pegue seu livro da estante,\n'
@@ -98,8 +97,10 @@ class IntroScreen extends HookWidget {
                             ),
                             const SizedBox(height: 10),
                             OutlinedButton(
-                              // TODO(kamisou): marque intro como vista
-                              onPressed: () => context.go('/login'),
+                              onPressed: () => ref
+                                  .read(introRepositoryProvider)
+                                  .setIntroSeen()
+                                  .then((value) => context.go('/login')),
                               child: const Text('Entrar'),
                             ),
                           ],
