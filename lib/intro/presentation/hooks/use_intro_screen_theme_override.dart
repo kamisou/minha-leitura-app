@@ -65,6 +65,9 @@ ThemeData useIntroScreenThemeOverride(ThemeData baseTheme) {
             ),
           ),
         ),
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: baseTheme.colorScheme.onPrimary,
+        ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Colors.white,
           selectionHandleColor: Colors.white,

@@ -8,9 +8,12 @@ class BookNotesTile extends HookWidget {
   const BookNotesTile({
     super.key,
     required this.note,
+    this.response = false,
   });
 
   final BookNote note;
+
+  final bool response;
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +47,44 @@ class BookNotesTile extends HookWidget {
           ],
         ),
         const SizedBox(height: 8),
-        Text(
-          usedMMyHm(note.createdAt),
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+        DefaultTextStyle(
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(
                 color: Theme.of(context).colorExtension?.gray[400],
                 fontWeight: FontWeight.w400,
               ),
+          child: Row(
+            children: [
+              Flexible(
+                child: Text(
+                  note.author.name,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                usedMMyHm(note.createdAt),
+              ),
+            ],
+          ),
         ),
+        if (!response)
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 8,
+              left: 20,
+            ),
+            child: Column(
+              children: [
+                ...note.responses.map(
+                  (e) => BookNotesTile(
+                    note: note,
+                    response: true,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (!response) const Divider(),
       ],
     );
   }

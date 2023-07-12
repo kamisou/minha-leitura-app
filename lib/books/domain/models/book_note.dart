@@ -12,7 +12,7 @@ class BookNote with _$BookNote {
     required String description,
     required User author,
     required DateTime createdAt,
-    List<BookNote>? responses,
+    @Default([]) List<BookNote> responses,
   }) = _BookNote;
 
   factory BookNote.fromJson(Json json) => _$BookNoteFromJson(json);

@@ -31,7 +31,6 @@ Raw<GoRouter> router(RouterRef ref) {
 
       return null;
     },
-    initialLocation: '/intro',
     routes: [
       GoRoute(
         path: '/',

@@ -12,8 +12,9 @@ class AuthRepository extends _$AuthRepository {
 
   @override
   Future<User?> build() async {
-    await _authorize();
-    return _getUser();
+    // await _authorize();
+    // return _getUser();
+    return const User(name: 'João Marcos Kaminoski de Souza');
   }
 
   Future<void> _authorize() async {
