@@ -21,6 +21,7 @@ class BookNotesPage extends StatelessWidget {
           itemBuilder: (context, index) => BookNotesTile(
             note: notes[index],
           ),
+          padding: EdgeInsets.zero,
           separatorBuilder: (context, index) => const Divider(),
         ),
         Padding(

@@ -88,6 +88,20 @@ class ThemeManager extends _$ThemeManager {
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
       ),
+      tabBarTheme: TabBarTheme(
+        labelColor: const Color(0xFF3B4149),
+        labelStyle: TextStyle(
+          fontFamily: fontFamily,
+          fontSize: 26,
+          fontWeight: FontWeight.w700,
+        ),
+        unselectedLabelColor: const Color(0xFFB7BCBF),
+        unselectedLabelStyle: TextStyle(
+          fontFamily: fontFamily,
+          fontSize: 26,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
       textTheme: TextTheme(
         // 14
         bodyMedium: TextStyle(

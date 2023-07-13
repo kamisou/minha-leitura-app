@@ -7,6 +7,7 @@ import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
 import 'package:reading/books/presentation/pages/book_details_page.dart';
 import 'package:reading/books/presentation/pages/book_notes_page.dart';
+import 'package:reading/books/presentation/pages/book_reading_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/common/extensions/color_extension.dart';
 import 'package:reading/common/presentation/widgets/book_cover.dart';
@@ -22,7 +23,7 @@ class BookDetailsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabController = usePageController();
+    final tabController = useTabController(initialLength: 3);
     final percentageRead = useBookReadPercentage(book);
 
     return Scaffold(
@@ -146,8 +147,28 @@ class BookDetailsScreen extends HookConsumerWidget {
               ],
             ),
           ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            sliver: SliverToBoxAdapter(
+              child: TabBar(
+                controller: tabController,
+                indicator: const BoxDecoration(),
+                isScrollable: true,
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.3,
+                ),
+                physics: const NeverScrollableScrollPhysics(),
+                splashFactory: NoSplash.splashFactory,
+                tabs: const [
+                  Tab(text: 'Detalhes'),
+                  Tab(text: 'Notas'),
+                  Tab(text: 'Histórico'),
+                ],
+              ),
+            ),
+          ),
         ],
-        body: PageView(
+        body: TabBarView(
           controller: tabController,
           children: [
             Padding(
@@ -161,6 +182,13 @@ class BookDetailsScreen extends HookConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ref.watch(bookNotesProvider(book.id)).maybeWhen(
                     data: (data) => BookNotesPage(notes: data),
+                    orElse: () => const SizedBox(),
+                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: ref.watch(bookReadingsProvider(book.id)).maybeWhen(
+                    data: (data) => BookReadingPage(readings: data),
                     orElse: () => const SizedBox(),
                   ),
             ),
