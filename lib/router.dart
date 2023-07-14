@@ -15,26 +15,18 @@ part 'router.g.dart';
 
 @riverpod
 Raw<GoRouter> router(RouterRef ref) {
+  final introSeen = ref.read(introSeenProvider).requireValue;
+
   return GoRouter(
-    redirect: (context, state) async {
-      final user = ref.read(authRepositoryProvider).valueOrNull;
-
-      if (user == null) {
-        final introSeen = ref.read(introSeenProvider).requireValue;
-
-        if (introSeen) {
-          return '/login';
-        } else {
-          return '/intro';
-        }
-      }
-
-      return null;
-    },
+    initialLocation: introSeen ? null : '/intro',
     routes: [
       GoRoute(
-        path: '/',
         builder: (context, state) => const HomeScreen(),
+        path: '/',
+        redirect: (context, state) {
+          final user = ref.read(authRepositoryProvider).valueOrNull;
+          return user == null ? '/login' : null;
+        },
         routes: [
           GoRoute(
             path: 'book',

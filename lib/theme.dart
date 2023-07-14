@@ -32,10 +32,9 @@ class ThemeManager extends _$ThemeManager {
       colorScheme: ColorScheme.light(
         inverseSurface: const Color(0xFF202020),
         onInverseSurface: Colors.white,
-        onSurfaceVariant: const Color(0xFF313539),
         outlineVariant: const Color(0xFFDDE0E4),
         primary: primaryColor,
-        surface: const Color(0x19A49A99),
+        surface: const Color(0x189A9A9A),
       ),
       disabledColor: const Color(0xFFE6E6E6),
       dividerTheme: const DividerThemeData(space: 42),
@@ -58,18 +57,14 @@ class ThemeManager extends _$ThemeManager {
       ],
       inputDecorationTheme: InputDecorationTheme(
         border: MaterialStateOutlineInputBorder.resolveWith(
-          (states) {
-            final color = states.contains(MaterialState.focused)
-                ? primaryColor
-                : const Color(0xFFA39A99);
-
-            return OutlineInputBorder(
-              borderRadius: BorderRadius.circular(32),
-              borderSide: BorderSide(
-                color: color,
-              ),
-            );
-          },
+          (states) => OutlineInputBorder(
+            borderSide: states.contains(MaterialState.error)
+                ? const BorderSide(
+                    color: Color(0xFFFF4336),
+                  )
+                : BorderSide.none,
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 20,
