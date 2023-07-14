@@ -30,7 +30,7 @@ class AchievementsScreen extends StatelessWidget {
                   color: Theme.of(context).colorExtension?.gray[600],
                 ),
             textAlign: TextAlign.center,
-          )
+          ),
         ],
       ),
     );
