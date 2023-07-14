@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/repositories/auth_repository.dart';
-import 'package:reading/common/presentation/hooks/use_user_initials.dart';
 import 'package:reading/profile/presentation/widgets/profile_menu_option.dart';
 import 'package:unicons/unicons.dart';
 
@@ -12,7 +12,7 @@ class OptionsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authRepositoryProvider).requireValue!;
-    final initials = useUserInitials(user);
+    final initials = useMemoized(user.initials, [user]);
 
     return SafeArea(
       child: Padding(
@@ -48,8 +48,13 @@ class OptionsPage extends HookConsumerWidget {
                   ProfileMenuOption(
                     icon: UniconsLine.user_check,
                     label: 'Meus Dados',
-                    // TODO(kamisou): ir para tela de meus dados
-                    onTap: () {},
+                    onTap: () => context.go('/profile'),
+                  ),
+                  const Divider(),
+                  ProfileMenuOption(
+                    icon: UniconsLine.medal,
+                    label: 'Conquistas',
+                    onTap: () => context.go('/achievements'),
                   ),
                   const Divider(),
                   ProfileMenuOption(

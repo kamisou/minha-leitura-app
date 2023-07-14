@@ -8,6 +8,7 @@ import 'package:reading/classes/presentation/screens/join_class_screen.dart';
 import 'package:reading/common/presentation/screens/home_screen.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/intro/presentation/screens/intro_screen.dart';
+import 'package:reading/profile/presentation/screens/achievements_screen.dart';
 import 'package:reading/profile/presentation/screens/profile_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -28,6 +29,10 @@ Raw<GoRouter> router(RouterRef ref) {
           return user == null ? '/login' : null;
         },
         routes: [
+          GoRoute(
+            path: 'achievements',
+            builder: (context, state) => const AchievementsScreen(),
+          ),
           GoRoute(
             path: 'book',
             builder: (context, state) => BookDetailsScreen(

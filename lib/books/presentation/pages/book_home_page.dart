@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reading/authentication/data/repositories/auth_repository.dart';
 import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:reading/books/presentation/pages/content/book_carrousel_content.dart';
 import 'package:reading/books/presentation/pages/content/greeting_content.dart';
@@ -14,9 +13,8 @@ class BookHomePage extends ConsumerWidget {
     return Column(
       children: [
         AppBar(
-          title: UserAppBar(
-            user: ref.watch(authRepositoryProvider).requireValue!,
-          ),
+          titleSpacing: 0,
+          title: const UserAppBar(),
         ),
         Expanded(
           child: ref.watch(myBooksProvider).maybeWhen(

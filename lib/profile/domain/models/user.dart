@@ -11,5 +11,10 @@ class User with _$User {
     String? avatar,
   }) = _User;
 
+  const User._();
+
   factory User.fromJson(Json json) => _$UserFromJson(json);
+
+  String initials([int initialsCount = 2]) =>
+      name.split(' ').take(initialsCount).map((e) => e[0]).join();
 }
