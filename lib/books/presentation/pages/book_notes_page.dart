@@ -54,6 +54,19 @@ class BookNotesPage extends StatelessWidget {
                       decoration: const InputDecoration(hintText: 'nota...'),
                       maxLines: 6,
                     ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text('Cancelar'),
+                        ),
+                        FilledButton(
+                          onPressed: () {},
+                          child: const Text('Salvar'),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
