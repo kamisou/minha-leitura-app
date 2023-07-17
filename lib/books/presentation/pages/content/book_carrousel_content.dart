@@ -48,13 +48,14 @@ class BookCarrouselContent extends HookWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 32),
         Expanded(
           child: PageView.builder(
             controller: pageController,
             itemCount: books.length,
             physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) => Center(
+            itemBuilder: (context, index) => Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: GestureDetector(
                 onTap: () => context.go('/book', extra: books[index]),
                 child: BookCover(url: books[index].coverArt),
@@ -62,7 +63,6 @@ class BookCarrouselContent extends HookWidget {
             ),
           ),
         ),
-        const SizedBox(height: 28),
         ValueListenableBuilder(
           valueListenable: page,
           builder: (context, value, child) => BookSummary(

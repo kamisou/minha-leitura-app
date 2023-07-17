@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
 import 'package:reading/common/extensions/color_extension.dart';
@@ -58,10 +59,11 @@ class BookNotesPage extends StatelessWidget {
                     Row(
                       children: [
                         TextButton(
-                          onPressed: () {},
+                          onPressed: context.pop,
                           child: const Text('Cancelar'),
                         ),
                         FilledButton(
+                          // TODO(kamisou): salvar nota
                           onPressed: () {},
                           child: const Text('Salvar'),
                         ),
