@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/dto/login_dto.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
 import 'package:reading/authentication/presentation/hooks/use_login_form_reducer.dart';
+import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/common/presentation/widgets/obsfuscated_text_form_field.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
@@ -18,6 +19,14 @@ class LoginForm extends HookConsumerWidget {
     final formKey = useRef(GlobalKey<FormState>());
     final loginForm = useLoginFormReducer();
 
+    useSnackbarErrorListener(
+      ref,
+      provider: loginControllerProvider,
+      messageBuilder: (error) => switch (error) {
+        _ => 'Ocorreu um erro ao fazer login. Tente novamente.',
+      },
+    );
+
     return Form(
       key: formKey.value,
       child: ListView(
@@ -26,9 +35,9 @@ class LoginForm extends HookConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () => context.go('/intro'),
-                child: const Icon(Icons.chevron_left),
+              IconButton(
+                onPressed: () => context.go('/intro'),
+                icon: const Icon(Icons.chevron_left),
               ),
               Text(
                 // TODO(kamisou): criar conta

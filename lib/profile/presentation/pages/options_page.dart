@@ -48,7 +48,8 @@ class OptionsPage extends HookConsumerWidget {
                   ProfileMenuOption(
                     icon: UniconsLine.user_check,
                     label: 'Meus Dados',
-                    onTap: () => context.go('/profile'),
+                    // TODO(kamisou): ir para meus dados
+                    onTap: () {},
                   ),
                   const Divider(),
                   ProfileMenuOption(

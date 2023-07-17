@@ -13,7 +13,6 @@ class BookHomePage extends ConsumerWidget {
     return Column(
       children: [
         AppBar(
-          titleSpacing: 0,
           title: const UserAppBar(),
         ),
         Expanded(

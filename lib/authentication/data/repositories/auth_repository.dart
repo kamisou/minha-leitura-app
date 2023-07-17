@@ -14,7 +14,7 @@ class AuthRepository extends _$AuthRepository {
   Future<User?> build() async {
     // await _authorize();
     // return _getUser();
-    return const User(name: 'João Marcos Kaminoski de Souza');
+    return null;
   }
 
   Future<void> _authorize() async {
@@ -28,18 +28,20 @@ class AuthRepository extends _$AuthRepository {
   }
 
   Future<User> _getUser() async {
-    final dynamic response = await ref.read(restApiProvider).get('/user');
-    return User.fromJson(response as Json);
+    // final dynamic response = await ref.read(restApiProvider).get('/user');
+    // return User.fromJson(response as Json);
+
+    return const User(name: 'João Marcos Kaminoski de Souza');
   }
 
   Future<void> login(LoginDTO data) async {
-    final response = await ref
-        .read(restApiProvider)
-        .post('/user/login', body: data.toJson()) as Map<String, dynamic>;
+    // final response = await ref
+    //     .read(restApiProvider)
+    //     .post('/user/login', body: data.toJson()) as Map<String, dynamic>;
 
-    final accessToken = response['access_token'] as String;
+    // final accessToken = response['access_token'] as String;
 
-    await ref.read(secureStorageProvider).write(_tokenKey, accessToken);
+    // await ref.read(secureStorageProvider).write(_tokenKey, accessToken);
 
     state = AsyncData(await _getUser());
   }

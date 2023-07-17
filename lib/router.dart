@@ -9,7 +9,6 @@ import 'package:reading/classes/presentation/screens/join_class_screen.dart';
 import 'package:reading/common/presentation/screens/home_screen.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/intro/presentation/screens/intro_screen.dart';
-import 'package:reading/profile/presentation/screens/profile_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router.g.dart';
@@ -48,10 +47,6 @@ Raw<GoRouter> router(RouterRef ref) {
                 builder: (context, state) => const JoinClassScreen(),
               ),
             ],
-          ),
-          GoRoute(
-            path: 'profile',
-            builder: (context, state) => const ProfileScreen(),
           ),
         ],
       ),

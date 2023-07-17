@@ -87,7 +87,7 @@ class RestApi {
             message: e.response!.statusMessage!,
           );
         case _:
-          const NoResponseRestException();
+          throw const NoResponseRestException();
       }
     } on SocketException {
       throw const NoResponseRestException();

@@ -46,7 +46,7 @@ class BookRepository {
       Book(
         id: 1,
         coverArt:
-            'https://s3-alpha-sig.figma.com/img/fc51/9370/48b40648284f72d5ba23eb7f53b20da8?Expires=1689552000&Signature=d9gtAuuYv23Q98uvBdAe9LT3SExvvBaHmd5XgKJQXgYxRIRiqJKgH6W4uOFNMs1fijGzP7Blow6OwqrG-5H5kaYa4UbX~B0DjtfBg2SuTN8nYX4njgq4ur3msyrmcwlHXNggPRkNs8MUI95KKTDMQMOqHMyZwwE2y-HbDrA56wPBJ0LtwBpihuwsHxHgEjQUtJ63Tr7Tc13Tnh2MEk0zMjw0Q05zFHcBPvqz5RxNxBf3beAYD85GaIMLeHKC9uMjR2MMHDjNXHkJlX0792FBIJNS7m2yFx9w5O7ADp9rlLZcZ9Au-dTpBc4znP6cbLHtQWWnji2xIYCo4q6puXifYw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
+            'https://s3-alpha-sig.figma.com/img/fc51/9370/48b40648284f72d5ba23eb7f53b20da8?Expires=1690761600&Signature=QiADSdNuPkbyJqAkP46yYdgkWj19XGUyn9ieeoibzunEzfF~vIKTdwewMjfb21yVJ9Gq2FKSoEFm~D0BxwoJEfz-9MVumNu64plDQfDL-nDLiVAAW7Zm69i7nG0-eK6uJZbTycZcH6rF0tWQiA2-8~xSmECNoWk-mT7-DL55BlcR0f6dzkxK0QjmJcs~vUKMmoKfO70dhP2nV0GYdpSYvsghBfxwZ40lADVTPwTwSK2fBPz4VbP~p5FPb7dz8HLAPJlR9ZlWhCmydjdVyUL5Oo-MiBe~S2U2iU1pZBP-4blVZSDTJ-yuQ5W94vgkQuX~CoT0yy4No3B-7q49MKwQGA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
         title: 'Alice no País das Maravilhas',
         author: 'Lewis Carroll',
         pageCount: 278,
@@ -55,7 +55,7 @@ class BookRepository {
       Book(
         id: 2,
         coverArt:
-            'https://s3-alpha-sig.figma.com/img/9dfb/7245/929efadae64ddbcebcc7571b22cbb0df?Expires=1689552000&Signature=JOLn1Jgkk61gSMaGCpbKQZMJyxPh-B1hW2sWkUoluHiGVEflvqyvsVJ2vWgD6cY6A4KV3KrrCZRr~JYRRSUrh~FK3t5YBHwSAE11yG2s~cIjfhzqsfuY2a-SEDI17MpgKR-GgwfYJ6mlGclRVEcZe5qzhMeVoD5~UF8QjVo5FjOkuldwYLTLTQzKdrvJUMkErJr-HYgjf7200hCnZOHx0Z0aoEHC5NVnsGAWKM~JqcO52tuWObV9z-0zBEohL0ZCiiM-3AKkhgLCdj-JPNgAeCdZnElPQLBxeeKX08fPATHUlB7gkVnezH42pqk4M0YHQFD5kL0xMi4IjYpHKLnXSA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
+            'https://s3-alpha-sig.figma.com/img/9dfb/7245/929efadae64ddbcebcc7571b22cbb0df?Expires=1690761600&Signature=b2~fTAwUPuJsjM1N4iH5xkrPA2TdbioLU~eWKrtRd-uEOgGx8rCXSkRgtvUNND1md3qVJhoIDX6aZx33umTYQOsyTN6jiKerNy3UZ1VkFSZh3xEk5-frLTylmLXrtAIVLO15kwozbTzLkeGgyCqX6avImGwEQbEJ1r-lVaOmuZ9NGPahAmn6~l5Y5hkTuGsyXdECON6w-FOWKb9OzaKBIUi2VrIgWxf~Sz-HvPzl-WFluKGTYOVUgu4naZMlzFmJeRF57eiAaTPAeKD-mCkLGsYFd6R1TtSzW23J0~eMjeGg-obJGJx3s4~lvCUIQZg5sK2dQCkvm4EniXdqLE8d8w__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
         title: 'O Iluminado',
         author: 'Stephen King',
         pageCount: 190,
@@ -64,7 +64,7 @@ class BookRepository {
       Book(
         id: 3,
         coverArt:
-            'https://s3-alpha-sig.figma.com/img/0945/92c4/c342a44fe57ffa61249aa175384402fc?Expires=1689552000&Signature=QPJ7Dvp9MUInw7on8JAlwshmTyqbL750Tepfi085zxEzfMA5SlZZg0YtDL74cvm-mkZjanmM4TA9c8SfIPNrVfTNkZMAmRiHPEESypxkGg-MrirsbXrD~jL-VLAoeh-V2nCfowH9cwmpsTQXYA~bmML98f3GbnF6mbPnS5wLVevsKALSlgSF~1QuICsyuabJ2KnIA-8WoKWvRSpgstd0IseoCDiIPEqLjXrNb1X~KAgKFY7B4zW9D4bUuYh9dHD4i~zMedAlnAokdh3ZMfhmtHRwmt10qS3FdX~Wa22Nxljhr3Bu8Wk2RwWvokniE2xoJFaRyYA3qfm-mjUKJAnxQg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
+            'https://s3-alpha-sig.figma.com/img/0945/92c4/c342a44fe57ffa61249aa175384402fc?Expires=1690761600&Signature=f-VogXfxA3TG4v88~y7BFLF-z9UpsPujoSYe0HnBNeYG9OdA3dHscnT9MqyIwJh9TC6AZNJotTBBqNx4jS7BzVA3pqWfBTdwuNlsQf6s2y8Igv7EsMyAlQ7PavCylDYgZpb8CVl1rp6EEF~~wA5WhcCnla9HhRmn7PEV3Cp1GBuWp6w7IjjSQl8Bx~jLtcp5qGNsa4cFQmJoWgrUfzM6RanLuh3h5IgVRsK4S6MpP7NoSVpM386JnTEpdjwYk065yhs3MBZbybDFBtEeknt71OIRkRER5EfxgJQWgnnu9UY~6MVN1DOpHvIPkrsqmHOfSxThjukL2MVu4ugadPELHw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
         title: 'Clube da Luta',
         author: 'Chuck Palahniuk',
         pageCount: 210,
