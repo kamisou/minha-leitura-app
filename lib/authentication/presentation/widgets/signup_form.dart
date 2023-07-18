@@ -101,8 +101,7 @@ class SignupForm extends HookConsumerWidget {
               value,
               signupForm.state.password.value,
             )) {
-              PasswordConfirmError.empty => 'Informe uma senha',
-              PasswordConfirmError.noMatch => 'As senhas não coincidem',
+              PasswordError.noMatch => 'As senhas não coincidem',
               _ => null,
             },
           ),

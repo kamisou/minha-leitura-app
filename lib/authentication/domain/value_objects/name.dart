@@ -2,7 +2,6 @@ enum NameError { empty, invalid }
 
 class Name {
   const Name([this.value = '']);
-  const Name.fromJson(String json) : value = json;
 
   final String value;
 
@@ -17,6 +16,4 @@ class Name {
 
     return null;
   }
-
-  static String toJson(Name name) => name.value;
 }

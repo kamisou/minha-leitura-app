@@ -1,21 +1,27 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:reading/authentication/domain/value_objects/email.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/common/infrastructure/rest_api.dart';
 
-part 'login_dto.freezed.dart';
-part 'login_dto.g.dart';
+class LoginDTO {
+  const LoginDTO({
+    this.email = const Email(),
+    this.password = const Password(),
+  });
 
-@freezed
-class LoginDTO with _$LoginDTO {
-  const factory LoginDTO({
-    @Default(Email()) //
-    @JsonKey(toJson: Email.toJson)
-    Email email,
-    @Default(Password()) //
-    @JsonKey(toJson: Password.toJson)
-    Password password,
-  }) = _LoginDTO;
+  final Email email;
+  final Password password;
 
-  factory LoginDTO.fromJson(Json json) => _$LoginDTOFromJson(json);
+  LoginDTO copyWith({
+    Email? email,
+    Password? password,
+  }) =>
+      LoginDTO(
+        email: email ?? this.email,
+        password: password ?? this.password,
+      );
+
+  Json toJson() => {
+        'email': email,
+        'password': password,
+      };
 }

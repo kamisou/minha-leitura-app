@@ -2,8 +2,7 @@ enum PagesError { empty, invalid }
 
 class Pages {
   const Pages([this.value]);
-  const Pages.fromJson(int json) : value = json;
-  Pages.fromString(String string) : value = int.parse(string);
+  Pages.fromString(String value) : value = int.tryParse(value);
 
   final int? value;
 
@@ -18,6 +17,4 @@ class Pages {
 
     return null;
   }
-
-  static int? toJson(Pages pages) => pages.value;
 }

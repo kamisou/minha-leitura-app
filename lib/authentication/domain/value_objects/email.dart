@@ -2,14 +2,14 @@ enum EmailError { empty }
 
 class Email {
   const Email([this.value = '']);
-  const Email.fromJson(String json) : value = json;
 
   final String value;
 
-  static EmailError? validate(String? value) => switch (value) {
-        '' || null => EmailError.empty,
-        _ => null,
-      };
+  static EmailError? validate(String? value) {
+    if (value?.isEmpty ?? true) {
+      return EmailError.empty;
+    }
 
-  static String toJson(Email email) => email.value;
+    return null;
+  }
 }

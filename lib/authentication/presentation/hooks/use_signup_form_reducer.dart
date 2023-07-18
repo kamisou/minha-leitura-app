@@ -8,18 +8,10 @@ import 'package:reading/authentication/domain/value_objects/password.dart';
 Store<SignupDTO, dynamic> useSignupFormReducer() {
   return useReducer(
     (state, action) => switch (action) {
-      Name() =>
-        // ignore: unused_result
-        state.copyWith(name: action),
-      Email() =>
-        // ignore: unused_result
-        state.copyWith(email: action),
-      Password() =>
-        // ignore: unused_result
-        state.copyWith(password: action),
-      PasswordConfirm() =>
-        // ignore: unused_result
-        state.copyWith(passwordConfirm: action),
+      Name() => state.copyWith(name: action),
+      Email() => state.copyWith(email: action),
+      Password() => state.copyWith(password: action),
+      PasswordConfirm() => state.copyWith(passwordConfirm: action),
       _ => state,
     },
     initialState: const SignupDTO(),

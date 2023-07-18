@@ -155,7 +155,7 @@ class BookRepository {
   Future<void> addReading(int bookId, Pages pages) async {
     await ref
         .read(restApiProvider)
-        .post('/book/$bookId/readings', body: {'pages': Pages.toJson(pages)});
+        .post('/book/$bookId/readings', body: {'pages': pages.value});
 
     ref.invalidate(bookDetailsProvider(bookId));
   }
