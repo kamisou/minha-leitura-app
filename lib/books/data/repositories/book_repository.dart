@@ -81,6 +81,7 @@ class BookRepository {
     // return BookDetails.fromJson(response as Json);
 
     return BookDetails(
+      id: 1,
       pageCount: 278,
       pagesRead: 72,
       currentPage: 36,
