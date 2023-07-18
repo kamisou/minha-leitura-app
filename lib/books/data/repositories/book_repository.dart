@@ -3,6 +3,8 @@ import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
+import 'package:reading/books/domain/value_objects/pages.dart';
+import 'package:reading/common/infrastructure/rest_api.dart';
 import 'package:reading/profile/domain/models/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -147,5 +149,13 @@ class BookRepository {
         date: DateTime.parse('2021-02-08T20:27:00.000Z'),
       ),
     ];
+  }
+
+  Future<void> addReading(int bookId, Pages pages) async {
+    await ref
+        .read(restApiProvider)
+        .post('/book/$bookId/readings', body: {'pages': Pages.toJson(pages)});
+
+    ref.invalidate(bookDetailsProvider(bookId));
   }
 }

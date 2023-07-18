@@ -27,9 +27,8 @@ class LoginForm extends HookConsumerWidget {
     useSnackbarErrorListener(
       ref,
       provider: loginControllerProvider,
-      messageBuilder: (error) => switch (error) {
-        _ => 'Ocorreu um erro ao fazer login. Tente novamente.',
-      },
+      messageBuilder: (error) =>
+          'Ocorreu um erro ao fazer login. Tente novamente.',
     );
 
     return Form(

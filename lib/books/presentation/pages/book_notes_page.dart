@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/models/book_note.dart';
+import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
-import 'package:reading/common/extensions/color_extension.dart';
 import 'package:unicons/unicons.dart';
 
 class BookNotesPage extends StatelessWidget {
@@ -33,44 +32,9 @@ class BookNotesPage extends StatelessWidget {
               backgroundColor: Theme.of(context).colorScheme.background,
               context: context,
               showDragHandle: true,
-              builder: (context) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    Text(
-                      'Nova nota',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall
-                          ?.copyWith(
-                            color: Theme.of(context).colorExtension?.gray[800],
-                          ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      decoration: const InputDecoration(hintText: 'título'),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      decoration: const InputDecoration(hintText: 'nota...'),
-                      maxLines: 6,
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        TextButton(
-                          onPressed: context.pop,
-                          child: const Text('Cancelar'),
-                        ),
-                        FilledButton(
-                          // TODO(kamisou): salvar nota
-                          onPressed: () {},
-                          child: const Text('Salvar'),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+              builder: (context) => const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: NewNoteDialog(),
               ),
             ),
             icon: const Icon(UniconsLine.edit),

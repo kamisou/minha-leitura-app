@@ -24,9 +24,8 @@ class SignupForm extends HookConsumerWidget {
     useSnackbarErrorListener(
       ref,
       provider: signupControllerProvider,
-      messageBuilder: (error) => switch (error) {
-        _ => 'Ocorreu um erro ao fazer cadastro. Tente novamente.',
-      },
+      messageBuilder: (error) =>
+          'Ocorreu um erro ao fazer cadastro. Tente novamente.',
     );
 
     return Form(

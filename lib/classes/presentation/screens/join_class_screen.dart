@@ -26,7 +26,7 @@ class JoinClassScreen extends HookConsumerWidget {
         BadResponseRestException(message: final message) => message,
         NoResponseRestException() =>
           'Você está sem acesso à internet. Tente novamente mais tarde.',
-        _ => null,
+        _ => 'Ocorreu um erro inesperado.',
       },
     );
 
