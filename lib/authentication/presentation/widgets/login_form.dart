@@ -3,16 +3,21 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/dto/login_dto.dart';
+import 'package:reading/authentication/domain/value_objects/email.dart';
+import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
 import 'package:reading/authentication/presentation/hooks/use_login_form_reducer.dart';
 import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/common/presentation/widgets/obsfuscated_text_form_field.dart';
-import 'package:reading/profile/domain/value_objects/email.dart';
-import 'package:reading/profile/domain/value_objects/password.dart';
 
 class LoginForm extends HookConsumerWidget {
-  const LoginForm({super.key});
+  const LoginForm({
+    super.key,
+    this.email,
+  });
+
+  final String? email;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,13 +44,9 @@ class LoginForm extends HookConsumerWidget {
                 onPressed: () => context.go('/intro'),
                 icon: const Icon(Icons.chevron_left),
               ),
-              Text(
-                // TODO(kamisou): criar conta
-                'Criar conta',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
+              TextButton(
+                onPressed: () => context.go('/signup'),
+                child: const Text('Criar conta'),
               ),
             ],
           ),

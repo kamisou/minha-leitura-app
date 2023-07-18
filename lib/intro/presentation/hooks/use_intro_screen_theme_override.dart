@@ -68,6 +68,20 @@ ThemeData useIntroScreenThemeOverride(ThemeData baseTheme) {
         progressIndicatorTheme: ProgressIndicatorThemeData(
           color: baseTheme.colorScheme.onPrimary,
         ),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: MaterialStateColor.resolveWith(
+              (states) => Colors.white,
+            ),
+            textStyle: MaterialStateTextStyle.resolveWith(
+              (states) => TextStyle(
+                fontFamily: baseTheme.textTheme.bodyLarge?.fontFamily,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Colors.white,
           selectionHandleColor: Colors.white,

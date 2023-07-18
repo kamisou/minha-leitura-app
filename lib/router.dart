@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:reading/achievements/presentation/screens/achievements_screen.dart';
 import 'package:reading/authentication/data/repositories/auth_repository.dart';
 import 'package:reading/authentication/presentation/screens/login_screen.dart';
+import 'package:reading/authentication/presentation/screens/signup_screen.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/screens/book_details_screen.dart';
 import 'package:reading/classes/presentation/screens/classes_screen.dart';
@@ -57,6 +58,10 @@ Raw<GoRouter> router(RouterRef ref) {
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/signup',
+        builder: (context, state) => const SignupScreen(),
       ),
     ],
   );

@@ -91,8 +91,7 @@ class IntroScreen extends HookConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             FilledButton(
-                              // TODO(kamisou): criar conta
-                              onPressed: () {},
+                              onPressed: () => context.go('/signup'),
                               child: const Text('Criar Conta'),
                             ),
                             const SizedBox(height: 10),
