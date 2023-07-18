@@ -11,8 +11,8 @@ import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.da
 import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/common/presentation/widgets/obsfuscated_text_form_field.dart';
 
-class LoginForm extends HookConsumerWidget {
-  const LoginForm({
+class LoginContent extends HookConsumerWidget {
+  const LoginContent({
     super.key,
     this.email,
   });

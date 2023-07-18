@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/authentication/presentation/content/signup_content.dart';
 import 'package:reading/authentication/presentation/controllers/signup_controller.dart';
-import 'package:reading/authentication/presentation/widgets/signup_form.dart';
 import 'package:reading/common/exceptions/rest_exception.dart';
 import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/common/presentation/widgets/gradient_intro_background.dart';
@@ -38,7 +38,7 @@ class SignupScreen extends HookConsumerWidget {
           SafeArea(
             child: Theme(
               data: themeOverride,
-              child: const SignupForm(),
+              child: const SignupContent(),
             ),
           ),
         ],

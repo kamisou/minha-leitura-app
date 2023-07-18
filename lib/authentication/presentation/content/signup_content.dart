@@ -13,8 +13,8 @@ import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.da
 import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/common/presentation/widgets/obsfuscated_text_form_field.dart';
 
-class SignupForm extends HookConsumerWidget {
-  const SignupForm({super.key});
+class SignupContent extends HookConsumerWidget {
+  const SignupContent({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
