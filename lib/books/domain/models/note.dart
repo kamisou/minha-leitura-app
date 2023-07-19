@@ -2,18 +2,18 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:reading/common/infrastructure/rest_api.dart';
 import 'package:reading/profile/domain/models/user.dart';
 
-part 'book_note.freezed.dart';
-part 'book_note.g.dart';
+part 'note.freezed.dart';
+part 'note.g.dart';
 
 @freezed
-class BookNote with _$BookNote {
-  const factory BookNote({
+class Note with _$Note {
+  const factory Note({
     required String title,
     required String description,
     required User author,
     required DateTime createdAt,
-    @Default([]) List<BookNote> responses,
-  }) = _BookNote;
+    @Default([]) List<Note> responses,
+  }) = _Note;
 
-  factory BookNote.fromJson(Json json) => _$BookNoteFromJson(json);
+  factory Note.fromJson(Json json) => _$NoteFromJson(json);
 }

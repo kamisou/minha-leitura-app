@@ -4,13 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:reading/books/domain/models/book.dart';
-import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
 import 'package:reading/books/presentation/pages/book_details_page.dart';
-import 'package:reading/books/presentation/pages/book_notes_page.dart';
-import 'package:reading/books/presentation/pages/book_reading_page.dart';
+import 'package:reading/books/presentation/pages/notes_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/common/extensions/color_extension.dart';
 import 'package:reading/common/presentation/widgets/book_cover.dart';
+import 'package:reading/readings/data/repositories/reading_repository.dart';
+import 'package:reading/readings/presentation/hooks/use_book_read_percentage.dart';
+import 'package:reading/readings/presentation/pages/book_reading_page.dart';
 import 'package:unicons/unicons.dart';
 
 class BookDetailsScreen extends HookConsumerWidget {
@@ -181,7 +182,7 @@ class BookDetailsScreen extends HookConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ref.watch(bookNotesProvider(book.id)).maybeWhen(
-                    data: (data) => BookNotesPage(notes: data),
+                    data: (data) => NotesPage(notes: data),
                     orElse: () => const SizedBox(),
                   ),
             ),

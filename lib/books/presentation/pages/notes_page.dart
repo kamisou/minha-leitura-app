@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:reading/books/domain/models/book_note.dart';
+import 'package:reading/books/domain/models/note.dart';
 import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
 import 'package:unicons/unicons.dart';
 
-class BookNotesPage extends StatelessWidget {
-  const BookNotesPage({
+class NotesPage extends StatelessWidget {
+  const NotesPage({
     super.key,
     required this.notes,
   });
 
-  final List<BookNote> notes;
+  final List<Note> notes;
 
   @override
   Widget build(BuildContext context) {
