@@ -4,8 +4,8 @@ import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
 import 'package:unicons/unicons.dart';
 
-class NotesPage extends StatelessWidget {
-  const NotesPage({
+class BookNotesPage extends StatelessWidget {
+  const BookNotesPage({
     super.key,
     required this.notes,
   });

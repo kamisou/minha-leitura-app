@@ -13,6 +13,7 @@ class NewReadingDialog extends HookWidget {
     final pages = useState(const Pages());
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           'Lançar Leitura',
@@ -23,17 +24,21 @@ class NewReadingDialog extends HookWidget {
         const SizedBox(height: 20),
         Text(
           'Informe o número da página que você parou',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorExtension?.gray[500],
               ),
+          textAlign: TextAlign.center,
         ),
         const SizedBox(height: 48),
         TextFormField(
+          textAlign: TextAlign.center,
           decoration: InputDecoration(
             border: InputBorder.none,
+            filled: false,
             hintText: '00',
             hintStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   color: Theme.of(context).colorExtension?.gray[300],
+                  fontSize: 52,
                 ),
           ),
           inputFormatters: [
@@ -41,24 +46,36 @@ class NewReadingDialog extends HookWidget {
           ],
           keyboardType: TextInputType.number,
           onChanged: (value) => pages.value = Pages.fromString(value),
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Theme.of(context).colorExtension?.gray[600],
+                fontSize: 52,
+              ),
           validator: (value) => switch (Pages.validate(value)) {
             PagesError.empty => 'Informe o número de páginas',
             PagesError.invalid => 'Informe um número de páginas válido',
             _ => null,
           },
         ),
-        const SizedBox(height: 100),
+        const SizedBox(height: 80),
         Row(
           children: [
-            TextButton(
-              onPressed: context.pop,
-              child: const Text('Cancelar'),
+            Expanded(
+              child: TextButton(
+                onPressed: context.pop,
+                child: const Text('Cancelar'),
+              ),
             ),
-            FilledButton(
-              onPressed: () => context.pop(pages),
-              child: const Text('Salvar'),
+            const SizedBox(width: 16),
+            Expanded(
+              child: FilledButton(
+                onPressed: () => context.pop(pages),
+                child: const Text('Salvar'),
+              ),
             ),
           ],
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).viewInsets.bottom,
         ),
       ],
     );

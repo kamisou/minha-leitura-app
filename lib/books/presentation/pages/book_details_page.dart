@@ -36,6 +36,7 @@ class BookDetailsPage extends HookConsumerWidget {
     );
 
     return Stack(
+      alignment: Alignment.bottomCenter,
       children: [
         ListView(
           padding: EdgeInsets.zero,
@@ -94,11 +95,12 @@ class BookDetailsPage extends HookConsumerWidget {
           padding: const EdgeInsets.only(bottom: 16),
           child: FilledButton.icon(
             onPressed: () => showModalBottomSheet<Pages?>(
-              backgroundColor: Theme.of(context).colorScheme.background,
               context: context,
+              backgroundColor: Theme.of(context).colorScheme.background,
+              isScrollControlled: true,
               showDragHandle: true,
               builder: (context) => const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 child: NewReadingDialog(),
               ),
             ).then(

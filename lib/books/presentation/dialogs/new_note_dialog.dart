@@ -37,7 +37,7 @@ class NewNoteDialog extends StatelessWidget {
               child: const Text('Salvar'),
             ),
           ],
-        )
+        ),
       ],
     );
   }

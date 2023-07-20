@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/pages/book_details_page.dart';
-import 'package:reading/books/presentation/pages/notes_page.dart';
+import 'package:reading/books/presentation/pages/book_notes_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/common/extensions/color_extension.dart';
 import 'package:reading/common/presentation/widgets/book_cover.dart';
@@ -182,7 +182,7 @@ class BookDetailsScreen extends HookConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ref.watch(bookNotesProvider(book.id)).maybeWhen(
-                    data: (data) => NotesPage(notes: data),
+                    data: (data) => BookNotesPage(notes: data),
                     orElse: () => const SizedBox(),
                   ),
             ),
