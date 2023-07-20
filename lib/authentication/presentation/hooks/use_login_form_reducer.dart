@@ -1,6 +1,6 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import 'package:reading/authentication/data/dto/login_dto.dart';
+import 'package:reading/authentication/data/dtos/login_dto.dart';
 import 'package:reading/authentication/domain/value_objects/email.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 

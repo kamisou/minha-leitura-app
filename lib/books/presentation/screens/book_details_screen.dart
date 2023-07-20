@@ -181,7 +181,7 @@ class BookDetailsScreen extends HookConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ref.watch(bookNotesProvider(book.id)).maybeWhen(
-                    data: (data) => BookNotesPage(notes: data),
+                    data: (data) => BookNotesPage(bookId: book.id, notes: data),
                     orElse: () => const SizedBox(),
                   ),
             ),

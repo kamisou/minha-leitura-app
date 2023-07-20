@@ -1,5 +1,5 @@
-import 'package:reading/authentication/data/dto/login_dto.dart';
-import 'package:reading/authentication/data/dto/signup_dto.dart';
+import 'package:reading/authentication/data/dtos/login_dto.dart';
+import 'package:reading/authentication/data/dtos/signup_dto.dart';
 import 'package:reading/common/infrastructure/rest_api.dart';
 import 'package:reading/common/infrastructure/secure_storage.dart';
 import 'package:reading/profile/domain/models/user.dart';
