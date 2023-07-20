@@ -99,10 +99,7 @@ class BookDetailsPage extends HookConsumerWidget {
               backgroundColor: Theme.of(context).colorScheme.background,
               isScrollControlled: true,
               showDragHandle: true,
-              builder: (context) => const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                child: NewReadingDialog(),
-              ),
+              builder: (context) => const NewReadingDialog(),
             ).then(
               (value) => value != null
                   ? ref

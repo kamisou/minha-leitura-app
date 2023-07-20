@@ -31,11 +31,9 @@ class BookNotesPage extends StatelessWidget {
             onPressed: () => showModalBottomSheet<void>(
               backgroundColor: Theme.of(context).colorScheme.background,
               context: context,
+              isScrollControlled: true,
               showDragHandle: true,
-              builder: (context) => const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: NewNoteDialog(),
-              ),
+              builder: (context) => const NewNoteDialog(),
             ),
             icon: const Icon(UniconsLine.edit),
             label: const Text('Adicionar anotação'),
