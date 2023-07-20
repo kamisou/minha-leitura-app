@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:reading/readings/domain/models/reading.dart';
-import 'package:reading/readings/presentation/widgets/book_reading_tile.dart';
+import 'package:reading/books/domain/models/book_reading.dart';
+import 'package:reading/books/presentation/widgets/book_reading_tile.dart';
 
 class BookReadingPage extends StatelessWidget {
   const BookReadingPage({
@@ -8,7 +8,7 @@ class BookReadingPage extends StatelessWidget {
     required this.readings,
   });
 
-  final List<Reading> readings;
+  final List<BookReading> readings;
 
   @override
   Widget build(BuildContext context) {

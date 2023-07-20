@@ -3,11 +3,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
+import 'package:reading/books/presentation/controllers/new_reading_controller.dart';
+import 'package:reading/books/presentation/dialogs/new_reading_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_details_tile.dart';
 import 'package:reading/common/presentation/hooks/use_d_mmmm_y.dart';
 import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
-import 'package:reading/readings/presentation/controllers/new_reading_controller.dart';
-import 'package:reading/readings/presentation/dialogs/new_reading_dialog.dart';
 import 'package:unicons/unicons.dart';
 
 class BookDetailsPage extends HookConsumerWidget {

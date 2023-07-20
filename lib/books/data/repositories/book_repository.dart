@@ -1,7 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
-import 'package:reading/books/domain/models/note.dart';
+import 'package:reading/books/domain/models/book_note.dart';
+import 'package:reading/books/domain/models/book_reading.dart';
+import 'package:reading/books/domain/value_objects/pages.dart';
+import 'package:reading/common/infrastructure/rest_api.dart';
 import 'package:reading/profile/domain/models/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -23,8 +26,13 @@ Future<BookDetails> bookDetails(BookDetailsRef ref, int bookId) {
 }
 
 @riverpod
-Future<List<Note>> bookNotes(BookNotesRef ref, int bookId) {
+Future<List<BookNote>> bookNotes(BookNotesRef ref, int bookId) {
   return ref.watch(bookRepositoryProvider).getBookNotes(bookId);
+}
+
+@riverpod
+Future<List<BookReading>> bookReadings(BookReadingsRef ref, int bookId) {
+  return ref.watch(bookRepositoryProvider).getBookReadings(bookId);
 }
 
 class BookRepository {
@@ -82,13 +90,13 @@ class BookRepository {
     );
   }
 
-  Future<List<Note>> getBookNotes(int bookId) async {
+  Future<List<BookNote>> getBookNotes(int bookId) async {
     // final dynamic response =
     //     await ref.read(restApiProvider).get('/book/$bookId/notes');
     // return (response as List).cast<Json>().map(BookNote.fromJson).toList();
 
     return [
-      Note(
+      BookNote(
         title: 'Reflexão',
         description:
             'Ipsum sea dolore clita magna. Sit et dolor sit in invidunt lorem'
@@ -110,7 +118,7 @@ class BookRepository {
         author: const User(name: 'Guilherme'),
         createdAt: DateTime.parse('2022-09-26T15:26:30.000Z'),
         responses: [
-          Note(
+          BookNote(
             title: 'Título XPTO',
             description: 'Vel et sit dolor sit stet. Hendrerit volutpat autem'
                 ' sea justo ut et quis lorem. Ut nonumy accusam nulla doming '
@@ -121,5 +129,34 @@ class BookRepository {
         ],
       ),
     ];
+  }
+
+  Future<List<BookReading>> getBookReadings(int bookId) async {
+    // final dynamic response =
+    //     await ref.read(restApiProvider).get('/book/$bookId/readings');
+    // return (response as List).cast<Json>().map(BookNote.fromJson).toList();
+
+    return [
+      BookReading(
+        pages: 22,
+        date: DateTime.parse('2021-02-10T18:24:00.000Z'),
+      ),
+      BookReading(
+        pages: 9,
+        date: DateTime.parse('2021-02-09T19:11:00.000Z'),
+      ),
+      BookReading(
+        pages: 4,
+        date: DateTime.parse('2021-02-08T20:27:00.000Z'),
+      ),
+    ];
+  }
+
+  Future<void> addReading(int bookId, Pages pages) async {
+    await ref
+        .read(restApiProvider)
+        .post('/book/$bookId/readings', body: {'pages': pages.value});
+
+    ref.invalidate(bookDetailsProvider(bookId));
   }
 }

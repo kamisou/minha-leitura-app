@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reading/books/domain/models/note.dart';
+import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
 import 'package:unicons/unicons.dart';
@@ -10,7 +10,7 @@ class BookNotesPage extends StatelessWidget {
     required this.notes,
   });
 
-  final List<Note> notes;
+  final List<BookNote> notes;
 
   @override
   Widget build(BuildContext context) {
