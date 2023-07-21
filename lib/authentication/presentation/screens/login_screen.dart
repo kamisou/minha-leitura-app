@@ -25,25 +25,25 @@ class LoginScreen extends HookConsumerWidget {
       },
     );
 
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-            ),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
           ),
-          const GradientIntroBackground(),
-          SafeArea(
+        ),
+        const GradientIntroBackground(),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SafeArea(
             child: Theme(
               data: themeOverride,
               child: const LoginContent(),
             ),
           ),
-        ],
-      ),
-      resizeToAvoidBottomInset: false,
+        ),
+      ],
     );
   }
 }

@@ -36,7 +36,7 @@ class Bookshelf extends StatelessWidget {
                     for (var book = 0; book < booksPerRow; book += 1)
                       if (row * booksPerRow + book < books.length)
                         SizedBox(
-                          width: 90,
+                          width: MediaQuery.of(context).size.width * 0.22,
                           child: GestureDetector(
                             onTap: () => context.go(
                               '/book',
