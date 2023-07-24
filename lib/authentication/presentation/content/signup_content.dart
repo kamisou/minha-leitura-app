@@ -3,8 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/dtos/signup_dto.dart';
-import 'package:reading/profile/domain/value_objects/email.dart';
-import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
 import 'package:reading/authentication/presentation/controllers/signup_controller.dart';
@@ -12,6 +10,8 @@ import 'package:reading/authentication/presentation/hooks/use_signup_form_reduce
 import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/common/presentation/widgets/obsfuscated_text_form_field.dart';
+import 'package:reading/profile/domain/value_objects/email.dart';
+import 'package:reading/profile/domain/value_objects/name.dart';
 
 class SignupContent extends HookConsumerWidget {
   const SignupContent({super.key});

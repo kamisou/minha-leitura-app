@@ -4,7 +4,7 @@ import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/profile/domain/value_objects/phone.dart';
 
-Store<ProfileDTO, dynamic> useProfileFormReducer([ProfileDTO? initialData]) {
+Store<ProfileDTO, dynamic> useProfileFormReducer({ProfileDTO? initialState}) {
   return useReducer(
     (state, action) => switch (action) {
       Name()? => state.copyWith(name: action),
@@ -12,7 +12,7 @@ Store<ProfileDTO, dynamic> useProfileFormReducer([ProfileDTO? initialData]) {
       Phone()? => state.copyWith(phone: action),
       _ => state,
     },
-    initialState: initialData ?? const ProfileDTO(),
+    initialState: initialState ?? const ProfileDTO(),
     initialAction: null,
   );
 }
