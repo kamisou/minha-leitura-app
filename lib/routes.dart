@@ -27,9 +27,9 @@ Raw<GoRouter> router(RouterRef ref) {
         builder: (context, state) => const HomeScreen(),
         path: '/',
         redirect: (context, state) {
-          final hasConnection = ref.read(connectivityProvider).requireValue;
+          final isConnected = ref.read(isConnectedProvider).requireValue;
           final user = ref.read(authRepositoryProvider).valueOrNull;
-          return hasConnection && user == null ? '/login' : null;
+          return isConnected && user == null ? '/login' : null;
         },
         routes: [
           GoRoute(

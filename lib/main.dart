@@ -20,7 +20,7 @@ void main() async {
   await Hive.initFlutter();
 
   final container = ProviderContainer();
-  await container.read(connectivityProvider.future);
+  await container.read(isConnectedProvider.future);
   await container.read(introSeenProvider.future);
 
   runApp(
