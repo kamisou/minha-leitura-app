@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/books/domain/models/book_note.dart';
-import 'package:reading/common/extensions/color_extension.dart';
+import 'package:reading/common/extensions/theme_extension.dart';
 import 'package:reading/common/presentation/hooks/use_dd_mm_yy_h_m.dart';
 
 class BookNotesTile extends HookWidget {

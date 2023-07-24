@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:reading/books/presentation/widgets/bookshelf.dart';
-import 'package:reading/common/extensions/color_extension.dart';
+import 'package:reading/common/extensions/theme_extension.dart';
 import 'package:reading/common/presentation/widgets/user_app_bar.dart';
 import 'package:unicons/unicons.dart';
 

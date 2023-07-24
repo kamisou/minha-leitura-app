@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:reading/common/extensions/color_extension.dart';
+import 'package:reading/common/extensions/theme_extension.dart';
 
 class NavBarHome extends HookWidget {
   const NavBarHome({
@@ -94,8 +94,8 @@ class NavBarHome extends HookWidget {
                   GestureDetector(
                     onTap: () => controller.animateToPage(
                       index,
-                      curve: Curves.easeInOutQuart,
-                      duration: const Duration(milliseconds: 300),
+                      curve: Theme.of(context).animationExtension!.curve,
+                      duration: Theme.of(context).animationExtension!.duration,
                     ),
                     child: Container(
                       alignment: Alignment.center,

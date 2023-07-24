@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reading/common/extensions/color_extension.dart';
+import 'package:reading/common/extensions/theme_extension.dart';
 import 'package:reading/common/presentation/widgets/user_app_bar.dart';
 
 class AchievementsScreen extends StatelessWidget {

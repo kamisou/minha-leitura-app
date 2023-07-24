@@ -6,7 +6,7 @@ import 'package:reading/classes/presentation/controllers/join_class_controller.d
 
 import 'package:reading/classes/presentation/widgets/code_input.dart';
 import 'package:reading/common/exceptions/rest_exception.dart';
-import 'package:reading/common/extensions/color_extension.dart';
+import 'package:reading/common/extensions/theme_extension.dart';
 import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
 

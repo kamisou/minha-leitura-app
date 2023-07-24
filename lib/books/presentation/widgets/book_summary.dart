@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
-import 'package:reading/common/extensions/color_extension.dart';
+import 'package:reading/common/extensions/theme_extension.dart';
 import 'package:unicons/unicons.dart';
 
 class BookSummary extends HookWidget {
@@ -11,10 +11,6 @@ class BookSummary extends HookWidget {
     super.key,
     required this.book,
   });
-
-  static const _duration = Duration(milliseconds: 500);
-
-  static const _curve = Curves.easeInOutQuart;
 
   final Book book;
 
@@ -27,15 +23,15 @@ class BookSummary extends HookWidget {
         Center(
           child: AnimatedPercentageMeter(
             percentage: percentageRead,
-            duration: _duration,
-            curve: _curve,
+            duration: Theme.of(context).animationExtension!.duration,
+            curve: Theme.of(context).animationExtension!.curve,
           ),
         ),
         const SizedBox(height: 16),
         AnimatedSwitcher(
-          duration: _duration,
-          switchInCurve: _curve,
-          switchOutCurve: _curve,
+          duration: Theme.of(context).animationExtension!.duration,
+          switchInCurve: Theme.of(context).animationExtension!.curve,
+          switchOutCurve: Theme.of(context).animationExtension!.curve,
           transitionBuilder: (child, animation) =>
               FadeTransition(opacity: animation, child: child),
           child: Column(

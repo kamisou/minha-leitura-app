@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reading/common/extensions/color_extension.dart';
+import 'package:reading/common/extensions/theme_extension.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme.g.dart';
@@ -39,6 +39,10 @@ class ThemeManager extends _$ThemeManager {
       disabledColor: const Color(0xFFE6E6E6),
       dividerTheme: const DividerThemeData(space: 42),
       extensions: const [
+        AnimationExtension(
+          curve: Curves.easeInOutQuart,
+          duration: Duration(milliseconds: 300),
+        ),
         ColorExtension(
           gray: MaterialColor(
             0xFF3B4149,

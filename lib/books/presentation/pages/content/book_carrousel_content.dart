@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/widgets/book_summary.dart';
-import 'package:reading/common/extensions/color_extension.dart';
+import 'package:reading/common/extensions/theme_extension.dart';
 import 'package:reading/common/presentation/hooks/use_page_notifier.dart';
 import 'package:reading/common/presentation/widgets/book_cover.dart';
 
