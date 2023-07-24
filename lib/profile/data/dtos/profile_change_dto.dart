@@ -3,8 +3,8 @@ import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/profile/domain/value_objects/phone.dart';
 
-class ProfileDTO {
-  const ProfileDTO({
+class ProfileChangeDTO {
+  const ProfileChangeDTO({
     this.name,
     this.email,
     this.phone,
@@ -16,12 +16,12 @@ class ProfileDTO {
 
   final Phone? phone;
 
-  ProfileDTO copyWith({
+  ProfileChangeDTO copyWith({
     Name? name,
     Email? email,
     Phone? phone,
   }) =>
-      ProfileDTO(
+      ProfileChangeDTO(
         name: name ?? this.name,
         email: email ?? this.email,
         phone: phone ?? this.phone,

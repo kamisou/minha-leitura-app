@@ -83,7 +83,7 @@ class LoginContent extends HookConsumerWidget {
               loginForm.state,
             ),
             validator: (value) => switch (Password.validate(value)) {
-              PasswordError() => 'Informe uma senha',
+              PasswordError.empty => 'Informe uma senha',
               _ => null,
             },
           ),

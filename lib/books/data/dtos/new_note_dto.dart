@@ -2,8 +2,8 @@ import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/common/infrastructure/rest_api.dart';
 
-class NoteDTO {
-  const NoteDTO({
+class NewNoteDTO {
+  const NewNoteDTO({
     this.title = const Title(),
     this.description = const Description(),
   });
@@ -12,11 +12,11 @@ class NoteDTO {
 
   final Description description;
 
-  NoteDTO copyWith({
+  NewNoteDTO copyWith({
     Title? title,
     Description? description,
   }) =>
-      NoteDTO(
+      NewNoteDTO(
         title: title ?? this.title,
         description: description ?? this.description,
       );

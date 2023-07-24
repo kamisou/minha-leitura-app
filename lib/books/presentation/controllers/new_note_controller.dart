@@ -1,4 +1,4 @@
-import 'package:reading/books/data/dtos/note_dto.dart';
+import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,7 +11,7 @@ class NewNoteController extends _$NewNoteController {
     return;
   }
 
-  Future<void> addNote(int bookId, NoteDTO note) async {
+  Future<void> addNote(int bookId, NewNoteDTO note) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
       () => ref.read(bookRepositoryProvider).addNote(bookId, note),

@@ -5,11 +5,13 @@ import 'package:reading/authentication/data/repositories/auth_repository.dart';
 import 'package:reading/common/infrastructure/image_picker.dart';
 import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
-import 'package:reading/profile/data/dtos/profile_dto.dart';
+import 'package:reading/profile/data/dtos/password_change_dto.dart';
+import 'package:reading/profile/data/dtos/profile_change_dto.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/profile/domain/value_objects/phone.dart';
 import 'package:reading/profile/presentation/controllers/my_profile_controller.dart';
+import 'package:reading/profile/presentation/dialogs/change_password_dialog.dart';
 import 'package:reading/profile/presentation/hooks/use_profile_form_reducer.dart';
 import 'package:reading/profile/presentation/widgets/profile_picture.dart';
 
@@ -21,7 +23,7 @@ class MyProfileScreen extends HookConsumerWidget {
     final user = ref.watch(authRepositoryProvider).requireValue!;
     final formKey = useRef(GlobalKey<FormState>());
     final profileForm = useProfileFormReducer(
-      initialState: ProfileDTO(
+      initialState: ProfileChangeDTO(
         email: Email(user.email),
         name: Name(user.name),
         phone: Phone(user.phone),
@@ -84,8 +86,16 @@ class MyProfileScreen extends HookConsumerWidget {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    // TODO(kamisou): alterar senha
-                    onPressed: () {},
+                    onPressed: () => showDialog<PasswordChangeDTO?>(
+                      context: context,
+                      builder: (context) => const ChangePasswordDialog(),
+                    ).then(
+                      (value) => value != null
+                          ? ref
+                              .read(myProfileControllerProvider.notifier)
+                              .savePassword(value)
+                          : null,
+                    ),
                     child: const Text('Alterar senha'),
                   ),
                 ),
@@ -124,7 +134,7 @@ class MyProfileScreen extends HookConsumerWidget {
     return ref.read(myProfileControllerProvider.notifier).saveAvatar(avatar);
   }
 
-  void _save(WidgetRef ref, FormState form, ProfileDTO data) {
+  void _save(WidgetRef ref, FormState form, ProfileChangeDTO data) {
     if (!form.validate()) {
       return;
     }

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reading/books/data/dtos/note_dto.dart';
+import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/models/book_note.dart';
@@ -161,7 +161,7 @@ class BookRepository {
     ref.invalidate(bookDetailsProvider(bookId));
   }
 
-  Future<void> addNote(int bookId, NoteDTO note) async {
+  Future<void> addNote(int bookId, NewNoteDTO note) async {
     await ref
         .read(restApiProvider)
         .post('/book/$bookId/notes', body: note.toJson());

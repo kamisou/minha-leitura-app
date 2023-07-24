@@ -84,7 +84,7 @@ class SignupContent extends HookConsumerWidget {
             decoration: const InputDecoration(hintText: 'Senha'),
             onChanged: (value) => signupForm.dispatch(Password(value)),
             validator: (value) => switch (Password.validate(value)) {
-              PasswordError() => 'Informe uma senha',
+              PasswordError.empty => 'Informe uma senha',
               _ => null,
             },
           ),

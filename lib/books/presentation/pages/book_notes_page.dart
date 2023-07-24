@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reading/books/data/dtos/note_dto.dart';
+import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
@@ -41,7 +41,7 @@ class BookNotesPage extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: FilledButton.icon(
-            onPressed: () => showModalBottomSheet<NoteDTO?>(
+            onPressed: () => showModalBottomSheet<NewNoteDTO?>(
               backgroundColor: Theme.of(context).colorScheme.background,
               context: context,
               isScrollControlled: true,
