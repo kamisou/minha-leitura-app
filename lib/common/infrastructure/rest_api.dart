@@ -52,11 +52,32 @@ class RestApi {
   }) =>
       _request(RestMethod.post, path, body: body);
 
+  Future<dynamic> upload(
+    String path, {
+    required String field,
+    required File file,
+  }) async {
+    log(
+      'upload $path\n'
+      'file: ${file.path}',
+      name: 'RestApi',
+    );
+
+    final bytes = file.readAsBytesSync();
+
+    final multipartFile = MultipartFile.fromBytes(bytes)..finalize();
+    final formData = FormData()
+      ..files.add(MapEntry(field, multipartFile))
+      ..finalize();
+
+    return _request(RestMethod.post, path, body: formData);
+  }
+
   Future<dynamic> _request(
     RestMethod method,
     String path, {
     Map<String, dynamic>? query,
-    Json? body,
+    Object? body,
   }) async {
     log(
       '$method $path\n'

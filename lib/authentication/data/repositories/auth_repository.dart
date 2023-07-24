@@ -2,6 +2,7 @@ import 'package:reading/authentication/data/dtos/login_dto.dart';
 import 'package:reading/authentication/data/dtos/signup_dto.dart';
 import 'package:reading/common/infrastructure/rest_api.dart';
 import 'package:reading/common/infrastructure/secure_storage.dart';
+import 'package:reading/profile/domain/models/user.dart';
 import 'package:reading/profile/domain/models/user_details.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -30,7 +31,7 @@ class AuthRepository extends _$AuthRepository {
 
   Future<UserDetails> _getUser() async {
     // final dynamic response = await ref.read(restApiProvider).get('/user');
-    // return User.fromJson(response as Json);
+    // return UserDetails.fromJson(response as Json);
 
     return const UserDetails(
       name: 'João Marcos Kaminoski de Souza',

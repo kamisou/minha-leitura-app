@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/repositories/auth_repository.dart';
+import 'package:reading/common/infrastructure/image_picker.dart';
 import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/profile/data/dtos/profile_dto.dart';
@@ -47,8 +48,7 @@ class MyProfileScreen extends HookConsumerWidget {
               children: [
                 Center(
                   child: GestureDetector(
-                    // TODO(kamisou): alterar foto
-                    onTap: () {},
+                    onTap: () => _changeAvatar(ref),
                     child: const ProfilePicture(radius: 110),
                   ),
                 ),
@@ -101,20 +101,34 @@ class MyProfileScreen extends HookConsumerWidget {
             ),
           ),
           ButtonProgressIndicator(
-            onPressed: () {
-              if (!formKey.value.currentState!.validate()) {
-                return;
-              }
-
-              ref
-                  .read(myProfileControllerProvider.notifier)
-                  .save(profileForm.state);
-            },
+            onPressed: () => _save(
+              ref,
+              formKey.value.currentState!,
+              profileForm.state,
+            ),
             isLoading: ref.watch(myProfileControllerProvider).isLoading,
             child: const Text('Salvar'),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _changeAvatar(WidgetRef ref) async {
+    final avatar = await ref.read(imagePickerProvider).pickImage();
+
+    if (avatar == null) {
+      return;
+    }
+
+    return ref.read(myProfileControllerProvider.notifier).saveAvatar(avatar);
+  }
+
+  void _save(WidgetRef ref, FormState form, ProfileDTO data) {
+    if (!form.validate()) {
+      return;
+    }
+
+    ref.read(myProfileControllerProvider.notifier).save(data);
   }
 }
