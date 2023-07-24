@@ -1,5 +1,5 @@
-import 'package:reading/authentication/domain/value_objects/email.dart';
-import 'package:reading/authentication/domain/value_objects/name.dart';
+import 'package:reading/profile/domain/value_objects/email.dart';
+import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/common/infrastructure/rest_api.dart';
 

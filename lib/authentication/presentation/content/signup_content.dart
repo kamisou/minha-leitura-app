@@ -3,8 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/dtos/signup_dto.dart';
-import 'package:reading/authentication/domain/value_objects/email.dart';
-import 'package:reading/authentication/domain/value_objects/name.dart';
+import 'package:reading/profile/domain/value_objects/email.dart';
+import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
 import 'package:reading/authentication/presentation/controllers/signup_controller.dart';
@@ -74,7 +74,8 @@ class SignupContent extends HookConsumerWidget {
             onChanged: (value) => signupForm.dispatch(Email(value)),
             textInputAction: TextInputAction.next,
             validator: (value) => switch (Email.validate(value)) {
-              EmailError() => 'Informe um endereço de e-mail',
+              EmailError.empty => 'Informe um endereço de e-mail',
+              EmailError.invalid => 'Informe um endereço de e-mail válido',
               _ => null,
             },
           ),
