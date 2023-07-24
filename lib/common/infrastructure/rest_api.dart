@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:reading/common/exceptions/rest_exception.dart';
-import 'package:reading/constants.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'rest_api.g.dart';
@@ -15,7 +14,7 @@ enum RestMethod { get, post }
 @riverpod
 RestApi restApi(RestApiRef ref) {
   return RestApi(
-    server: ref.watch(constantsProvider).restApiUrl,
+    server: 'http://192.168.0.169:8002/api',
   );
 }
 

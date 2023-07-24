@@ -1,17 +1,19 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:reading/common/infrastructure/rest_api.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
 
 @freezed
-class User with _$User {
+@HiveType(typeId: 1)
+class User extends HiveObject with _$User {
   const factory User({
-    required String name,
-    String? avatar,
+    @HiveField(0) required String name,
+    @HiveField(1) String? avatar,
   }) = _User;
 
-  const User._();
+  User._();
 
   factory User.fromJson(Json json) => _$UserFromJson(json);
 

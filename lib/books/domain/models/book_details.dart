@@ -1,21 +1,23 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:reading/common/infrastructure/rest_api.dart';
 
 part 'book_details.freezed.dart';
 part 'book_details.g.dart';
 
 @freezed
-class BookDetails with _$BookDetails {
+@HiveType(typeId: 5)
+class BookDetails extends HiveObject with _$BookDetails {
   const factory BookDetails({
-    required int id,
-    required int pageCount,
-    required int pagesRead,
-    required int currentPage,
-    required int dailyPageGoal,
-    required DateTime started,
+    @HiveField(0) required int id,
+    @HiveField(1) required int pageCount,
+    @HiveField(2) required int pagesRead,
+    @HiveField(3) required int currentPage,
+    @HiveField(4) required int dailyPageGoal,
+    @HiveField(5) required DateTime started,
   }) = _BookDetails;
 
-  const BookDetails._();
+  BookDetails._();
 
   factory BookDetails.fromJson(Json json) => _$BookDetailsFromJson(json);
 
