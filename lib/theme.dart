@@ -6,35 +6,22 @@ part 'theme.g.dart';
 
 @riverpod
 class ThemeManager extends _$ThemeManager {
-  String get _fontFamily => 'Nunito';
-
   @override
   ThemeData build() {
-    return _generateThemeData(
-      primaryColor: const Color(0xFFF44336),
-      fontFamily: _fontFamily,
-    );
-  }
+    const primaryColor = Color(0xFFF44336);
+    const fontFamily = 'Nunito';
 
-  void setPrimaryColor(Color primaryColor) {
-    state = state.copyWith(primaryColor: primaryColor);
-  }
-
-  ThemeData _generateThemeData({
-    required Color primaryColor,
-    required String fontFamily,
-  }) {
     return ThemeData(
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.white,
       ),
       brightness: Brightness.light,
-      colorScheme: ColorScheme.light(
-        inverseSurface: const Color(0xFF202020),
+      colorScheme: const ColorScheme.light(
+        inverseSurface: Color(0xFF202020),
         onInverseSurface: Colors.white,
-        outlineVariant: const Color(0xFFDDE0E4),
+        outlineVariant: Color(0xFFDDE0E4),
         primary: primaryColor,
-        surface: const Color(0x189A9A9A),
+        surface: Color(0x189A9A9A),
       ),
       disabledColor: const Color(0xFFE6E6E6),
       dividerTheme: const DividerThemeData(space: 42),
@@ -55,6 +42,7 @@ class ThemeManager extends _$ThemeManager {
               600: Color(0xFF697B86),
               700: Color(0xFF4D585F),
               800: Color(0xFF3B4149),
+              900: Color(0x19FFFFFF),
             },
           ),
         ),
@@ -76,9 +64,9 @@ class ThemeManager extends _$ThemeManager {
         ),
         filled: true,
       ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
+      outlinedButtonTheme: const OutlinedButtonThemeData(
         style: ButtonStyle(
-          iconSize: const MaterialStatePropertyAll(18),
+          iconSize: MaterialStatePropertyAll(18),
           side: MaterialStatePropertyAll(
             BorderSide(color: primaryColor),
           ),
@@ -87,21 +75,21 @@ class ThemeManager extends _$ThemeManager {
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
       ),
-      tabBarTheme: TabBarTheme(
-        labelColor: const Color(0xFF3B4149),
+      tabBarTheme: const TabBarTheme(
+        labelColor: Color(0xFF3B4149),
         labelStyle: TextStyle(
           fontFamily: fontFamily,
           fontSize: 26,
           fontWeight: FontWeight.w700,
         ),
-        unselectedLabelColor: const Color(0xFFB7BCBF),
+        unselectedLabelColor: Color(0xFFB7BCBF),
         unselectedLabelStyle: TextStyle(
           fontFamily: fontFamily,
           fontSize: 26,
           fontWeight: FontWeight.w700,
         ),
       ),
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
         // 14
         bodyMedium: TextStyle(
           fontFamily: fontFamily,
@@ -145,5 +133,9 @@ class ThemeManager extends _$ThemeManager {
       ),
       useMaterial3: true,
     );
+  }
+
+  void setPrimaryColor(Color primaryColor) {
+    state = state.copyWith(primaryColor: primaryColor);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/models/book.dart';
+import 'package:reading/common/extensions/theme_extension.dart';
 import 'package:reading/common/presentation/widgets/book_cover.dart';
 
 class Bookshelf extends StatelessWidget {
@@ -25,7 +26,10 @@ class Bookshelf extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             children: [
               CustomPaint(
-                painter: _ShelfPainter(),
+                painter: _ShelfPainter(
+                  backColor: Colors.white,
+                  frontColor: Theme.of(context).colorExtension!.gray[200]!,
+                ),
                 size: const Size.fromHeight(46),
               ),
               Padding(
@@ -58,14 +62,23 @@ class Bookshelf extends StatelessWidget {
 }
 
 class _ShelfPainter extends CustomPainter {
+  const _ShelfPainter({
+    required this.frontColor,
+    required this.backColor,
+  });
+
+  final Color frontColor;
+
+  final Color backColor;
+
   @override
   void paint(Canvas canvas, Size size) {
     const shelfThickness = 4.0;
     const shelfBackHeight = 42.0;
     const shelfBackWidthReduction = 24.0;
 
-    final frontPaint = Paint()..color = const Color(0xFFE8EBED);
-    final backPaint = Paint()..color = const Color(0xFFFFFFFF);
+    final frontPaint = Paint()..color = frontColor;
+    final backPaint = Paint()..color = backColor;
 
     final frontRRect = RRect.fromRectAndCorners(
       Rect.fromLTRB(

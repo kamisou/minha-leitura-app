@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:reading/common/extensions/theme_extension.dart';
 
-ThemeData useIntroScreenThemeOverride(ThemeData baseTheme) {
+ThemeData useIntroScreenThemeOverride() {
+  final context = useContext();
+  final baseTheme = Theme.of(context);
+
   return use(
     _LoginThemeData(
       themeData: baseTheme.copyWith(
@@ -23,7 +27,7 @@ ThemeData useIntroScreenThemeOverride(ThemeData baseTheme) {
             horizontal: 20,
             vertical: 15,
           ),
-          fillColor: const Color(0x19FFFFFF),
+          fillColor: Theme.of(context).colorExtension?.gray[900],
           filled: true,
           errorStyle: TextStyle(
             color: Colors.white,

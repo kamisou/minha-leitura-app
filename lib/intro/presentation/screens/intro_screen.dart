@@ -14,7 +14,7 @@ class IntroScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeOverride = useIntroScreenThemeOverride(Theme.of(context));
+    final themeOverride = useIntroScreenThemeOverride();
     final pageController = usePageController();
 
     return Scaffold(
