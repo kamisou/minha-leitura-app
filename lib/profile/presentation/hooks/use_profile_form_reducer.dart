@@ -4,8 +4,9 @@ import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/profile/domain/value_objects/phone.dart';
 
-Store<ProfileChangeDTO, dynamic> useProfileFormReducer(
-    {ProfileChangeDTO? initialState}) {
+Store<ProfileChangeDTO, dynamic> useProfileFormReducer({
+  ProfileChangeDTO? initialState,
+}) {
   return useReducer(
     (state, action) => switch (action) {
       Name()? => state.copyWith(name: action),
