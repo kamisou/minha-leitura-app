@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/repositories/auth_repository.dart';
-import 'package:reading/common/infrastructure/image_picker.dart';
+import 'package:reading/common/infrastructure/datasources/image_picker.dart';
 import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/profile/data/dtos/password_change_dto.dart';
@@ -20,7 +20,7 @@ class MyProfileScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authRepositoryProvider).requireValue!;
+    final user = ref.watch(userProvider)!;
     final formKey = useRef(GlobalKey<FormState>());
     final profileForm = useProfileFormReducer(
       initialState: ProfileChangeDTO(

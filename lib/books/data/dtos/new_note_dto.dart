@@ -1,6 +1,6 @@
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
-import 'package:reading/common/infrastructure/rest_api.dart';
+import 'package:reading/common/infrastructure/datasources/rest_api.dart';
 
 class NewNoteDTO {
   const NewNoteDTO({

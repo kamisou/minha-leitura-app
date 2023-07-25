@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/models/book.dart';
-import 'package:reading/common/extensions/theme_extension.dart';
+import 'package:reading/common/presentation/theme_extension.dart';
 import 'package:reading/common/presentation/widgets/book_cover.dart';
 
 class Bookshelf extends StatelessWidget {

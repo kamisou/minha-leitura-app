@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/hooks/use_book_note_form_reducer.dart';
-import 'package:reading/common/extensions/theme_extension.dart';
+import 'package:reading/common/presentation/theme_extension.dart';
 
 class NewNoteDialog extends HookWidget {
   const NewNoteDialog({super.key});

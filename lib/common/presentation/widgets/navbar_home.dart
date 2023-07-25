@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:reading/common/extensions/theme_extension.dart';
+import 'package:reading/common/presentation/theme_extension.dart';
 
 class NavBarHome extends HookWidget {
   const NavBarHome({

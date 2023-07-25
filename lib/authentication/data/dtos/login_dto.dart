@@ -1,5 +1,5 @@
 import 'package:reading/authentication/domain/value_objects/password.dart';
-import 'package:reading/common/infrastructure/rest_api.dart';
+import 'package:reading/common/infrastructure/datasources/rest_api.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 
 class LoginDTO {

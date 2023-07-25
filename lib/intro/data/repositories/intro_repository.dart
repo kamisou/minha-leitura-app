@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reading/common/infrastructure/secure_storage.dart';
+import 'package:reading/common/infrastructure/datasources/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'intro_repository.g.dart';

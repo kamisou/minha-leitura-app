@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
-import 'package:reading/common/extensions/theme_extension.dart';
+import 'package:reading/common/presentation/theme_extension.dart';
 import 'package:unicons/unicons.dart';
 
 class BookSummary extends HookWidget {

@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/classes/domain/models/class.dart';
-import 'package:reading/common/infrastructure/rest_api.dart';
+import 'package:reading/common/infrastructure/datasources/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'class_repository.g.dart';

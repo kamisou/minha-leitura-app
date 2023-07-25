@@ -1,21 +1,26 @@
 import 'package:reading/authentication/data/dtos/login_dto.dart';
 import 'package:reading/authentication/data/dtos/signup_dto.dart';
-import 'package:reading/common/infrastructure/rest_api.dart';
-import 'package:reading/common/infrastructure/secure_storage.dart';
+import 'package:reading/common/infrastructure/datasources/rest_api.dart';
+import 'package:reading/common/infrastructure/datasources/secure_storage.dart';
 import 'package:reading/profile/domain/models/user_details.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository.g.dart';
+
+/// note: only safe to consume after successful login
+@riverpod
+UserDetails? user(UserRef ref) {
+  return ref.watch(authRepositoryProvider).value;
+}
 
 @Riverpod(keepAlive: true)
 class AuthRepository extends _$AuthRepository {
   static const String _tokenKey = 'access_token';
 
   @override
-  Future<UserDetails?> build() async {
-    // await _authorize();
-    // return _getUser();
-    return null;
+  Future<UserDetails> build() async {
+    await _authorize();
+    return _getUser();
   }
 
   Future<void> _authorize() async {

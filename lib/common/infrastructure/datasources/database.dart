@@ -1,22 +1,17 @@
 import 'dart:async';
 
 import 'package:hive/hive.dart';
-import 'package:reading/common/exceptions/database_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'database.g.dart';
 
 @riverpod
-Database database(DatabaseRef ref, String collection) {
-  return Database(collection);
+Database database(DatabaseRef ref) {
+  return Database();
 }
 
 class Database {
-  const Database(this.collection);
-
-  final String collection;
-
-  Future<T> getById<T>(int id) async {
+  Future<T> getById<T>(String collection, int id) async {
     final box = await Hive.openBox<T>(collection);
     final value = box.get(id);
 
@@ -29,7 +24,7 @@ class Database {
     return value;
   }
 
-  Future<List<T>> getAll<T>() async {
+  Future<List<T>> getAll<T>(String collection) async {
     final box = await Hive.openBox<T>(collection);
     final values = box.values.toList();
 
@@ -37,4 +32,12 @@ class Database {
 
     return values;
   }
+}
+
+sealed class DatabaseException implements Exception {
+  const DatabaseException();
+}
+
+final class NoRowFoundException extends DatabaseException {
+  const NoRowFoundException();
 }

@@ -1,4 +1,4 @@
-import 'package:reading/books/data/repositories/book_repository.dart';
+import 'package:reading/books/data/repositories/book_reading_repository.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,7 +14,7 @@ class NewReadingController extends _$NewReadingController {
   Future<void> addReading(int bookId, Pages pages) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(bookRepositoryProvider).addReading(bookId, pages),
+      () => ref.read(bookReadingRepositoryProvider).addReading(bookId, pages),
     );
   }
 }

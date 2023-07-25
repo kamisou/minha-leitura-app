@@ -13,7 +13,7 @@ class ProfilePicture extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authRepositoryProvider).requireValue!;
+    final user = ref.watch(userProvider)!;
     final initials = useMemoized(user.initials, [user]);
 
     return DecoratedBox(

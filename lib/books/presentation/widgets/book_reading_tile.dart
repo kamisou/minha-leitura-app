@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
-import 'package:reading/common/extensions/theme_extension.dart';
 import 'package:reading/common/presentation/hooks/use_dd_mm_yy_h_m.dart';
+import 'package:reading/common/presentation/theme_extension.dart';
 
 class BookReadingTile extends HookWidget {
   const BookReadingTile({

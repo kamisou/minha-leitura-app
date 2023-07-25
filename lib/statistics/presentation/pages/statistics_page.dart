@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:reading/common/extensions/color_extension.dart';
-import 'package:reading/common/extensions/theme_extension.dart';
+import 'package:reading/common/presentation/theme_extension.dart';
 import 'package:reading/common/presentation/widgets/user_app_bar.dart';
+import 'package:reading/common/util/color_extension.dart';
 import 'package:reading/statistics/presentation/widgets/meter.dart';
 
 class StatisticsPage extends StatelessWidget {

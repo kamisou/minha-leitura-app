@@ -7,7 +7,7 @@ import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/screens/book_details_screen.dart';
 import 'package:reading/classes/presentation/screens/classes_screen.dart';
 import 'package:reading/classes/presentation/screens/join_class_screen.dart';
-import 'package:reading/common/infrastructure/connectivity.dart';
+import 'package:reading/common/infrastructure/datasources/connectivity.dart';
 import 'package:reading/common/presentation/screens/home_screen.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/intro/presentation/screens/intro_screen.dart';
@@ -26,11 +26,10 @@ Raw<GoRouter> router(RouterRef ref) {
       GoRoute(
         builder: (context, state) => const HomeScreen(),
         path: '/',
-        redirect: (context, state) {
-          final isConnected = ref.read(isConnectedProvider).requireValue;
-          final user = ref.read(authRepositoryProvider).valueOrNull;
-          return isConnected && user == null ? '/login' : null;
-        },
+        redirect: (context, state) =>
+            ref.read(isConnectedProvider) && ref.read(userProvider) == null
+                ? '/login'
+                : null,
         routes: [
           GoRoute(
             path: 'achievements',

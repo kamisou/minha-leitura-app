@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/books/data/repositories/book_note_repository.dart';
+import 'package:reading/books/data/repositories/book_reading_repository.dart';
 import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
@@ -9,7 +11,7 @@ import 'package:reading/books/presentation/pages/book_details_page.dart';
 import 'package:reading/books/presentation/pages/book_notes_page.dart';
 import 'package:reading/books/presentation/pages/book_reading_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
-import 'package:reading/common/extensions/theme_extension.dart';
+import 'package:reading/common/presentation/theme_extension.dart';
 import 'package:reading/common/presentation/widgets/book_cover.dart';
 import 'package:unicons/unicons.dart';
 
@@ -173,7 +175,7 @@ class BookDetailsScreen extends HookConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: ref.watch(bookDetailsProvider(book.id)).maybeWhen(
+              child: ref.watch(bookProvider(book.id)).maybeWhen(
                     data: (data) => BookDetailsPage(book: data),
                     orElse: () => const SizedBox(),
                   ),

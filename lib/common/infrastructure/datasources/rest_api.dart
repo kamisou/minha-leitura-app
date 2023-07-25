@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:reading/common/exceptions/rest_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'rest_api.g.dart';
@@ -113,4 +112,22 @@ class RestApi {
       throw const NoResponseRestException();
     }
   }
+}
+
+sealed class RestException implements Exception {
+  const RestException();
+}
+
+class BadResponseRestException extends RestException {
+  const BadResponseRestException({
+    required this.code,
+    required this.message,
+  });
+
+  final int code;
+  final String message;
+}
+
+class NoResponseRestException extends RestException {
+  const NoResponseRestException();
 }
