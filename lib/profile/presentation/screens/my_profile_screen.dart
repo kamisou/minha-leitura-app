@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/repositories/auth_repository.dart';
-import 'package:reading/shared/infrastructure/datasources/image_picker.dart';
-import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
-import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/profile/data/dtos/password_change_dto.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
@@ -14,6 +11,9 @@ import 'package:reading/profile/presentation/controllers/my_profile_controller.d
 import 'package:reading/profile/presentation/dialogs/change_password_dialog.dart';
 import 'package:reading/profile/presentation/hooks/use_profile_form_reducer.dart';
 import 'package:reading/profile/presentation/widgets/profile_picture.dart';
+import 'package:reading/shared/infrastructure/datasources/image_picker.dart';
+import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 
 class MyProfileScreen extends HookConsumerWidget {
   const MyProfileScreen({super.key});

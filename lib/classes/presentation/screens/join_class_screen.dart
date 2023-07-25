@@ -6,8 +6,8 @@ import 'package:reading/classes/presentation/controllers/join_class_controller.d
 import 'package:reading/classes/presentation/widgets/code_input.dart';
 import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
-import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
+import 'package:reading/shared/util/theme_data_extension.dart';
 
 class JoinClassScreen extends HookConsumerWidget {
   const JoinClassScreen({super.key});

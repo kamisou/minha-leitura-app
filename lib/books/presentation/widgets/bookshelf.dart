@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/models/book.dart';
-import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
+import 'package:reading/shared/util/theme_data_extension.dart';
 
 class Bookshelf extends StatelessWidget {
   const Bookshelf({

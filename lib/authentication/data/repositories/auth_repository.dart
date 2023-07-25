@@ -1,8 +1,8 @@
 import 'package:reading/authentication/data/dtos/login_dto.dart';
 import 'package:reading/authentication/data/dtos/signup_dto.dart';
+import 'package:reading/profile/domain/models/user_details.dart';
 import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
 import 'package:reading/shared/infrastructure/datasources/secure_storage.dart';
-import 'package:reading/profile/domain/models/user_details.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository.g.dart';
@@ -15,8 +15,6 @@ UserDetails? user(UserRef ref) {
 
 @Riverpod(keepAlive: true)
 class AuthRepository extends _$AuthRepository {
-  static const String _tokenKey = 'access_token';
-
   @override
   Future<UserDetails> build() async {
     await _authorize();
@@ -24,7 +22,8 @@ class AuthRepository extends _$AuthRepository {
   }
 
   Future<void> _authorize() async {
-    final accessToken = await ref.read(secureStorageProvider).read(_tokenKey);
+    final accessToken =
+        await ref.read(secureStorageProvider).read('access_token');
 
     if (accessToken == null) {
       return;
@@ -51,20 +50,12 @@ class AuthRepository extends _$AuthRepository {
 
     // final accessToken = response['access_token'] as String;
 
-    // await ref.read(secureStorageProvider).write(_tokenKey, accessToken);
+    // await ref.read(secureStorageProvider).write('access_token', accessToken);
 
     state = AsyncData(await _getUser());
   }
 
   Future<void> signup(SignupDTO data) async {
-    // final response = await ref
-    //     .read(restApiProvider)
-    //     .post('/user/signup', body: data.toJson()) as Map<String, dynamic>;
-
-    // final accessToken = response['access_token'] as String;
-
-    // await ref.read(secureStorageProvider).write(_tokenKey, accessToken);
-
     state = AsyncData(await _getUser());
   }
 }

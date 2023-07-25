@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
 import 'package:reading/profile/domain/models/user.dart';
+import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
 
 part 'book_note.freezed.dart';
 part 'book_note.g.dart';

@@ -7,11 +7,11 @@ import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/screens/book_details_screen.dart';
 import 'package:reading/classes/presentation/screens/classes_screen.dart';
 import 'package:reading/classes/presentation/screens/join_class_screen.dart';
-import 'package:reading/shared/infrastructure/datasources/connectivity.dart';
-import 'package:reading/shared/presentation/screens/home_screen.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/intro/presentation/screens/intro_screen.dart';
 import 'package:reading/profile/presentation/screens/my_profile_screen.dart';
+import 'package:reading/shared/infrastructure/datasources/connectivity.dart';
+import 'package:reading/shared/presentation/screens/home_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'routes.g.dart';

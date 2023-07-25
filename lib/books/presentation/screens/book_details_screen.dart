@@ -11,8 +11,8 @@ import 'package:reading/books/presentation/pages/book_details_page.dart';
 import 'package:reading/books/presentation/pages/book_notes_page.dart';
 import 'package:reading/books/presentation/pages/book_reading_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
-import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
+import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
 
 class BookDetailsScreen extends HookConsumerWidget {

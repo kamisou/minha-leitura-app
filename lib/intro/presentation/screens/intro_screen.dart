@@ -3,10 +3,10 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/shared/presentation/widgets/gradient_intro_background.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/intro/presentation/hooks/use_intro_screen_theme_override.dart';
 import 'package:reading/intro/presentation/pages/intro_page.dart';
+import 'package:reading/shared/presentation/widgets/gradient_intro_background.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class IntroScreen extends HookConsumerWidget {
