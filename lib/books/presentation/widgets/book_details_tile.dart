@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reading/common/presentation/theme_extension.dart';
+import 'package:reading/shared/util/theme_data_extension.dart';
 
 class BookDetailsTile extends StatelessWidget {
   const BookDetailsTile({

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:reading/common/presentation/theme_extension.dart';
+import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:vector_graphics/vector_graphics.dart';
 
 class GreetingContent extends StatelessWidget {

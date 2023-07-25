@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reading/common/presentation/widgets/loading_network_image.dart';
+import 'package:reading/shared/presentation/widgets/loading_network_image.dart';
 
 class BookCover extends StatelessWidget {
   const BookCover({

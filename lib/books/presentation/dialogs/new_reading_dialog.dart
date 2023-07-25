@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
-import 'package:reading/common/presentation/theme_extension.dart';
+import 'package:reading/shared/util/theme_data_extension.dart';
 
 class NewReadingDialog extends HookWidget {
   const NewReadingDialog({super.key});

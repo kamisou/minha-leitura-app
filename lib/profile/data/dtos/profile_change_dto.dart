@@ -1,4 +1,4 @@
-import 'package:reading/common/infrastructure/datasources/rest_api.dart';
+import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/profile/domain/value_objects/phone.dart';

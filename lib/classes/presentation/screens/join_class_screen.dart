@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/classes/presentation/controllers/join_class_controller.dart';
 import 'package:reading/classes/presentation/widgets/code_input.dart';
-import 'package:reading/common/infrastructure/datasources/rest_api.dart';
-import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
-import 'package:reading/common/presentation/theme_extension.dart';
-import 'package:reading/common/presentation/widgets/button_progress_indicator.dart';
+import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
+import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/shared/util/theme_data_extension.dart';
+import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 
 class JoinClassScreen extends HookConsumerWidget {
   const JoinClassScreen({super.key});

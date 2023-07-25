@@ -8,7 +8,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:reading/authentication/data/repositories/auth_repository.dart';
 
-import 'package:reading/common/infrastructure/datasources/connectivity.dart';
+import 'package:reading/shared/infrastructure/datasources/connectivity.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/routes.dart';
 import 'package:reading/theme.dart';

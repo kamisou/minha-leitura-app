@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
-import 'package:reading/common/infrastructure/datasources/rest_api.dart';
+import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'book_note_repository.g.dart';

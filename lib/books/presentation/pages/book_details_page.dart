@@ -6,8 +6,8 @@ import 'package:reading/books/domain/value_objects/pages.dart';
 import 'package:reading/books/presentation/controllers/new_reading_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_reading_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_details_tile.dart';
-import 'package:reading/common/presentation/hooks/use_d_mmmm_y.dart';
-import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/shared/presentation/hooks/use_d_mmmm_y.dart';
+import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:unicons/unicons.dart';
 
 class BookDetailsPage extends HookConsumerWidget {

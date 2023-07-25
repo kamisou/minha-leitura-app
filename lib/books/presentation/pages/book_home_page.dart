@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:reading/books/presentation/pages/content/book_carrousel_content.dart';
 import 'package:reading/books/presentation/pages/content/greeting_content.dart';
-import 'package:reading/common/presentation/widgets/user_app_bar.dart';
+import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
 
 class BookHomePage extends ConsumerWidget {
   const BookHomePage({super.key});

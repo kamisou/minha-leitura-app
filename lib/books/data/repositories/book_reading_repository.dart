@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
-import 'package:reading/common/infrastructure/datasources/connectivity.dart';
-import 'package:reading/common/infrastructure/datasources/rest_api.dart';
+import 'package:reading/shared/infrastructure/datasources/connectivity.dart';
+import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'book_reading_repository.g.dart';

@@ -5,7 +5,7 @@ import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
-import 'package:reading/common/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:unicons/unicons.dart';
 
 class BookNotesPage extends ConsumerWidget {

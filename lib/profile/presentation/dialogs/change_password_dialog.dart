@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
-import 'package:reading/common/presentation/widgets/obsfuscated_text_form_field.dart';
+import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
 import 'package:reading/profile/presentation/hooks/use_password_form_reducer.dart';
 
 class ChangePasswordDialog extends HookWidget {
