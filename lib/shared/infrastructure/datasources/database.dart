@@ -11,26 +11,33 @@ Database database(DatabaseRef ref) {
 }
 
 class Database {
-  Future<T> getById<T>(String collection, int id) async {
-    final box = await Hive.openBox<T>(collection);
-    final value = box.get(id);
+  Future<T> getById<T>(int id) async {
+    final box = await Hive.openLazyBox<T>(T.toString());
+    final value = await box.get(id);
 
     if (value == null) {
       throw const NoRowFoundException();
     }
 
-    unawaited(box.close());
+    box.close().ignore();
 
     return value;
   }
 
-  Future<List<T>> getAll<T>(String collection) async {
-    final box = await Hive.openBox<T>(collection);
+  Future<List<T>> getAll<T>() async {
+    final box = await Hive.openBox<T>(T.toString());
     final values = box.values.toList();
 
-    unawaited(box.close());
+    box.close().ignore();
 
     return values;
+  }
+
+  Future<void> update<T>(dynamic id, T value) async {
+    final box = await Hive.openLazyBox<T>(T.toString());
+    await box.put(id, value);
+
+    box.close().ignore();
   }
 }
 

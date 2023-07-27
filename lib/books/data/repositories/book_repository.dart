@@ -61,11 +61,11 @@ class OfflineBookRepository extends BookRepository {
 
   @override
   Future<BookDetails> getBookDetails(int bookId) {
-    return ref.read(databaseProvider).getById('book_details', bookId);
+    return ref.read(databaseProvider).getById(bookId);
   }
 
   @override
   Future<List<Book>> getMyBooks() {
-    return ref.read(databaseProvider).getAll('books');
+    return ref.read(databaseProvider).getAll();
   }
 }
