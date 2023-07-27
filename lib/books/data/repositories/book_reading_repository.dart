@@ -19,16 +19,6 @@ Future<List<BookReading>> bookReadings(BookReadingsRef ref, int bookId) {
   return ref.read(bookReadingRepositoryProvider).getBookReadings(bookId);
 }
 
-abstract class BookReadingRepository {
-  const BookReadingRepository(this.ref);
-
-  final Ref ref;
-
-  Future<List<BookReading>> getBookReadings(int bookId);
-
-  Future<void> addReading(int bookId, Pages pages);
-}
-
 class OnlineBookReadingRepository extends BookReadingRepository {
   const OnlineBookReadingRepository(super.ref);
 
@@ -63,4 +53,13 @@ class OfflineBookReadingRepository extends BookReadingRepository {
     // TODO(kamisou): buscar leituras relacionadas com bookId
     throw UnimplementedError();
   }
+}
+
+abstract class BookReadingRepository {
+  const BookReadingRepository(this.ref);
+
+  final Ref ref;
+
+  Future<List<BookReading>> getBookReadings(int bookId);
+  Future<void> addReading(int bookId, Pages pages);
 }

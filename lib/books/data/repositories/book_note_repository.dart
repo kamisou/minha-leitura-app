@@ -16,16 +16,6 @@ Future<List<BookNote>> bookNotes(BookNotesRef ref, int bookId) {
   return ref.read(bookNoteRepositoryProvider).getBookNotes(bookId);
 }
 
-abstract class BookNoteRepository {
-  const BookNoteRepository(this.ref);
-
-  final Ref ref;
-
-  Future<List<BookNote>> getBookNotes(int bookId);
-
-  Future<void> addNote(int bookId, NewNoteDTO note);
-}
-
 class OnlineBookNoteRepository extends BookNoteRepository {
   const OnlineBookNoteRepository(super.ref);
 
@@ -44,4 +34,13 @@ class OnlineBookNoteRepository extends BookNoteRepository {
         .then((response) => (response as List<Json>).map(BookNote.fromJson))
         .then((bookNotes) => bookNotes.toList());
   }
+}
+
+abstract class BookNoteRepository {
+  const BookNoteRepository(this.ref);
+
+  final Ref ref;
+
+  Future<List<BookNote>> getBookNotes(int bookId);
+  Future<void> addNote(int bookId, NewNoteDTO note);
 }

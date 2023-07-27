@@ -31,7 +31,6 @@ abstract class BookRepository {
   final Ref ref;
 
   Future<List<Book>> getMyBooks();
-
   Future<BookDetails> getBookDetails(int bookId);
 }
 
