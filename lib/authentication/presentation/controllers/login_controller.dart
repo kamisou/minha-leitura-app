@@ -14,7 +14,7 @@ class LoginController extends _$LoginController {
   Future<void> login(LoginDTO data) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(authRepositoryProvider.notifier).login(data),
+      () => ref.read(authRepositoryProvider).login(data),
     );
   }
 }

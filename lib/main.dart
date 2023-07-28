@@ -24,7 +24,7 @@ void main() async {
   try {
     await container.read(introSeenProvider.future);
     await container.read(connectionStatusProvider.future);
-    await container.read(authRepositoryProvider.future);
+    await container.read(myUserProvider.future);
   } catch (error, stackTrace) {
     log('initialization error', error: error, stackTrace: stackTrace);
   }

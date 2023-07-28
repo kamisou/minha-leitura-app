@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'rest_api.g.dart';
@@ -10,7 +11,7 @@ typedef Json = Map<String, dynamic>;
 
 enum RestMethod { get, post }
 
-@riverpod
+@Riverpod(keepAlive: true)
 RestApi restApi(RestApiRef ref) {
   return DioRestApi(
     server: 'http://192.168.0.169:8002/api',
@@ -32,6 +33,8 @@ class DioRestApi extends RestApi {
         );
 
   final Dio _dio;
+
+  bool get isAuthorized => _dio.options.headers.containsKey('authorization');
 
   @override
   void authorize(String scheme, String token) {
@@ -119,33 +122,14 @@ class DioRestApi extends RestApi {
 }
 
 abstract class RestApi {
+  bool get isAuthorized;
+
   void authorize(String scheme, String token);
-
   Future<dynamic> get(String path, {Map<String, dynamic>? query, Json? body});
-
   Future<dynamic> post(String path, {Json? body});
-
   Future<dynamic> upload(
     String path, {
     required String field,
     required File file,
   });
-}
-
-sealed class RestException implements Exception {
-  const RestException();
-}
-
-class BadResponseRestException extends RestException {
-  const BadResponseRestException({
-    required this.code,
-    required this.message,
-  });
-
-  final int code;
-  final String message;
-}
-
-class NoResponseRestException extends RestException {
-  const NoResponseRestException();
 }

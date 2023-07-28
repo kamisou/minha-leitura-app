@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
+import 'package:reading/shared/exceptions/database_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'database.g.dart';
@@ -82,12 +83,4 @@ abstract class Database {
   Future<List<T>> getWhere<T>(bool Function(T value) predicate);
   Future<int> insert<T>(T value);
   Future<void> update<T>(dynamic id, T value);
-}
-
-sealed class DatabaseException implements Exception {
-  const DatabaseException();
-}
-
-final class NoRowFoundException extends DatabaseException {
-  const NoRowFoundException();
 }

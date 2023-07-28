@@ -14,7 +14,7 @@ class SignupController extends _$SignupController {
   Future<void> signup(SignupDTO data) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(authRepositoryProvider.notifier).signup(data),
+      () => ref.read(authRepositoryProvider).signup(data),
     );
   }
 }

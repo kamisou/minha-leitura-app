@@ -48,14 +48,14 @@ class OnlineBookNoteRepository extends BookNoteRepository
   Future<void> addNote(int bookId, NewNoteDTO note) {
     return ref
         .read(restApiProvider)
-        .post('/books/$bookId/notes', body: note.toJson());
+        .post('books/$bookId/notes', body: note.toJson());
   }
 
   @override
   Future<List<BookNote>> getBookNotes(int bookId) {
     return ref
         .read(restApiProvider)
-        .get('/books/$bookId/notes')
+        .get('books/$bookId/notes')
         .then((response) => (response as List<Json>).map(BookNote.fromJson))
         .then((bookNotes) => bookNotes.toList());
   }

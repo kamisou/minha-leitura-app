@@ -29,20 +29,20 @@ class OnlineBookRepository extends BookRepository {
   const OnlineBookRepository(super.ref);
 
   @override
-  Future<BookDetails> getBookDetails(int bookId) {
-    return ref
-        .read(restApiProvider)
-        .get('books/$bookId')
-        .then((response) => BookDetails.fromJson(response as Json));
-  }
-
-  @override
   Future<List<Book>> getMyBooks() {
     return ref
         .read(restApiProvider)
         .get('books/my')
         .then((response) => (response as List<Json>).map(Book.fromJson))
         .then((books) => books.toList());
+  }
+
+  @override
+  Future<BookDetails> getBookDetails(int bookId) {
+    return ref
+        .read(restApiProvider)
+        .get('books/$bookId')
+        .then((response) => BookDetails.fromJson(response as Json));
   }
 }
 
