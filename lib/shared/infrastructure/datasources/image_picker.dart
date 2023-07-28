@@ -7,14 +7,15 @@ part 'image_picker.g.dart';
 
 @riverpod
 ImagePicker imagePicker(ImagePickerRef ref) {
-  return ImagePicker();
+  return ImagePickerImpl();
 }
 
-class ImagePicker {
+class ImagePickerImpl with ImagePicker {
+  @override
   Future<File?> pickImage() async {
     final imagePicker = picker.ImagePicker();
-    final image =
-        await imagePicker.pickImage(source: picker.ImageSource.gallery);
+    final image = await imagePicker //
+        .pickImage(source: picker.ImageSource.gallery);
 
     if (image == null) {
       return null;
@@ -22,4 +23,8 @@ class ImagePicker {
 
     return File(image.path);
   }
+}
+
+mixin ImagePicker {
+  Future<File?> pickImage();
 }

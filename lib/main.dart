@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:reading/authentication/data/repositories/auth_repository.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/routes.dart';
-import 'package:reading/shared/infrastructure/datasources/connectivity.dart';
+import 'package:reading/shared/infrastructure/datasources/connection_status.dart';
 import 'package:reading/theme.dart';
 
 void main() async {
@@ -23,7 +23,7 @@ void main() async {
   final container = ProviderContainer();
   try {
     await container.read(introSeenProvider.future);
-    await container.read(connectivityProvider.future);
+    await container.read(connectionStatusProvider.future);
     await container.read(authRepositoryProvider.future);
   } catch (error, stackTrace) {
     log('initialization error', error: error, stackTrace: stackTrace);

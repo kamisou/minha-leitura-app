@@ -12,13 +12,13 @@ enum RestMethod { get, post }
 
 @riverpod
 RestApi restApi(RestApiRef ref) {
-  return RestApi(
+  return DioRestApi(
     server: 'http://192.168.0.169:8002/api',
   );
 }
 
-class RestApi {
-  RestApi({
+class DioRestApi extends RestApi {
+  DioRestApi({
     required String server,
   }) : _dio = Dio(
           BaseOptions(
@@ -33,10 +33,12 @@ class RestApi {
 
   final Dio _dio;
 
+  @override
   void authorize(String scheme, String token) {
     _dio.options.headers['authorization'] = '$scheme token';
   }
 
+  @override
   Future<dynamic> get(
     String path, {
     Map<String, dynamic>? query,
@@ -44,12 +46,14 @@ class RestApi {
   }) =>
       _request(RestMethod.get, path, query: query, body: body);
 
+  @override
   Future<dynamic> post(
     String path, {
     Json? body,
   }) =>
       _request(RestMethod.post, path, body: body);
 
+  @override
   Future<dynamic> upload(
     String path, {
     required String field,
@@ -71,6 +75,7 @@ class RestApi {
     return _request(RestMethod.post, path, body: formData);
   }
 
+  @override
   Future<dynamic> _request(
     RestMethod method,
     String path, {
@@ -112,6 +117,27 @@ class RestApi {
       throw const NoResponseRestException();
     }
   }
+}
+
+abstract class RestApi {
+  void authorize(String scheme, String token);
+
+  Future<dynamic> get(String path, {Map<String, dynamic>? query, Json? body});
+
+  Future<dynamic> post(String path, {Json? body});
+
+  Future<dynamic> upload(
+    String path, {
+    required String field,
+    required File file,
+  });
+
+  Future<dynamic> _request(
+    RestMethod method,
+    String path, {
+    Map<String, dynamic>? query,
+    Object? body,
+  });
 }
 
 sealed class RestException implements Exception {

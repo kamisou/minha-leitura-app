@@ -22,8 +22,9 @@ class AuthRepository extends _$AuthRepository {
   }
 
   Future<void> _authorize() async {
-    final accessToken =
-        await ref.read(secureStorageProvider).read('access_token');
+    final accessToken = await ref
+        .read(secureStorageProvider) //
+        .read('access_token');
 
     if (accessToken == null) {
       return;

@@ -7,6 +7,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'database.g.dart';
 
 @riverpod
+Database database(DatabaseRef ref) {
+  return HiveDatabase(ref);
+}
+
+@riverpod
 Future<BoxBase<dynamic>> hiveBox(
   HiveBoxRef ref,
   Type type, {
@@ -19,11 +24,6 @@ Future<BoxBase<dynamic>> hiveBox(
   ref.onDispose(box.close);
 
   return box;
-}
-
-@riverpod
-Database database(DatabaseRef ref) {
-  return HiveDatabase(ref);
 }
 
 class HiveDatabase extends Database {

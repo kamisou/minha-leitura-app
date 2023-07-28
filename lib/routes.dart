@@ -10,7 +10,7 @@ import 'package:reading/classes/presentation/screens/join_class_screen.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/intro/presentation/screens/intro_screen.dart';
 import 'package:reading/profile/presentation/screens/my_profile_screen.dart';
-import 'package:reading/shared/infrastructure/datasources/connectivity.dart';
+import 'package:reading/shared/infrastructure/datasources/connection_status.dart';
 import 'package:reading/shared/presentation/screens/home_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
