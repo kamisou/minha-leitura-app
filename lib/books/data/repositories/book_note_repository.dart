@@ -1,8 +1,8 @@
-import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
+import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/profile/data/dtos/password_change_dto.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
+import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/profile/domain/value_objects/phone.dart';
-import 'package:reading/profile/presentation/controllers/my_profile_controller.dart';
+import 'package:reading/profile/presentation/controllers/profile_controller.dart';
 import 'package:reading/profile/presentation/dialogs/change_password_dialog.dart';
 import 'package:reading/profile/presentation/hooks/use_profile_form_reducer.dart';
 import 'package:reading/profile/presentation/widgets/profile_picture.dart';
@@ -15,8 +15,8 @@ import 'package:reading/shared/infrastructure/image_picker.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 
-class MyProfileScreen extends HookConsumerWidget {
-  const MyProfileScreen({super.key});
+class ProfileScreen extends HookConsumerWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +32,7 @@ class MyProfileScreen extends HookConsumerWidget {
 
     useSnackbarErrorListener(
       ref,
-      provider: myProfileControllerProvider,
+      provider: profileControllerProvider,
       messageBuilder: (error) =>
           'Ocorreu um erro ao salvar as alterações do perfil.',
     );
@@ -92,7 +92,7 @@ class MyProfileScreen extends HookConsumerWidget {
                     ).then(
                       (value) => value != null
                           ? ref
-                              .read(myProfileControllerProvider.notifier)
+                              .read(profileControllerProvider.notifier)
                               .savePassword(value)
                           : null,
                     ),
@@ -116,7 +116,7 @@ class MyProfileScreen extends HookConsumerWidget {
               formKey.value.currentState!,
               profileForm.state,
             ),
-            isLoading: ref.watch(myProfileControllerProvider).isLoading,
+            isLoading: ref.watch(profileControllerProvider).isLoading,
             child: const Text('Salvar'),
           ),
         ],
@@ -131,7 +131,7 @@ class MyProfileScreen extends HookConsumerWidget {
       return;
     }
 
-    return ref.read(myProfileControllerProvider.notifier).saveAvatar(avatar);
+    return ref.read(profileControllerProvider.notifier).saveAvatar(avatar);
   }
 
   void _save(WidgetRef ref, FormState form, ProfileChangeDTO data) {
@@ -139,6 +139,6 @@ class MyProfileScreen extends HookConsumerWidget {
       return;
     }
 
-    ref.read(myProfileControllerProvider.notifier).save(data);
+    ref.read(profileControllerProvider.notifier).save(data);
   }
 }

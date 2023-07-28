@@ -10,8 +10,8 @@ part 'achievement.g.dart';
 class Achievements with _$Achievements {
   const factory Achievements({
     @HiveField(0) required int id,
-    @HiveField(1) required List<Achievement> single,
-    @HiveField(2) required List<Milestone> milestones,
+    @HiveField(1) required Map<String, Unlockable> unlockables,
+    @HiveField(2) required Map<String, Milestone> milestones,
   }) = _Achievements;
 
   factory Achievements.fromJson(Json json) => _$AchievementsFromJson(json);
@@ -19,15 +19,14 @@ class Achievements with _$Achievements {
 
 @freezed
 @HiveType(typeId: 10)
-class Achievement with _$Achievement {
-  const factory Achievement({
+class Unlockable with _$Unlockable {
+  const factory Unlockable({
     @HiveField(0) required int id,
     @HiveField(1) required String title,
-    @HiveField(2) required String category,
     @HiveField(3) required bool achieved,
-  }) = _Achievement;
+  }) = _Unlockable;
 
-  factory Achievement.fromJson(Json json) => _$AchievementFromJson(json);
+  factory Unlockable.fromJson(Json json) => _$UnlockableFromJson(json);
 }
 
 @freezed

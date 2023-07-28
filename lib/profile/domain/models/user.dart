@@ -14,7 +14,7 @@ class User with _$User {
     @HiveField(2) String? avatar,
   }) = _User;
 
-  User._();
+  const User._();
 
   factory User.fromJson(Json json) => _$UserFromJson(json);
 

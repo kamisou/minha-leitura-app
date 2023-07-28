@@ -8,7 +8,7 @@ import 'package:reading/classes/presentation/screens/classes_screen.dart';
 import 'package:reading/classes/presentation/screens/join_class_screen.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/intro/presentation/screens/intro_screen.dart';
-import 'package:reading/profile/presentation/screens/my_profile_screen.dart';
+import 'package:reading/profile/presentation/screens/profile_screen.dart';
 import 'package:reading/shared/presentation/screens/home_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -16,10 +16,8 @@ part 'routes.g.dart';
 
 @riverpod
 Raw<GoRouter> router(RouterRef ref) {
-  final introSeen = ref.read(introSeenProvider).requireValue;
-
   return GoRouter(
-    initialLocation: introSeen ? null : '/intro',
+    initialLocation: ref.read(introSeenProvider).value! ? null : '/intro',
     routes: [
       GoRoute(
         builder: (context, state) => const HomeScreen(),
@@ -49,8 +47,8 @@ Raw<GoRouter> router(RouterRef ref) {
             ],
           ),
           GoRoute(
-            path: '/myProfile',
-            builder: (context, state) => const MyProfileScreen(),
+            path: 'profile',
+            builder: (context, state) => const ProfileScreen(),
           ),
         ],
       ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,16 +16,21 @@ class ConnectionStatus extends _$ConnectionStatus {
   Future<bool> build() {
     final connectivity = Connectivity();
 
-    final stream = connectivity.onConnectivityChanged;
-    final subscription = stream.listen(_onConnectivityChanged);
+    final subscription = connectivity //
+        .onConnectivityChanged //
+        .listen(_onConnectivityChanged);
 
     ref.onDispose(subscription.cancel);
 
-    return stream.first.then(_isConnected);
+    return connectivity.checkConnectivity().then(_isConnected);
   }
 
   void _onConnectivityChanged(ConnectivityResult result) {
     state = AsyncData(_isConnected(result));
+    log(
+      'Connection ${state.value! ? '' : 'un'}available',
+      name: 'ConnectionStatus',
+    );
   }
 
   bool _isConnected(ConnectivityResult result) {

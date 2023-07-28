@@ -17,7 +17,7 @@ class BookDetails with _$BookDetails {
     @HiveField(5) required DateTime started,
   }) = _BookDetails;
 
-  BookDetails._();
+  const BookDetails._();
 
   factory BookDetails.fromJson(Json json) => _$BookDetailsFromJson(json);
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
@@ -12,21 +13,6 @@ Database database(DatabaseRef ref) {
   return HiveDatabase(ref);
 }
 
-@riverpod
-Future<BoxBase<dynamic>> hiveBox(
-  HiveBoxRef ref,
-  Type type, {
-  bool lazy = true,
-}) async {
-  final box = await (lazy
-      ? Hive.openLazyBox<dynamic>('${type}s')
-      : Hive.openBox<dynamic>('${type}s'));
-
-  ref.onDispose(box.close);
-
-  return box;
-}
-
 class HiveDatabase extends Database {
   const HiveDatabase(this.ref);
 
@@ -34,7 +20,9 @@ class HiveDatabase extends Database {
 
   @override
   Future<T> getById<T>(int id) async {
-    final box = await ref.read(hiveBoxProvider(T).future) as LazyBox<T>;
+    log('get $T by $id', name: 'Database');
+
+    final box = await Hive.openLazyBox<T>(T.toString());
     final value = await box.get(id);
 
     if (value == null) {
@@ -46,8 +34,9 @@ class HiveDatabase extends Database {
 
   @override
   Future<List<T>> getAll<T>() async {
-    final box = await ref.read(hiveBoxProvider(T, lazy: false).future) //
-        as Box<T>;
+    log('get all $T', name: 'Database');
+
+    final box = await Hive.openBox<T>(T.toString());
     final values = box.values.toList();
 
     return values;
@@ -55,8 +44,9 @@ class HiveDatabase extends Database {
 
   @override
   Future<List<T>> getWhere<T>(bool Function(T value) predicate) async {
-    final box = await ref.read(hiveBoxProvider(T, lazy: false).future) //
-        as Box<T>;
+    log('get $T where', name: 'Database');
+
+    final box = await Hive.openBox<T>(T.toString());
     final values = box.values.where(predicate).toList();
 
     return values;
@@ -64,13 +54,19 @@ class HiveDatabase extends Database {
 
   @override
   Future<int> insert<T>(T value) async {
-    final box = await ref.read(hiveBoxProvider(T).future) as LazyBox<T>;
+    log('insert $T: $value', name: 'Database');
+
+    final box = await Hive.openLazyBox<T>(T.toString());
+
     return box.add(value);
   }
 
   @override
   Future<void> update<T>(T value, dynamic id) async {
-    final box = await ref.read(hiveBoxProvider(T).future) as LazyBox<T>;
+    log('update $T: $value ($id)', name: 'Database');
+
+    final box = await Hive.openLazyBox<T>(T.toString());
+
     return box.put(id, value);
   }
 
@@ -79,7 +75,9 @@ class HiveDatabase extends Database {
     Iterable<T> values,
     dynamic Function(T value) id,
   ) async {
-    final box = await ref.read(hiveBoxProvider(T).future) as LazyBox<T>;
+    log('update all $T', name: 'Database');
+
+    final box = await Hive.openLazyBox<T>(T.toString());
 
     return box.putAll(
       {

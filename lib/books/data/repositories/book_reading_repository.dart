@@ -36,10 +36,10 @@ class OnlineBookReadingRepository extends BookReadingRepository
   }
 
   @override
-  Future<void> addReading(int bookId, Pages pages) async {
+  Future<void> addReading(int bookId, Pages data) async {
     final reading = await ref
         .read(restApiProvider)
-        .post('books/$bookId/readings', body: {'pages': pages.value}) //
+        .post('books/$bookId/readings', body: {'pages': data.value}) //
         .then((response) => BookReading.fromJson(response as Json));
 
     ref.read(databaseProvider).update(reading, reading.id).ignore();

@@ -22,7 +22,7 @@ class OptionsPage extends StatelessWidget {
                   ProfileMenuOption(
                     icon: UniconsLine.user_check,
                     label: 'Meus Dados',
-                    onTap: () => context.go('/myProfile'),
+                    onTap: () => context.go('/profile'),
                   ),
                   const Divider(),
                   ProfileMenuOption(

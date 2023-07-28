@@ -5,10 +5,10 @@ import 'package:reading/profile/data/dtos/profile_change_dto.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'my_profile_controller.g.dart';
+part 'profile_controller.g.dart';
 
 @riverpod
-class MyProfileController extends _$MyProfileController {
+class ProfileController extends _$ProfileController {
   @override
   Future<void> build() async {
     return;

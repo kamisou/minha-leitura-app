@@ -17,7 +17,7 @@ class UserProfile with _$UserProfile {
     @HiveField(4) String? avatar,
   }) = _UserProfile;
 
-  UserProfile._();
+  const UserProfile._();
 
   factory UserProfile.fromJson(Json json) => _$UserProfileFromJson(json);
 

@@ -23,7 +23,7 @@ class BookNote with _$BookNote {
 
   factory BookNote.fromJson(Json json) => _$BookNoteFromJson(json);
 
-  BookNote._();
+  const BookNote._();
 
   int get parentId => bookId ?? noteId!;
 }

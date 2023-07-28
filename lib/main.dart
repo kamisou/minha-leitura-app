@@ -19,20 +19,25 @@ void main() async {
 
   await Hive.initFlutter();
 
+  runApp(
+    ProviderScope(
+      parent: await initRiverpod(),
+      child: const App(),
+    ),
+  );
+}
+
+Future<ProviderContainer> initRiverpod() async {
   final container = ProviderContainer();
+
   try {
     await container.read(introSeenProvider.future);
     await container.read(connectionStatusProvider.future);
   } catch (error, stackTrace) {
-    log('initialization error', error: error, stackTrace: stackTrace);
+    log('riverpod initialization error', error: error, stackTrace: stackTrace);
   }
 
-  runApp(
-    ProviderScope(
-      parent: container,
-      child: const App(),
-    ),
-  );
+  return container;
 }
 
 class App extends ConsumerWidget {
