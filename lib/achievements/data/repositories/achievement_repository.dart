@@ -1,12 +1,17 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reading/achievements/domain/models/achievement.dart';
+import 'package:reading/shared/data/repository.dart';
+import 'package:reading/shared/infrastructure/connection_status.dart';
+import 'package:reading/shared/infrastructure/database.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'achievement_repository.g.dart';
 
 @riverpod
 AchievementRepository achievementRepository(AchievementRepositoryRef ref) {
-  return AchievementRepository(ref);
+  return ref.read(isConnectedProvider)
+      ? OnlineAchievementRepository(ref)
+      : OfflineAchievementsRepository(ref);
 }
 
 @riverpod
@@ -14,43 +19,36 @@ Future<Achievements> myAchievements(MyAchievementsRef ref) {
   return ref.watch(achievementRepositoryProvider).getMyAchievements();
 }
 
-class AchievementRepository {
-  const AchievementRepository(this.ref);
+class OnlineAchievementRepository extends AchievementRepository {
+  const OnlineAchievementRepository(super.ref);
 
-  final Ref ref;
-
+  @override
   Future<Achievements> getMyAchievements() async {
-    // final dynamic response =
-    //     await ref.read(restApiProvider).get('/user/achievements');
-    // return (response as List).cast<Json>().map(Achievement.fromJson).toList()
+    final achievements = await ref
+        .read(restApiProvider) //
+        .get('achievements/my')
+        .then((response) => Achievements.fromJson(response as Json));
 
-    return const Achievements(
-      single: [
-        Achievement(
-          category: 'Iniciando',
-          title: 'Primeira leitura iniciada',
-          achieved: true,
-        ),
-        Achievement(
-          category: 'Iniciando',
-          title: 'Primeira leitura concluída',
-          achieved: false,
-        ),
-      ],
-      milestones: [
-        Milestone(
-          title: 'Livros concluídos',
-          milestones: [5, 10, 20, 40, 50, 100, 150, 200, 250, 300],
-        ),
-        Milestone(
-          title: 'Assiduidade de leitura',
-          milestones: [5, 10, 30, 50],
-        ),
-        Milestone(
-          title: 'Páginas lidas',
-          milestones: [100, 250, 500, 1000, 2000, 5000],
-        ),
-      ],
-    );
+    ref.read(databaseProvider).update(achievements, achievements.id).ignore();
+
+    return achievements;
   }
+}
+
+class OfflineAchievementsRepository extends AchievementRepository {
+  const OfflineAchievementsRepository(super.ref);
+
+  @override
+  Future<Achievements> getMyAchievements() {
+    return ref
+        .read(databaseProvider)
+        .getAll<Achievements>()
+        .then((achievements) => achievements.first);
+  }
+}
+
+abstract class AchievementRepository extends Repository {
+  const AchievementRepository(super.ref);
+
+  Future<Achievements> getMyAchievements();
 }

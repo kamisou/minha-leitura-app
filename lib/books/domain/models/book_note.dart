@@ -7,17 +7,18 @@ part 'book_note.freezed.dart';
 part 'book_note.g.dart';
 
 @freezed
-@HiveType(typeId: 7)
-class BookNote extends HiveObject with _$BookNote {
+@HiveType(typeId: 8)
+class BookNote with _$BookNote {
   @Assert('bookId != null || noteId != null', 'BookNote needs a parent id!')
   const factory BookNote({
-    @HiveField(0) required String title,
-    @HiveField(1) required String description,
-    @HiveField(2) required User author,
-    @HiveField(3) required DateTime createdAt,
-    @HiveField(4) @Default([]) List<BookNote> responses,
-    @HiveField(5) int? bookId,
-    @HiveField(6) int? noteId,
+    @HiveField(0) required int id,
+    @HiveField(1) required String title,
+    @HiveField(2) required String description,
+    @HiveField(3) required User author,
+    @HiveField(4) required DateTime createdAt,
+    @HiveField(5) @Default([]) List<BookNote> responses,
+    @HiveField(6) int? bookId,
+    @HiveField(7) int? noteId,
   }) = _BookNote;
 
   factory BookNote.fromJson(Json json) => _$BookNoteFromJson(json);
@@ -27,8 +28,8 @@ class BookNote extends HiveObject with _$BookNote {
   int get parentId => bookId ?? noteId!;
 }
 
-@HiveType(typeId: 107)
-class OfflineBookNote extends HiveObject {
+@HiveType(typeId: 108)
+class OfflineBookNote {
   OfflineBookNote({
     required this.title,
     required this.description,

@@ -25,16 +25,28 @@ class OnlineClassRepository extends ClassRepository {
 
   @override
   Future<List<Class>> getMyClasses() async {
-    return ref
+    final classes = await ref
         .read(restApiProvider)
         .get('classes/my')
         .then((response) => (response as List<Json>).map(Class.fromJson))
         .then((classes) => classes.toList());
+
+    ref
+        .read(databaseProvider)
+        .updateAll(classes, ($class) => $class.id)
+        .ignore();
+
+    return classes;
   }
 
   @override
   Future<void> joinClass(String code) async {
-    await ref.read(restApiProvider).post('classes/$code/join');
+    final $class = await ref
+        .read(restApiProvider) //
+        .post('classes/$code/join')
+        .then((response) => Class.fromJson(response as Json));
+
+    ref.read(databaseProvider).update($class, $class.id).ignore();
     ref.invalidate(myClassesProvider);
   }
 }

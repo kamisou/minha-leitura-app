@@ -1,13 +1,24 @@
 import 'dart:io';
 
-import 'package:reading/authentication/data/repositories/auth_repository.dart';
 import 'package:reading/profile/data/dtos/password_change_dto.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
+import 'package:reading/profile/domain/models/user_profile.dart';
 import 'package:reading/shared/data/repository.dart';
+import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'profile_repository.g.dart';
+
+@riverpod
+UserProfile profile(ProfileRef ref) {
+  return const UserProfile(
+    id: 1,
+    name: 'João Marcos Kaminoski de Souza',
+    email: 'kamisou@outlook.com',
+    phone: '(42) 9 9860-0427',
+  );
+}
 
 @riverpod
 ProfileRepository profileRepository(ProfileRepositoryRef ref) {
@@ -19,26 +30,31 @@ class OnlineProfileRepository extends ProfileRepository {
 
   @override
   Future<void> save(ProfileChangeDTO data) async {
-    await ref
+    final profile = await ref
         .read(restApiProvider) //
-        .post('/user/profile', body: data.toJson());
-    ref.invalidate(myUserProvider);
+        .post('user/my/profile', body: data.toJson())
+        .then((response) => UserProfile.fromJson(response as Json));
+
+    ref.read(databaseProvider).update(profile, profile.id).ignore();
+    ref.invalidate(profileProvider);
   }
 
   @override
   Future<void> saveAvatar(File avatar) async {
-    await ref
+    final profile = await ref
         .read(restApiProvider) //
-        .upload('/user/avatar', field: 'avatar', file: avatar);
-    ref.invalidate(myUserProvider);
+        .upload('user/my/avatar', field: 'avatar', file: avatar)
+        .then((response) => UserProfile.fromJson(response as Json));
+
+    ref.read(databaseProvider).update(profile, profile.id).ignore();
+    ref.invalidate(profileProvider);
   }
 
   @override
-  Future<void> savePassword(PasswordChangeDTO data) async {
-    await ref
+  Future<void> savePassword(PasswordChangeDTO data) {
+    return ref
         .read(restApiProvider) //
-        .post('/user/password', body: data.toJson());
-    ref.invalidate(myUserProvider);
+        .post('user/my/password', body: data.toJson());
   }
 }
 

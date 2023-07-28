@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/authentication/data/repositories/auth_repository.dart';
+import 'package:reading/profile/data/repositories/profile_repository.dart';
 
 class ProfilePicture extends HookConsumerWidget {
   const ProfilePicture({
@@ -13,7 +13,7 @@ class ProfilePicture extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider)!;
+    final user = ref.watch(profileProvider);
     final initials = useMemoized(user.initials, [user]);
 
     return DecoratedBox(

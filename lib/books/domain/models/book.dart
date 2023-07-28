@@ -6,8 +6,8 @@ part 'book.freezed.dart';
 part 'book.g.dart';
 
 @freezed
-@HiveType(typeId: 4)
-class Book extends HiveObject with _$Book {
+@HiveType(typeId: 5)
+class Book with _$Book {
   const factory Book({
     @HiveField(0) required int id,
     @HiveField(1) required String coverArt,

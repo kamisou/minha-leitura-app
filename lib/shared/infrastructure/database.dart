@@ -69,9 +69,24 @@ class HiveDatabase extends Database {
   }
 
   @override
-  Future<void> update<T>(dynamic id, T value) async {
+  Future<void> update<T>(T value, dynamic id) async {
     final box = await ref.read(hiveBoxProvider(T).future) as LazyBox<T>;
     return box.put(id, value);
+  }
+
+  @override
+  Future<void> updateAll<T>(
+    Iterable<T> values,
+    dynamic Function(T value) id,
+  ) async {
+    final box = await ref.read(hiveBoxProvider(T).future) as LazyBox<T>;
+
+    return box.putAll(
+      {
+        for (final value in values) //
+          id(value): value,
+      },
+    );
   }
 }
 
@@ -82,5 +97,6 @@ abstract class Database {
   Future<List<T>> getAll<T>();
   Future<List<T>> getWhere<T>(bool Function(T value) predicate);
   Future<int> insert<T>(T value);
-  Future<void> update<T>(dynamic id, T value);
+  Future<void> update<T>(T value, dynamic id);
+  Future<void> updateAll<T>(Iterable<T> values, dynamic Function(T value) id);
 }

@@ -6,35 +6,38 @@ part 'achievement.freezed.dart';
 part 'achievement.g.dart';
 
 @freezed
-@HiveType(typeId: 8)
-class Achievements extends HiveObject with _$Achievements {
+@HiveType(typeId: 9)
+class Achievements with _$Achievements {
   const factory Achievements({
-    @HiveField(0) required List<Achievement> single,
-    @HiveField(1) required List<Milestone> milestones,
+    @HiveField(0) required int id,
+    @HiveField(1) required List<Achievement> single,
+    @HiveField(2) required List<Milestone> milestones,
   }) = _Achievements;
 
   factory Achievements.fromJson(Json json) => _$AchievementsFromJson(json);
 }
 
 @freezed
-@HiveType(typeId: 9)
-class Achievement extends HiveObject with _$Achievement {
+@HiveType(typeId: 10)
+class Achievement with _$Achievement {
   const factory Achievement({
-    @HiveField(0) required String title,
-    @HiveField(1) required String category,
-    @HiveField(2) required bool achieved,
+    @HiveField(0) required int id,
+    @HiveField(1) required String title,
+    @HiveField(2) required String category,
+    @HiveField(3) required bool achieved,
   }) = _Achievement;
 
   factory Achievement.fromJson(Json json) => _$AchievementFromJson(json);
 }
 
 @freezed
-@HiveType(typeId: 10)
-class Milestone extends HiveObject with _$Milestone {
+@HiveType(typeId: 11)
+class Milestone with _$Milestone {
   const factory Milestone({
-    @HiveField(0) required String title,
-    @HiveField(1) required List<int> milestones,
-    @HiveField(2) int? achieved,
+    @HiveField(0) required int id,
+    @HiveField(1) required String title,
+    @HiveField(2) required List<int> milestones,
+    @HiveField(3) int? achieved,
   }) = _Milestone;
 
   factory Milestone.fromJson(Json json) => _$MilestoneFromJson(json);

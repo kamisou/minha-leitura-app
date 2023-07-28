@@ -6,11 +6,12 @@ part 'user.freezed.dart';
 part 'user.g.dart';
 
 @freezed
-@HiveType(typeId: 1)
-class User extends HiveObject with _$User {
+@HiveType(typeId: 2)
+class User with _$User {
   const factory User({
-    @HiveField(0) required String name,
-    @HiveField(1) String? avatar,
+    @HiveField(0) required int id,
+    @HiveField(1) required String name,
+    @HiveField(2) String? avatar,
   }) = _User;
 
   User._();

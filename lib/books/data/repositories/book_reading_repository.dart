@@ -26,29 +26,39 @@ class OnlineBookReadingRepository extends BookReadingRepository
 
   @override
   Future<void> commitOfflineUpdates() async {
-    final offlineBookReadings = await ref
+    final readings = await ref
         .read(databaseProvider) //
         .getAll<OfflineBookReading>();
 
-    for (final reading in offlineBookReadings) {
+    for (final reading in readings) {
       await addReading(reading.bookId, Pages(reading.pages));
     }
   }
 
   @override
-  Future<void> addReading(int bookId, Pages pages) {
-    return ref
+  Future<void> addReading(int bookId, Pages pages) async {
+    final reading = await ref
         .read(restApiProvider)
-        .post('books/$bookId/readings', body: {'pages': pages.value});
+        .post('books/$bookId/readings', body: {'pages': pages.value}) //
+        .then((response) => BookReading.fromJson(response as Json));
+
+    ref.read(databaseProvider).update(reading, reading.id).ignore();
   }
 
   @override
   Future<List<BookReading>> getBookReadings(int bookId) async {
-    return ref
+    final readings = await ref
         .read(restApiProvider)
         .get('books/$bookId/readings')
         .then((response) => (response as List<Json>).map(BookReading.fromJson))
         .then((bookReadings) => bookReadings.toList());
+
+    ref
+        .read(databaseProvider)
+        .updateAll(readings, (value) => value.id)
+        .ignore();
+
+    return readings;
   }
 }
 
@@ -56,9 +66,9 @@ class OfflineBookReadingRepository extends BookReadingRepository {
   const OfflineBookReadingRepository(super.ref);
 
   @override
-  Future<void> addReading(int bookId, Pages pages) {
-    final bookReading = OfflineBookReading(bookId: bookId, pages: pages.value!);
-    return ref.read(databaseProvider).insert(bookReading);
+  Future<void> addReading(int bookId, Pages data) {
+    final reading = OfflineBookReading(bookId: bookId, pages: data.value!);
+    return ref.read(databaseProvider).insert(reading);
   }
 
   @override
@@ -73,5 +83,5 @@ abstract class BookReadingRepository extends Repository {
   const BookReadingRepository(super.ref);
 
   Future<List<BookReading>> getBookReadings(int bookId);
-  Future<void> addReading(int bookId, Pages pages);
+  Future<void> addReading(int bookId, Pages data);
 }

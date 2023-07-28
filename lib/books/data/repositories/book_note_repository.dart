@@ -1,4 +1,4 @@
-import 'package:reading/authentication/data/repositories/auth_repository.dart';
+import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
@@ -29,11 +29,11 @@ class OnlineBookNoteRepository extends BookNoteRepository
 
   @override
   Future<void> commitOfflineUpdates() async {
-    final bookNotes = await ref
+    final notes = await ref
         .read(databaseProvider) //
         .getAll<OfflineBookNote>();
 
-    for (final note in bookNotes) {
+    for (final note in notes) {
       await addNote(
         note.bookId!,
         NewNoteDTO(
@@ -45,19 +45,26 @@ class OnlineBookNoteRepository extends BookNoteRepository
   }
 
   @override
-  Future<void> addNote(int bookId, NewNoteDTO note) {
-    return ref
+  Future<void> addNote(int bookId, NewNoteDTO data) async {
+    final note = await ref
         .read(restApiProvider)
-        .post('books/$bookId/notes', body: note.toJson());
+        .post('books/$bookId/notes', body: data.toJson())
+        .then((response) => BookNote.fromJson(response as Json));
+
+    ref.read(databaseProvider).update(note, note.id).ignore();
   }
 
   @override
-  Future<List<BookNote>> getBookNotes(int bookId) {
-    return ref
+  Future<List<BookNote>> getBookNotes(int bookId) async {
+    final notes = await ref
         .read(restApiProvider)
         .get('books/$bookId/notes')
         .then((response) => (response as List<Json>).map(BookNote.fromJson))
         .then((bookNotes) => bookNotes.toList());
+
+    ref.read(databaseProvider).updateAll(notes, (note) => note.id).ignore();
+
+    return notes;
   }
 }
 
@@ -65,11 +72,11 @@ class OfflineBookNoteRepository extends BookNoteRepository {
   const OfflineBookNoteRepository(super.db);
 
   @override
-  Future<void> addNote(int bookId, NewNoteDTO note) {
+  Future<void> addNote(int bookId, NewNoteDTO data) {
     final bookNote = OfflineBookNote(
-      title: note.title.value,
-      description: note.description.value,
-      author: ref.read(userProvider)!.toUser(),
+      title: data.title.value,
+      description: data.description.value,
+      author: ref.read(profileProvider).toUser(),
       bookId: bookId,
     );
 
@@ -88,5 +95,5 @@ abstract class BookNoteRepository extends Repository {
   const BookNoteRepository(super.ref);
 
   Future<List<BookNote>> getBookNotes(int bookId);
-  Future<void> addNote(int bookId, NewNoteDTO note);
+  Future<void> addNote(int bookId, NewNoteDTO data);
 }

@@ -6,19 +6,20 @@ part 'book_reading.freezed.dart';
 part 'book_reading.g.dart';
 
 @freezed
-@HiveType(typeId: 6)
-class BookReading extends HiveObject with _$BookReading {
+@HiveType(typeId: 7)
+class BookReading with _$BookReading {
   const factory BookReading({
-    @HiveField(0) required int pages,
-    @HiveField(1) required DateTime date,
-    @HiveField(2) required int bookId,
+    @HiveField(0) required int id,
+    @HiveField(1) required int pages,
+    @HiveField(2) required DateTime date,
+    @HiveField(3) required int bookId,
   }) = _BookReading;
 
   factory BookReading.fromJson(Json json) => _$BookReadingFromJson(json);
 }
 
-@HiveType(typeId: 106)
-class OfflineBookReading extends HiveObject {
+@HiveType(typeId: 107)
+class OfflineBookReading {
   OfflineBookReading({
     required this.pages,
     required this.bookId,

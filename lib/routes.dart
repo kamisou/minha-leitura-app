@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:reading/achievements/presentation/screens/achievements_screen.dart';
-import 'package:reading/authentication/data/repositories/auth_repository.dart';
 import 'package:reading/authentication/presentation/screens/login_screen.dart';
 import 'package:reading/authentication/presentation/screens/signup_screen.dart';
 import 'package:reading/books/domain/models/book.dart';
@@ -10,7 +9,6 @@ import 'package:reading/classes/presentation/screens/join_class_screen.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/intro/presentation/screens/intro_screen.dart';
 import 'package:reading/profile/presentation/screens/my_profile_screen.dart';
-import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/presentation/screens/home_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -26,10 +24,9 @@ Raw<GoRouter> router(RouterRef ref) {
       GoRoute(
         builder: (context, state) => const HomeScreen(),
         path: '/',
-        redirect: (context, state) =>
-            ref.read(isConnectedProvider) && ref.read(userProvider) == null
-                ? '/login'
-                : null,
+        // TODO(kamisou): checar se usuário está logado
+        // redirect: (context, state) =>
+        // ref.read(profileProvider) != null ? '/login' : null,
         routes: [
           GoRoute(
             path: 'achievements',
