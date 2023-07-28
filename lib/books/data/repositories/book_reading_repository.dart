@@ -10,6 +10,8 @@ part 'book_reading_repository.g.dart';
 
 @riverpod
 BookReadingRepository bookReadingRepository(BookReadingRepositoryRef ref) {
+  return FakeBookReadingRepository(ref);
+
   return ref.read(isConnectedProvider)
       ? OnlineBookReadingRepository(ref)
       : OfflineBookReadingRepository(ref);
@@ -76,6 +78,45 @@ class OfflineBookReadingRepository extends BookReadingRepository {
     return ref
         .read(databaseProvider)
         .getWhere((value) => value.bookId == bookId);
+  }
+}
+
+class FakeBookReadingRepository extends BookReadingRepository {
+  const FakeBookReadingRepository(super.ref);
+
+  @override
+  Future<void> addReading(int bookId, Pages data) async {
+    return;
+  }
+
+  @override
+  Future<List<BookReading>> getBookReadings(int bookId) async {
+    return [
+      BookReading(
+        id: 1,
+        pages: 22,
+        date: DateTime(2021, 2, 10, 18, 24),
+        bookId: bookId,
+      ),
+      BookReading(
+        id: 2,
+        pages: 9,
+        date: DateTime(2021, 2, 9, 19, 11),
+        bookId: bookId,
+      ),
+      BookReading(
+        id: 3,
+        pages: 4,
+        date: DateTime(2021, 2, 8, 20, 27),
+        bookId: bookId,
+      ),
+      BookReading(
+        id: 1,
+        pages: 14,
+        date: DateTime(2021, 2, 7, 18, 24),
+        bookId: bookId,
+      ),
+    ];
   }
 }
 

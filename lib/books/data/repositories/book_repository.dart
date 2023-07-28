@@ -10,6 +10,8 @@ part 'book_repository.g.dart';
 
 @riverpod
 BookRepository bookRepository(BookRepositoryRef ref) {
+  return FakeBookRepository(ref);
+
   return ref.read(isConnectedProvider)
       ? OnlineBookRepository(ref)
       : OfflineBookRepository(ref);
@@ -65,6 +67,37 @@ class OfflineBookRepository extends BookRepository {
   @override
   Future<List<Book>> getMyBooks() {
     return ref.read(databaseProvider).getAll();
+  }
+}
+
+class FakeBookRepository extends BookRepository {
+  const FakeBookRepository(super.ref);
+
+  @override
+  Future<BookDetails> getBookDetails(int bookId) async {
+    return BookDetails(
+      id: 1,
+      pageCount: 248,
+      pagesRead: 72,
+      currentPage: 36,
+      dailyPageGoal: 10,
+      started: DateTime(2021, 02, 10),
+    );
+  }
+
+  @override
+  Future<List<Book>> getMyBooks() async {
+    return [
+      const Book(
+        id: 1,
+        coverArt:
+            'https://s3-alpha-sig.figma.com/img/fc51/9370/48b40648284f72d5ba23eb7f53b20da8?Expires=1691366400&Signature=njikvp9J48lDWb047c2gun3VPYwmjh5qTKTg2UeZCSHc0wIf95pEsAZeNevlMC6sUpwj1FVTCLJZZ5tUHV--q5MBCbVeZiOcnGwzWQJ5TT4lJG17ZkQcFnWiRlGFbzGz4xnyQw7TwNp32f-lAb57ok4brWPGNymy5hUKIxoCU7-S2wtPaEhnJPYmMqgR-F8KUz4MIXuGkrm19XedYVKNFCREBQCP-m0HaZ0k1yGlD7gMVgeq-0keTv-Em9p6jOHsfF0~tPa129jNkR7SUl3FO3hg2H-vPPjDmQYkDQPSnZ8rFy-M268eez4iA9HxxStJ7yUgJW2W~GNYXxb9VbodXQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
+        title: 'Alice no País das Maravilhas',
+        author: 'Lewis Carroll',
+        pageCount: 248,
+        pagesRead: 72,
+      ),
+    ];
   }
 }
 

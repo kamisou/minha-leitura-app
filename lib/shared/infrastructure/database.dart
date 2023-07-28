@@ -25,6 +25,8 @@ class HiveDatabase extends Database {
     final box = await Hive.openLazyBox<T>(T.toString());
     final value = await box.get(id);
 
+    box.close().ignore();
+
     if (value == null) {
       throw const NoRowFoundException();
     }
@@ -39,6 +41,8 @@ class HiveDatabase extends Database {
     final box = await Hive.openBox<T>(T.toString());
     final values = box.values.toList();
 
+    box.close().ignore();
+
     return values;
   }
 
@@ -49,6 +53,8 @@ class HiveDatabase extends Database {
     final box = await Hive.openBox<T>(T.toString());
     final values = box.values.where(predicate).toList();
 
+    box.close().ignore();
+
     return values;
   }
 
@@ -57,8 +63,11 @@ class HiveDatabase extends Database {
     log('insert $T: $value', name: 'Database');
 
     final box = await Hive.openLazyBox<T>(T.toString());
+    final id = await box.add(value);
 
-    return box.add(value);
+    box.close().ignore();
+
+    return id;
   }
 
   @override
@@ -66,8 +75,9 @@ class HiveDatabase extends Database {
     log('update $T: $value ($id)', name: 'Database');
 
     final box = await Hive.openLazyBox<T>(T.toString());
+    await box.put(id, value);
 
-    return box.put(id, value);
+    box.close().ignore();
   }
 
   @override
@@ -78,13 +88,12 @@ class HiveDatabase extends Database {
     log('update all $T', name: 'Database');
 
     final box = await Hive.openLazyBox<T>(T.toString());
+    await box.putAll({
+      for (final value in values) //
+        id(value): value,
+    });
 
-    return box.putAll(
-      {
-        for (final value in values) //
-          id(value): value,
-      },
-    );
+    box.close().ignore();
   }
 }
 
