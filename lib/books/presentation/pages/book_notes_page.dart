@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
+import 'package:reading/books/presentation/dialogs/view_note_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:unicons/unicons.dart';
 
-class BookNotesPage extends ConsumerWidget {
+class BookNotesPage extends HookConsumerWidget {
   const BookNotesPage({
     super.key,
     required this.bookId,
@@ -32,8 +33,17 @@ class BookNotesPage extends ConsumerWidget {
       children: [
         ListView.separated(
           itemCount: notes.length,
-          itemBuilder: (context, index) => BookNotesTile(
-            note: notes[index],
+          itemBuilder: (context, index) => GestureDetector(
+            onTap: () => showModalBottomSheet<void>(
+              context: context,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              isScrollControlled: true,
+              shape: const Border(),
+              builder: (context) => const ViewNoteDialog(),
+            ),
+            child: BookNotesTile(
+              note: notes[index],
+            ),
           ),
           padding: EdgeInsets.zero,
           separatorBuilder: (context, index) => const Divider(),

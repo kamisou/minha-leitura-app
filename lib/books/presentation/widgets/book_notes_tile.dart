@@ -84,7 +84,6 @@ class BookNotesTile extends HookWidget {
               ],
             ),
           ),
-        if (!response) const Divider(),
       ],
     );
   }

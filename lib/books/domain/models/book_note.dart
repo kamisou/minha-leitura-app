@@ -7,7 +7,7 @@ part 'book_note.freezed.dart';
 part 'book_note.g.dart';
 
 @freezed
-@HiveType(typeId: 8)
+@HiveType(typeId: 9)
 class BookNote with _$BookNote {
   @Assert('bookId != null || noteId != null', 'BookNote needs a parent id!')
   const factory BookNote({
@@ -28,7 +28,7 @@ class BookNote with _$BookNote {
   int get parentId => bookId ?? noteId!;
 }
 
-@HiveType(typeId: 108)
+@HiveType(typeId: 109)
 class OfflineBookNote {
   OfflineBookNote({
     required this.title,

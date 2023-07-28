@@ -122,8 +122,10 @@ class FakeBookNoteRepository extends BookNoteRepository {
                 ' egestas porttitor nunc...',
             author: const User(id: 1, name: 'Fulano de Tal'),
             createdAt: DateTime(2022, 09, 26, 15, 28, 30),
+            noteId: 1,
           ),
         ],
+        bookId: bookId,
       ),
       BookNote(
         id: 3,
@@ -133,6 +135,7 @@ class FakeBookNoteRepository extends BookNoteRepository {
             ' egestas porttitor nunc...',
         author: const User(id: 2, name: 'Guilherme'),
         createdAt: DateTime(2022, 09, 27, 16, 0, 10),
+        bookId: bookId,
       ),
     ];
   }
