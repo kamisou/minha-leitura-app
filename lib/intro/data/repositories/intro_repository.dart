@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/infrastructure/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,22 +14,18 @@ Future<bool> introSeen(IntroSeenRef ref) {
   return ref.read(introRepositoryProvider).getIntroSeen();
 }
 
-class IntroRepository {
-  const IntroRepository(this.ref);
-
-  static const String _introSeenKey = 'intro_seen';
-
-  final Ref ref;
+class IntroRepository extends Repository {
+  const IntroRepository(super.ref);
 
   Future<void> setIntroSeen() async {
-    await ref.read(secureStorageProvider).write(_introSeenKey, 'true');
+    await ref.read(secureStorageProvider).write('intro_seen', 'true');
     ref.invalidate(introSeenProvider);
   }
 
   Future<bool> getIntroSeen() {
     return ref
         .read(secureStorageProvider)
-        .read(_introSeenKey)
+        .read('intro_seen')
         .then((value) => value == 'true');
   }
 }

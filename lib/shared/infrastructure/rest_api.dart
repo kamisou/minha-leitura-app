@@ -34,6 +34,7 @@ class DioRestApi extends RestApi {
 
   final Dio _dio;
 
+  @override
   bool get isAuthorized => _dio.options.headers.containsKey('authorization');
 
   @override

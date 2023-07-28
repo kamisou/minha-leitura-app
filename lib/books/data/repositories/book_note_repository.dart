@@ -70,6 +70,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
       title: note.title.value,
       description: note.description.value,
       author: ref.read(userProvider)!.toUser(),
+      bookId: bookId,
     );
 
     return ref.read(databaseProvider).insert(bookNote);
