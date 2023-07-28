@@ -75,7 +75,6 @@ class DioRestApi extends RestApi {
     return _request(RestMethod.post, path, body: formData);
   }
 
-  @override
   Future<dynamic> _request(
     RestMethod method,
     String path, {
@@ -130,13 +129,6 @@ abstract class RestApi {
     String path, {
     required String field,
     required File file,
-  });
-
-  Future<dynamic> _request(
-    RestMethod method,
-    String path, {
-    Map<String, dynamic>? query,
-    Object? body,
   });
 }
 

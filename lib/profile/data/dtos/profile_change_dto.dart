@@ -1,7 +1,7 @@
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/profile/domain/value_objects/phone.dart';
-import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
 
 class ProfileChangeDTO {
   const ProfileChangeDTO({

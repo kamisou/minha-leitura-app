@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';

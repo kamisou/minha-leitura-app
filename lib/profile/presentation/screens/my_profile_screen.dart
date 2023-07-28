@@ -11,7 +11,7 @@ import 'package:reading/profile/presentation/controllers/my_profile_controller.d
 import 'package:reading/profile/presentation/dialogs/change_password_dialog.dart';
 import 'package:reading/profile/presentation/hooks/use_profile_form_reducer.dart';
 import 'package:reading/profile/presentation/widgets/profile_picture.dart';
-import 'package:reading/shared/infrastructure/datasources/image_picker.dart';
+import 'package:reading/shared/infrastructure/image_picker.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 

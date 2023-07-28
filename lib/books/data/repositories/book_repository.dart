@@ -1,40 +1,27 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
-import 'package:reading/shared/infrastructure/datasources/connection_status.dart';
-import 'package:reading/shared/infrastructure/datasources/database.dart';
-import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
+import 'package:reading/shared/application/repository_service.dart';
+import 'package:reading/shared/infrastructure/database.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'book_repository.g.dart';
 
 @riverpod
-BookRepository bookRepository(BookRepositoryRef ref) {
-  return ref.watch(isConnectedProvider)
-      ? OnlineBookRepository(ref)
-      : OfflineBookRepository(ref);
-}
-
-@riverpod
 Future<List<Book>> myBooks(MyBooksRef ref) {
-  return ref.watch(bookRepositoryProvider).getMyBooks();
+  return ref
+      .read(repositoryServiceProvider)<BookRepository>() //
+      .getMyBooks();
 }
 
 @riverpod
 Future<BookDetails> book(BookRef ref, int bookId) {
-  return ref.watch(bookRepositoryProvider).getBookDetails(bookId);
+  return ref
+      .read(repositoryServiceProvider)<BookRepository>()
+      .getBookDetails(bookId);
 }
 
-abstract class BookRepository {
-  const BookRepository(this.ref);
-
-  final Ref ref;
-
-  Future<List<Book>> getMyBooks();
-  Future<BookDetails> getBookDetails(int bookId);
-}
-
-class OnlineBookRepository extends BookRepository {
+class OnlineBookRepository extends OnlineRepository implements BookRepository {
   const OnlineBookRepository(super.ref);
 
   @override
@@ -55,8 +42,9 @@ class OnlineBookRepository extends BookRepository {
   }
 }
 
-class OfflineBookRepository extends BookRepository {
-  const OfflineBookRepository(super.ref);
+class OfflineBookRepository extends OfflineRepository
+    implements BookRepository {
+  const OfflineBookRepository(super.db);
 
   @override
   Future<BookDetails> getBookDetails(int bookId) {
@@ -67,4 +55,9 @@ class OfflineBookRepository extends BookRepository {
   Future<List<Book>> getMyBooks() {
     return ref.read(databaseProvider).getAll();
   }
+}
+
+abstract class BookRepository {
+  Future<List<Book>> getMyBooks();
+  Future<BookDetails> getBookDetails(int bookId);
 }

@@ -1,5 +1,5 @@
 import 'package:reading/authentication/domain/value_objects/password.dart';
-import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
 
 class PasswordChangeDTO {
   const PasswordChangeDTO({

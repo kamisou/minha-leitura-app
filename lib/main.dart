@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:reading/authentication/data/repositories/auth_repository.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/routes.dart';
-import 'package:reading/shared/infrastructure/datasources/connection_status.dart';
+import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/theme.dart';
 
 void main() async {

@@ -1,26 +1,35 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
-import 'package:reading/shared/infrastructure/datasources/connection_status.dart';
-import 'package:reading/shared/infrastructure/datasources/rest_api.dart';
+import 'package:reading/shared/application/repository_service.dart';
+import 'package:reading/shared/infrastructure/database.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'book_reading_repository.g.dart';
 
 @riverpod
-BookReadingRepository bookReadingRepository(BookReadingRepositoryRef ref) {
-  return ref.watch(isConnectedProvider)
-      ? OnlineBookReadingRepository(ref)
-      : OfflineBookReadingRepository(ref);
-}
-
-@riverpod
 Future<List<BookReading>> bookReadings(BookReadingsRef ref, int bookId) {
-  return ref.read(bookReadingRepositoryProvider).getBookReadings(bookId);
+  return ref
+      .read(repositoryServiceProvider)<BookReadingRepository>()
+      .getBookReadings(bookId);
 }
 
-class OnlineBookReadingRepository extends BookReadingRepository {
+class OnlineBookReadingRepository extends OnlineRepository
+    with OfflineAwareOnlineRepository
+    implements BookReadingRepository {
   const OnlineBookReadingRepository(super.ref);
+
+  @override
+  Future<void> commitOfflineUpdates() async {
+    final offlineBookReadings = await ref
+        .read(databaseProvider) //
+        .getAll<OfflineBookReading>();
+
+    for (final reading in offlineBookReadings) {
+      await addReading(reading.bookId, Pages(reading.pages));
+    }
+  }
 
   @override
   Future<void> addReading(int bookId, Pages pages) {
@@ -30,7 +39,7 @@ class OnlineBookReadingRepository extends BookReadingRepository {
   }
 
   @override
-  Future<List<BookReading>> getBookReadings(int bookId) {
+  Future<List<BookReading>> getBookReadings(int bookId) async {
     return ref
         .read(restApiProvider)
         .get('books/$bookId/readings')
@@ -39,19 +48,21 @@ class OnlineBookReadingRepository extends BookReadingRepository {
   }
 }
 
-class OfflineBookReadingRepository extends BookReadingRepository {
+class OfflineBookReadingRepository extends OfflineRepository
+    implements BookReadingRepository {
   const OfflineBookReadingRepository(super.ref);
 
   @override
   Future<void> addReading(int bookId, Pages pages) {
-    // TODO(kamisou): métodos para update offline
-    throw UnimplementedError();
+    final bookReading = OfflineBookReading(bookId: bookId, pages: pages.value!);
+    return ref.read(databaseProvider).insert(bookReading);
   }
 
   @override
   Future<List<BookReading>> getBookReadings(int bookId) {
-    // TODO(kamisou): buscar leituras relacionadas com bookId
-    throw UnimplementedError();
+    return ref
+        .read(databaseProvider)
+        .getWhere((value) => value.bookId == bookId);
   }
 }
 
