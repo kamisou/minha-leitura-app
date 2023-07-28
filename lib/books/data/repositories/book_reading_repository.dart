@@ -1,7 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
-import 'package:reading/shared/application/repository_service.dart';
+import 'package:reading/shared/data/repository.dart';
+import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -9,15 +9,19 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'book_reading_repository.g.dart';
 
 @riverpod
-Future<List<BookReading>> bookReadings(BookReadingsRef ref, int bookId) {
-  return ref
-      .read(repositoryServiceProvider)<BookReadingRepository>()
-      .getBookReadings(bookId);
+BookReadingRepository bookReadingRepository(BookReadingRepositoryRef ref) {
+  return ref.read(isConnectedProvider)
+      ? OnlineBookReadingRepository(ref)
+      : OfflineBookReadingRepository(ref);
 }
 
-class OnlineBookReadingRepository extends OnlineRepository
-    with OfflineAwareOnlineRepository
-    implements BookReadingRepository {
+@riverpod
+Future<List<BookReading>> bookReadings(BookReadingsRef ref, int bookId) {
+  return ref.read(bookReadingRepositoryProvider).getBookReadings(bookId);
+}
+
+class OnlineBookReadingRepository extends BookReadingRepository
+    with OfflineAwareOnlineRepository {
   const OnlineBookReadingRepository(super.ref);
 
   @override
@@ -48,8 +52,7 @@ class OnlineBookReadingRepository extends OnlineRepository
   }
 }
 
-class OfflineBookReadingRepository extends OfflineRepository
-    implements BookReadingRepository {
+class OfflineBookReadingRepository extends BookReadingRepository {
   const OfflineBookReadingRepository(super.ref);
 
   @override
@@ -66,10 +69,8 @@ class OfflineBookReadingRepository extends OfflineRepository
   }
 }
 
-abstract class BookReadingRepository {
-  const BookReadingRepository(this.ref);
-
-  final Ref ref;
+abstract class BookReadingRepository extends Repository {
+  const BookReadingRepository(super.ref);
 
   Future<List<BookReading>> getBookReadings(int bookId);
   Future<void> addReading(int bookId, Pages pages);

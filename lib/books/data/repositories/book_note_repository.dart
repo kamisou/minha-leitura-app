@@ -3,7 +3,8 @@ import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
-import 'package:reading/shared/application/repository_service.dart';
+import 'package:reading/shared/data/repository.dart';
+import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -11,15 +12,19 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'book_note_repository.g.dart';
 
 @riverpod
-Future<List<BookNote>> bookNotes(BookNotesRef ref, int bookId) {
-  return ref
-      .read(repositoryServiceProvider)<BookNoteRepository>()
-      .getBookNotes(bookId);
+BookNoteRepository bookNoteRepository(BookNoteRepositoryRef ref) {
+  return ref.read(isConnectedProvider)
+      ? OnlineBookNoteRepository(ref)
+      : OfflineBookNoteRepository(ref);
 }
 
-class OnlineBookNoteRepository extends OnlineRepository
-    with OfflineAwareOnlineRepository
-    implements BookNoteRepository {
+@riverpod
+Future<List<BookNote>> bookNotes(BookNotesRef ref, int bookId) {
+  return ref.read(bookNoteRepositoryProvider).getBookNotes(bookId);
+}
+
+class OnlineBookNoteRepository extends BookNoteRepository
+    with OfflineAwareOnlineRepository {
   const OnlineBookNoteRepository(super.ref);
 
   @override
@@ -56,8 +61,7 @@ class OnlineBookNoteRepository extends OnlineRepository
   }
 }
 
-class OfflineBookNoteRepository extends OfflineRepository
-    implements BookNoteRepository {
+class OfflineBookNoteRepository extends BookNoteRepository {
   const OfflineBookNoteRepository(super.db);
 
   @override
@@ -79,7 +83,9 @@ class OfflineBookNoteRepository extends OfflineRepository
   }
 }
 
-abstract class BookNoteRepository {
+abstract class BookNoteRepository extends Repository {
+  const BookNoteRepository(super.ref);
+
   Future<List<BookNote>> getBookNotes(int bookId);
   Future<void> addNote(int bookId, NewNoteDTO note);
 }

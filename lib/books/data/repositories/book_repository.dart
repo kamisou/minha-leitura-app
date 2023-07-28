@@ -1,6 +1,7 @@
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
-import 'package:reading/shared/application/repository_service.dart';
+import 'package:reading/shared/data/repository.dart';
+import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -8,20 +9,23 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'book_repository.g.dart';
 
 @riverpod
+BookRepository bookRepository(BookRepositoryRef ref) {
+  return ref.read(isConnectedProvider)
+      ? OnlineBookRepository(ref)
+      : OfflineBookRepository(ref);
+}
+
+@riverpod
 Future<List<Book>> myBooks(MyBooksRef ref) {
-  return ref
-      .read(repositoryServiceProvider)<BookRepository>() //
-      .getMyBooks();
+  return ref.read(bookRepositoryProvider).getMyBooks();
 }
 
 @riverpod
 Future<BookDetails> book(BookRef ref, int bookId) {
-  return ref
-      .read(repositoryServiceProvider)<BookRepository>()
-      .getBookDetails(bookId);
+  return ref.read(bookRepositoryProvider).getBookDetails(bookId);
 }
 
-class OnlineBookRepository extends OnlineRepository implements BookRepository {
+class OnlineBookRepository extends BookRepository {
   const OnlineBookRepository(super.ref);
 
   @override
@@ -42,8 +46,7 @@ class OnlineBookRepository extends OnlineRepository implements BookRepository {
   }
 }
 
-class OfflineBookRepository extends OfflineRepository
-    implements BookRepository {
+class OfflineBookRepository extends BookRepository {
   const OfflineBookRepository(super.db);
 
   @override
@@ -57,7 +60,9 @@ class OfflineBookRepository extends OfflineRepository
   }
 }
 
-abstract class BookRepository {
+abstract class BookRepository extends Repository {
+  const BookRepository(super.ref);
+
   Future<List<Book>> getMyBooks();
   Future<BookDetails> getBookDetails(int bookId);
 }
