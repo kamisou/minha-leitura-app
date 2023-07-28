@@ -1,3 +1,4 @@
+import 'package:reading/books/data/dtos/new_reading_dto.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
 import 'package:reading/shared/data/repository.dart';
@@ -33,15 +34,21 @@ class OnlineBookReadingRepository extends BookReadingRepository
         .getAll<OfflineBookReading>();
 
     for (final reading in readings) {
-      await addReading(reading.bookId, Pages(reading.pages));
+      await addReading(
+        reading.bookId,
+        NewReadingDTO(
+          pages: Pages(reading.pages),
+          target: Pages(reading.target),
+        ),
+      );
     }
   }
 
   @override
-  Future<void> addReading(int bookId, Pages data) async {
+  Future<void> addReading(int bookId, NewReadingDTO data) async {
     final reading = await ref
         .read(restApiProvider)
-        .post('books/$bookId/readings', body: {'pages': data.value}) //
+        .post('books/$bookId/readings', body: data.toJson())
         .then((response) => BookReading.fromJson(response as Json));
 
     ref.read(databaseProvider).update(reading, reading.id).ignore();
@@ -68,8 +75,13 @@ class OfflineBookReadingRepository extends BookReadingRepository {
   const OfflineBookReadingRepository(super.ref);
 
   @override
-  Future<void> addReading(int bookId, Pages data) {
-    final reading = OfflineBookReading(bookId: bookId, pages: data.value!);
+  Future<void> addReading(int bookId, NewReadingDTO data) {
+    final reading = OfflineBookReading(
+      pages: data.pages.value!,
+      target: data.target.value!,
+      bookId: bookId,
+    );
+
     return ref.read(databaseProvider).insert(reading);
   }
 
@@ -85,7 +97,7 @@ class FakeBookReadingRepository extends BookReadingRepository {
   const FakeBookReadingRepository(super.ref);
 
   @override
-  Future<void> addReading(int bookId, Pages data) async {
+  Future<void> addReading(int bookId, NewReadingDTO data) async {
     return;
   }
 
@@ -95,24 +107,28 @@ class FakeBookReadingRepository extends BookReadingRepository {
       BookReading(
         id: 1,
         pages: 22,
+        target: 10,
         date: DateTime(2021, 2, 10, 18, 24),
         bookId: bookId,
       ),
       BookReading(
         id: 2,
         pages: 9,
+        target: 10,
         date: DateTime(2021, 2, 9, 19, 11),
         bookId: bookId,
       ),
       BookReading(
         id: 3,
         pages: 4,
+        target: 10,
         date: DateTime(2021, 2, 8, 20, 27),
         bookId: bookId,
       ),
       BookReading(
         id: 1,
         pages: 14,
+        target: 10,
         date: DateTime(2021, 2, 7, 18, 24),
         bookId: bookId,
       ),
@@ -124,5 +140,5 @@ abstract class BookReadingRepository extends Repository {
   const BookReadingRepository(super.ref);
 
   Future<List<BookReading>> getBookReadings(int bookId);
-  Future<void> addReading(int bookId, Pages data);
+  Future<void> addReading(int bookId, NewReadingDTO data);
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
+import 'package:reading/books/presentation/hooks/use_book_score_color.dart';
 import 'package:reading/shared/presentation/hooks/use_dd_mm_yy_h_m.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -15,10 +16,7 @@ class BookReadingTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = useMemoized(() {
-      // TODO(kamisou): lógica para meta de leitura (depende de cada livro)
-      return const Color(0xFF007F00);
-    });
+    final color = useBookScoreColor(reading.score);
 
     return Row(
       children: [

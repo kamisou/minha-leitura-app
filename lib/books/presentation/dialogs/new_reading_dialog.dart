@@ -3,14 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
+import 'package:reading/books/presentation/hooks/use_book_reading_form_reducer.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class NewReadingDialog extends HookWidget {
-  const NewReadingDialog({super.key});
+  const NewReadingDialog({
+    super.key,
+    required this.target,
+  });
+
+  final int target;
 
   @override
   Widget build(BuildContext context) {
-    final pages = useState(const Pages());
+    final readingForm = useBookReadingFormReducer(target);
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -47,7 +53,9 @@ class NewReadingDialog extends HookWidget {
               FilteringTextInputFormatter.digitsOnly,
             ],
             keyboardType: TextInputType.number,
-            onChanged: (value) => pages.value = Pages.fromString(value),
+            onChanged: (value) => readingForm.dispatch(
+              {'pages': Pages.fromString(value)},
+            ),
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   color: Theme.of(context).colorExtension?.gray[600],
                   fontSize: 52,
@@ -70,7 +78,7 @@ class NewReadingDialog extends HookWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: FilledButton(
-                  onPressed: () => context.pop(pages),
+                  onPressed: () => context.pop(readingForm.state),
                   child: const Text('Salvar'),
                 ),
               ),

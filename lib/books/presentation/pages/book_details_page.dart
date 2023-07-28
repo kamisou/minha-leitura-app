@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/books/data/dtos/new_reading_dto.dart';
 import 'package:reading/books/domain/models/book_details.dart';
-import 'package:reading/books/domain/value_objects/pages.dart';
 import 'package:reading/books/presentation/controllers/new_reading_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_reading_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_details_tile.dart';
@@ -94,12 +94,13 @@ class BookDetailsPage extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: FilledButton.icon(
-            onPressed: () => showModalBottomSheet<Pages?>(
+            onPressed: () => showModalBottomSheet<NewReadingDTO?>(
               context: context,
               backgroundColor: Theme.of(context).colorScheme.background,
               isScrollControlled: true,
               showDragHandle: true,
-              builder: (context) => const NewReadingDialog(),
+              builder: (context) =>
+                  NewReadingDialog(target: book.dailyPageGoal),
             ).then(
               (value) => value != null
                   ? ref
