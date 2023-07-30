@@ -42,8 +42,8 @@ class OnlineProfileRepository extends ProfileRepository {
   @override
   Future<void> saveAvatar(File avatar) async {
     final profile = await ref
-        .read(restApiProvider) //
-        .upload('user/my/avatar', field: 'avatar', file: avatar)
+        .read(restApiProvider)
+        .upload('user/my/avatar', {'avatar': avatar}) //
         .then((response) => UserProfile.fromJson(response as Json));
 
     ref.read(databaseProvider).update(profile, profile.id).ignore();

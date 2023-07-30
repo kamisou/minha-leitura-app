@@ -31,6 +31,18 @@ class OnlineBookRepository extends BookRepository {
   const OnlineBookRepository(super.ref);
 
   @override
+  Future<BookDetails> getBookDetails(int bookId) async {
+    final details = await ref
+        .read(restApiProvider)
+        .get('books/$bookId')
+        .then((response) => BookDetails.fromJson(response as Json));
+
+    ref.read(databaseProvider).update(details, details.id).ignore();
+
+    return details;
+  }
+
+  @override
   Future<List<Book>> getMyBooks() async {
     final books = await ref
         .read(restApiProvider)
@@ -41,18 +53,6 @@ class OnlineBookRepository extends BookRepository {
     ref.read(databaseProvider).updateAll(books, (book) => book.id).ignore();
 
     return books;
-  }
-
-  @override
-  Future<BookDetails> getBookDetails(int bookId) async {
-    final details = await ref
-        .read(restApiProvider)
-        .get('books/$bookId')
-        .then((response) => BookDetails.fromJson(response as Json));
-
-    ref.read(databaseProvider).update(details, details.id).ignore();
-
-    return details;
   }
 }
 
@@ -104,6 +104,6 @@ class FakeBookRepository extends BookRepository {
 abstract class BookRepository extends Repository {
   const BookRepository(super.ref);
 
-  Future<List<Book>> getMyBooks();
   Future<BookDetails> getBookDetails(int bookId);
+  Future<List<Book>> getMyBooks();
 }

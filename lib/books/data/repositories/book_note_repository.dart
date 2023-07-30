@@ -1,12 +1,8 @@
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
-import 'package:reading/books/domain/value_objects/description.dart';
-import 'package:reading/books/domain/value_objects/title.dart';
-import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/profile/domain/models/user.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
-import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -27,25 +23,8 @@ Future<List<BookNote>> bookNotes(BookNotesRef ref, int bookId) {
 }
 
 class OnlineBookNoteRepository extends BookNoteRepository
-    with OfflineAwareOnlineRepository {
+    with OfflineUpdatePusher, OfflinePersister {
   const OnlineBookNoteRepository(super.ref);
-
-  @override
-  Future<void> commitOfflineUpdates() async {
-    final notes = await ref
-        .read(databaseProvider) //
-        .getAll<OfflineBookNote>();
-
-    for (final note in notes) {
-      await addNote(
-        note.bookId!,
-        NewNoteDTO(
-          title: Title(note.title),
-          description: Description(note.description),
-        ),
-      );
-    }
-  }
 
   @override
   Future<void> addNote(int bookId, NewNoteDTO data) async {
@@ -54,7 +33,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .post('books/$bookId/notes', body: data.toJson())
         .then((response) => BookNote.fromJson(response as Json));
 
-    ref.read(databaseProvider).update(note, note.id).ignore();
+    save(note, note.id);
   }
 
   @override
@@ -65,9 +44,23 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .then((response) => (response as List<Json>).map(BookNote.fromJson))
         .then((bookNotes) => bookNotes.toList());
 
-    ref.read(databaseProvider).updateAll(notes, (note) => note.id).ignore();
+    return saveAll(notes, (note) => note.id);
+  }
 
-    return notes;
+  @override
+  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data) async {
+    final note = await ref
+        .read(restApiProvider)
+        .put('books/$bookId/notes', body: data.toJson())
+        .then((response) => BookNote.fromJson(response as Json));
+
+    save(note, note.id);
+  }
+
+  @override
+  Future<void> pushUpdates() {
+    // TODO: implement pushUpdates
+    throw UnimplementedError();
   }
 }
 
@@ -76,21 +69,20 @@ class OfflineBookNoteRepository extends BookNoteRepository {
 
   @override
   Future<void> addNote(int bookId, NewNoteDTO data) {
-    final bookNote = OfflineBookNote(
-      title: data.title.value,
-      description: data.description.value,
-      author: ref.read(profileProvider).toUser(),
-      bookId: bookId,
-    );
-
-    return ref.read(databaseProvider).insert(bookNote);
+    // TODO: implement addNote
+    throw UnimplementedError();
   }
 
   @override
   Future<List<BookNote>> getBookNotes(int bookId) {
-    return ref
-        .read(databaseProvider)
-        .getWhere((value) => value.bookId == bookId);
+    // TODO: implement getBookNotes
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data) {
+    // TODO: implement updateNote
+    throw UnimplementedError();
   }
 }
 
@@ -139,11 +131,17 @@ class FakeBookNoteRepository extends BookNoteRepository {
       ),
     ];
   }
+
+  @override
+  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data) async {
+    return;
+  }
 }
 
 abstract class BookNoteRepository extends Repository {
   const BookNoteRepository(super.ref);
 
-  Future<List<BookNote>> getBookNotes(int bookId);
   Future<void> addNote(int bookId, NewNoteDTO data);
+  Future<List<BookNote>> getBookNotes(int bookId);
+  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data);
 }

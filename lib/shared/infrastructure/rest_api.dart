@@ -9,8 +9,6 @@ part 'rest_api.g.dart';
 
 typedef Json = Map<String, dynamic>;
 
-enum RestMethod { get, post }
-
 @Riverpod(keepAlive: true)
 RestApi restApi(RestApiRef ref) {
   return DioRestApi(
@@ -35,14 +33,6 @@ class DioRestApi extends RestApi {
   final Dio _dio;
 
   @override
-  bool get isAuthorized => _dio.options.headers.containsKey('authorization');
-
-  @override
-  void authorize(String scheme, String token) {
-    _dio.options.headers['authorization'] = '$scheme token';
-  }
-
-  @override
   Future<dynamic> get(
     String path, {
     Map<String, dynamic>? query,
@@ -58,23 +48,29 @@ class DioRestApi extends RestApi {
       _request(RestMethod.post, path, body: body);
 
   @override
-  Future<dynamic> upload(
+  Future<dynamic> put(
     String path, {
-    required String field,
-    required File file,
-  }) async {
+    Map<String, dynamic>? body,
+  }) =>
+      _request(RestMethod.put, path, body: body);
+
+  @override
+  Future<dynamic> upload(String path, Map<String, File> files) async {
     log(
       'upload $path\n'
-      'file: ${file.path}',
+      'files: $files',
       name: 'RestApi',
     );
 
-    final bytes = file.readAsBytesSync();
+    final formData = FormData();
 
-    final multipartFile = MultipartFile.fromBytes(bytes)..finalize();
-    final formData = FormData()
-      ..files.add(MapEntry(field, multipartFile))
-      ..finalize();
+    formData.files.addAll(
+      files.map((key, value) {
+        final bytes = value.readAsBytesSync();
+        final multipartFile = MultipartFile.fromBytes(bytes);
+        return MapEntry(key, multipartFile);
+      }).entries,
+    );
 
     return _request(RestMethod.post, path, body: formData);
   }
@@ -93,17 +89,12 @@ class DioRestApi extends RestApi {
     );
 
     try {
-      final response = switch (method) {
-        RestMethod.get => await _dio.get<dynamic>(
-            path,
-            data: body,
-            queryParameters: query,
-          ),
-        RestMethod.post => await _dio.post<dynamic>(
-            path,
-            data: body,
-          ),
-      };
+      final response = await _dio.request<dynamic>(
+        path,
+        data: body,
+        queryParameters: query,
+        options: Options(method: method.name),
+      );
 
       return response.data;
     } on DioException catch (e) {
@@ -122,15 +113,19 @@ class DioRestApi extends RestApi {
   }
 }
 
-abstract class RestApi {
-  bool get isAuthorized;
+enum RestMethod {
+  get(name: 'get'),
+  post(name: 'post'),
+  put(name: 'put');
 
-  void authorize(String scheme, String token);
+  const RestMethod({required this.name});
+
+  final String name;
+}
+
+abstract class RestApi {
   Future<dynamic> get(String path, {Map<String, dynamic>? query, Json? body});
   Future<dynamic> post(String path, {Json? body});
-  Future<dynamic> upload(
-    String path, {
-    required String field,
-    required File file,
-  });
+  Future<dynamic> put(String path, {Map<String, dynamic>? body});
+  Future<dynamic> upload(String path, Map<String, File> files);
 }

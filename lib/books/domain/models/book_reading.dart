@@ -44,21 +44,3 @@ class BookReading with _$BookReading {
     return BookReadingScore.bad;
   }
 }
-
-@HiveType(typeId: 107)
-class OfflineBookReading {
-  OfflineBookReading({
-    required this.pages,
-    required this.target,
-    required this.bookId,
-  });
-
-  @HiveField(0)
-  final int target;
-
-  @HiveField(1)
-  final int pages;
-
-  @HiveField(2)
-  final int bookId;
-}
