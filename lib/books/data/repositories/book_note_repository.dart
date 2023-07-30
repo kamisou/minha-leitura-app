@@ -1,8 +1,12 @@
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
+import 'package:reading/books/domain/value_objects/description.dart';
+import 'package:reading/books/domain/value_objects/title.dart';
+import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/profile/domain/models/user.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
+import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -23,7 +27,7 @@ Future<List<BookNote>> bookNotes(BookNotesRef ref, int bookId) {
 }
 
 class OnlineBookNoteRepository extends BookNoteRepository
-    with OfflineUpdatePusher, OfflinePersister {
+    with OfflinePersister, OfflineUpdatePusher {
   const OnlineBookNoteRepository(super.ref);
 
   @override
@@ -33,7 +37,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .post('books/$bookId/notes', body: data.toJson())
         .then((response) => BookNote.fromJson(response as Json));
 
-    save(note, note.id);
+    save(note);
   }
 
   @override
@@ -42,9 +46,9 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .read(restApiProvider)
         .get('books/$bookId/notes')
         .then((response) => (response as List<Json>).map(BookNote.fromJson))
-        .then((bookNotes) => bookNotes.toList());
+        .then((notes) => notes.toList());
 
-    return saveAll(notes, (note) => note.id);
+    return saveAll(notes, (note) => note.id!);
   }
 
   @override
@@ -58,9 +62,23 @@ class OnlineBookNoteRepository extends BookNoteRepository
   }
 
   @override
-  Future<void> pushUpdates() {
-    // TODO: implement pushUpdates
-    throw UnimplementedError();
+  Future<void> pushUpdates() async {
+    final notes = await ref
+        .read(databaseProvider) //
+        .getAll<OfflineBookNote>();
+
+    for (final note in notes) {
+      final data = NewNoteDTO(
+        description: Description(note.description),
+        title: Title(note.title),
+      );
+
+      if (note.id == null) {
+        await addNote(note.parentId, data);
+      } else {
+        await updateNote(note.parentId, note.id!, data);
+      }
+    }
   }
 }
 
@@ -69,20 +87,42 @@ class OfflineBookNoteRepository extends BookNoteRepository {
 
   @override
   Future<void> addNote(int bookId, NewNoteDTO data) {
-    // TODO: implement addNote
-    throw UnimplementedError();
+    final note = OfflineBookNote(
+      title: data.title.value,
+      description: data.description.value,
+      author: ref.read(profileProvider).toUser(),
+      createdAt: DateTime.now(),
+      parentId: bookId,
+    );
+
+    return ref.read(databaseProvider).insert(note);
   }
 
   @override
-  Future<List<BookNote>> getBookNotes(int bookId) {
-    // TODO: implement getBookNotes
-    throw UnimplementedError();
+  Future<List<BookNote>> getBookNotes(int bookId) async {
+    final db = ref.read(databaseProvider);
+
+    return Future.wait([
+      db.getWhere<BookNote>((note) => note.parentId == bookId),
+      db.getWhere<OfflineBookNote>((note) => note.parentId == bookId),
+    ]) //
+        .then((notes) => [...notes.first, ...notes.last]);
   }
 
   @override
-  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data) {
-    // TODO: implement updateNote
-    throw UnimplementedError();
+  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data) async {
+    final db = ref.read(databaseProvider);
+
+    var note = await db
+        .getById<BookNote>(noteId)
+        .catchError((error) => db.getById<OfflineBookNote>(noteId));
+
+    note = note.copyWith(
+      title: data.title.value,
+      description: data.description.value,
+    );
+
+    return db.update(note as OfflineBookNote, note.id);
   }
 }
 
@@ -114,10 +154,10 @@ class FakeBookNoteRepository extends BookNoteRepository {
                 ' egestas porttitor nunc...',
             author: const User(id: 1, name: 'Fulano de Tal'),
             createdAt: DateTime(2022, 09, 26, 15, 28, 30),
-            noteId: 1,
+            parentId: 1,
           ),
         ],
-        bookId: bookId,
+        parentId: bookId,
       ),
       BookNote(
         id: 3,
@@ -127,7 +167,7 @@ class FakeBookNoteRepository extends BookNoteRepository {
             ' egestas porttitor nunc...',
         author: const User(id: 2, name: 'Guilherme'),
         createdAt: DateTime(2022, 09, 27, 16, 0, 10),
-        bookId: bookId,
+        parentId: bookId,
       ),
     ];
   }

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -14,28 +13,33 @@ import 'package:reading/theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Intl.defaultLocale = Platform.localeName;
-  await initializeDateFormatting(Intl.defaultLocale);
+  await initLocale();
+  await initHive();
 
-  await Hive.initFlutter();
+  final riverpod = await initRiverpod();
 
   runApp(
     ProviderScope(
-      parent: await initRiverpod(),
+      parent: riverpod,
       child: const App(),
     ),
   );
 }
 
+Future<void> initLocale() async {
+  Intl.defaultLocale = Platform.localeName;
+  return initializeDateFormatting(Intl.defaultLocale);
+}
+
+Future<void> initHive() async {
+  return Hive.initFlutter();
+}
+
 Future<ProviderContainer> initRiverpod() async {
   final container = ProviderContainer();
 
-  try {
-    await container.read(introSeenProvider.future);
-    await container.read(connectionStatusProvider.future);
-  } catch (error, stackTrace) {
-    log('riverpod initialization error', error: error, stackTrace: stackTrace);
-  }
+  await container.read(introSeenProvider.future);
+  await container.read(connectionStatusProvider.future);
 
   return container;
 }

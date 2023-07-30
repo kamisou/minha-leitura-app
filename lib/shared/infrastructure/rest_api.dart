@@ -9,7 +9,7 @@ part 'rest_api.g.dart';
 
 typedef Json = Map<String, dynamic>;
 
-@Riverpod(keepAlive: true)
+@riverpod
 RestApi restApi(RestApiRef ref) {
   return DioRestApi(
     server: 'http://192.168.0.169:8002/api',

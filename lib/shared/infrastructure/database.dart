@@ -8,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'database.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Database database(DatabaseRef ref) {
   return HiveDatabase(ref);
 }
@@ -19,7 +19,7 @@ class HiveDatabase extends Database {
   final Ref ref;
 
   @override
-  Future<T> getById<T>(int id) async {
+  Future<T> getById<T>(dynamic id) async {
     log('get $T by $id', name: 'Database');
 
     final box = await Hive.openLazyBox<T>(T.toString());
@@ -100,7 +100,7 @@ class HiveDatabase extends Database {
 abstract class Database {
   const Database();
 
-  Future<T> getById<T>(int id);
+  Future<T> getById<T>(dynamic id);
   Future<List<T>> getAll<T>();
   Future<List<T>> getWhere<T>(bool Function(T value) predicate);
   Future<int> insert<T>(T value);

@@ -12,8 +12,13 @@ mixin OfflineUpdatePusher on Repository {
 }
 
 mixin OfflinePersister on Repository {
-  T save<T>(T data, dynamic id) {
-    ref.read(databaseProvider).update(data, id);
+  T save<T>(T data, [dynamic id]) {
+    final db = ref.read(databaseProvider);
+
+    id == null //
+        ? db.insert(data)
+        : db.update(data, id);
+
     return data;
   }
 
