@@ -40,8 +40,10 @@ class OptionsPage extends StatelessWidget {
                   ProfileMenuOption(
                     icon: UniconsLine.setting,
                     label: 'Ajustes',
-                    // TODO(kamisou): ir para tela de ajustes
-                    onTap: () {},
+                    onTap: () {
+                      // TODO: implement go to settings
+                      throw UnimplementedError();
+                    },
                   ),
                 ],
               ),

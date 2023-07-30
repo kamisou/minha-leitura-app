@@ -11,8 +11,7 @@ class SignupController extends _$SignupController {
   }
 
   Future<void> signup(SignupDTO data) async {
-    state = const AsyncLoading();
-    // TODO(kamisou): signup com repositório de auth
-    state = await AsyncValue.guard(() async {});
+    // TODO: implement signup
+    throw UnimplementedError();
   }
 }

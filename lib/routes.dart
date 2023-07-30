@@ -22,9 +22,10 @@ Raw<GoRouter> router(RouterRef ref) {
       GoRoute(
         builder: (context, state) => const HomeScreen(),
         path: '/',
-        // TODO(kamisou): checar se usuário está logado
-        // redirect: (context, state) =>
-        // ref.read(profileProvider) != null ? '/login' : null,
+        redirect: (context, state) {
+          // TODO: implement auth redirection
+          return null;
+        },
         routes: [
           GoRoute(
             path: 'achievements',

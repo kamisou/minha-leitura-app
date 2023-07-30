@@ -102,8 +102,10 @@ class ProfileScreen extends HookConsumerWidget {
                 const SizedBox(height: 12),
                 Center(
                   child: TextButton(
-                    // TODO(kamisou): excluir conta
-                    onPressed: () {},
+                    onPressed: () {
+                      // TODO: implement delete account
+                      throw UnimplementedError();
+                    },
                     child: const Text('Excluir conta'),
                   ),
                 ),

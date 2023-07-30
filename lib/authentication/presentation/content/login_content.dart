@@ -91,13 +91,12 @@ class LoginContent extends HookConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                // TODO(kamisou): recuperar senha
-                'Esqueci minha senha',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+              TextButton(
+                onPressed: () {
+                  // TODO: implement forgotPassword
+                  throw UnimplementedError();
+                },
+                child: const Text('Esqueci minha senha'),
               ),
               ButtonProgressIndicator(
                 isLoading: ref.watch(loginControllerProvider).isLoading,

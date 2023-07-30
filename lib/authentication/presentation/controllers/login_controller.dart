@@ -11,8 +11,7 @@ class LoginController extends _$LoginController {
   }
 
   Future<void> login(LoginDTO data) async {
-    state = const AsyncLoading();
-    // TODO(kamisou): login com repositório de auth
-    state = await AsyncValue.guard(() async {});
+    // TODO: implement login
+    throw UnimplementedError();
   }
 }

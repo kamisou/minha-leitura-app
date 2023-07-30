@@ -67,8 +67,10 @@ class BookshelfPage extends ConsumerWidget {
                             label: const Text('Ingressar turma'),
                           ),
                           OutlinedButton.icon(
-                            // TODO(kamisou): buscar livro
-                            onPressed: () {},
+                            onPressed: () {
+                              // TODO: implement search books
+                              throw UnimplementedError();
+                            },
                             icon: const Icon(UniconsLine.search),
                             label: const Text('Buscar'),
                           ),

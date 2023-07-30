@@ -132,14 +132,18 @@ class BookDetailsScreen extends HookConsumerWidget {
                     spacing: 16,
                     children: [
                       FilledButton.icon(
-                        // TODO(kamisou): definir meta
-                        onPressed: () {},
+                        onPressed: () {
+                          // TODO: implement define goals
+                          throw UnimplementedError();
+                        },
                         icon: const Icon(UniconsLine.book_open),
                         label: const Text('Definir Meta'),
                       ),
                       OutlinedButton.icon(
-                        // TODO(kamisou): compartilhar livro
-                        onPressed: () {},
+                        onPressed: () {
+                          // TODO: implement share book
+                          throw UnimplementedError();
+                        },
                         icon: const Icon(UniconsLine.share_alt),
                         label: const Text('Compartilhar'),
                       ),

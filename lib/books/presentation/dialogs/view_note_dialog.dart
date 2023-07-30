@@ -22,8 +22,10 @@ class ViewNoteDialog extends StatelessWidget {
             ),
             const Spacer(),
             FilledIconButton(
-              // TODO(kamisou): compartilhar nota
-              onPressed: () {},
+              onPressed: () {
+                // TODO: implement share note
+                throw UnimplementedError();
+              },
               icon: FeatherIcons.share2,
             ),
           ],
