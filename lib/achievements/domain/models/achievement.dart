@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:reading/shared/domain/id.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 
 part 'achievement.freezed.dart';
@@ -10,7 +9,7 @@ part 'achievement.g.dart';
 @HiveType(typeId: 9)
 class Achievements with _$Achievements {
   const factory Achievements({
-    @HiveField(0) required Id id,
+    @HiveField(0) required int id,
     @HiveField(1) required Map<String, Unlockable> unlockables,
     @HiveField(2) required Map<String, Milestone> milestones,
   }) = _Achievements;
@@ -22,7 +21,7 @@ class Achievements with _$Achievements {
 @HiveType(typeId: 10)
 class Unlockable with _$Unlockable {
   const factory Unlockable({
-    @HiveField(0) required Id id,
+    @HiveField(0) required int id,
     @HiveField(1) required String title,
     @HiveField(3) required bool achieved,
   }) = _Unlockable;
@@ -34,7 +33,7 @@ class Unlockable with _$Unlockable {
 @HiveType(typeId: 11)
 class Milestone with _$Milestone {
   const factory Milestone({
-    @HiveField(0) required Id id,
+    @HiveField(0) required int id,
     @HiveField(1) required String title,
     @HiveField(2) required List<int> milestones,
     @HiveField(3) int? achieved,

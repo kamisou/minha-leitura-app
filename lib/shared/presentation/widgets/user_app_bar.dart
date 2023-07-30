@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
+import 'package:reading/shared/presentation/hooks/use_initials.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class UserAppBar extends HookConsumerWidget {
@@ -10,7 +10,7 @@ class UserAppBar extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(profileProvider);
-    final initials = useMemoized(user.initials, [user]);
+    final initials = useInitials(user);
 
     return Row(
       children: [
