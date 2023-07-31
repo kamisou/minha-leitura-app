@@ -2,14 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class Meter extends ImplicitlyAnimatedWidget {
+class Meter extends StatelessWidget {
   const Meter({
     super.key,
-    required super.duration,
     required this.value,
     required this.max,
     required this.radius,
-    super.curve,
     this.backgroundColor,
     this.color,
     this.gradient,
@@ -40,16 +38,6 @@ class Meter extends ImplicitlyAnimatedWidget {
   final TextStyle? style;
 
   @override
-  ImplicitlyAnimatedWidgetState<ImplicitlyAnimatedWidget> createState() =>
-      _MeterState();
-}
-
-class _MeterState extends ImplicitlyAnimatedWidgetState<Meter> {
-  Tween<double>? _valueTween;
-
-  Tween<double>? _maxTween;
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -58,44 +46,36 @@ class _MeterState extends ImplicitlyAnimatedWidgetState<Meter> {
           children: [
             CustomPaint(
               size: Size(
-                widget.radius * 2,
-                widget.radius,
+                radius * 2,
+                radius,
               ),
               painter: _MeterPainter(
-                value: _valueTween?.evaluate(animation),
-                max: _maxTween?.evaluate(animation),
-                backgroundColor: widget.backgroundColor,
-                color: widget.color,
-                gradient: widget.gradient,
+                value: value,
+                max: max,
+                backgroundColor: backgroundColor,
+                color: color,
+                gradient: gradient,
               ),
             ),
-            Text(
-              widget.value.toStringAsPrecision(1),
-              style: widget.style,
+            Positioned(
+              bottom: -6,
+              child: Text(
+                value.toStringAsPrecision(2),
+                style: style,
+              ),
             ),
           ],
         ),
-        if (widget.label != null)
-          Text(
-            widget.label!,
-            style: widget.labelStyle,
+        if (label != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: Text(
+              label!,
+              style: labelStyle,
+            ),
           ),
       ],
     );
-  }
-
-  @override
-  void forEachTween(TweenVisitor<dynamic> visitor) {
-    _valueTween = visitor(
-      _valueTween,
-      widget.value,
-      (targetValue) => Tween(begin: targetValue),
-    ) as Tween<double>?;
-    _maxTween = visitor(
-      _maxTween,
-      widget.max,
-      (targetValue) => Tween(begin: targetValue),
-    ) as Tween<double>?;
   }
 }
 
@@ -120,13 +100,13 @@ class _MeterPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = Rect.fromLTRB(0, 0, size.width, size.height);
+    final rect = Rect.fromLTRB(0, 0, size.width, size.height * 2);
 
     final backgroundPaint = Paint();
     final fillPaint = Paint();
 
     final sweepAngle =
-        value != null && max != null ? (value! / max!) * (-pi / 2) : 0.0;
+        value != null && max != null ? (value! / max!) * -pi : 0.0;
 
     if (backgroundColor != null) {
       backgroundPaint.color = backgroundColor!;
@@ -138,9 +118,15 @@ class _MeterPainter extends CustomPainter {
       fillPaint.shader = gradient!.createShader(rect);
     }
 
+    final clipPath = Path()
+      ..addArc(rect.deflate(16), 0, 2 * pi)
+      ..addRect(rect)
+      ..fillType = PathFillType.evenOdd;
+
     canvas
-      ..drawArc(rect, 0, -pi / 2, false, backgroundPaint)
-      ..drawArc(rect, pi, sweepAngle, false, fillPaint);
+      ..clipPath(clipPath)
+      ..drawArc(rect, 0, -pi, true, backgroundPaint)
+      ..drawArc(rect, pi, -sweepAngle, true, fillPaint);
   }
 
   @override

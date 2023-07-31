@@ -9,7 +9,7 @@ part 'user_profile.g.dart';
 
 @freezed
 @HiveType(typeId: 3)
-class UserProfile with _$UserProfile, HasName {
+class UserProfile with _$UserProfile implements HasName {
   const factory UserProfile({
     @HiveField(0) required int id,
     @HiveField(1) required String name,

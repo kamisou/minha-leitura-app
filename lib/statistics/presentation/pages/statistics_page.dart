@@ -31,8 +31,6 @@ class StatisticsPage extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         Meter(
-          curve: Theme.of(context).animationExtension!.curve,
-          duration: Theme.of(context).animationExtension!.duration,
           value: 8.3,
           max: 10,
           radius: 74,

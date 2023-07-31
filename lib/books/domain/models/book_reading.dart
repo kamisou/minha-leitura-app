@@ -17,7 +17,7 @@ enum BookReadingScore {
 
 @freezed
 @HiveType(typeId: 7)
-class BookReading extends HiveObject with _$BookReading {
+class BookReading with _$BookReading {
   const factory BookReading({
     @HiveField(0) required int id,
     @HiveField(1) required int pages,
@@ -34,7 +34,7 @@ class BookReading extends HiveObject with _$BookReading {
     @HiveField(4) required int bookId,
   }) = OfflineBookReading;
 
-  BookReading._();
+  const BookReading._();
 
   factory BookReading.fromJson(Json json) => _$BookReadingFromJson(json);
 

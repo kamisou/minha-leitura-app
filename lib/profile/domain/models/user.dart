@@ -8,8 +8,7 @@ part 'user.g.dart';
 
 @freezed
 @HiveType(typeId: 2)
-class User with _$User {
-  @Implements<HasName>()
+class User with _$User implements HasName {
   const factory User({
     @HiveField(0) required int id,
     @HiveField(1) required String name,
