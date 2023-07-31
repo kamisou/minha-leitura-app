@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:reading/books/data/dtos/new_reading_dto.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
+import 'package:reading/books/domain/value_objects/pages.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
+import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -22,7 +25,7 @@ Future<List<BookReading>> bookReadings(BookReadingsRef ref, int bookId) {
 }
 
 class OnlineBookReadingRepository extends BookReadingRepository
-    with OfflineUpdatePusher, OfflinePersister {
+    with OfflineUpdatePusher {
   const OnlineBookReadingRepository(super.ref);
   @override
   Future<void> addReading(int bookId, NewReadingDTO data) async {
@@ -31,7 +34,9 @@ class OnlineBookReadingRepository extends BookReadingRepository
         .post('books/$bookId/readings', body: data.toJson())
         .then((response) => BookReading.fromJson(response as Json));
 
-    save(reading, reading.id);
+    await save(reading, reading.id);
+
+    return super.addReading(bookId, data);
   }
 
   @override
@@ -42,13 +47,25 @@ class OnlineBookReadingRepository extends BookReadingRepository
         .then((response) => (response as List<Json>).map(BookReading.fromJson))
         .then((bookReadings) => bookReadings.toList());
 
-    return saveAll(readings, (value) => value.id);
+    saveAll(readings, (value) => value.id).ignore();
+
+    return readings;
   }
 
   @override
-  Future<void> pushUpdates() {
-    // TODO: implement pushUpdates
-    throw UnimplementedError();
+  Future<void> pushUpdates() async {
+    final readings = await ref
+        .read(databaseProvider) //
+        .getAll<OfflineBookReading>();
+
+    for (final reading in readings) {
+      final data = NewReadingDTO(
+        pages: Pages(reading.pages),
+        target: Pages(reading.target),
+      );
+
+      await addReading(reading.bookId, data);
+    }
   }
 }
 
@@ -56,25 +73,32 @@ class OfflineBookReadingRepository extends BookReadingRepository {
   const OfflineBookReadingRepository(super.ref);
 
   @override
-  Future<void> addReading(int bookId, NewReadingDTO data) {
-    // TODO: implement addReading
-    throw UnimplementedError();
+  Future<void> addReading(int bookId, NewReadingDTO data) async {
+    final reading = OfflineBookReading(
+      pages: data.pages.value!,
+      target: data.target.value!,
+      bookId: bookId,
+    );
+
+    await save(reading);
+
+    return super.addReading(bookId, data);
   }
 
   @override
   Future<List<BookReading>> getBookReadings(int bookId) {
-    // TODO: implement getBookReadings
-    throw UnimplementedError();
+    final db = ref.read(databaseProvider);
+
+    return Future.wait([
+      db.getWhere<BookReading>((reading) => reading.bookId == bookId),
+      db.getWhere<OfflineBookReading>((reading) => reading.bookId == bookId),
+    ]) //
+        .then((readings) => [...readings.first, ...readings.last]);
   }
 }
 
 class FakeBookReadingRepository extends BookReadingRepository {
   const FakeBookReadingRepository(super.ref);
-
-  @override
-  Future<void> addReading(int bookId, NewReadingDTO data) async {
-    return;
-  }
 
   @override
   Future<List<BookReading>> getBookReadings(int bookId) async {
@@ -111,9 +135,13 @@ class FakeBookReadingRepository extends BookReadingRepository {
   }
 }
 
-abstract class BookReadingRepository extends Repository {
+abstract class BookReadingRepository extends Repository with OfflinePersister {
   const BookReadingRepository(super.ref);
 
-  Future<void> addReading(int bookId, NewReadingDTO data);
+  @mustCallSuper
+  Future<void> addReading(int bookId, NewReadingDTO data) async {
+    ref.invalidate(bookReadingsProvider);
+  }
+
   Future<List<BookReading>> getBookReadings(int bookId);
 }

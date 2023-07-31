@@ -51,7 +51,9 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .then((response) => (response as List<Json>).map(BookNote.fromJson))
         .then((notes) => notes.toList());
 
-    return saveAll(notes, (note) => note.id!);
+    saveAll(notes, (note) => note.id!).ignore();
+
+    return notes;
   }
 
   @override
@@ -96,7 +98,6 @@ class OfflineBookNoteRepository extends BookNoteRepository {
       title: data.title.value,
       description: data.description.value,
       author: ref.read(profileProvider).toUser(),
-      createdAt: DateTime.now(),
       parentId: bookId,
     );
 

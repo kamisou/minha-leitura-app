@@ -30,7 +30,7 @@ class BookReading extends HiveObject with _$BookReading {
     @HiveField(0) int? id,
     @HiveField(1) required int pages,
     @HiveField(2) required int target,
-    @HiveField(3) required DateTime date,
+    @HiveField(3) DateTime? date,
     @HiveField(4) required int bookId,
   }) = OfflineBookReading;
 

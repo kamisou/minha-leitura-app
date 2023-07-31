@@ -37,7 +37,7 @@ class OnlineBookRepository extends BookRepository {
         .get('books/$bookId')
         .then((response) => BookDetails.fromJson(response as Json));
 
-    ref.read(databaseProvider).update(details, details.id).ignore();
+    save(details, details.id).ignore();
 
     return details;
   }
@@ -50,7 +50,7 @@ class OnlineBookRepository extends BookRepository {
         .then((response) => (response as List<Json>).map(Book.fromJson))
         .then((books) => books.toList());
 
-    ref.read(databaseProvider).updateAll(books, (book) => book.id).ignore();
+    saveAll(books, (book) => book.id).ignore();
 
     return books;
   }
@@ -101,7 +101,7 @@ class FakeBookRepository extends BookRepository {
   }
 }
 
-abstract class BookRepository extends Repository {
+abstract class BookRepository extends Repository with OfflinePersister {
   const BookRepository(super.ref);
 
   Future<BookDetails> getBookDetails(int bookId);

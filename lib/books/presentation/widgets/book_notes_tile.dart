@@ -62,7 +62,9 @@ class BookNotesTile extends HookWidget {
               ),
               const SizedBox(width: 16),
               Text(
-                useddMMyyHm(note.createdAt),
+                note is! OfflineBookNote
+                    ? useddMMyyHm(note.createdAt!)
+                    : 'Não sincronizado',
               ),
             ],
           ),

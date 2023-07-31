@@ -37,7 +37,9 @@ class BookReadingTile extends HookWidget {
         const SizedBox(width: 8),
         Expanded(
           child: Text(
-            useddMMyyHm(reading.date),
+            reading is! OfflineBookReading
+                ? useddMMyyHm(reading.date!)
+                : 'Não sincronizado',
             style: Theme.of(context)
                 .textTheme
                 .titleMedium
