@@ -12,18 +12,18 @@ mixin OfflineUpdatePusher on Repository {
 }
 
 mixin OfflinePersister on Repository {
-  T save<T>(T data, [dynamic id]) {
+  Future<T> save<T>(T data, [dynamic id]) async {
     final db = ref.read(databaseProvider);
 
-    id == null //
+    await (id == null //
         ? db.insert(data)
-        : db.update(data, id);
+        : db.update(data, id));
 
     return data;
   }
 
-  List<T> saveAll<T>(List<T> data, dynamic Function(T) id) {
-    ref.read(databaseProvider).updateAll(data, id);
+  Future<List<T>> saveAll<T>(List<T> data, dynamic Function(T) id) async {
+    await ref.read(databaseProvider).updateAll(data, id);
     return data;
   }
 }

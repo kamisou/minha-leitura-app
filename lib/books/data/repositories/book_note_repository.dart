@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
@@ -27,7 +28,7 @@ Future<List<BookNote>> bookNotes(BookNotesRef ref, int bookId) {
 }
 
 class OnlineBookNoteRepository extends BookNoteRepository
-    with OfflinePersister, OfflineUpdatePusher {
+    with OfflineUpdatePusher {
   const OnlineBookNoteRepository(super.ref);
 
   @override
@@ -37,7 +38,9 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .post('books/$bookId/notes', body: data.toJson())
         .then((response) => BookNote.fromJson(response as Json));
 
-    save(note);
+    await save(note);
+
+    return super.addNote(bookId, data);
   }
 
   @override
@@ -58,7 +61,9 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .put('books/$bookId/notes', body: data.toJson())
         .then((response) => BookNote.fromJson(response as Json));
 
-    save(note, note.id);
+    await save(note, note.id);
+
+    return super.updateNote(bookId, noteId, data);
   }
 
   @override
@@ -86,7 +91,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
   const OfflineBookNoteRepository(super.db);
 
   @override
-  Future<void> addNote(int bookId, NewNoteDTO data) {
+  Future<void> addNote(int bookId, NewNoteDTO data) async {
     final note = OfflineBookNote(
       title: data.title.value,
       description: data.description.value,
@@ -95,7 +100,9 @@ class OfflineBookNoteRepository extends BookNoteRepository {
       parentId: bookId,
     );
 
-    return ref.read(databaseProvider).insert(note);
+    await save(note);
+
+    return super.addNote(bookId, data);
   }
 
   @override
@@ -122,17 +129,14 @@ class OfflineBookNoteRepository extends BookNoteRepository {
       description: data.description.value,
     );
 
-    return db.update(note as OfflineBookNote, note.id);
+    await save(note as OfflineBookNote, note.id);
+
+    return super.updateNote(bookId, noteId, data);
   }
 }
 
 class FakeBookNoteRepository extends BookNoteRepository {
   const FakeBookNoteRepository(super.ref);
-
-  @override
-  Future<void> addNote(int bookId, NewNoteDTO data) async {
-    return;
-  }
 
   @override
   Future<List<BookNote>> getBookNotes(int bookId) async {
@@ -171,17 +175,20 @@ class FakeBookNoteRepository extends BookNoteRepository {
       ),
     ];
   }
-
-  @override
-  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data) async {
-    return;
-  }
 }
 
-abstract class BookNoteRepository extends Repository {
+abstract class BookNoteRepository extends Repository with OfflinePersister {
   const BookNoteRepository(super.ref);
 
-  Future<void> addNote(int bookId, NewNoteDTO data);
+  @mustCallSuper
+  Future<void> addNote(int bookId, NewNoteDTO data) async {
+    ref.invalidate(bookNotesProvider);
+  }
+
   Future<List<BookNote>> getBookNotes(int bookId);
-  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data);
+
+  @mustCallSuper
+  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data) async {
+    ref.invalidate(bookNotesProvider);
+  }
 }
