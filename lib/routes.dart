@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:reading/achievements/presentation/screens/achievements_screen.dart';
 import 'package:reading/authentication/presentation/screens/login_screen.dart';
 import 'package:reading/authentication/presentation/screens/signup_screen.dart';
 import 'package:reading/books/domain/models/book.dart';
@@ -27,10 +26,6 @@ Raw<GoRouter> router(RouterRef ref) {
           return null;
         },
         routes: [
-          GoRoute(
-            path: 'achievements',
-            builder: (context, state) => const AchievementsScreen(),
-          ),
           GoRoute(
             path: 'book',
             builder: (context, state) => BookDetailsScreen(

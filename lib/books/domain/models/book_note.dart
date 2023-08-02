@@ -7,7 +7,7 @@ part 'book_note.freezed.dart';
 part 'book_note.g.dart';
 
 @freezed
-@HiveType(typeId: 9)
+@HiveType(typeId: 12)
 class BookNote with _$BookNote {
   const factory BookNote({
     @HiveField(0) required int id,
