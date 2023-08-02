@@ -71,6 +71,16 @@ class HiveDatabase extends Database {
   }
 
   @override
+  Future<void> removeById<T>(dynamic id) async {
+    log('remove $T by $id', name: 'Database');
+
+    final box = await Hive.openLazyBox<T>(T.toString());
+    await box.delete(id);
+
+    box.close().ignore();
+  }
+
+  @override
   Future<void> update<T>(T value, dynamic id) async {
     log('update $T: $value ($id)', name: 'Database');
 
@@ -104,6 +114,7 @@ abstract class Database {
   Future<List<T>> getAll<T>();
   Future<List<T>> getWhere<T>(bool Function(T value) predicate);
   Future<int> insert<T>(T value);
+  Future<void> removeById<T>(dynamic id);
   Future<void> update<T>(T value, dynamic id);
   Future<void> updateAll<T>(Iterable<T> values, dynamic Function(T value) id);
 }

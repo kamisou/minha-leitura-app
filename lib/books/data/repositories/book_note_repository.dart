@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
@@ -57,15 +57,15 @@ class OnlineBookNoteRepository extends BookNoteRepository
   }
 
   @override
-  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data) async {
-    final note = await ref
+  Future<void> updateNote(int bookId, BookNote note, NewNoteDTO data) async {
+    final newNote = await ref
         .read(restApiProvider)
-        .put('books/$bookId/notes', body: data.toJson())
+        .put('books/$bookId/notes/${note.id}', body: data.toJson())
         .then((response) => BookNote.fromJson(response as Json));
 
-    await save(note, note.id);
+    await save(newNote, note.id);
 
-    return super.updateNote(bookId, noteId, data);
+    return super.updateNote(bookId, note, data);
   }
 
   @override
@@ -83,9 +83,18 @@ class OnlineBookNoteRepository extends BookNoteRepository
       if (note.id == null) {
         await addNote(note.parentId, data);
       } else {
-        await updateNote(note.parentId, note.id!, data);
+        await updateNote(note.parentId, note, data);
       }
     }
+  }
+
+  @override
+  Future<void> removeNote(int bookId, BookNote note) async {
+    await ref.read(restApiProvider).post('books/$bookId/notes/${note.id}');
+
+    ref.read(databaseProvider).removeById<BookNote>(note.id).ignore();
+
+    return super.removeNote(bookId, note);
   }
 }
 
@@ -118,21 +127,32 @@ class OfflineBookNoteRepository extends BookNoteRepository {
   }
 
   @override
-  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data) async {
+  Future<void> updateNote(int bookId, BookNote note, NewNoteDTO data) async {
     final db = ref.read(databaseProvider);
 
-    var note = await db
-        .getById<BookNote>(noteId)
-        .catchError((error) => db.getById<OfflineBookNote>(noteId));
+    var newNote = await (note.id == null
+        ? db.getById<OfflineBookNote>(note.key)
+        : db.getById<BookNote>(note.id));
 
-    note = note.copyWith(
+    newNote = newNote.copyWith(
       title: data.title.value,
       description: data.description.value,
     );
 
     await save(note as OfflineBookNote, note.id);
 
-    return super.updateNote(bookId, noteId, data);
+    return super.updateNote(bookId, note, data);
+  }
+
+  @override
+  Future<void> removeNote(int bookId, BookNote note) async {
+    final db = ref.read(databaseProvider);
+
+    await (note.id == null
+        ? db.removeById<OfflineBookNote>(note.key)
+        : db.removeById<OfflineBookNote>(note.id));
+
+    return super.removeNote(bookId, note);
   }
 }
 
@@ -182,6 +202,7 @@ abstract class BookNoteRepository extends Repository with OfflinePersister {
   const BookNoteRepository(super.ref);
 
   @mustCallSuper
+  @mustBeOverridden
   Future<void> addNote(int bookId, NewNoteDTO data) async {
     ref.invalidate(bookNotesProvider);
   }
@@ -189,7 +210,14 @@ abstract class BookNoteRepository extends Repository with OfflinePersister {
   Future<List<BookNote>> getBookNotes(int bookId);
 
   @mustCallSuper
-  Future<void> updateNote(int bookId, int noteId, NewNoteDTO data) async {
+  @mustBeOverridden
+  Future<void> updateNote(int bookId, BookNote note, NewNoteDTO data) async {
+    ref.invalidate(bookNotesProvider);
+  }
+
+  @mustCallSuper
+  @mustBeOverridden
+  Future<void> removeNote(int bookId, BookNote note) async {
     ref.invalidate(bookNotesProvider);
   }
 }

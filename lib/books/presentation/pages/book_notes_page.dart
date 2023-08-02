@@ -39,7 +39,7 @@ class BookNotesPage extends HookConsumerWidget {
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               isScrollControlled: true,
               shape: const Border(),
-              builder: (context) => const ViewNoteDialog(),
+              builder: (context) => ViewNoteDialog(note: notes[index]),
             ),
             child: BookNotesTile(
               note: notes[index],

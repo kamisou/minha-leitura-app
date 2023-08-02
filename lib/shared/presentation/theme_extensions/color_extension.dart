@@ -3,13 +3,22 @@ import 'package:flutter/material.dart';
 class ColorExtension extends ThemeExtension<ColorExtension> {
   const ColorExtension({
     required this.gray,
+    required this.information,
   });
 
   final MaterialColor gray;
 
+  final Color information;
+
   @override
-  ThemeExtension<ColorExtension> copyWith({MaterialColor? gray}) =>
-      ColorExtension(gray: gray ?? this.gray);
+  ThemeExtension<ColorExtension> copyWith({
+    MaterialColor? gray,
+    Color? information,
+  }) =>
+      ColorExtension(
+        gray: gray ?? this.gray,
+        information: information ?? this.information,
+      );
 
   @override
   ThemeExtension<ColorExtension> lerp(
@@ -31,6 +40,7 @@ class ColorExtension extends ThemeExtension<ColorExtension> {
           ],
         ),
       ),
+      information: Color.lerp(information, other.information, t) ?? information,
     );
   }
 }

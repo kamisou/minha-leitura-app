@@ -46,6 +46,7 @@ class ThemeManager extends _$ThemeManager {
               900: Color(0x19FFFFFF),
             },
           ),
+          information: Color(0xFF2895FA),
         ),
       ],
       inputDecorationTheme: InputDecorationTheme(

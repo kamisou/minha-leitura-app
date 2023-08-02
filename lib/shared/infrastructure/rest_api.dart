@@ -33,6 +33,9 @@ class DioRestApi extends RestApi {
   final Dio _dio;
 
   @override
+  Future<dynamic> delete(String path) => _request(RestMethod.delete, path);
+
+  @override
   Future<dynamic> get(
     String path, {
     Map<String, dynamic>? query,
@@ -114,6 +117,7 @@ class DioRestApi extends RestApi {
 }
 
 enum RestMethod {
+  delete(name: 'delete'),
   get(name: 'get'),
   post(name: 'post'),
   put(name: 'put');
@@ -124,6 +128,7 @@ enum RestMethod {
 }
 
 abstract class RestApi {
+  Future<dynamic> delete(String path);
   Future<dynamic> get(String path, {Map<String, dynamic>? query, Json? body});
   Future<dynamic> post(String path, {Json? body});
   Future<dynamic> put(String path, {Map<String, dynamic>? body});

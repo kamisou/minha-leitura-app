@@ -8,8 +8,9 @@ part 'book_note.g.dart';
 
 @freezed
 @HiveType(typeId: 12)
-class BookNote with _$BookNote {
-  const factory BookNote({
+class BookNote with _$BookNote, HiveObjectMixin {
+  @With<HiveObjectMixin>()
+  factory BookNote({
     @HiveField(0) required int id,
     @HiveField(1) required String title,
     @HiveField(2) required String description,
@@ -19,7 +20,8 @@ class BookNote with _$BookNote {
     @HiveField(6) required int parentId,
   }) = _BookNote;
 
-  const factory BookNote.offline({
+  @With<HiveObjectMixin>()
+  factory BookNote.offline({
     @HiveField(0) int? id,
     @HiveField(1) required String title,
     @HiveField(2) required String description,

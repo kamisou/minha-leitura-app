@@ -28,7 +28,10 @@ class OptionsPage extends StatelessWidget {
                   ProfileMenuOption(
                     icon: UniconsLine.medal,
                     label: 'Conquistas',
-                    onTap: () => context.go('/achievements'),
+                    onTap: () {
+                      // TODO: implement go to achievements
+                      throw UnimplementedError();
+                    },
                   ),
                   const Divider(),
                   ProfileMenuOption(

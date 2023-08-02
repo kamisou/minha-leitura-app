@@ -5,4 +5,7 @@ extension ColorExtension on Color {
     final newColor = HSLColor.fromColor(this);
     return newColor.withLightness(lightness).toColor();
   }
+
+  MaterialStateColor get materialStateAll =>
+      MaterialStateColor.resolveWith((states) => this);
 }
