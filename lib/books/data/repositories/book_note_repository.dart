@@ -6,6 +6,7 @@ import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/profile/domain/models/user.dart';
 import 'package:reading/shared/data/repository.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
@@ -146,13 +147,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
 
   @override
   Future<void> removeNote(int bookId, BookNote note) async {
-    final db = ref.read(databaseProvider);
-
-    await (note.id == null
-        ? db.removeById<OfflineBookNote>(note.key)
-        : db.removeById<OfflineBookNote>(note.id));
-
-    return super.removeNote(bookId, note);
+    throw OnlineOnlyOperationException();
   }
 }
 
@@ -215,7 +210,6 @@ abstract class BookNoteRepository extends Repository with OfflinePersister {
     ref.invalidate(bookNotesProvider);
   }
 
-  @mustCallSuper
   @mustBeOverridden
   Future<void> removeNote(int bookId, BookNote note) async {
     ref.invalidate(bookNotesProvider);

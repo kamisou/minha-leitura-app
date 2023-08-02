@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:reading/books/data/dtos/new_reading_dto.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
@@ -139,6 +139,7 @@ abstract class BookReadingRepository extends Repository with OfflinePersister {
   const BookReadingRepository(super.ref);
 
   @mustCallSuper
+  @mustBeOverridden
   Future<void> addReading(int bookId, NewReadingDTO data) async {
     ref.invalidate(bookReadingsProvider);
   }

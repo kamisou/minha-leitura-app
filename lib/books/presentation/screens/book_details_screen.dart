@@ -3,12 +3,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/repositories/book_note_repository.dart';
+import 'package:reading/books/data/repositories/book_rating_repository.dart';
 import 'package:reading/books/data/repositories/book_reading_repository.dart';
 import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
 import 'package:reading/books/presentation/pages/book_details_page.dart';
 import 'package:reading/books/presentation/pages/book_notes_page.dart';
+import 'package:reading/books/presentation/pages/book_ratings_page.dart';
 import 'package:reading/books/presentation/pages/book_reading_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
@@ -169,6 +171,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                   Tab(text: 'Detalhes'),
                   Tab(text: 'Notas'),
                   Tab(text: 'Histórico'),
+                  Tab(text: 'Avaliações'),
                 ],
               ),
             ),
@@ -195,6 +198,13 @@ class BookDetailsScreen extends HookConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ref.watch(bookReadingsProvider(book.id)).maybeWhen(
                     data: (data) => BookReadingPage(readings: data),
+                    orElse: () => const SizedBox(),
+                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: ref.watch(bookRatingsProvider(book.id)).maybeWhen(
+                    data: (data) => BookRatingsPage(ratings: data),
                     orElse: () => const SizedBox(),
                   ),
             ),
