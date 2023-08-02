@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:reading/authentication/data/repositories/token_repository.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
+import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/routes.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/theme.dart';
@@ -40,6 +42,8 @@ Future<ProviderContainer> initRiverpod() async {
 
   await container.read(introSeenProvider.future);
   await container.read(connectionStatusProvider.future);
+  await container.read(tokenRepositoryProvider.future);
+  await container.read(profileProvider.future);
 
   return container;
 }

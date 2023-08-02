@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:reading/authentication/data/repositories/token_repository.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,14 +12,19 @@ typedef Json = Map<String, dynamic>;
 
 @riverpod
 RestApi restApi(RestApiRef ref) {
+  final accessToken = ref.watch(tokenRepositoryProvider).valueOrNull;
   return DioRestApi(
     server: 'http://192.168.0.169:8002/api',
+    headers: accessToken != null //
+        ? {'Authorization': 'Bearer $accessToken'}
+        : null,
   );
 }
 
 class DioRestApi extends RestApi {
   DioRestApi({
     required String server,
+    Map<String, dynamic>? headers,
   }) : _dio = Dio(
           BaseOptions(
             baseUrl: server,
@@ -26,6 +32,7 @@ class DioRestApi extends RestApi {
             headers: {
               'accept': 'application/json',
               'content-type': 'application/json',
+              if (headers != null) ...headers,
             },
           ),
         );

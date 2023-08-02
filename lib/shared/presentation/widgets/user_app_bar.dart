@@ -9,7 +9,7 @@ class UserAppBar extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(profileProvider);
+    final user = ref.watch(profileProvider).requireValue;
     final initials = useInitials(user);
 
     return Row(

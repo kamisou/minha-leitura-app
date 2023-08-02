@@ -91,7 +91,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
 
   @override
   Future<void> removeNote(int bookId, BookNote note) async {
-    await ref.read(restApiProvider).post('books/$bookId/notes/${note.id}');
+    await ref.read(restApiProvider).delete('books/$bookId/notes/${note.id}');
 
     ref.read(databaseProvider).removeById<BookNote>(note.id).ignore();
 
@@ -107,7 +107,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
     final note = OfflineBookNote(
       title: data.title.value,
       description: data.description.value,
-      author: ref.read(profileProvider).toUser(),
+      author: ref.read(profileProvider).requireValue.toUser(),
       parentId: bookId,
     );
 
