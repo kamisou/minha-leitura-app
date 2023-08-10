@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/books/domain/models/book_note.dart';
-import 'package:reading/shared/presentation/hooks/use_dd_mm_yy_h_m.dart';
+import 'package:reading/books/presentation/widgets/author_timestamp.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class BookNotesTile extends HookWidget {
@@ -47,27 +47,9 @@ class BookNotesTile extends HookWidget {
           ],
         ),
         const SizedBox(height: 8),
-        DefaultTextStyle(
-          style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                color: Theme.of(context).colorExtension?.gray[400],
-                fontWeight: FontWeight.w400,
-              ),
-          child: Row(
-            children: [
-              Flexible(
-                child: Text(
-                  note.author.name,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Text(
-                note is! OfflineBookNote
-                    ? useddMMyyHm(note.createdAt!)
-                    : 'Não sincronizado',
-              ),
-            ],
-          ),
+        AuthorTimestamp(
+          author: note.author,
+          timestamp: note.createdAt,
         ),
         if (!response)
           Padding(

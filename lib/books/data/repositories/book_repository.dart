@@ -91,7 +91,7 @@ class FakeBookRepository extends BookRepository {
       const Book(
         id: 1,
         coverArt:
-            'https://s3-alpha-sig.figma.com/img/fc51/9370/48b40648284f72d5ba23eb7f53b20da8?Expires=1691366400&Signature=njikvp9J48lDWb047c2gun3VPYwmjh5qTKTg2UeZCSHc0wIf95pEsAZeNevlMC6sUpwj1FVTCLJZZ5tUHV--q5MBCbVeZiOcnGwzWQJ5TT4lJG17ZkQcFnWiRlGFbzGz4xnyQw7TwNp32f-lAb57ok4brWPGNymy5hUKIxoCU7-S2wtPaEhnJPYmMqgR-F8KUz4MIXuGkrm19XedYVKNFCREBQCP-m0HaZ0k1yGlD7gMVgeq-0keTv-Em9p6jOHsfF0~tPa129jNkR7SUl3FO3hg2H-vPPjDmQYkDQPSnZ8rFy-M268eez4iA9HxxStJ7yUgJW2W~GNYXxb9VbodXQ__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
+            'https://s3-alpha-sig.figma.com/img/fc51/9370/48b40648284f72d5ba23eb7f53b20da8?Expires=1692576000&Signature=aKraWa~X7NBXf5ye~xvnYDGbFXRPNM2efo-g9vBkG~U3L3EMNwfY6enOO-8qCDQusmLXZ72tXiBCnLWmQo20l7ZlNx96XW~F0RhFzrJrbEEMD9vaCxr-peXytt2PuvsCLA959-sWGzTWsYZDDjozwfHLGtZTe4vGplYyfer7NBPqhQ~PPhWYBORQEDsrnmhpSYuVeWAxmj~zLSrUj2y3Ri6xScZHscDYqoBLiA6paR5AbHcoTlbmtY7AOIGK4rN~wLqJarBhuBMG3n5Zx6TM9BOIB4wpo2H~CjDq4eqmyPQWYrYTjdOf1zL3AEsYB1xJ9VRGYo5cdPc5XMpDvxVbLg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
         title: 'Alice no País das Maravilhas',
         author: 'Lewis Carroll',
         pageCount: 248,

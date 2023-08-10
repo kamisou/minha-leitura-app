@@ -27,7 +27,7 @@ class BookDetailsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabController = useTabController(initialLength: 3);
+    final tabController = useTabController(initialLength: 4);
     final percentageRead = useBookReadPercentage(book);
 
     return Scaffold(

@@ -6,6 +6,7 @@ import 'package:reading/authentication/domain/domain/token.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
+import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -13,7 +14,11 @@ part 'login_repository.g.dart';
 
 @riverpod
 LoginRepository loginRepository(LoginRepositoryRef ref) {
-  return OnlineLoginRepository(ref);
+  return FakeLoginRepository(ref);
+
+  return ref.read(isConnectedProvider)
+      ? OnlineLoginRepository(ref)
+      : OfflineLoginRepository(ref);
 }
 
 class OnlineLoginRepository extends LoginRepository {
@@ -49,6 +54,20 @@ class OfflineLoginRepository extends LoginRepository {
   @override
   Future<void> login(LoginDTO data) {
     throw OnlineOnlyOperationException();
+  }
+}
+
+class FakeLoginRepository extends LoginRepository {
+  const FakeLoginRepository(super.ref);
+
+  @override
+  Future<void> login(LoginDTO data) async {
+    return;
+  }
+
+  @override
+  Future<void> logout() async {
+    return;
   }
 }
 

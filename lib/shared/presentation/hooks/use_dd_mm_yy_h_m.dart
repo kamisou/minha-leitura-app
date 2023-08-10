@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 String useddMMyyHm(DateTime dateTime) {
   return useMemoized(
-    () => DateFormat("dd'/'MM'/'yy' - 'H':'m").format(dateTime),
+    () => DateFormat("dd'/'MM'/'yy' - 'HH':'mm").format(dateTime),
     [dateTime],
   );
 }
