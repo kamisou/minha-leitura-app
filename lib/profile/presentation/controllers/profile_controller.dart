@@ -17,7 +17,7 @@ class ProfileController extends _$ProfileController {
   Future<void> save(ProfileChangeDTO data) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(profileRepositoryProvider).save(data),
+      () => ref.read(profileRepositoryProvider).saveProfile(data),
     );
   }
 

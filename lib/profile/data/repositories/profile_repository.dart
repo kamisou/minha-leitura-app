@@ -16,14 +16,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'profile_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-Future<UserProfile>? profile(ProfileRef ref) async {
+Future<UserProfile> profile(ProfileRef ref) async {
   return ref.read(profileRepositoryProvider).getMyProfile();
 }
 
 @riverpod
 ProfileRepository profileRepository(ProfileRepositoryRef ref) {
-  return FakeProfileRepository(ref);
-
   return ref.read(isConnectedProvider)
       ? OnlineProfileRepository(ref)
       : OfflineProfileRepository(ref);
@@ -36,7 +34,7 @@ class OnlineProfileRepository extends ProfileRepository {
   Future<UserProfile> getMyProfile() async {
     final profile = await ref
         .read(restApiProvider)
-        .get('user/my/profile')
+        .get('app/student')
         .then((response) => UserProfile.fromJson(response as Json));
 
     await save(profile);
@@ -115,25 +113,6 @@ class OfflineProfileRepository extends ProfileRepository {
   @override
   Future<void> saveProfile(ProfileChangeDTO data) {
     throw OnlineOnlyOperationException();
-  }
-}
-
-class FakeProfileRepository extends ProfileRepository {
-  const FakeProfileRepository(super.ref);
-
-  @override
-  Future<UserProfile> getMyProfile() async {
-    return const UserProfile(
-      id: 1,
-      name: 'João Marcos',
-      email: 'kamisou@outlook.com',
-      phone: '(42) 9 9860-0427',
-    );
-  }
-
-  @override
-  Future<void> savePassword(PasswordChangeDTO data) async {
-    return;
   }
 }
 

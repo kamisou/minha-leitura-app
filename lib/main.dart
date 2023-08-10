@@ -40,10 +40,12 @@ Future<void> initHive() async {
 Future<ProviderContainer> initRiverpod() async {
   final container = ProviderContainer();
 
-  await container.read(introSeenProvider.future);
-  await container.read(connectionStatusProvider.future);
-  await container.read(tokenRepositoryProvider.future);
-  await container.read(profileProvider.future);
+  try {
+    await container.read(introSeenProvider.future);
+    await container.read(connectionStatusProvider.future);
+    await container.read(tokenRepositoryProvider.future);
+    await container.read(profileProvider.future);
+  } catch (_) {}
 
   return container;
 }

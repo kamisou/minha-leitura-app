@@ -14,7 +14,7 @@ typedef Json = Map<String, dynamic>;
 RestApi restApi(RestApiRef ref) {
   final accessToken = ref.watch(tokenRepositoryProvider).valueOrNull;
   return DioRestApi(
-    server: 'http://192.168.0.169:8002/api',
+    server: 'https://921-review-feature-we-621uu4.k8s.senailondrina.com/api/',
     headers: accessToken != null //
         ? {'Authorization': 'Bearer $accessToken'}
         : null,

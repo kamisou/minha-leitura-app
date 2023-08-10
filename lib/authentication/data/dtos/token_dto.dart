@@ -7,7 +7,7 @@ class TokenDTO {
 
   TokenDTO.fromJson(Json json)
       : //
-        accessToken = json['access_token'] as String;
+        accessToken = json['token'] as String;
 
   final String accessToken;
 }

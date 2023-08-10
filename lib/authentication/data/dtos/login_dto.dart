@@ -21,7 +21,7 @@ class LoginDTO {
       );
 
   Json toJson() => {
-        'email': email,
-        'password': password,
+        'email': email.value,
+        'password': password.value,
       };
 }

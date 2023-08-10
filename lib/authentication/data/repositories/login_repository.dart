@@ -22,8 +22,8 @@ class LoginRepository extends Repository {
 
     final tokenData = await ref
         .read(restApiProvider)
-        .post('user/login', body: data.toJson())
-        .then((response) => TokenDTO.fromJson(response as Json));
+        .post('auth/login', body: data.toJson())
+        .then((response) => TokenDTO.fromJson((response as List)[0] as Json));
 
     await tokenRepo.setAccessToken(tokenData.accessToken);
 

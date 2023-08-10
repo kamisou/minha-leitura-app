@@ -24,13 +24,6 @@ class LoginContent extends HookConsumerWidget {
     final formKey = useRef(GlobalKey<FormState>());
     final loginForm = useLoginFormReducer();
 
-    useSnackbarErrorListener(
-      ref,
-      provider: loginControllerProvider,
-      messageBuilder: (error) =>
-          'Ocorreu um erro ao fazer login. Tente novamente.',
-    );
-
     return Form(
       key: formKey.value,
       child: ListView(
