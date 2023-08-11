@@ -85,13 +85,6 @@ class JoinClassScreen extends HookConsumerWidget {
     ref
         .read(joinClassControllerProvider.notifier)
         .joinClass(code)
-        .then((value) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Sucesso! Você ingressou na turma!'),
-        ),
-      );
-      context.go('/classes');
-    });
+        .then((value) => context.go('/classes'));
   }
 }
