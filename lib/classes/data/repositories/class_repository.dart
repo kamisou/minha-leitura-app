@@ -20,20 +20,21 @@ Future<List<Class>> myClasses(MyClassesRef ref) {
   return ref.watch(classRepositoryProvider).getMyClasses();
 }
 
-class OnlineClassRepository extends ClassRepository {
+class OnlineClassRepository extends ClassRepository with OfflinePersister {
   const OnlineClassRepository(super.ref);
 
   @override
   Future<List<Class>> getMyClasses() async {
     final classes = await ref
         .read(restApiProvider)
-        .get('classes/my')
-        .then((response) => (response as List<Json>).map(Class.fromJson))
+        .get('app/enrollment')
+        .then((response) => (response as Json)['data'])
+        .then((response) => (response as List).cast<Json>().map(Class.fromJson))
         .then((classes) => classes.toList());
 
     ref
         .read(databaseProvider)
-        .updateAll(classes, ($class) => $class.id)
+        .updateAll<Class>(classes, ($class) => $class.id)
         .ignore();
 
     return classes;
@@ -43,10 +44,12 @@ class OnlineClassRepository extends ClassRepository {
   Future<void> joinClass(String code) async {
     final $class = await ref
         .read(restApiProvider) //
-        .post('classes/$code/join')
+        .post('app/enrollment', body: {'code': code}) //
+        .then((response) => (response as Json)['classroom'])
         .then((response) => Class.fromJson(response as Json));
 
-    ref.read(databaseProvider).update($class, $class.id).ignore();
+    save<Class>($class, $class.id).ignore();
+
     ref.invalidate(myClassesProvider);
   }
 }

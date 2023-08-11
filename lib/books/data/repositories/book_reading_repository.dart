@@ -34,7 +34,7 @@ class OnlineBookReadingRepository extends BookReadingRepository
         .post('books/$bookId/readings', body: data.toJson())
         .then((response) => BookReading.fromJson(response as Json));
 
-    await save(reading, reading.id);
+    await save<BookReading>(reading, reading.id);
 
     return super.addReading(bookId, data);
   }
@@ -47,7 +47,7 @@ class OnlineBookReadingRepository extends BookReadingRepository
         .then((response) => (response as List<Json>).map(BookReading.fromJson))
         .then((bookReadings) => bookReadings.toList());
 
-    saveAll(readings, (value) => value.id).ignore();
+    saveAll<BookReading>(readings, (value) => value.id).ignore();
 
     return readings;
   }
@@ -80,7 +80,7 @@ class OfflineBookReadingRepository extends BookReadingRepository {
       bookId: bookId,
     );
 
-    await save(reading);
+    await save<OfflineBookReading>(reading);
 
     return super.addReading(bookId, data);
   }

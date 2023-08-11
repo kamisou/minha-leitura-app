@@ -43,6 +43,15 @@ class ClassesScreen extends ConsumerWidget {
                             itemCount: classes.length,
                             itemBuilder: (context, index) => Text(
                               '${classes[index].name} - ${classes[index].code}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorExtension
+                                        ?.gray[800],
+                                    fontWeight: FontWeight.w700,
+                                  ),
                             ),
                             separatorBuilder: (context, index) =>
                                 const Divider(endIndent: 32),
@@ -60,6 +69,9 @@ class ClassesScreen extends ConsumerWidget {
                                 ),
                             textAlign: TextAlign.center,
                           ),
+                    loading: () => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                     orElse: () => const SizedBox(),
                   ),
             ),

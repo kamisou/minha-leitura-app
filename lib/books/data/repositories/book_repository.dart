@@ -37,7 +37,7 @@ class OnlineBookRepository extends BookRepository {
         .get('books/$bookId')
         .then((response) => BookDetails.fromJson(response as Json));
 
-    save(details, details.id).ignore();
+    save<BookDetails>(details, details.id).ignore();
 
     return details;
   }
@@ -50,7 +50,7 @@ class OnlineBookRepository extends BookRepository {
         .then((response) => (response as List<Json>).map(Book.fromJson))
         .then((books) => books.toList());
 
-    saveAll(books, (book) => book.id).ignore();
+    saveAll<Book>(books, (book) => book.id).ignore();
 
     return books;
   }
@@ -61,12 +61,12 @@ class OfflineBookRepository extends BookRepository {
 
   @override
   Future<BookDetails> getBookDetails(int bookId) {
-    return ref.read(databaseProvider).getById(bookId);
+    return ref.read(databaseProvider).getById<BookDetails>(bookId);
   }
 
   @override
   Future<List<Book>> getMyBooks() {
-    return ref.read(databaseProvider).getAll();
+    return ref.read(databaseProvider).getAll<Book>();
   }
 }
 

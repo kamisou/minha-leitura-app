@@ -17,4 +17,11 @@ class LoginController extends _$LoginController {
       () => ref.read(loginRepositoryProvider).login(data),
     );
   }
+
+  Future<void> logout() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(
+      () => ref.read(loginRepositoryProvider).logout(),
+    );
+  }
 }

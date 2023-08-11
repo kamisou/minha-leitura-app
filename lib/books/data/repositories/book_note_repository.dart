@@ -39,7 +39,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .post('books/$bookId/notes', body: data.toJson())
         .then((response) => BookNote.fromJson(response as Json));
 
-    await save(note);
+    await save<BookNote>(note);
 
     return super.addNote(bookId, data);
   }
@@ -52,7 +52,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .then((response) => (response as List<Json>).map(BookNote.fromJson))
         .then((notes) => notes.toList());
 
-    saveAll(notes, (note) => note.id!).ignore();
+    saveAll<BookNote>(notes, (note) => note.id!).ignore();
 
     return notes;
   }
@@ -64,7 +64,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .put('books/$bookId/notes/${note.id}', body: data.toJson())
         .then((response) => BookNote.fromJson(response as Json));
 
-    await save(newNote, note.id);
+    await save<BookNote>(newNote, note.id);
 
     return super.updateNote(bookId, note, data);
   }
@@ -111,7 +111,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
       parentId: bookId,
     );
 
-    await save(note);
+    await save<BookNote>(note);
 
     return super.addNote(bookId, data);
   }
@@ -140,7 +140,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
       description: data.description.value,
     );
 
-    await save(note as OfflineBookNote, note.id);
+    await save<OfflineBookNote>(note as OfflineBookNote, note.id);
 
     return super.updateNote(bookId, note, data);
   }

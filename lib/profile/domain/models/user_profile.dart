@@ -14,6 +14,7 @@ class UserProfile with _$UserProfile implements HasName {
     @HiveField(0) required int id,
     @HiveField(1) required String name,
     @HiveField(2) required String email,
+    // @HiveField(3) required String phone,
     @HiveField(3) String? avatar,
   }) = _UserProfile;
 

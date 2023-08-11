@@ -48,7 +48,7 @@ class OnlineBookRatingRepository extends BookRatingRepository
         .post('books/$bookId/ratings', body: data.toJson())
         .then((response) => BookRating.fromJson(response as Json));
 
-    await save(rating);
+    await save<BookRating>(rating);
 
     return super.addRating(bookId, data);
   }
@@ -104,7 +104,7 @@ class OfflineBookRatingRepository extends BookRatingRepository {
       bookId: bookId,
     );
 
-    await save(rating);
+    await save<OfflineBookRating>(rating);
 
     return super.addRating(bookId, data);
   }

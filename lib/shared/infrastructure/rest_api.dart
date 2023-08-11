@@ -13,6 +13,7 @@ typedef Json = Map<String, dynamic>;
 @riverpod
 RestApi restApi(RestApiRef ref) {
   final accessToken = ref.watch(tokenRepositoryProvider).valueOrNull;
+  log('$accessToken');
   return DioRestApi(
     server: 'https://921-review-feature-we-621uu4.k8s.senailondrina.com/api/',
     headers: accessToken != null //

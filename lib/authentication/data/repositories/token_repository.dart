@@ -20,7 +20,7 @@ class TokenRepository extends _$TokenRepository {
 
   /// persists token info (access token, refresh token, associated user)
   Future<void> saveTokenData(Token token) {
-    return ref.read(encryptedDatabaseProvider).insert(token);
+    return ref.read(encryptedDatabaseProvider).insert<Token>(token);
   }
 
   /// deletes the currently auth token and its persisted data

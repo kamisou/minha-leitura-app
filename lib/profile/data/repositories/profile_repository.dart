@@ -22,8 +22,6 @@ Future<UserProfile> profile(ProfileRef ref) async {
 
 @riverpod
 ProfileRepository profileRepository(ProfileRepositoryRef ref) {
-  return FakeProfileRepository(ref);
-
   return ref.read(isConnectedProvider)
       ? OnlineProfileRepository(ref)
       : OfflineProfileRepository(ref);
@@ -39,7 +37,9 @@ class OnlineProfileRepository extends ProfileRepository {
         .get('app/student')
         .then((response) => UserProfile.fromJson(response as Json));
 
-    await save(profile);
+    await ref
+        .read(encryptedDatabaseProvider)
+        .update<UserProfile>(profile, profile.id);
 
     return profile;
   }
@@ -51,7 +51,10 @@ class OnlineProfileRepository extends ProfileRepository {
         .post('user/my/profile', body: data.toJson())
         .then((response) => UserProfile.fromJson(response as Json));
 
-    ref.read(databaseProvider).update(profile, profile.id).ignore();
+    ref
+        .read(encryptedDatabaseProvider)
+        .update<UserProfile>(profile, profile.id)
+        .ignore();
 
     return super.saveProfile(data);
   }
@@ -63,7 +66,10 @@ class OnlineProfileRepository extends ProfileRepository {
         .upload('user/my/avatar', {'avatar': avatar}) //
         .then((response) => UserProfile.fromJson(response as Json));
 
-    ref.read(databaseProvider).update(profile, profile.id).ignore();
+    ref
+        .read(encryptedDatabaseProvider)
+        .update<UserProfile>(profile, profile.id)
+        .ignore();
 
     return super.saveAvatar(avatar);
   }
@@ -115,25 +121,6 @@ class OfflineProfileRepository extends ProfileRepository {
   @override
   Future<void> saveProfile(ProfileChangeDTO data) {
     throw OnlineOnlyOperationException();
-  }
-}
-
-class FakeProfileRepository extends ProfileRepository {
-  const FakeProfileRepository(super.ref);
-
-  @override
-  Future<UserProfile> getMyProfile() async {
-    return const UserProfile(
-      id: 1,
-      name: 'João Marcos',
-      email: 'kamisou@outlook.com',
-      // phone: '(42) 9 9860-0427',
-    );
-  }
-
-  @override
-  Future<void> savePassword(PasswordChangeDTO data) async {
-    return;
   }
 }
 

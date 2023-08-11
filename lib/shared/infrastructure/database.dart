@@ -26,7 +26,7 @@ class HiveDatabase extends Database {
   Future<T> getById<T>(dynamic id) async {
     log('get $T by $id', name: 'Database');
 
-    final box = await _getBox<LazyBox<T>, T>();
+    final box = await _getBox<T>() as LazyBox<T>;
     final value = await box.get(id);
 
     box.close().ignore();
@@ -42,7 +42,7 @@ class HiveDatabase extends Database {
   Future<List<T>> getAll<T>() async {
     log('get all $T', name: 'Database');
 
-    final box = await _getBox<Box<T>, T>();
+    final box = await _getBox<T>(lazy: false) as Box<T>;
     final values = box.values.toList();
 
     box.close().ignore();
@@ -54,7 +54,7 @@ class HiveDatabase extends Database {
   Future<List<T>> getWhere<T>(bool Function(T value) predicate) async {
     log('get $T where', name: 'Database');
 
-    final box = await _getBox<Box<T>, T>();
+    final box = await _getBox<T>(lazy: false) as Box<T>;
     final values = box.values.where(predicate).toList();
 
     box.close().ignore();
@@ -66,7 +66,7 @@ class HiveDatabase extends Database {
   Future<int> insert<T>(T value) async {
     log('insert $T: $value', name: 'Database');
 
-    final box = await _getBox<LazyBox<T>, T>();
+    final box = await _getBox<T>() as LazyBox<T>;
     final id = await box.add(value);
 
     box.close().ignore();
@@ -78,7 +78,7 @@ class HiveDatabase extends Database {
   Future<void> removeById<T>(dynamic id) async {
     log('remove $T by $id', name: 'Database');
 
-    final box = await _getBox<LazyBox<T>, T>();
+    final box = await _getBox<T>() as LazyBox<T>;
     await box.delete(id);
 
     box.close().ignore();
@@ -91,7 +91,7 @@ class HiveDatabase extends Database {
   ) async {
     log('remove $T where', name: 'Database');
 
-    final box = await _getBox<Box<T>, T>();
+    final box = await _getBox<T>(lazy: false) as Box<T>;
     final ids = box.values.where(predicate).map(id);
 
     await box.deleteAll(ids);
@@ -103,7 +103,7 @@ class HiveDatabase extends Database {
   Future<void> update<T>(T value, dynamic id) async {
     log('update $T: $value ($id)', name: 'Database');
 
-    final box = await _getBox<LazyBox<T>, T>();
+    final box = await _getBox<T>() as LazyBox<T>;
     await box.put(id, value);
 
     box.close().ignore();
@@ -116,7 +116,7 @@ class HiveDatabase extends Database {
   ) async {
     log('update all $T', name: 'Database');
 
-    final box = await _getBox<LazyBox<T>, T>();
+    final box = await _getBox<T>() as LazyBox<T>;
     await box.putAll({
       for (final value in values) //
         id(value): value,
@@ -125,14 +125,12 @@ class HiveDatabase extends Database {
     box.close().ignore();
   }
 
-  Future<B> _getBox<B extends BoxBase<T>, T>() async {
-    if (B is LazyBox<T>) {
-      return Hive.openLazyBox<T>(T.toString()) as B;
-    } else if (B is Box<T>) {
-      return Hive.openBox<T>(T.toString()) as B;
+  Future<BoxBase<T>> _getBox<T>({bool lazy = true}) async {
+    if (lazy) {
+      return Hive.openLazyBox<T>(T.toString());
+    } else {
+      return Hive.openBox<T>(T.toString());
     }
-
-    throw ArgumentError('Box must be LazyBox or Box!');
   }
 }
 
@@ -142,7 +140,7 @@ class EncryptedHiveDatabase extends HiveDatabase {
   final SecureStorage secureStorage;
 
   @override
-  Future<B> _getBox<B extends BoxBase<T>, T>() async {
+  Future<BoxBase<T>> _getBox<T>({bool lazy = true}) async {
     var key = await secureStorage.read('hive_key');
 
     if (key == null) {
@@ -153,13 +151,11 @@ class EncryptedHiveDatabase extends HiveDatabase {
 
     final cipher = HiveAesCipher(base64Decode(key));
 
-    if (B is LazyBox<T>) {
-      return Hive.openLazyBox<T>(T.toString(), encryptionCipher: cipher) as B;
-    } else if (B is Box<T>) {
-      return Hive.openBox<T>(T.toString(), encryptionCipher: cipher) as B;
+    if (lazy) {
+      return Hive.openLazyBox<T>(T.toString(), encryptionCipher: cipher);
+    } else {
+      return Hive.openBox<T>(T.toString(), encryptionCipher: cipher);
     }
-
-    throw ArgumentError('Box must be LazyBox or Box!');
   }
 }
 

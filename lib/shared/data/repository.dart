@@ -16,14 +16,14 @@ mixin OfflinePersister on Repository {
     final db = ref.read(databaseProvider);
 
     await (id == null //
-        ? db.insert(data)
-        : db.update(data, id));
+        ? db.insert<T>(data)
+        : db.update<T>(data, id));
 
     return data;
   }
 
   Future<List<T>> saveAll<T>(List<T> data, dynamic Function(T) id) async {
-    await ref.read(databaseProvider).updateAll(data, id);
+    await ref.read(databaseProvider).updateAll<T>(data, id);
     return data;
   }
 }

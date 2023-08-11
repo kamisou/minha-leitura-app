@@ -6,8 +6,17 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
+import 'package:reading/authentication/domain/domain/token.dart';
+import 'package:reading/books/domain/models/book.dart';
+import 'package:reading/books/domain/models/book_details.dart';
+import 'package:reading/books/domain/models/book_note.dart';
+import 'package:reading/books/domain/models/book_rating.dart';
+import 'package:reading/books/domain/models/book_reading.dart';
+import 'package:reading/classes/domain/models/class.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
+import 'package:reading/profile/domain/models/user.dart';
+import 'package:reading/profile/domain/models/user_profile.dart';
 import 'package:reading/routes.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/theme.dart';
@@ -34,7 +43,17 @@ Future<void> initLocale() async {
 }
 
 Future<void> initHive() async {
-  return Hive.initFlutter();
+  await Hive.initFlutter();
+  Hive
+    ..registerAdapter(TokenAdapter())
+    ..registerAdapter(BookDetailsAdapter())
+    ..registerAdapter(BookNoteAdapter())
+    ..registerAdapter(BookRatingAdapter())
+    ..registerAdapter(BookReadingAdapter())
+    ..registerAdapter(BookAdapter())
+    ..registerAdapter(ClassAdapter())
+    ..registerAdapter(UserProfileAdapter())
+    ..registerAdapter(UserAdapter());
 }
 
 Future<ProviderContainer> initRiverpod() async {
@@ -59,6 +78,7 @@ class App extends ConsumerWidget {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       routerConfig: router,
       theme: theme,
     );

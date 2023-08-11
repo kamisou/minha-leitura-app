@@ -14,8 +14,6 @@ part 'login_repository.g.dart';
 
 @riverpod
 LoginRepository loginRepository(LoginRepositoryRef ref) {
-  return FakeLoginRepository(ref);
-
   return ref.read(isConnectedProvider)
       ? OnlineLoginRepository(ref)
       : OfflineLoginRepository(ref);
@@ -54,20 +52,6 @@ class OfflineLoginRepository extends LoginRepository {
   @override
   Future<void> login(LoginDTO data) {
     throw OnlineOnlyOperationException();
-  }
-}
-
-class FakeLoginRepository extends LoginRepository {
-  const FakeLoginRepository(super.ref);
-
-  @override
-  Future<void> login(LoginDTO data) async {
-    return;
-  }
-
-  @override
-  Future<void> logout() async {
-    return;
   }
 }
 
