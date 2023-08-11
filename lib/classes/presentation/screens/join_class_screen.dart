@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/classes/presentation/controllers/join_class_controller.dart';
 import 'package:reading/classes/presentation/widgets/code_input.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
@@ -23,8 +24,8 @@ class JoinClassScreen extends HookConsumerWidget {
       provider: joinClassControllerProvider,
       messageBuilder: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
-        NoResponseRestException() =>
-          'Você está sem acesso à internet. Tente novamente mais tarde.',
+        OnlineOnlyOperationException() =>
+          'Você precisa estar online para se cadastrar!',
         _ => null,
       },
     );

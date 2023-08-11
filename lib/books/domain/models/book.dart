@@ -10,7 +10,7 @@ part 'book.g.dart';
 class Book with _$Book {
   const factory Book({
     @HiveField(0) required int id,
-    @HiveField(1) required String coverArt,
+    @HiveField(1) String? coverArt,
     @HiveField(2) required String title,
     @HiveField(3) required String author,
     @HiveField(4) required int pageCount,

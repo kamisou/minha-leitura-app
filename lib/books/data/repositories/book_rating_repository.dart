@@ -81,32 +81,6 @@ class OnlineBookRatingRepository extends BookRatingRepository
   }
 }
 
-class FakeBookRatingRepository extends BookRatingRepository {
-  const FakeBookRatingRepository(super.ref);
-
-  @override
-  Future<List<BookRating>> getRatings(int bookId) async {
-    return [
-      BookRating(
-        id: 1,
-        rating: 4.2,
-        comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing',
-        author: const User(id: 5, name: 'Guilherme'),
-        createdAt: DateTime(2022, 09, 26),
-        bookId: bookId,
-      ),
-      BookRating(
-        id: 2,
-        rating: 3,
-        comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing',
-        author: const User(id: 6, name: 'Ciclano da Silva'),
-        createdAt: DateTime(2022, 09, 10),
-        bookId: bookId,
-      ),
-    ];
-  }
-}
-
 class OfflineBookRatingRepository extends BookRatingRepository {
   const OfflineBookRatingRepository(super.ref);
 
@@ -138,6 +112,32 @@ class OfflineBookRatingRepository extends BookRatingRepository {
   @override
   Future<void> removeRating(int bookId, BookRating rating) {
     throw OnlineOnlyOperationException();
+  }
+}
+
+class FakeBookRatingRepository extends BookRatingRepository {
+  const FakeBookRatingRepository(super.ref);
+
+  @override
+  Future<List<BookRating>> getRatings(int bookId) async {
+    return [
+      BookRating(
+        id: 1,
+        rating: 4.2,
+        comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing',
+        author: const User(id: 5, name: 'Guilherme'),
+        createdAt: DateTime(2022, 09, 26),
+        bookId: bookId,
+      ),
+      BookRating(
+        id: 2,
+        rating: 3,
+        comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing',
+        author: const User(id: 6, name: 'Ciclano da Silva'),
+        createdAt: DateTime(2022, 09, 10),
+        bookId: bookId,
+      ),
+    ];
   }
 }
 

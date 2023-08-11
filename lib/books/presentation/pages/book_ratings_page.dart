@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/books/data/dtos/new_rating_dto.dart';
 import 'package:reading/books/domain/models/book_rating.dart';
+import 'package:reading/books/presentation/controllers/new_rating_controller.dart';
+import 'package:reading/books/presentation/dialogs/new_rating_dialog.dart';
 import 'package:reading/books/presentation/hooks/use_rating_average.dart';
 import 'package:reading/books/presentation/widgets/book_rating_tile.dart';
 import 'package:reading/books/presentation/widgets/star_rating_widget.dart';
+import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
 
-class BookRatingsPage extends HookWidget {
+class BookRatingsPage extends HookConsumerWidget {
   const BookRatingsPage({
     super.key,
     required this.ratings,
+    required this.bookId,
   });
 
   final List<BookRating> ratings;
 
+  final int bookId;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final average = useRatingAverage(ratings);
+
+    useSnackbarErrorListener(
+      ref,
+      provider: newRatingControllerProvider,
+      messageBuilder: (error) => 'Não foi possível salvar a avaliação.',
+    );
 
     return CustomScrollView(
       slivers: [
@@ -55,8 +68,19 @@ class BookRatingsPage extends HookWidget {
               ),
               FilledButton.icon(
                 onPressed: () {
-                  // TODO: implement rate
-                  throw UnimplementedError();
+                  showModalBottomSheet<NewRatingDTO?>(
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    context: context,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    builder: (context) => const NewRatingDialog(),
+                  ).then(
+                    (value) => value != null
+                        ? ref
+                            .read(newRatingControllerProvider.notifier)
+                            .addRating(bookId, value)
+                        : null,
+                  );
                 },
                 icon: const Icon(UniconsSolid.star),
                 label: const Text('Avaliar'),

@@ -6,7 +6,6 @@ import 'package:reading/profile/data/dtos/profile_change_dto.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
-import 'package:reading/profile/domain/value_objects/phone.dart';
 import 'package:reading/profile/presentation/controllers/profile_controller.dart';
 import 'package:reading/profile/presentation/dialogs/change_password_dialog.dart';
 import 'package:reading/profile/presentation/hooks/use_profile_form_reducer.dart';
@@ -26,7 +25,7 @@ class ProfileScreen extends HookConsumerWidget {
       initialState: ProfileChangeDTO(
         email: Email(user.email),
         name: Name(user.name),
-        phone: Phone(user.phone),
+        // phone: Phone(user.phone),
       ),
     );
 
@@ -73,15 +72,15 @@ class ProfileScreen extends HookConsumerWidget {
                     _ => null,
                   },
                 ),
-                const SizedBox(height: 18),
-                TextFormField(
-                  initialValue: user.phone,
-                  onChanged: (value) => profileForm.dispatch(Phone(value)),
-                  validator: (value) => switch (Phone.validate(value)) {
-                    PhoneError.invalid => 'Informe um telefone válido',
-                    _ => null,
-                  },
-                ),
+                // const SizedBox(height: 18),
+                // TextFormField(
+                //   initialValue: user.phone,
+                //   onChanged: (value) => profileForm.dispatch(Phone(value)),
+                //   validator: (value) => switch (Phone.validate(value)) {
+                //     PhoneError.invalid => 'Informe um telefone válido',
+                //     _ => null,
+                //   },
+                // ),
                 const SizedBox(height: 12),
                 Align(
                   alignment: Alignment.centerRight,

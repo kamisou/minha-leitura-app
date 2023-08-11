@@ -4,10 +4,10 @@ import 'package:reading/shared/presentation/widgets/loading_network_image.dart';
 class BookCover extends StatelessWidget {
   const BookCover({
     super.key,
-    required this.url,
+    this.url,
   });
 
-  final String url;
+  final String? url;
 
   @override
   Widget build(BuildContext context) {

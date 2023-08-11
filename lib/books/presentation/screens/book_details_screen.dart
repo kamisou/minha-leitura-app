@@ -43,10 +43,15 @@ class BookDetailsScreen extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Image.network(
-                        book.coverArt,
+                        book.coverArt ?? '',
                         fit: BoxFit.cover,
                         opacity: const AlwaysStoppedAnimation(0.4),
                         height: MediaQuery.of(context).size.height * 0.2,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          alignment: Alignment.center,
+                          color: Theme.of(context).disabledColor,
+                          child: const Icon(UniconsThinline.image_v),
+                        ),
                       ),
                       Container(
                         height: 4,
@@ -204,7 +209,10 @@ class BookDetailsScreen extends HookConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ref.watch(bookRatingsProvider(book.id)).maybeWhen(
-                    data: (data) => BookRatingsPage(ratings: data),
+                    data: (data) => BookRatingsPage(
+                      bookId: book.id,
+                      ratings: data,
+                    ),
                     orElse: () => const SizedBox(),
                   ),
             ),

@@ -127,7 +127,7 @@ class FakeProfileRepository extends ProfileRepository {
       id: 1,
       name: 'João Marcos',
       email: 'kamisou@outlook.com',
-      phone: '(42) 9 9860-0427',
+      // phone: '(42) 9 9860-0427',
     );
   }
 
