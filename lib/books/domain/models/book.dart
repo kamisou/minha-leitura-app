@@ -10,11 +10,10 @@ part 'book.g.dart';
 class Book with _$Book {
   const factory Book({
     @HiveField(0) required int id,
-    @HiveField(1) String? coverArt,
+    @HiveField(1) String? cover,
     @HiveField(2) required String title,
     @HiveField(3) required String author,
-    @HiveField(4) required int pageCount,
-    @HiveField(5) required int pagesRead,
+    @HiveField(4) required int pages,
   }) = _Book;
 
   factory Book.fromJson(Json json) => _$BookFromJson(json);

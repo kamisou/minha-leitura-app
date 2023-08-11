@@ -3,25 +3,17 @@ import 'package:reading/shared/infrastructure/rest_api.dart';
 
 class NewReadingDTO {
   const NewReadingDTO({
-    this.pages = const Pages(),
-    this.target = const Pages(),
+    this.page = const Pages(),
   });
 
-  final Pages pages;
-
-  final Pages target;
+  final Pages page;
 
   NewReadingDTO copyWith({
-    Pages? pages,
-    Pages? target,
+    Pages? page,
   }) =>
       NewReadingDTO(
-        pages: pages ?? this.pages,
-        target: target ?? this.target,
+        page: page ?? this.page,
       );
 
-  Json toJson() => {
-        'pages': pages.value,
-        'target': target.value,
-      };
+  Json toJson() => {'page': page.value};
 }

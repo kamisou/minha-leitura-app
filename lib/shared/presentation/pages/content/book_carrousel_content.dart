@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-import 'package:reading/books/domain/models/book.dart';
+import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/presentation/widgets/book_summary.dart';
 import 'package:reading/shared/presentation/hooks/use_page_notifier.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
@@ -13,7 +13,7 @@ class BookCarrouselContent extends HookWidget {
     required this.books,
   }) : assert(books.isNotEmpty, 'The book carrousel cannot be empty!');
 
-  final List<Book> books;
+  final List<BookDetails> books;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class BookCarrouselContent extends HookWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: GestureDetector(
                 onTap: () => context.go('/book', extra: books[index]),
-                child: BookCover(url: books[index].coverArt),
+                child: BookCover(url: books[index].book.cover),
               ),
             ),
           ),

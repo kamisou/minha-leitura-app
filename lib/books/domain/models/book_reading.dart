@@ -21,34 +21,16 @@ class BookReading with _$BookReading {
   const factory BookReading({
     @HiveField(0) required int id,
     @HiveField(1) required int pages,
-    @HiveField(2) required int target,
-    @HiveField(3) required DateTime date,
-    @HiveField(4) required int bookId,
+    @HiveField(2) required DateTime date,
+    @HiveField(3) required int bookId,
   }) = _BookReading;
 
   const factory BookReading.offline({
     @HiveField(0) int? id,
     @HiveField(1) required int pages,
-    @HiveField(2) required int target,
-    @HiveField(3) DateTime? date,
-    @HiveField(4) required int bookId,
+    @HiveField(2) required DateTime date,
+    @HiveField(3) required int bookId,
   }) = OfflineBookReading;
 
-  const BookReading._();
-
   factory BookReading.fromJson(Json json) => _$BookReadingFromJson(json);
-
-  BookReadingScore get score {
-    final value = pages / target;
-
-    if (value >= 1.0) {
-      return BookReadingScore.good;
-    }
-
-    if (value >= 0.75) {
-      return BookReadingScore.regular;
-    }
-
-    return BookReadingScore.bad;
-  }
 }

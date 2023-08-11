@@ -20,7 +20,7 @@ Future<List<Class>> myClasses(MyClassesRef ref) {
   return ref.watch(classRepositoryProvider).getMyClasses();
 }
 
-class OnlineClassRepository extends ClassRepository with OfflinePersister {
+class OnlineClassRepository extends ClassRepository {
   const OnlineClassRepository(super.ref);
 
   @override
@@ -68,7 +68,7 @@ class OfflineClassRepository extends ClassRepository {
   }
 }
 
-abstract class ClassRepository extends Repository {
+abstract class ClassRepository extends Repository with OfflinePersister {
   const ClassRepository(super.ref);
 
   Future<List<Class>> getMyClasses();

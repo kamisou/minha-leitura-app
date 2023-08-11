@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:reading/books/domain/models/book.dart';
-import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
+import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
@@ -12,17 +11,15 @@ class BookSummary extends HookWidget {
     required this.book,
   });
 
-  final Book book;
+  final BookDetails book;
 
   @override
   Widget build(BuildContext context) {
-    final percentageRead = useBookReadPercentage(book);
-
     return Column(
       children: [
         Center(
           child: AnimatedPercentageMeter(
-            percentage: percentageRead,
+            percentage: book.percentageRead,
             duration: Theme.of(context).animationExtension!.duration,
             curve: Theme.of(context).animationExtension!.curve,
           ),
@@ -38,7 +35,7 @@ class BookSummary extends HookWidget {
             key: ValueKey(book.id),
             children: [
               Text(
-                book.title,
+                book.book.title,
                 key: ValueKey(book.id),
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Theme.of(context).colorExtension?.gray[800],
@@ -59,7 +56,7 @@ class BookSummary extends HookWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    '${book.pagesRead} / ${book.pageCount} páginas lidas',
+                    '${book.actualPage} / ${book.book.pages} páginas lidas',
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                           color: Theme.of(context).colorExtension?.gray[400],
                         ),

@@ -11,10 +11,10 @@ class NewReadingController extends _$NewReadingController {
     return;
   }
 
-  Future<void> addReading(int bookId, NewReadingDTO data) async {
+  Future<void> updateReading(int bookId, NewReadingDTO data) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(bookReadingRepositoryProvider).addReading(bookId, data),
+      () => ref.read(bookReadingRepositoryProvider).updateReading(bookId, data),
     );
   }
 }

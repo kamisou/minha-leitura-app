@@ -1,4 +1,4 @@
-enum PagesError { empty, invalid }
+enum PagesError { empty, invalid, zero }
 
 class Pages {
   const Pages([this.value]);
@@ -11,8 +11,12 @@ class Pages {
       return PagesError.empty;
     }
 
-    if (int.tryParse(value!) == null) {
+    final integer = int.tryParse(value!);
+
+    if (integer == null) {
       return PagesError.invalid;
+    } else if (integer == 0) {
+      return PagesError.zero;
     }
 
     return null;

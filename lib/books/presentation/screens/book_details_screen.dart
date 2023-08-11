@@ -5,9 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/repositories/book_note_repository.dart';
 import 'package:reading/books/data/repositories/book_rating_repository.dart';
 import 'package:reading/books/data/repositories/book_reading_repository.dart';
-import 'package:reading/books/data/repositories/book_repository.dart';
-import 'package:reading/books/domain/models/book.dart';
-import 'package:reading/books/presentation/hooks/use_book_read_percentage.dart';
+import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/presentation/pages/book_details_page.dart';
 import 'package:reading/books/presentation/pages/book_notes_page.dart';
 import 'package:reading/books/presentation/pages/book_ratings_page.dart';
@@ -23,12 +21,11 @@ class BookDetailsScreen extends HookConsumerWidget {
     required this.book,
   });
 
-  final Book book;
+  final BookDetails book;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabController = useTabController(initialLength: 4);
-    final percentageRead = useBookReadPercentage(book);
 
     return Scaffold(
       body: NestedScrollView(
@@ -43,7 +40,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Image.network(
-                        book.coverArt ?? '',
+                        book.book.cover ?? '',
                         fit: BoxFit.cover,
                         opacity: const AlwaysStoppedAnimation(0.4),
                         height: MediaQuery.of(context).size.height * 0.2,
@@ -89,7 +86,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                         ),
                         Expanded(
                           flex: 3,
-                          child: BookCover(url: book.coverArt),
+                          child: BookCover(url: book.book.cover),
                         ),
                         const Expanded(
                           flex: 2,
@@ -106,7 +103,7 @@ class BookDetailsScreen extends HookConsumerWidget {
             child: Column(
               children: [
                 Text(
-                  '${percentageRead.toStringAsFixed(0)}%',
+                  '${book.percentageRead.toStringAsFixed(0)}%',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w800,
@@ -114,19 +111,19 @@ class BookDetailsScreen extends HookConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 AnimatedPercentageMeter(
-                  percentage: percentageRead,
+                  percentage: book.percentageRead,
                   duration: Duration.zero,
                 ),
                 const SizedBox(height: 18),
                 Text(
-                  book.title,
+                  book.book.title,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorExtension?.gray[800],
                         fontWeight: FontWeight.w700,
                       ),
                 ),
                 Text(
-                  book.author,
+                  book.book.author,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).colorExtension?.gray[500],
                         fontWeight: FontWeight.w700,
@@ -187,10 +184,7 @@ class BookDetailsScreen extends HookConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: ref.watch(bookProvider(book.id)).maybeWhen(
-                    data: (data) => BookDetailsPage(book: data),
-                    orElse: () => const SizedBox(),
-                  ),
+              child: BookDetailsPage(book: book),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),

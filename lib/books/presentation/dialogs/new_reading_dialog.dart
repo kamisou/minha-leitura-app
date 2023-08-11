@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
 import 'package:reading/books/presentation/hooks/use_book_reading_form_reducer.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -9,14 +10,14 @@ import 'package:reading/shared/util/theme_data_extension.dart';
 class NewReadingDialog extends HookWidget {
   const NewReadingDialog({
     super.key,
-    required this.target,
+    required this.book,
   });
 
-  final int target;
+  final BookDetails book;
 
   @override
   Widget build(BuildContext context) {
-    final readingForm = useBookReadingFormReducer(target);
+    final readingForm = useBookReadingFormReducer();
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -61,8 +62,10 @@ class NewReadingDialog extends HookWidget {
                   fontSize: 52,
                 ),
             validator: (value) => switch (Pages.validate(value)) {
-              PagesError.empty => 'Informe o número de páginas',
-              PagesError.invalid => 'Informe um número de páginas válido',
+              PagesError.empty => 'Informe o número da página',
+              PagesError.invalid ||
+              PagesError.zero =>
+                'Informe uma página válida',
               _ => null,
             },
           ),

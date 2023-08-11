@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:reading/books/domain/models/book.dart';
+import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -11,7 +11,7 @@ class Bookshelf extends StatelessWidget {
     required this.booksPerRow,
   });
 
-  final List<Book> books;
+  final List<BookDetails> books;
 
   final int booksPerRow;
 
@@ -47,7 +47,7 @@ class Bookshelf extends StatelessWidget {
                               extra: books[row * booksPerRow + book],
                             ),
                             child: BookCover(
-                              url: books[row * booksPerRow + book].coverArt,
+                              url: books[row * booksPerRow + book].book.cover,
                             ),
                           ),
                         ),

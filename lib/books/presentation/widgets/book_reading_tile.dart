@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
-import 'package:reading/books/presentation/hooks/use_book_score_color.dart';
 import 'package:reading/shared/presentation/hooks/use_dd_mm_yy_h_m.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -16,8 +15,6 @@ class BookReadingTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = useBookScoreColor(reading.score);
-
     return Row(
       children: [
         DecoratedBox(
@@ -38,7 +35,7 @@ class BookReadingTile extends HookWidget {
         Expanded(
           child: Text(
             reading is! OfflineBookReading
-                ? useddMMyyHm(reading.date!)
+                ? useddMMyyHm(reading.date)
                 : 'Não sincronizado',
             style: Theme.of(context)
                 .textTheme
@@ -48,9 +45,9 @@ class BookReadingTile extends HookWidget {
         ),
         const SizedBox(width: 8),
         DecoratedBox(
-          decoration: ShapeDecoration(
-            color: color.withOpacity(0.13),
-            shape: const StadiumBorder(),
+          decoration: const ShapeDecoration(
+            color: Color(0xFFEEEEEE),
+            shape: StadiumBorder(),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -59,10 +56,9 @@ class BookReadingTile extends HookWidget {
             ),
             child: Text(
               '${reading.pages} pág. lida(s)',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: color),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorExtension?.gray[600],
+                  ),
             ),
           ),
         ),
