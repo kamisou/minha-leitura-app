@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
+import 'package:reading/profile/presentation/controllers/profile_controller.dart';
 import 'package:reading/profile/presentation/widgets/profile_menu_option.dart';
 import 'package:reading/profile/presentation/widgets/profile_picture.dart';
 import 'package:unicons/unicons.dart';
@@ -53,6 +54,20 @@ class OptionsPage extends ConsumerWidget {
                 ],
               ),
             ),
+            ProfileMenuOption(
+              icon: UniconsLine.user_minus,
+              label: 'Deletar Conta',
+              onTap: () {
+                context.go('/login');
+                ref.read(profileControllerProvider.notifier).deleteProfile();
+              },
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+            ),
+            const Divider(),
             ProfileMenuOption(
               icon: UniconsLine.exit,
               label: 'Sair',

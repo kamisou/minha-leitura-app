@@ -9,7 +9,6 @@ import 'package:reading/authentication/presentation/controllers/signup_controlle
 import 'package:reading/authentication/presentation/hooks/use_signup_form_reducer.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
-import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
 
@@ -20,13 +19,6 @@ class SignupContent extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useRef(GlobalKey<FormState>());
     final signupForm = useSignupFormReducer();
-
-    useSnackbarErrorListener(
-      ref,
-      provider: signupControllerProvider,
-      messageBuilder: (error) =>
-          'Ocorreu um erro ao fazer cadastro. Tente novamente.',
-    );
 
     return Form(
       key: formKey.value,
@@ -83,6 +75,7 @@ class SignupContent extends HookConsumerWidget {
           ObfuscatedTextFormField(
             decoration: const InputDecoration(hintText: 'Senha'),
             onChanged: (value) => signupForm.dispatch(Password(value)),
+            textInputAction: TextInputAction.next,
             validator: (value) => switch (Password.validate(value)) {
               PasswordError.empty => 'Informe uma senha',
               _ => null,
@@ -134,7 +127,11 @@ class SignupContent extends HookConsumerWidget {
 
     ref
         .read(signupControllerProvider.notifier)
-        .signup(data)
-        .then((value) => context.go('/'));
+        .signup(data) //
+        .then(
+          (value) => ref.read(signupControllerProvider).asError == null
+              ? context.go('/')
+              : null,
+        );
   }
 }

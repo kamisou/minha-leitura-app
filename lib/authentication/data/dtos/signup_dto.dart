@@ -33,8 +33,8 @@ class SignupDTO {
       );
 
   Json toJson() => {
-        'name': name,
-        'email': email,
-        'password': password,
+        'name': name.value,
+        'email': email.value,
+        'password': password.value,
       };
 }

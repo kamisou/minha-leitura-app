@@ -113,7 +113,8 @@ class DioRestApi extends RestApi {
         case DioExceptionType.badResponse:
           throw BadResponseRestException(
             code: e.response!.statusCode!,
-            message: e.response!.statusMessage!,
+            message: (e.response?.data as Json)['message'] as String? ??
+                e.response!.statusMessage!,
           );
         case _:
           throw const NoResponseRestException();

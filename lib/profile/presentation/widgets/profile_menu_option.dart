@@ -6,6 +6,7 @@ class ProfileMenuOption extends StatelessWidget {
     required this.icon,
     required this.label,
     this.onTap,
+    this.style,
   });
 
   final IconData icon;
@@ -13,6 +14,8 @@ class ProfileMenuOption extends StatelessWidget {
   final String label;
 
   final void Function()? onTap;
+
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +31,10 @@ class ProfileMenuOption extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontSize: 18,
-                  ),
+              style: style ??
+                  Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: 18,
+                      ),
             ),
           ),
         ],

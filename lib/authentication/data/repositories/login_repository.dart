@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:reading/authentication/data/dtos/login_dto.dart';
+import 'package:reading/authentication/data/dtos/signup_dto.dart';
 import 'package:reading/authentication/data/dtos/token_dto.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
 import 'package:reading/authentication/domain/domain/token.dart';
@@ -40,6 +41,23 @@ class OnlineLoginRepository extends LoginRepository {
   }
 
   @override
+  Future<void> signup(SignupDTO data) async {
+    final tokenRepo = ref.read(tokenRepositoryProvider.notifier);
+
+    final tokenData = await ref
+        .read(restApiProvider)
+        .post('auth/register', body: data.toJson())
+        .then((response) => TokenDTO.fromJson(response as Json));
+
+    await tokenRepo.setAccessToken(tokenData.accessToken);
+
+    final profile = await ref.refresh(profileProvider.future);
+    final token = Token(accessToken: tokenData.accessToken, userId: profile.id);
+
+    return tokenRepo.saveTokenData(token);
+  }
+
+  @override
   Future<void> logout() async {
     await ref.read(restApiProvider).post('auth/logout');
     return super.logout();
@@ -53,12 +71,19 @@ class OfflineLoginRepository extends LoginRepository {
   Future<void> login(LoginDTO data) {
     throw OnlineOnlyOperationException();
   }
+
+  @override
+  Future<void> signup(SignupDTO data) {
+    throw OnlineOnlyOperationException();
+  }
 }
 
 abstract class LoginRepository extends Repository {
   const LoginRepository(super.ref);
 
   Future<void> login(LoginDTO data);
+
+  Future<void> signup(SignupDTO data);
 
   @mustCallSuper
   Future<void> logout() async {

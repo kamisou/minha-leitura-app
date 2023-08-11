@@ -34,4 +34,11 @@ class ProfileController extends _$ProfileController {
       () => ref.read(profileRepositoryProvider).savePassword(data),
     );
   }
+
+  Future<void> deleteProfile() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(
+      () => ref.read(profileRepositoryProvider).deleteProfile(),
+    );
+  }
 }

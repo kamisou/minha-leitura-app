@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:reading/authentication/data/repositories/login_repository.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
 import 'package:reading/authentication/domain/domain/token.dart';
 import 'package:reading/profile/data/dtos/password_change_dto.dart';
@@ -80,6 +81,12 @@ class OnlineProfileRepository extends ProfileRepository {
         .read(restApiProvider) //
         .post('user/my/password', body: data.toJson());
   }
+
+  @override
+  Future<void> deleteProfile() async {
+    await ref.read(restApiProvider).delete('app/student');
+    return ref.read(loginRepositoryProvider).logout();
+  }
 }
 
 class OfflineProfileRepository extends ProfileRepository {
@@ -122,6 +129,11 @@ class OfflineProfileRepository extends ProfileRepository {
   Future<void> saveProfile(ProfileChangeDTO data) {
     throw OnlineOnlyOperationException();
   }
+
+  @override
+  Future<void> deleteProfile() {
+    throw OnlineOnlyOperationException();
+  }
 }
 
 abstract class ProfileRepository extends Repository with OfflinePersister {
@@ -140,4 +152,6 @@ abstract class ProfileRepository extends Repository with OfflinePersister {
   }
 
   Future<void> savePassword(PasswordChangeDTO data);
+
+  Future<void> deleteProfile();
 }

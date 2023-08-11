@@ -1,4 +1,5 @@
 import 'package:reading/authentication/data/dtos/signup_dto.dart';
+import 'package:reading/authentication/data/repositories/login_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'signup_controller.g.dart';
@@ -11,7 +12,9 @@ class SignupController extends _$SignupController {
   }
 
   Future<void> signup(SignupDTO data) async {
-    // TODO: implement signup
-    throw UnimplementedError();
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(
+      () => ref.read(loginRepositoryProvider).signup(data),
+    );
   }
 }
