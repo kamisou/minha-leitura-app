@@ -42,6 +42,7 @@ class SimpleTextField extends StatelessWidget {
               fontSize: fontSize,
             ),
       ),
+      maxLines: null,
       inputFormatters: inputFormatters,
       keyboardType: keyboardType,
       onChanged: onChanged,

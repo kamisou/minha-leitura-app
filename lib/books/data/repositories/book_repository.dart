@@ -2,7 +2,6 @@ import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
-import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'book_repository.g.dart';
@@ -24,16 +23,16 @@ class OnlineBookRepository extends BookRepository {
 
   @override
   Future<List<BookDetails>> getMyBooks() async {
-    final books = await ref
-        .read(restApiProvider)
-        .get('app/reading')
-        .then((response) => (response as Json)['data'] as List)
-        .then((list) => list.cast<Json>().map(BookDetails.fromJson))
-        .then((books) => books.toList());
+    // final books = await ref
+    //     .read(restApiProvider)
+    //     .get('app/reading')
+    //     .then((response) => (response as Json)['data'] as List)
+    //     .then((list) => list.cast<Json>().map(BookDetails.fromJson))
+    //     .then((books) => books.toList());
 
-    saveAll<BookDetails>(books, (book) => book.id).ignore();
+    // saveAll<BookDetails>(books, (book) => book.id).ignore();
 
-    return books;
+    return [];
   }
 }
 

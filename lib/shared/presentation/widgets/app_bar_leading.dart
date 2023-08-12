@@ -3,12 +3,17 @@ import 'package:go_router/go_router.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class AppBarLeading extends StatelessWidget {
-  const AppBarLeading({super.key});
+  const AppBarLeading({
+    super.key,
+    this.onTap,
+  });
+
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: context.pop,
+      onTap: onTap ?? context.pop,
       child: Center(
         child: Container(
           decoration: ShapeDecoration(
