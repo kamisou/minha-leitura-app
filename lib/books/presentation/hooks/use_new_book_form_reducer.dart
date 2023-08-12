@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/books/data/dtos/new_book_dto.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
@@ -9,6 +11,7 @@ Store<NewBookDTO, dynamic> useNewBookFormReducer() {
     (state, action) => switch (action) {
       Title() => state.copyWith(title: action),
       Name() => state.copyWith(author: action),
+      File() => state.copyWith(file: action),
       Pages() => state.copyWith(pages: action),
       _ => state,
     },
