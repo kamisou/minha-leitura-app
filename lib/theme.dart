@@ -15,6 +15,12 @@ class ThemeManager extends _$ThemeManager {
     return ThemeData(
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.white,
+        titleTextStyle: TextStyle(
+          color: Color(0xFF697B86),
+          fontFamily: fontFamily,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+        ),
       ),
       brightness: Brightness.light,
       colorScheme: const ColorScheme.light(
@@ -36,7 +42,9 @@ class ThemeManager extends _$ThemeManager {
             0xFF3B4149,
             {
               100: Color(0xFFFAFAFA),
+              150: Color(0xFFEEEEEE),
               200: Color(0xFFE8EAED),
+              250: Color(0xFFD6D6D6),
               300: Color(0xFFB7BCBF),
               400: Color(0xFF98A2A8),
               500: Color(0xFF808E96),
@@ -66,9 +74,25 @@ class ThemeManager extends _$ThemeManager {
         ),
         filled: true,
       ),
+      filledButtonTheme: const FilledButtonThemeData(
+        style: ButtonStyle(
+          padding: MaterialStatePropertyAll(
+            EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 16,
+            ),
+          ),
+        ),
+      ),
       outlinedButtonTheme: const OutlinedButtonThemeData(
         style: ButtonStyle(
           iconSize: MaterialStatePropertyAll(18),
+          padding: MaterialStatePropertyAll(
+            EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 16,
+            ),
+          ),
           side: MaterialStatePropertyAll(
             BorderSide(color: primaryColor),
           ),

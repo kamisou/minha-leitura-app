@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/domain/models/book_details.dart';
-import 'package:reading/books/presentation/pages/book_details_page.dart';
+import 'package:reading/books/presentation/pages/book_details/book_details_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';

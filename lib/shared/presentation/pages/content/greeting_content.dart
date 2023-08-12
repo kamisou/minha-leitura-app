@@ -54,9 +54,17 @@ class GreetingContent extends StatelessWidget {
         const SizedBox(height: 48),
         Center(
           child: OutlinedButton.icon(
-            onPressed: () => context.go('/classes/join'),
+            onPressed: () => context.go('/book/new'),
             icon: const Icon(Icons.add),
-            label: const Text('Ingressar turma'),
+            label: const Text('Cadastre um Livro'),
+            style: const ButtonStyle(
+              padding: MaterialStatePropertyAll(
+                EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+              ),
+            ),
           ),
         ),
       ],

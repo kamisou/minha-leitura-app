@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/shared/presentation/hooks/use_initials.dart';
-import 'package:reading/shared/util/theme_data_extension.dart';
 
 class UserAppBar extends HookConsumerWidget {
   const UserAppBar({super.key});
@@ -30,13 +29,11 @@ class UserAppBar extends HookConsumerWidget {
           child: RichText(
             text: TextSpan(
               text: 'Olá, ',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorExtension?.gray[800],
-                  ),
+              style: DefaultTextStyle.of(context).style,
               children: [
                 TextSpan(
                   text: user.name,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: const TextStyle(fontWeight: FontWeight.w400),
                 ),
               ],
             ),

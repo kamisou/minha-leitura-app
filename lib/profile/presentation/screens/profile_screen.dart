@@ -39,7 +39,6 @@ class ProfileScreen extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Meus Dados'),
-        titleSpacing: 0,
       ),
       body: Stack(
         children: [

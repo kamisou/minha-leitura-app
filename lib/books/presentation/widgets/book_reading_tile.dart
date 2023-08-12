@@ -18,8 +18,8 @@ class BookReadingTile extends HookWidget {
     return Row(
       children: [
         DecoratedBox(
-          decoration: const BoxDecoration(
-            color: Color(0xFFEEEEEE),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorExtension?.gray[150],
             shape: BoxShape.circle,
           ),
           child: Padding(
@@ -45,9 +45,9 @@ class BookReadingTile extends HookWidget {
         ),
         const SizedBox(width: 8),
         DecoratedBox(
-          decoration: const ShapeDecoration(
-            color: Color(0xFFEEEEEE),
-            shape: StadiumBorder(),
+          decoration: ShapeDecoration(
+            color: Theme.of(context).colorExtension?.gray[150],
+            shape: const StadiumBorder(),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(

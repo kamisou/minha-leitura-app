@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/classes/data/repositories/class_repository.dart';
+import 'package:reading/shared/presentation/widgets/app_bar_leading.dart';
 import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
@@ -13,7 +14,7 @@ class ClassesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0,
+        leading: const AppBarLeading(),
         title: const UserAppBar(),
       ),
       body: Padding(

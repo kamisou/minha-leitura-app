@@ -7,6 +7,7 @@ import 'package:reading/classes/presentation/widgets/code_input.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/shared/presentation/widgets/app_bar_leading.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -32,6 +33,7 @@ class JoinClassScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const AppBarLeading(),
         title: Text(
           'Ingressar em turma',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
 import 'package:reading/books/presentation/hooks/use_book_reading_form_reducer.dart';
+import 'package:reading/shared/presentation/widgets/simple_text_field.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class NewReadingDialog extends HookWidget {
@@ -39,17 +40,8 @@ class NewReadingDialog extends HookWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          TextFormField(
-            textAlign: TextAlign.center,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              filled: false,
-              hintText: '00',
-              hintStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: Theme.of(context).colorExtension?.gray[300],
-                    fontSize: 52,
-                  ),
-            ),
+          SimpleTextField(
+            hintText: '00',
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
             ],
@@ -57,10 +49,6 @@ class NewReadingDialog extends HookWidget {
             onChanged: (value) => readingForm.dispatch(
               {'pages': Pages.fromString(value)},
             ),
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: Theme.of(context).colorExtension?.gray[600],
-                  fontSize: 52,
-                ),
             validator: (value) => switch (Pages.validate(value)) {
               PagesError.empty => 'Informe o número da página',
               PagesError.invalid ||
