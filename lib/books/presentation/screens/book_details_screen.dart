@@ -2,14 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/books/data/repositories/book_note_repository.dart';
-import 'package:reading/books/data/repositories/book_rating_repository.dart';
-import 'package:reading/books/data/repositories/book_reading_repository.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/presentation/pages/book_details_page.dart';
-import 'package:reading/books/presentation/pages/book_notes_page.dart';
-import 'package:reading/books/presentation/pages/book_ratings_page.dart';
-import 'package:reading/books/presentation/pages/book_reading_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -25,7 +19,7 @@ class BookDetailsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabController = useTabController(initialLength: 4);
+    final tabController = useTabController(initialLength: 1);
 
     return Scaffold(
       body: NestedScrollView(
@@ -171,9 +165,9 @@ class BookDetailsScreen extends HookConsumerWidget {
                 splashFactory: NoSplash.splashFactory,
                 tabs: const [
                   Tab(text: 'Detalhes'),
-                  Tab(text: 'Notas'),
-                  Tab(text: 'Histórico'),
-                  Tab(text: 'Avaliações'),
+                  // Tab(text: 'Notas'),
+                  // Tab(text: 'Histórico'),
+                  // Tab(text: 'Avaliações'),
                 ],
               ),
             ),
@@ -186,30 +180,30 @@ class BookDetailsScreen extends HookConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: BookDetailsPage(book: book),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: ref.watch(bookNotesProvider(book.id)).maybeWhen(
-                    data: (data) => BookNotesPage(bookId: book.id, notes: data),
-                    orElse: () => const SizedBox(),
-                  ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: ref.watch(bookReadingsProvider(book.id)).maybeWhen(
-                    data: (data) => BookReadingPage(readings: data),
-                    orElse: () => const SizedBox(),
-                  ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: ref.watch(bookRatingsProvider(book.id)).maybeWhen(
-                    data: (data) => BookRatingsPage(
-                      bookId: book.id,
-                      ratings: data,
-                    ),
-                    orElse: () => const SizedBox(),
-                  ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 24),
+            //   child: ref.watch(bookNotesProvider(book.id)).maybeWhen(
+            //         data: (data) => BookNotesPage(bookId: book.id, notes: data),
+            //         orElse: () => const SizedBox(),
+            //       ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 24),
+            //   child: ref.watch(bookReadingsProvider(book.id)).maybeWhen(
+            //         data: (data) => BookReadingPage(readings: data),
+            //         orElse: () => const SizedBox(),
+            //       ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 24),
+            //   child: ref.watch(bookRatingsProvider(book.id)).maybeWhen(
+            //         data: (data) => BookRatingsPage(
+            //           bookId: book.id,
+            //           ratings: data,
+            //         ),
+            //         orElse: () => const SizedBox(),
+            //       ),
+            // ),
           ],
         ),
       ),

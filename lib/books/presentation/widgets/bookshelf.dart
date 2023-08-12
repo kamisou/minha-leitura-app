@@ -46,6 +46,7 @@ class Bookshelf extends StatelessWidget {
                               '/book',
                               extra: books[row * booksPerRow + book],
                             ),
+                            // TODO: status flair
                             child: BookCover(
                               url: books[row * booksPerRow + book].book.cover,
                             ),

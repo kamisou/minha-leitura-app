@@ -36,7 +36,6 @@ class HomeScreen extends HookWidget {
           UniconsLine.bars,
           UniconsLine.home_alt,
           UniconsLine.book_alt,
-          UniconsLine.graph_bar,
         ],
       ),
     );
