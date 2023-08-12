@@ -22,8 +22,6 @@ class SignupScreen extends HookConsumerWidget {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>
           'Você precisa estar online para se registrar!',
-        NoResponseRestException() =>
-          'Você está sem acesso à internet. Tente novamente mais tarde.',
         _ => null,
       },
     );

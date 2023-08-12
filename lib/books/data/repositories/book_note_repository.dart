@@ -4,7 +4,6 @@ import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
-import 'package:reading/profile/domain/models/user.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
@@ -16,8 +15,6 @@ part 'book_note_repository.g.dart';
 
 @riverpod
 BookNoteRepository bookNoteRepository(BookNoteRepositoryRef ref) {
-  return FakeBookNoteRepository(ref);
-
   return ref.read(isConnectedProvider)
       ? OnlineBookNoteRepository(ref)
       : OfflineBookNoteRepository(ref);
@@ -39,7 +36,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .post('books/$bookId/notes', body: data.toJson())
         .then((response) => BookNote.fromJson(response as Json));
 
-    await save<BookNote>(note);
+    await save<BookNote>(note, note.id);
 
     return super.addNote(bookId, data);
   }
@@ -107,11 +104,11 @@ class OfflineBookNoteRepository extends BookNoteRepository {
     final note = OfflineBookNote(
       title: data.title.value,
       description: data.description.value,
-      author: ref.read(profileProvider).requireValue.toUser(),
+      author: ref.read(profileProvider).requireValue!.toUser(),
       parentId: bookId,
     );
 
-    await save<BookNote>(note);
+    await save<OfflineBookNote>(note);
 
     return super.addNote(bookId, data);
   }
@@ -148,48 +145,6 @@ class OfflineBookNoteRepository extends BookNoteRepository {
   @override
   Future<void> removeNote(int bookId, BookNote note) async {
     throw OnlineOnlyOperationException();
-  }
-}
-
-class FakeBookNoteRepository extends BookNoteRepository {
-  const FakeBookNoteRepository(super.ref);
-
-  @override
-  Future<List<BookNote>> getBookNotes(int bookId) async {
-    return [
-      BookNote(
-        id: 1,
-        title: 'Reflexão',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi'
-            ' egestas porttitor nunc...',
-        author: const User(id: 1, name: 'Guilherme'),
-        createdAt: DateTime(2022, 09, 26, 15, 26, 30),
-        responses: [
-          BookNote(
-            id: 2,
-            title: 'Título XPTO',
-            description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi'
-                ' egestas porttitor nunc...',
-            author: const User(id: 1, name: 'Fulano de Tal'),
-            createdAt: DateTime(2022, 09, 26, 15, 28, 30),
-            parentId: 1,
-          ),
-        ],
-        parentId: bookId,
-      ),
-      BookNote(
-        id: 3,
-        title: 'Dica de rotina matinal ',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi'
-            ' egestas porttitor nunc...',
-        author: const User(id: 2, name: 'Guilherme'),
-        createdAt: DateTime(2022, 09, 27, 16, 0, 10),
-        parentId: bookId,
-      ),
-    ];
   }
 }
 

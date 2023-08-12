@@ -35,7 +35,7 @@ class BookReadingTile extends HookWidget {
         Expanded(
           child: Text(
             reading is! OfflineBookReading
-                ? useddMMyyHm(reading.date)
+                ? useddMMyyHm(reading.createdAt)
                 : 'Não sincronizado',
             style: Theme.of(context)
                 .textTheme
@@ -55,7 +55,7 @@ class BookReadingTile extends HookWidget {
               vertical: 4,
             ),
             child: Text(
-              '${reading.pages} pág. lida(s)',
+              '${reading.page} pág. lida(s)',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorExtension?.gray[600],
                   ),

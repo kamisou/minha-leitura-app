@@ -17,7 +17,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'profile_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-Future<UserProfile> profile(ProfileRef ref) async {
+Future<UserProfile?> profile(ProfileRef ref) async {
+  if (ref.read(tokenRepositoryProvider).valueOrNull == null) {
+    return null;
+  }
   return ref.read(profileRepositoryProvider).getMyProfile();
 }
 

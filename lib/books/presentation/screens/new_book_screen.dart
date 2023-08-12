@@ -1,14 +1,24 @@
+import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart' hide Title;
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/books/data/dtos/new_book_dto.dart';
+import 'package:reading/books/domain/models/book_details.dart';
+import 'package:reading/books/domain/value_objects/date.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
+import 'package:reading/books/presentation/controllers/new_book_controller.dart';
 import 'package:reading/books/presentation/hooks/use_new_book_form_reducer.dart';
 import 'package:reading/books/presentation/pages/new_book/new_book_page.dart';
+import 'package:reading/books/presentation/widgets/selection_button.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/infrastructure/image_picker.dart';
 import 'package:reading/shared/presentation/hooks/use_page_notifier.dart';
+import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/presentation/widgets/app_bar_leading.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/presentation/widgets/simple_text_field.dart';
@@ -25,15 +35,25 @@ class NewBookScreen extends HookConsumerWidget {
     final page = usePageNotifier(pageController);
     final newBookForm = useNewBookFormReducer();
 
+    useSnackbarErrorListener(
+      ref,
+      provider: newBookControllerProvider,
+      messageBuilder: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        OnlineOnlyOperationException() =>
+          'Você precisa estar online para registrar um novo livro!',
+        _ => null,
+      },
+    );
+
     return Scaffold(
       appBar: AppBar(
-        leading: ValueListenableBuilder(
-          valueListenable: page,
-          builder: (context, value, child) => AppBarLeading(
-            onTap: value != 0 //
-                ? () => _onTapBack(context, pageController)
-                : null,
-          ),
+        leading: AppBarLeading(
+          onTap: () {
+            page.value == 0 //
+                ? context.pop()
+                : _onTapBack(context, pageController);
+          },
         ),
         title: const Text('Cadastrar Novo Livro'),
       ),
@@ -44,7 +64,10 @@ class NewBookScreen extends HookConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: SmoothPageIndicator(
               controller: pageController,
-              count: 4,
+              count: switch (newBookForm.state.status) {
+                BookStatus.reading || BookStatus.finished => 7,
+                _ => 5,
+              },
               effect: WormEffect(
                 activeDotColor: Theme.of(context).colorScheme.primary,
                 dotColor:
@@ -88,9 +111,9 @@ class NewBookScreen extends HookConsumerWidget {
                       horizontal: 72,
                       vertical: 96,
                     ),
-                    child: newBookForm.state.file != null
+                    child: newBookForm.state.cover != null
                         ? BookCover.file(
-                            file: newBookForm.state.file,
+                            file: newBookForm.state.cover,
                           )
                         : GestureDetector(
                             onTap: () =>
@@ -142,7 +165,7 @@ class NewBookScreen extends HookConsumerWidget {
                           ),
                   ),
                   prompt: 'Inserir capa',
-                  onTapNext: newBookForm.state.file != null
+                  onTapNext: newBookForm.state.cover != null
                       ? () => _onTapNext(context, pageController)
                       : null,
                   onTapSkip: () => _onTapNext(context, pageController),
@@ -156,8 +179,8 @@ class NewBookScreen extends HookConsumerWidget {
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                     keyboardType: TextInputType.number,
-                    onChanged: (value) =>
-                        newBookForm.dispatch(Pages.fromString(value)),
+                    onChanged: (value) => newBookForm
+                        .dispatch({'pages': Pages.fromString(value)}),
                   ),
                   prompt: 'Número de páginas',
                   onTapNext: switch (Pages.validate(
@@ -167,12 +190,188 @@ class NewBookScreen extends HookConsumerWidget {
                     _ => null,
                   },
                 ),
+                NewBookPage(
+                  builder: (context) => Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 40,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SelectionButton(
+                          onPressed: () =>
+                              newBookForm.dispatch(BookStatus.pending),
+                          text: 'vou iniciar agora',
+                          selected:
+                              newBookForm.state.status == BookStatus.pending,
+                        ),
+                        const SizedBox(height: 16),
+                        SelectionButton(
+                          onPressed: () =>
+                              newBookForm.dispatch(BookStatus.reading),
+                          text: 'estou lendo',
+                          selected:
+                              newBookForm.state.status == BookStatus.reading,
+                        ),
+                        const SizedBox(height: 16),
+                        SelectionButton(
+                          onPressed: () =>
+                              newBookForm.dispatch(BookStatus.finished),
+                          text: 'já li esse livro',
+                          selected:
+                              newBookForm.state.status == BookStatus.finished,
+                        ),
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: newBookForm.state.haveTheBook == 1,
+                              onChanged: (value) =>
+                                  newBookForm.dispatch(value! ? 1 : 0),
+                            ),
+                            Text(
+                              'Eu tenho esse livro',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorExtension
+                                        ?.gray[600],
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  prompt: 'Leitura',
+                  onTapNext: newBookForm.state.status != null
+                      ? () => switch (newBookForm.state.status) {
+                            BookStatus.pending =>
+                              _finish(context, ref, newBookForm.state),
+                            BookStatus.reading ||
+                            BookStatus.finished =>
+                              _onTapNext(context, pageController),
+                            _ => null,
+                          }
+                      : null,
+                ),
+                ...switch (newBookForm.state.status) {
+                  BookStatus.reading => [
+                      NewBookPage(
+                        builder: (context) => SimpleTextField(
+                          autofocus: true,
+                          fontSize: 36,
+                          hintText: 'dd/mm/aa',
+                          inputFormatters: [
+                            TextInputMask(mask: '99/99/99'),
+                          ],
+                          keyboardType: TextInputType.datetime,
+                          onChanged: (value) => newBookForm.dispatch(
+                            {'started_at': Date(value)},
+                          ),
+                        ),
+                        prompt: 'Quando começou a ler?',
+                        onTapNext: switch (Date.validate(
+                          newBookForm.state.startedAt.value,
+                        )) {
+                          null => () => _onTapNext(context, pageController),
+                          _ => null,
+                        },
+                      ),
+                      NewBookPage(
+                        builder: (context) => SimpleTextField(
+                          autofocus: true,
+                          fontSize: 36,
+                          hintText: '00',
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) => newBookForm.dispatch(
+                            {'actual_page': Pages.fromString(value)},
+                          ),
+                        ),
+                        prompt: 'Parou em qual página?',
+                        onTapNext: switch (Pages.validate(
+                          '${newBookForm.state.pages.value}',
+                        )) {
+                          null => () =>
+                              _finish(context, ref, newBookForm.state),
+                          _ => null,
+                        },
+                      ),
+                    ],
+                  BookStatus.finished => [
+                      NewBookPage(
+                        builder: (context) => SimpleTextField(
+                          autofocus: true,
+                          fontSize: 36,
+                          hintText: 'dd/mm/aa',
+                          inputFormatters: [
+                            TextInputMask(mask: '99/99/99'),
+                          ],
+                          keyboardType: TextInputType.datetime,
+                          onChanged: (value) => newBookForm.dispatch(
+                            {'started_at': Date(value)},
+                          ),
+                        ),
+                        prompt: 'Quando você leu?',
+                        onTapNext: switch (Date.validate(
+                          newBookForm.state.startedAt.value,
+                        )) {
+                          null => () => _onTapNext(context, pageController),
+                          _ => null,
+                        },
+                      ),
+                      NewBookPage(
+                        builder: (context) => SimpleTextField(
+                          autofocus: true,
+                          fontSize: 36,
+                          hintText: 'dd/mm/aa',
+                          inputFormatters: [
+                            TextInputMask(mask: '99/99/99'),
+                          ],
+                          keyboardType: TextInputType.datetime,
+                          onChanged: (value) => newBookForm.dispatch(
+                            {'finished_at': Date(value)},
+                          ),
+                        ),
+                        prompt: 'Quando terminou?',
+                        onTapNext: switch (Date.validate(
+                          newBookForm.state.finishedAt.value,
+                        )) {
+                          null => () =>
+                              _finish(context, ref, newBookForm.state),
+                          _ => null,
+                        },
+                      ),
+                    ],
+                  _ => [
+                      const SizedBox(),
+                    ],
+                },
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _finish(BuildContext context, WidgetRef ref, NewBookDTO data) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    ref
+        .read(newBookControllerProvider.notifier) //
+        .addBook(data)
+        .then(
+          (value) => ref.read(newBookControllerProvider).asError == null
+              ? context.pop()
+              : null,
+        );
   }
 
   void _onTapBack(BuildContext context, PageController pageController) {

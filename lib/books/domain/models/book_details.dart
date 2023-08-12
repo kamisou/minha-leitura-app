@@ -9,11 +9,15 @@ part 'book_details.g.dart';
 @HiveType(typeId: 13)
 enum BookStatus {
   @HiveField(0)
-  pending,
+  pending(name: 'pending'),
   @HiveField(1)
-  reading,
+  reading(name: 'reading'),
   @HiveField(2)
-  finished,
+  finished(name: 'finished');
+
+  const BookStatus({required this.name});
+
+  final String name;
 }
 
 @freezed
@@ -25,7 +29,8 @@ class BookDetails with _$BookDetails {
     @HiveField(2) DateTime? finishedAt,
     @HiveField(3) required BookStatus status,
     @HiveField(4) required double percentageRead,
-    @HiveField(5) required int actualPage,
+    // TODO: actualPage não deve ser nulável
+    @HiveField(5) int? actualPage,
     @HiveField(6) required Book book,
   }) = _BookDetails;
 

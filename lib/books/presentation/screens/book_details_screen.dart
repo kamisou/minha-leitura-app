@@ -117,37 +117,37 @@ class BookDetailsScreen extends HookConsumerWidget {
                       ),
                 ),
                 Text(
-                  book.book.author,
+                  book.book.author ?? '',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).colorExtension?.gray[500],
                         fontWeight: FontWeight.w700,
                       ),
                 ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Wrap(
-                    spacing: 16,
-                    children: [
-                      FilledButton.icon(
-                        onPressed: () {
-                          // TODO: implement define goals
-                          throw UnimplementedError();
-                        },
-                        icon: const Icon(UniconsLine.book_open),
-                        label: const Text('Definir Meta'),
-                      ),
-                      OutlinedButton.icon(
-                        onPressed: () {
-                          // TODO: implement share book
-                          throw UnimplementedError();
-                        },
-                        icon: const Icon(UniconsLine.share_alt),
-                        label: const Text('Compartilhar'),
-                      ),
-                    ],
-                  ),
-                ),
+                // const SizedBox(height: 20),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 24),
+                //   child: Wrap(
+                //     spacing: 16,
+                //     children: [
+                //       FilledButton.icon(
+                //         onPressed: () {
+                //           // TODO: implement define goals
+                //           throw UnimplementedError();
+                //         },
+                //         icon: const Icon(UniconsLine.book_open),
+                //         label: const Text('Definir Meta'),
+                //       ),
+                //       OutlinedButton.icon(
+                //         onPressed: () {
+                //           // TODO: implement share book
+                //           throw UnimplementedError();
+                //         },
+                //         icon: const Icon(UniconsLine.share_alt),
+                //         label: const Text('Compartilhar'),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),

@@ -6,6 +6,7 @@ import 'package:reading/books/presentation/controllers/new_reading_controller.da
 import 'package:reading/books/presentation/dialogs/new_reading_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_details_tile.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_d_mmmm_y.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:unicons/unicons.dart';
@@ -24,6 +25,7 @@ class BookDetailsPage extends HookConsumerWidget {
       ref,
       provider: newReadingControllerProvider,
       messageBuilder: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>
           'É preciso estar online para lançar a leitura.',
         _ => null,
@@ -39,7 +41,7 @@ class BookDetailsPage extends HookConsumerWidget {
             BookDetailsTile(
               icon: UniconsLine.book_alt,
               label: 'Total de Páginas',
-              value: '${book.book.pages}',
+              value: '${book.book.pages ?? '-'}',
             ),
             const Divider(),
             BookDetailsTile(
@@ -57,7 +59,7 @@ class BookDetailsPage extends HookConsumerWidget {
             BookDetailsTile(
               icon: UniconsLine.file,
               label: 'Página Atual',
-              value: '${book.actualPage}',
+              value: '${book.actualPage ?? '-'}',
             ),
             // const Divider(),
             // BookDetailsTile(

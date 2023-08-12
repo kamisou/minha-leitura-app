@@ -29,7 +29,6 @@ class DioRestApi extends RestApi {
   }) : _dio = Dio(
           BaseOptions(
             baseUrl: server,
-            connectTimeout: const Duration(seconds: 5),
             headers: {
               'accept': 'application/json',
               'content-type': 'application/json',

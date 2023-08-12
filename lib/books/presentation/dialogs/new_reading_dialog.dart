@@ -46,9 +46,7 @@ class NewReadingDialog extends HookWidget {
               FilteringTextInputFormatter.digitsOnly,
             ],
             keyboardType: TextInputType.number,
-            onChanged: (value) => readingForm.dispatch(
-              {'pages': Pages.fromString(value)},
-            ),
+            onChanged: (value) => readingForm.dispatch(Pages.fromString(value)),
             validator: (value) => switch (Pages.validate(value)) {
               PagesError.empty => 'Informe o número da página',
               PagesError.invalid ||

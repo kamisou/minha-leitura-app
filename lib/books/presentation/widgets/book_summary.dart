@@ -56,7 +56,7 @@ class BookSummary extends HookWidget {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    '${book.actualPage} / ${book.book.pages} páginas lidas',
+                    '${book.actualPage ?? '-'} / ${book.book.pages ?? '-'} páginas lidas',
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                           color: Theme.of(context).colorExtension?.gray[400],
                         ),

@@ -1,8 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:reading/authentication/domain/domain/token.dart';
+import 'package:reading/books/domain/models/book.dart';
+import 'package:reading/books/domain/models/book_details.dart';
+import 'package:reading/books/domain/models/book_note.dart';
+import 'package:reading/books/domain/models/book_rating.dart';
+import 'package:reading/books/domain/models/book_reading.dart';
+import 'package:reading/classes/domain/models/class.dart';
+import 'package:reading/profile/domain/models/user.dart';
+import 'package:reading/profile/domain/models/user_profile.dart';
 import 'package:reading/shared/exceptions/database_exception.dart';
 import 'package:reading/shared/infrastructure/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,6 +32,22 @@ Database encryptedDatabase(EncryptedDatabaseRef ref) {
 
 class HiveDatabase extends Database {
   const HiveDatabase();
+
+  @override
+  Future<void> initialize() async {
+    await Hive.initFlutter('hive');
+    Hive
+      ..registerAdapter(TokenAdapter())
+      ..registerAdapter(BookDetailsAdapter())
+      ..registerAdapter(BookNoteAdapter())
+      ..registerAdapter(BookRatingAdapter())
+      ..registerAdapter(BookReadingAdapter())
+      ..registerAdapter(BookAdapter())
+      ..registerAdapter(ClassAdapter())
+      ..registerAdapter(UserProfileAdapter())
+      ..registerAdapter(UserAdapter())
+      ..registerAdapter(BookStatusAdapter());
+  }
 
   @override
   Future<T> getById<T>(dynamic id) async {
@@ -125,6 +152,14 @@ class HiveDatabase extends Database {
     box.close().ignore();
   }
 
+  @override
+  Future<void> wipe() async {
+    final appDocs = await getApplicationDocumentsDirectory();
+    final hive = Directory('${appDocs.path}/hive');
+
+    await hive.delete(recursive: true);
+  }
+
   Future<BoxBase<T>> _getBox<T>({bool lazy = true}) async {
     if (lazy) {
       return Hive.openLazyBox<T>(T.toString());
@@ -162,6 +197,7 @@ class EncryptedHiveDatabase extends HiveDatabase {
 abstract class Database {
   const Database();
 
+  Future<void> initialize();
   Future<T> getById<T>(dynamic id);
   Future<List<T>> getAll<T>();
   Future<List<T>> getWhere<T>(bool Function(T value) predicate);
@@ -173,4 +209,5 @@ abstract class Database {
   );
   Future<void> update<T>(T value, dynamic id);
   Future<void> updateAll<T>(Iterable<T> values, dynamic Function(T value) id);
+  Future<void> wipe();
 }

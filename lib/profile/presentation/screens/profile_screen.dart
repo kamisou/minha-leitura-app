@@ -19,7 +19,7 @@ class ProfileScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(profileProvider).requireValue;
+    final user = ref.watch(profileProvider).requireValue!;
     final formKey = useRef(GlobalKey<FormState>());
     final profileForm = useProfileFormReducer(
       initialState: ProfileChangeDTO(

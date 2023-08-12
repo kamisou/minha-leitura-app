@@ -25,9 +25,11 @@ class TokenRepository extends _$TokenRepository {
 
   /// deletes the currently auth token and its persisted data
   Future<void> deleteToken() async {
-    final currentToken = await ref
-        .read(secureStorageProvider) //
-        .read('current_token');
+    final secureStorage = ref.read(secureStorageProvider);
+
+    final currentToken = await secureStorage.read('current_token');
+
+    await ref.read(secureStorageProvider).delete('current_token');
 
     return ref
         .read(encryptedDatabaseProvider) //

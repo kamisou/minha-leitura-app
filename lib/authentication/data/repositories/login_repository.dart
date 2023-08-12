@@ -8,6 +8,7 @@ import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
+import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -35,7 +36,8 @@ class OnlineLoginRepository extends LoginRepository {
     await tokenRepo.setAccessToken(tokenData.accessToken);
 
     final profile = await ref.refresh(profileProvider.future);
-    final token = Token(accessToken: tokenData.accessToken, userId: profile.id);
+    final token =
+        Token(accessToken: tokenData.accessToken, userId: profile!.id);
 
     return tokenRepo.saveTokenData(token);
   }
@@ -52,7 +54,8 @@ class OnlineLoginRepository extends LoginRepository {
     await tokenRepo.setAccessToken(tokenData.accessToken);
 
     final profile = await ref.refresh(profileProvider.future);
-    final token = Token(accessToken: tokenData.accessToken, userId: profile.id);
+    final token =
+        Token(accessToken: tokenData.accessToken, userId: profile!.id);
 
     return tokenRepo.saveTokenData(token);
   }
@@ -88,6 +91,7 @@ abstract class LoginRepository extends Repository {
   @mustCallSuper
   Future<void> logout() async {
     await ref.read(tokenRepositoryProvider.notifier).deleteToken();
+    await ref.read(databaseProvider).wipe();
     ref.invalidate(profileProvider);
   }
 }

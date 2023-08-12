@@ -12,8 +12,9 @@ class Book with _$Book {
     @HiveField(0) required int id,
     @HiveField(1) String? cover,
     @HiveField(2) required String title,
-    @HiveField(3) required String author,
-    @HiveField(4) required int pages,
+    // TODO: author e pages não deve ser nulável
+    @HiveField(3) String? author,
+    @HiveField(4) int? pages,
   }) = _Book;
 
   factory Book.fromJson(Json json) => _$BookFromJson(json);

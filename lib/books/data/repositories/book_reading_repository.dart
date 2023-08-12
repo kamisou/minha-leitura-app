@@ -29,7 +29,7 @@ class OnlineBookReadingRepository extends BookReadingRepository {
   Future<void> updateReading(int bookId, NewReadingDTO data) async {
     final reading = await ref
         .read(restApiProvider)
-        .post('app/reading/$bookId', body: data.toJson())
+        .put('app/reading/$bookId', body: data.toJson())
         .then((response) => BookReading.fromJson(response as Json));
 
     await save<BookReading>(reading, reading.id);

@@ -4,7 +4,6 @@ import 'package:reading/books/domain/models/book_rating.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/rating.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
-import 'package:reading/profile/domain/models/user.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
@@ -16,8 +15,6 @@ part 'book_rating_repository.g.dart';
 
 @riverpod
 BookRatingRepository bookRatingRepository(BookRatingRepositoryRef ref) {
-  return FakeBookRatingRepository(ref);
-
   return ref.read(isConnectedProvider)
       ? OnlineBookRatingRepository(ref)
       : OfflineBookRatingRepository(ref);
@@ -48,7 +45,7 @@ class OnlineBookRatingRepository extends BookRatingRepository
         .post('books/$bookId/ratings', body: data.toJson())
         .then((response) => BookRating.fromJson(response as Json));
 
-    await save<BookRating>(rating);
+    await save<BookRating>(rating, rating.id);
 
     return super.addRating(bookId, data);
   }
@@ -100,7 +97,7 @@ class OfflineBookRatingRepository extends BookRatingRepository {
     final rating = OfflineBookRating(
       rating: data.rating.value!,
       comment: data.comment.value,
-      author: ref.read(profileProvider).requireValue.toUser(),
+      author: ref.read(profileProvider).requireValue!.toUser(),
       bookId: bookId,
     );
 
@@ -112,32 +109,6 @@ class OfflineBookRatingRepository extends BookRatingRepository {
   @override
   Future<void> removeRating(int bookId, BookRating rating) {
     throw OnlineOnlyOperationException();
-  }
-}
-
-class FakeBookRatingRepository extends BookRatingRepository {
-  const FakeBookRatingRepository(super.ref);
-
-  @override
-  Future<List<BookRating>> getRatings(int bookId) async {
-    return [
-      BookRating(
-        id: 1,
-        rating: 4.2,
-        comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing',
-        author: const User(id: 5, name: 'Guilherme'),
-        createdAt: DateTime(2022, 09, 26),
-        bookId: bookId,
-      ),
-      BookRating(
-        id: 2,
-        rating: 3,
-        comment: 'Lorem ipsum dolor sit amet, consectetur adipiscing',
-        author: const User(id: 6, name: 'Ciclano da Silva'),
-        createdAt: DateTime(2022, 09, 10),
-        bookId: bookId,
-      ),
-    ];
   }
 }
 

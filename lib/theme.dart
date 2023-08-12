@@ -23,6 +23,17 @@ class ThemeManager extends _$ThemeManager {
         ),
       ),
       brightness: Brightness.light,
+      checkboxTheme: CheckboxThemeData(
+        checkColor: const MaterialStatePropertyAll(primaryColor),
+        fillColor: const MaterialStatePropertyAll(Colors.transparent),
+        side: MaterialStateBorderSide.resolveWith(
+          (states) => BorderSide(
+            color: states.contains(MaterialState.selected)
+                ? primaryColor
+                : const Color(0xFF697B86),
+          ),
+        ),
+      ),
       colorScheme: const ColorScheme.light(
         inverseSurface: Color(0xFF202020),
         onInverseSurface: Colors.white,

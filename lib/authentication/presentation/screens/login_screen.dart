@@ -22,8 +22,6 @@ class LoginScreen extends HookConsumerWidget {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>
           'Você precisa estar online para fazer login!',
-        NoResponseRestException() =>
-          'Você está sem acesso à internet. Tente novamente mais tarde.',
         _ => null,
       },
     );

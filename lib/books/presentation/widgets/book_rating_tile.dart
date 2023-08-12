@@ -25,7 +25,7 @@ class BookRatingTile extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             StarRatingWidget(value: rating.rating),
-            if (rating.author.id == ref.read(profileProvider).requireValue.id)
+            if (rating.author.id == ref.read(profileProvider).requireValue!.id)
               GestureDetector(
                 onTap: () => ref
                     .read(bookRatingRepositoryProvider)

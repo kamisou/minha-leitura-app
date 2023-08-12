@@ -21,10 +21,12 @@ class LoadingNetworkImage extends StatelessWidget {
       src ?? '',
       fit: fit,
       errorBuilder: (context, error, stackTrace) {
-        return Container(
-          alignment: Alignment.center,
-          color: Theme.of(context).disabledColor,
-          child: const Icon(UniconsThinline.image_v),
+        return builder(
+          Container(
+            alignment: Alignment.center,
+            color: Theme.of(context).disabledColor,
+            child: const Icon(UniconsThinline.image_v),
+          ),
         );
       },
       loadingBuilder: (context, child, loadingProgress) {
