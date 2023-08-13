@@ -62,18 +62,18 @@ class BookshelfPage extends ConsumerWidget {
                         spacing: 12,
                         children: [
                           OutlinedButton.icon(
-                            onPressed: () => context.go('/classes/join'),
+                            onPressed: () => context.go('/book/new'),
                             icon: const Icon(UniconsLine.plus),
-                            label: const Text('Ingressar turma'),
+                            label: const Text('Adicionar'),
                           ),
-                          OutlinedButton.icon(
-                            onPressed: () {
-                              // TODO: implement search books
-                              throw UnimplementedError();
-                            },
-                            icon: const Icon(UniconsLine.search),
-                            label: const Text('Buscar'),
-                          ),
+                          // OutlinedButton.icon(
+                          //   onPressed: () {
+                          //     // TODO: implement search books
+                          //     throw UnimplementedError();
+                          //   },
+                          //   icon: const Icon(UniconsLine.search),
+                          //   label: const Text('Buscar'),
+                          // ),
                         ],
                       ),
                       const SizedBox(height: 20),

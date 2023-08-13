@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/books/domain/models/book_details.dart';
+import 'package:reading/books/data/repositories/book_reading_repository.dart';
 import 'package:reading/books/presentation/pages/book_details/book_details_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
@@ -12,14 +12,15 @@ import 'package:unicons/unicons.dart';
 class BookDetailsScreen extends HookConsumerWidget {
   const BookDetailsScreen({
     super.key,
-    required this.book,
+    required this.bookId,
   });
 
-  final BookDetails book;
+  final int bookId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabController = useTabController(initialLength: 1);
+    final bookDetails = ref.watch(bookDetailsProvider(bookId));
 
     return Scaffold(
       body: NestedScrollView(
@@ -34,7 +35,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Image.network(
-                        book.book.cover ?? '',
+                        bookDetails.book.cover ?? '',
                         fit: BoxFit.cover,
                         opacity: const AlwaysStoppedAnimation(0.4),
                         height: MediaQuery.of(context).size.height * 0.2,
@@ -80,7 +81,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                         ),
                         Expanded(
                           flex: 3,
-                          child: BookCover(url: book.book.cover),
+                          child: BookCover(url: bookDetails.book.cover),
                         ),
                         const Expanded(
                           flex: 2,
@@ -97,7 +98,7 @@ class BookDetailsScreen extends HookConsumerWidget {
             child: Column(
               children: [
                 Text(
-                  '${book.percentageRead.toStringAsFixed(0)}%',
+                  '${bookDetails.percentageRead.toStringAsFixed(0)}%',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                         fontWeight: FontWeight.w800,
@@ -105,19 +106,19 @@ class BookDetailsScreen extends HookConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 AnimatedPercentageMeter(
-                  percentage: book.percentageRead,
+                  percentage: bookDetails.percentageRead,
                   duration: Duration.zero,
                 ),
                 const SizedBox(height: 18),
                 Text(
-                  book.book.title,
+                  bookDetails.book.title,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorExtension?.gray[800],
                         fontWeight: FontWeight.w700,
                       ),
                 ),
                 Text(
-                  book.book.author ?? '',
+                  bookDetails.book.author ?? '',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).colorExtension?.gray[500],
                         fontWeight: FontWeight.w700,
@@ -178,7 +179,7 @@ class BookDetailsScreen extends HookConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: BookDetailsPage(book: book),
+              child: BookDetailsPage(book: bookDetails),
             ),
             // Padding(
             //   padding: const EdgeInsets.symmetric(horizontal: 24),

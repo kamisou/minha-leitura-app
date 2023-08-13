@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/models/book_details.dart';
+import 'package:reading/books/presentation/hooks/use_status_color.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
-class Bookshelf extends StatelessWidget {
+class Bookshelf extends HookWidget {
   const Bookshelf({
     super.key,
     required this.books,
@@ -36,28 +38,45 @@ class Bookshelf extends StatelessWidget {
                 padding: const EdgeInsets.all(24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    for (var book = 0; book < booksPerRow; book += 1)
-                      if (row * booksPerRow + book < books.length)
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.22,
-                          child: GestureDetector(
-                            onTap: () => context.go(
-                              '/book',
-                              extra: books[row * booksPerRow + book],
-                            ),
-                            // TODO: status flair
-                            child: BookCover(
-                              url: books[row * booksPerRow + book].book.cover,
-                            ),
-                          ),
-                        ),
-                  ],
+                  children: List.generate(
+                    booksPerRow,
+                    (index) => _bookBuilder(context, row, index),
+                  ),
                 ),
               ),
             ],
           ),
       ],
+    );
+  }
+
+  Widget _bookBuilder(BuildContext context, int row, int index) {
+    if (row * booksPerRow + index >= books.length) {
+      return const SizedBox();
+    }
+
+    final book = books[row * booksPerRow + index];
+
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.22,
+      child: GestureDetector(
+        onTap: () => context.go('/book', extra: book.id),
+        child: Stack(
+          children: [
+            BookCover(url: book.book.cover),
+            Positioned(
+              top: 0,
+              right: 8,
+              child: CustomPaint(
+                size: const Size(14, 20),
+                painter: _FlairPainter(
+                  color: useStatusColor(book.status),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -107,6 +126,31 @@ class _ShelfPainter extends CustomPainter {
       ..drawShadow(backTrapezoid, const Color(0x7F000000), 10, false)
       ..drawPath(backTrapezoid, backPaint)
       ..drawRRect(frontRRect, frontPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _FlairPainter extends CustomPainter {
+  const _FlairPainter({
+    required this.color,
+  });
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = color;
+    final path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(size.width, 0)
+      ..lineTo(size.width, size.height)
+      ..lineTo(size.width / 2, size.height - size.height * 0.3)
+      ..lineTo(0, size.height)
+      ..lineTo(0, 0);
+
+    canvas.drawPath(path, paint);
   }
 
   @override

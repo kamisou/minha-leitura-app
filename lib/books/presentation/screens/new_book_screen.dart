@@ -111,18 +111,18 @@ class NewBookScreen extends HookConsumerWidget {
                       horizontal: 72,
                       vertical: 96,
                     ),
-                    child: newBookForm.state.cover != null
-                        ? BookCover.file(
-                            file: newBookForm.state.cover,
-                          )
-                        : GestureDetector(
-                            onTap: () =>
-                                ref.read(imagePickerProvider).pickImage().then(
-                                      (value) => value == null
-                                          ? null
-                                          : newBookForm.dispatch(value),
-                                    ),
-                            child: AspectRatio(
+                    child: GestureDetector(
+                      onTap: () =>
+                          ref.read(imagePickerProvider).pickImage().then(
+                                (value) => value == null
+                                    ? null
+                                    : newBookForm.dispatch(value),
+                              ),
+                      child: newBookForm.state.cover != null
+                          ? BookCover.file(
+                              file: newBookForm.state.cover,
+                            )
+                          : AspectRatio(
                               aspectRatio: 0.7,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
@@ -162,7 +162,7 @@ class NewBookScreen extends HookConsumerWidget {
                                 ),
                               ),
                             ),
-                          ),
+                    ),
                   ),
                   prompt: 'Inserir capa',
                   onTapNext: newBookForm.state.cover != null

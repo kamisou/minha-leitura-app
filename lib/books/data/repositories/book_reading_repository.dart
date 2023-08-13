@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:reading/books/data/dtos/new_reading_dto.dart';
+import 'package:reading/books/data/repositories/book_repository.dart';
+import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
@@ -20,6 +22,14 @@ BookReadingRepository bookReadingRepository(BookReadingRepositoryRef ref) {
 @riverpod
 Future<List<BookReading>> bookReadings(BookReadingsRef ref, int bookId) {
   return ref.read(bookReadingRepositoryProvider).getBookReadings(bookId);
+}
+
+@riverpod
+BookDetails bookDetails(BookDetailsRef ref, int id) {
+  return ref
+      .watch(myBooksProvider)
+      .requireValue
+      .firstWhere((book) => book.id == id);
 }
 
 class OnlineBookReadingRepository extends BookReadingRepository {
@@ -76,7 +86,7 @@ abstract class BookReadingRepository extends Repository with OfflinePersister {
 
   @mustBeOverridden
   Future<void> updateReading(int bookId, NewReadingDTO data) async {
-    ref.invalidate(bookReadingsProvider);
+    ref.invalidate(myBooksProvider);
   }
 
   Future<List<BookReading>> getBookReadings(int bookId);

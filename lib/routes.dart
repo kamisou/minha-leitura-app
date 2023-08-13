@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:reading/authentication/presentation/screens/login_screen.dart';
 import 'package:reading/authentication/presentation/screens/signup_screen.dart';
-import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/presentation/screens/book_details_screen.dart';
 import 'package:reading/books/presentation/screens/new_book_screen.dart';
 import 'package:reading/classes/presentation/screens/classes_screen.dart';
@@ -33,7 +32,7 @@ Raw<GoRouter> router(RouterRef ref) {
           GoRoute(
             path: 'book',
             builder: (context, state) => BookDetailsScreen(
-              book: state.extra! as BookDetails,
+              bookId: state.extra! as int,
             ),
           ),
           GoRoute(

@@ -57,7 +57,7 @@ class BookCarrouselContent extends HookWidget {
               alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: GestureDetector(
-                onTap: () => context.go('/book', extra: books[index]),
+                onTap: () => context.go('/book', extra: books[index].id),
                 child: BookCover(url: books[index].book.cover),
               ),
             ),
