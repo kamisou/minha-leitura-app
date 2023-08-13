@@ -154,6 +154,8 @@ class HiveDatabase extends Database {
 
   @override
   Future<void> wipe() async {
+    log('wiping Hive database', name: 'Database');
+
     final appDocs = await getApplicationDocumentsDirectory();
     final hive = Directory('${appDocs.path}/hive');
 

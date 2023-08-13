@@ -29,13 +29,14 @@ class TokenRepository extends _$TokenRepository {
 
     final currentToken = await secureStorage.read('current_token');
 
-    await ref.read(secureStorageProvider).delete('current_token');
-
-    return ref
-        .read(encryptedDatabaseProvider) //
-        .removeWhere<Token>(
-          (token) => token.accessToken == currentToken,
-          (token) => token.key,
-        );
+    await Future.wait([
+      secureStorage.delete('current_token'),
+      ref
+          .read(encryptedDatabaseProvider) //
+          .removeWhere<Token>(
+            (token) => token.accessToken == currentToken,
+            (token) => token.key,
+          ),
+    ]);
   }
 }

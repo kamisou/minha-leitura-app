@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:reading/authentication/data/repositories/login_repository.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
 import 'package:reading/authentication/domain/domain/token.dart';
 import 'package:reading/profile/data/dtos/password_change_dto.dart';
@@ -88,7 +87,9 @@ class OnlineProfileRepository extends ProfileRepository {
   @override
   Future<void> deleteProfile() async {
     await ref.read(restApiProvider).delete('app/student');
-    return ref.read(loginRepositoryProvider).logout();
+    await ref.read(tokenRepositoryProvider.notifier).deleteToken();
+    await ref.read(databaseProvider).wipe();
+    ref.invalidate(profileProvider);
   }
 }
 
