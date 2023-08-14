@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/routes.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:reading/theme.dart';
 
 void main() async {
@@ -35,12 +37,23 @@ Future<ProviderContainer> initRiverpod() async {
   final container = ProviderContainer();
 
   try {
-    await container.read(databaseProvider).initialize();
-    await container.read(introSeenProvider.future);
+    // services
     await container.read(connectionStatusProvider.future);
     await container.read(tokenRepositoryProvider.future);
+    await container.read(databaseProvider).initialize();
+
+    // async data
+    await container.read(introSeenProvider.future);
     await container.read(profileProvider.future);
-  } catch (_) {}
+    await container.read(restApiEndpointProvider.future);
+  } catch (error, stackTrace) {
+    log(
+      'initialization failed:',
+      error: error,
+      stackTrace: stackTrace,
+      name: 'Riverpod',
+    );
+  }
 
   return container;
 }

@@ -10,6 +10,12 @@ part 'rest_api.g.dart';
 
 typedef Json = Map<String, dynamic>;
 
+@Riverpod(keepAlive: true)
+Future<String> restApiEndpoint(RestApiEndpointRef ref) {
+  final uri = Uri.parse('https://websix.gitlab.io/minha-leitura-app/API');
+  return Dio().getUri<String>(uri).then((response) => response.data!);
+}
+
 @riverpod
 RestApi restApi(RestApiRef ref) {
   final accessToken = ref.watch(tokenRepositoryProvider).valueOrNull;
