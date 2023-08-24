@@ -59,7 +59,7 @@ class BookNotesTile extends HookWidget {
             ),
             child: Column(
               children: [
-                ...note.responses.map(
+                ...note.replies.map(
                   (e) => BookNotesTile(
                     note: note,
                     response: true,

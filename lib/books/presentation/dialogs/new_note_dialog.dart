@@ -43,6 +43,7 @@ class NewNoteDialog extends HookWidget {
             decoration: const InputDecoration(hintText: 'título'),
             initialValue: note?.title,
             onChanged: (value) => bookNoteForm.dispatch(Title(value)),
+            textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 10),
           TextFormField(

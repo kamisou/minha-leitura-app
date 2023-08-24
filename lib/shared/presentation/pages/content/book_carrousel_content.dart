@@ -63,10 +63,13 @@ class BookCarrouselContent extends HookWidget {
             ),
           ),
         ),
-        ValueListenableBuilder(
-          valueListenable: page,
-          builder: (context, value, child) => BookSummary(
-            book: books[page.value],
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: ValueListenableBuilder(
+            valueListenable: page,
+            builder: (context, value, child) => BookSummary(
+              book: books[page.value],
+            ),
           ),
         ),
       ],

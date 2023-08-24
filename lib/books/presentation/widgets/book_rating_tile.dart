@@ -44,7 +44,7 @@ class BookRatingTile extends ConsumerWidget {
               ),
         ),
         AuthorTimestamp(
-          author: rating.author,
+          author: rating.author.name,
           timestamp: rating.createdAt,
         ),
       ],

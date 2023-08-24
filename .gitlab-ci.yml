@@ -1,9 +1,0 @@
-# The Docker image that will be used to build your app
-image: ruby:3.1
-pages:
-    when: manual
-    script:
-        - ':'
-    artifacts:
-        paths:
-            - public

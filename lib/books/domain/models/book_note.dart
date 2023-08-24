@@ -1,12 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:reading/profile/domain/models/user.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 
 part 'book_note.freezed.dart';
 part 'book_note.g.dart';
 
-@freezed
+@Freezed(fallbackUnion: 'default')
 @HiveType(typeId: 12)
 class BookNote with _$BookNote, HiveObjectMixin {
   @With<HiveObjectMixin>()
@@ -14,9 +13,9 @@ class BookNote with _$BookNote, HiveObjectMixin {
     @HiveField(0) required int id,
     @HiveField(1) required String title,
     @HiveField(2) required String description,
-    @HiveField(3) required User author,
+    @HiveField(3) required String author,
     @HiveField(4) required DateTime createdAt,
-    @HiveField(5) @Default([]) List<BookNote> responses,
+    @HiveField(5) @Default([]) List<BookNote> replies,
     @HiveField(6) required int parentId,
   }) = _BookNote;
 
@@ -25,9 +24,9 @@ class BookNote with _$BookNote, HiveObjectMixin {
     @HiveField(0) int? id,
     @HiveField(1) required String title,
     @HiveField(2) required String description,
-    @HiveField(3) required User author,
+    @HiveField(3) required String author,
     @HiveField(4) DateTime? createdAt,
-    @HiveField(5) @Default([]) List<BookNote> responses,
+    @HiveField(5) @Default([]) List<BookNote> replies,
     @HiveField(6) required int parentId,
   }) = OfflineBookNote;
 

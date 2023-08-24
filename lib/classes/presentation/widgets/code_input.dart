@@ -34,7 +34,7 @@ class _CodeInputState extends State<CodeInput> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: TextField(
-                autofocus: i == 0,
+                autofocus: true,
                 cursorWidth: 0,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -51,10 +51,12 @@ class _CodeInputState extends State<CodeInput> {
 
                   final focus = FocusManager.instance.primaryFocus;
 
-                  if (value.isEmpty) {
-                    focus?.previousFocus();
-                  } else {
-                    focus?.nextFocus();
+                  if (value.isNotEmpty) {
+                    if (i < digits.length - 1) {
+                      focus?.nextFocus();
+                    } else {
+                      focus?.unfocus();
+                    }
                   }
 
                   widget.onChanged?.call(digits.join());

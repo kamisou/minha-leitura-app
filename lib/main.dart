@@ -11,7 +11,6 @@ import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/routes.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
-import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:reading/theme.dart';
 
 void main() async {
@@ -45,7 +44,6 @@ Future<ProviderContainer> initRiverpod() async {
     // async data
     await container.read(introSeenProvider.future);
     await container.read(profileProvider.future);
-    await container.read(restApiEndpointProvider.future);
   } catch (error, stackTrace) {
     log(
       'initialization failed:',

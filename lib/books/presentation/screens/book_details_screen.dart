@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/books/data/repositories/book_note_repository.dart';
 import 'package:reading/books/data/repositories/book_reading_repository.dart';
 import 'package:reading/books/presentation/pages/book_details/book_details_page.dart';
+import 'package:reading/books/presentation/pages/book_details/book_notes_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -19,7 +21,7 @@ class BookDetailsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabController = useTabController(initialLength: 1);
+    final tabController = useTabController(initialLength: 2);
     final bookDetails = ref.watch(bookDetailsProvider(bookId));
 
     return Scaffold(
@@ -95,61 +97,66 @@ class BookDetailsScreen extends HookConsumerWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Text(
-                  '${bookDetails.percentageRead.toStringAsFixed(0)}%',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w800,
-                      ),
-                ),
-                const SizedBox(height: 8),
-                AnimatedPercentageMeter(
-                  percentage: bookDetails.percentageRead,
-                  duration: Duration.zero,
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  bookDetails.book.title,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).colorExtension?.gray[800],
-                        fontWeight: FontWeight.w700,
-                      ),
-                ),
-                Text(
-                  bookDetails.book.author ?? '',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorExtension?.gray[500],
-                        fontWeight: FontWeight.w700,
-                      ),
-                ),
-                // const SizedBox(height: 20),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 24),
-                //   child: Wrap(
-                //     spacing: 16,
-                //     children: [
-                //       FilledButton.icon(
-                //         onPressed: () {
-                //           // TODO: implement define goals
-                //           throw UnimplementedError();
-                //         },
-                //         icon: const Icon(UniconsLine.book_open),
-                //         label: const Text('Definir Meta'),
-                //       ),
-                //       OutlinedButton.icon(
-                //         onPressed: () {
-                //           // TODO: implement share book
-                //           throw UnimplementedError();
-                //         },
-                //         icon: const Icon(UniconsLine.share_alt),
-                //         label: const Text('Compartilhar'),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  Text(
+                    '${bookDetails.percentageRead.toStringAsFixed(0)}%',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w800,
+                        ),
+                  ),
+                  const SizedBox(height: 8),
+                  AnimatedPercentageMeter(
+                    percentage: bookDetails.percentageRead,
+                    duration: Duration.zero,
+                  ),
+                  const SizedBox(height: 18),
+                  Text(
+                    bookDetails.book.title,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Theme.of(context).colorExtension?.gray[800],
+                          fontWeight: FontWeight.w700,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    bookDetails.book.author ?? '',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorExtension?.gray[500],
+                          fontWeight: FontWeight.w700,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  // const SizedBox(height: 20),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 24),
+                  //   child: Wrap(
+                  //     spacing: 16,
+                  //     children: [
+                  //       FilledButton.icon(
+                  //         onPressed: () {
+                  //           // TODO: implement define goals
+                  //           throw UnimplementedError();
+                  //         },
+                  //         icon: const Icon(UniconsLine.book_open),
+                  //         label: const Text('Definir Meta'),
+                  //       ),
+                  //       OutlinedButton.icon(
+                  //         onPressed: () {
+                  //           // TODO: implement share book
+                  //           throw UnimplementedError();
+                  //         },
+                  //         icon: const Icon(UniconsLine.share_alt),
+                  //         label: const Text('Compartilhar'),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
           ),
           SliverPadding(
@@ -166,7 +173,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                 splashFactory: NoSplash.splashFactory,
                 tabs: const [
                   Tab(text: 'Detalhes'),
-                  // Tab(text: 'Notas'),
+                  Tab(text: 'Anotações'),
                   // Tab(text: 'Histórico'),
                   // Tab(text: 'Avaliações'),
                 ],
@@ -181,13 +188,17 @@ class BookDetailsScreen extends HookConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: BookDetailsPage(book: bookDetails),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 24),
-            //   child: ref.watch(bookNotesProvider(book.id)).maybeWhen(
-            //         data: (data) => BookNotesPage(bookId: book.id, notes: data),
-            //         orElse: () => const SizedBox(),
-            //       ),
-            // ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: ref.watch(bookNotesProvider(bookDetails.id)).maybeWhen(
+                    data: (data) => BookNotesPage(
+                      bookId: bookDetails.id,
+                      notes: data,
+                    ),
+                    error: (error, stackTrace) => Text('$error:\n$stackTrace'),
+                    orElse: () => const SizedBox(),
+                  ),
+            ),
             // Padding(
             //   padding: const EdgeInsets.symmetric(horizontal: 24),
             //   child: ref.watch(bookReadingsProvider(book.id)).maybeWhen(

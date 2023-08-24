@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:reading/shared/domain/has_name.dart';
 import 'package:reading/shared/presentation/hooks/use_dd_mm_yy_h_m.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -11,7 +10,7 @@ class AuthorTimestamp extends HookWidget {
     this.timestamp,
   });
 
-  final HasName author;
+  final String author;
 
   final DateTime? timestamp;
 
@@ -26,7 +25,7 @@ class AuthorTimestamp extends HookWidget {
         children: [
           Flexible(
             child: Text(
-              author.name,
+              author,
               overflow: TextOverflow.ellipsis,
             ),
           ),

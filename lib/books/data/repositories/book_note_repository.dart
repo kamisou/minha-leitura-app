@@ -31,10 +31,13 @@ class OnlineBookNoteRepository extends BookNoteRepository
 
   @override
   Future<void> addNote(int bookId, NewNoteDTO data) async {
-    final note = await ref
-        .read(restApiProvider)
-        .post('books/$bookId/notes', body: data.toJson())
-        .then((response) => BookNote.fromJson(response as Json));
+    final note = await ref.read(restApiProvider).post(
+      'app/note',
+      body: {
+        ...data.toJson(),
+        'reading_id': bookId,
+      },
+    ).then((response) => BookNote.fromJson(response as Json));
 
     await save<BookNote>(note, note.id);
 
@@ -45,8 +48,13 @@ class OnlineBookNoteRepository extends BookNoteRepository
   Future<List<BookNote>> getBookNotes(int bookId) async {
     final notes = await ref
         .read(restApiProvider)
-        .get('books/$bookId/notes')
-        .then((response) => (response as List<Json>).map(BookNote.fromJson))
+        .get('app/note/reading/$bookId')
+        .then((response) => (response as Json)['notes'])
+        .then(
+          (list) => (list as List)
+              .cast<Json>()
+              .map((note) => BookNote.fromJson({...note, 'parent_id': bookId})),
+        )
         .then((notes) => notes.toList());
 
     saveAll<BookNote>(notes, (note) => note.id!).ignore();
@@ -104,7 +112,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
     final note = OfflineBookNote(
       title: data.title.value,
       description: data.description.value,
-      author: ref.read(profileProvider).requireValue!.toUser(),
+      author: ref.read(profileProvider).requireValue!.name,
       parentId: bookId,
     );
 
