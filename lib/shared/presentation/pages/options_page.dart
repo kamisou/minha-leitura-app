@@ -28,14 +28,6 @@ class OptionsPage extends ConsumerWidget {
                   //   onTap: () => context.go('/profile'),
                   // ),
                   // const Divider(),
-                  // ProfileMenuOption(
-                  //   icon: UniconsLine.medal,
-                  //   label: 'Conquistas',
-                  //   onTap: () {
-                  //     // TODO: implement go to achievements
-                  //     throw UnimplementedError();
-                  //   },
-                  // ),
                   // const Divider(),
                   ProfileMenuOption(
                     icon: UniconsLine.bell_school,
@@ -43,6 +35,11 @@ class OptionsPage extends ConsumerWidget {
                     onTap: () => context.go('/classes'),
                   ),
                   const Divider(),
+                  ProfileMenuOption(
+                    icon: UniconsLine.medal,
+                    label: 'Conquistas',
+                    onTap: () => context.go('/achievements'),
+                  ),
                   // ProfileMenuOption(
                   //   icon: UniconsLine.setting,
                   //   label: 'Ajustes',

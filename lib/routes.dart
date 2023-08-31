@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:reading/achievements/presentation/screens/achivements_screen.dart';
 import 'package:reading/authentication/presentation/screens/login_screen.dart';
 import 'package:reading/authentication/presentation/screens/signup_screen.dart';
 import 'package:reading/books/presentation/screens/book_details_screen.dart';
@@ -48,6 +49,10 @@ Raw<GoRouter> router(RouterRef ref) {
                 builder: (context, state) => const JoinClassScreen(),
               ),
             ],
+          ),
+          GoRoute(
+            path: 'achievements',
+            builder: (context, state) => const AchivementsScreen(),
           ),
           GoRoute(
             path: 'profile',
