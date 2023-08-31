@@ -65,7 +65,7 @@ class OnlineLoginRepository extends LoginRepository {
   Future<void> recover(Email email) {
     return ref
         .read(restApiProvider)
-        .post('auth/reset-password', body: {'email': email.value});
+        .post('auth/forgot-password', body: {'email': email.value});
   }
 
   @override

@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/presentation/controllers/email_recovery_controller.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
+import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:reading/theme.dart';
 
@@ -14,6 +16,15 @@ class PasswordRecoveryDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useRef(GlobalKey<FormState>());
     final email = useState(const Email());
+
+    useSnackbarErrorListener(
+      ref,
+      provider: emailRecoveryControllerProvider,
+      messageBuilder: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        _ => null,
+      },
+    );
 
     return Theme(
       data: ref.read(themeManagerProvider),
@@ -94,7 +105,7 @@ class PasswordRecoveryDialog extends HookConsumerWidget {
         .read(emailRecoveryControllerProvider.notifier) //
         .recover(email)
         .then(
-          (value) => ref.read(emailRecoveryControllerProvider).asError != null
+          (value) => ref.read(emailRecoveryControllerProvider).asError == null
               ? context.pop()
               : null,
         );

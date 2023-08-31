@@ -14,14 +14,16 @@ void useSnackbarErrorListener(
       final message = messageBuilder(next.error!);
 
       if (message == null) {
-        if (next.error is Error) {
-          throw next.error! as Error;
-        } else if (next.error is Exception) {
-          throw next.error! as Exception;
-        }
+        // ignore: only_throw_errors
+        throw next.error!;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(message)),
+          SnackBar(
+            content: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(message),
+            ),
+          ),
         );
       }
     }

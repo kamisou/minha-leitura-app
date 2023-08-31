@@ -9,7 +9,6 @@ import 'package:reading/books/presentation/pages/book_details/book_notes_page.da
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
-import 'package:unicons/unicons.dart';
 
 class BookDetailsScreen extends HookConsumerWidget {
   const BookDetailsScreen({
@@ -44,7 +43,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                         errorBuilder: (context, error, stackTrace) => Container(
                           alignment: Alignment.center,
                           color: Theme.of(context).disabledColor,
-                          child: const Icon(UniconsThinline.image_v),
+                          height: MediaQuery.of(context).size.height * 0.2,
                         ),
                       ),
                       Container(
@@ -83,7 +82,18 @@ class BookDetailsScreen extends HookConsumerWidget {
                         ),
                         Expanded(
                           flex: 3,
-                          child: BookCover(url: bookDetails.book.cover),
+                          child: DecoratedBox(
+                            decoration: const BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 12,
+                                  color: Color(0x18000000),
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: BookCover(url: bookDetails.book.cover),
+                          ),
                         ),
                         const Expanded(
                           flex: 2,
