@@ -126,6 +126,9 @@ class ThemeManager extends _$ThemeManager {
           fontWeight: FontWeight.w700,
         ),
       ),
+      textSelectionTheme: const TextSelectionThemeData(
+        cursorColor: primaryColor,
+      ),
       textTheme: const TextTheme(
         // 14
         bodyMedium: TextStyle(

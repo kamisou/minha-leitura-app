@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/dtos/login_dto.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
+import 'package:reading/authentication/presentation/dialogs/password_recovery_dialog.dart';
 import 'package:reading/authentication/presentation/hooks/use_login_form_reducer.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
@@ -84,10 +85,10 @@ class LoginContent extends HookConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                onPressed: () {
-                  // TODO: implement forgotPassword
-                  throw UnimplementedError();
-                },
+                onPressed: () => showDialog<void>(
+                  context: context,
+                  builder: (context) => const PasswordRecoveryDialog(),
+                ),
                 child: const Text('Esqueci minha senha'),
               ),
               ButtonProgressIndicator(
