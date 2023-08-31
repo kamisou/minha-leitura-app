@@ -20,7 +20,7 @@ void useSnackbarErrorListener(
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(message),
             ),
           ),

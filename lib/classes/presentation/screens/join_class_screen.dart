@@ -84,9 +84,10 @@ class JoinClassScreen extends HookConsumerWidget {
   }
 
   void _join(BuildContext context, WidgetRef ref, String code) {
-    ref
-        .read(joinClassControllerProvider.notifier)
-        .joinClass(code)
-        .then((value) => context.go('/classes'));
+    ref.read(joinClassControllerProvider.notifier).joinClass(code).then(
+          (value) => ref.read(joinClassControllerProvider).asError == null
+              ? context.go('/classes')
+              : null,
+        );
   }
 }

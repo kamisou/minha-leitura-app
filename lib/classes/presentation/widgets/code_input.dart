@@ -37,7 +37,7 @@ class _CodeInputState extends State<CodeInput> {
                 autofocus: true,
                 cursorWidth: 0,
                 decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: UnderlineInputBorder(),
                   counter: SizedBox(),
                   contentPadding: EdgeInsets.zero,
                   filled: false,
@@ -62,6 +62,7 @@ class _CodeInputState extends State<CodeInput> {
                   widget.onChanged?.call(digits.join());
                 },
                 showCursor: false,
+                style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
             ),

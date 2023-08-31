@@ -140,11 +140,11 @@ class ViewNoteDialog extends HookConsumerWidget {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
