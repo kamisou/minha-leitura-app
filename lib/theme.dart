@@ -65,6 +65,7 @@ class ThemeManager extends _$ThemeManager {
               900: Color(0x19FFFFFF),
             },
           ),
+          achieved: Color(0xFFFFDB78),
           information: Color(0xFF2895FA),
         ),
       ],

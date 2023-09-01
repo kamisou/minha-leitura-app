@@ -3,20 +3,25 @@ import 'package:flutter/material.dart';
 class ColorExtension extends ThemeExtension<ColorExtension> {
   const ColorExtension({
     required this.gray,
+    required this.achieved,
     required this.information,
   });
 
   final MaterialColor gray;
+
+  final Color achieved;
 
   final Color information;
 
   @override
   ThemeExtension<ColorExtension> copyWith({
     MaterialColor? gray,
+    Color? achieved,
     Color? information,
   }) =>
       ColorExtension(
         gray: gray ?? this.gray,
+        achieved: achieved ?? this.achieved,
         information: information ?? this.information,
       );
 
@@ -40,6 +45,7 @@ class ColorExtension extends ThemeExtension<ColorExtension> {
           ],
         ),
       ),
+      achieved: Color.lerp(achieved, other.achieved, t) ?? achieved,
       information: Color.lerp(information, other.information, t) ?? information,
     );
   }

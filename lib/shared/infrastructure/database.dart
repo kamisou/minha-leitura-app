@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:reading/achievements/domain/models/achievement.dart';
 import 'package:reading/authentication/domain/domain/token.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
@@ -46,7 +47,9 @@ class HiveDatabase extends Database {
       ..registerAdapter(ClassAdapter())
       ..registerAdapter(UserProfileAdapter())
       ..registerAdapter(UserAdapter())
-      ..registerAdapter(BookStatusAdapter());
+      ..registerAdapter(BookStatusAdapter())
+      ..registerAdapter(AchievementCategoryAdapter())
+      ..registerAdapter(AchievementAdapter());
   }
 
   @override
