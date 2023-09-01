@@ -36,43 +36,25 @@ class _StarRatingWidgetState extends State<StarRatingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final full = _value.floor();
-    final empty = widget.stars - full - 1;
-
     return Row(
       children: [
-        for (int i = 0; i < full; i += 1)
+        for (var i = 0; i < widget.stars; i += 1)
           GestureDetector(
-            onTap: () => _onChanged(() => _value = i.toDouble()),
+            onTapDown: (details) => setState(() {
+              print(details.localPosition);
+              setState(() => _value = i + 1);
+              widget.onChanged?.call(_value);
+            }),
             child: Icon(
-              UniconsSolid.star,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        if (_value != full)
-          GestureDetector(
-            onTap: () => _onChanged(() => _value.ceil()),
-            child: Icon(
-              _value - full == 0
-                  ? UniconsLine.star
-                  : UniconsSolid.star_half_alt,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-        for (int i = 0; i < empty; i += 1)
-          GestureDetector(
-            onTap: () => _onChanged(() => _value = (i + full).toDouble()),
-            child: Icon(
-              UniconsLine.star,
+              i <= _value.ceil()
+                  ? i == _value
+                      ? UniconsSolid.star
+                      : UniconsSolid.star_half_alt
+                  : UniconsLine.star,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
       ],
     );
-  }
-
-  void _onChanged(void Function() set) {
-    setState(set);
-    widget.onChanged?.call(_value);
   }
 }
