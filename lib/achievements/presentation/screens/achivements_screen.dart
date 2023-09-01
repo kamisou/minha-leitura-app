@@ -43,7 +43,7 @@ class AchivementsScreen extends ConsumerWidget {
                   data: (achievements) => SliverList.builder(
                     itemCount: achievements.length,
                     itemBuilder: (context, index) => AchievementSection(
-                      achievement: achievements[index],
+                      category: achievements[index],
                     ),
                   ),
                   orElse: () => const SliverToBoxAdapter(

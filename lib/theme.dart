@@ -40,6 +40,7 @@ class ThemeManager extends _$ThemeManager {
         outlineVariant: Color(0xFFDDE0E4),
         primary: primaryColor,
         surface: Color(0x189A9A9A),
+        surfaceTint: Color(0x01FFFFFF),
       ),
       disabledColor: const Color(0xFFE6E6E6),
       dividerTheme: const DividerThemeData(space: 42),

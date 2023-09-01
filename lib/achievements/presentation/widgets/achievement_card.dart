@@ -47,12 +47,15 @@ class AchievementCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (achievement.max > 1)
-                Text(
-                  '${achievement.max}',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: darkerColor,
-                        fontWeight: FontWeight.w700,
-                      ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: Text(
+                    '${achievement.max}',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: darkerColor,
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
                 ),
               Icon(
                 UniconsLine.book_open,

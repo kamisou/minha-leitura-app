@@ -6,10 +6,10 @@ import 'package:reading/shared/util/theme_data_extension.dart';
 class AchievementSection extends StatelessWidget {
   const AchievementSection({
     super.key,
-    required this.achievement,
+    required this.category,
   });
 
-  final AchievementCategory achievement;
+  final AchievementCategory category;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class AchievementSection extends StatelessWidget {
         Row(
           children: [
             Text(
-              achievement.name,
+              category.name,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Theme.of(context).colorExtension?.gray[800],
                     fontWeight: FontWeight.w700,
@@ -42,9 +42,9 @@ class AchievementSection extends StatelessWidget {
             ),
             shrinkWrap: true,
             children: [
-              for (var i = 0; i < achievement.achievements.length; i += 1)
+              for (var i = 0; i < category.achievements.length; i += 1)
                 AchievementCard(
-                  achievement: achievement.achievements[i],
+                  achievement: category.achievements[i],
                 ),
             ],
           ),
