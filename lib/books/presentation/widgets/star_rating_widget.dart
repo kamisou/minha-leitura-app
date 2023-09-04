@@ -37,21 +37,22 @@ class _StarRatingWidgetState extends State<StarRatingWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         for (var i = 0; i < widget.stars; i += 1)
           GestureDetector(
-            onTapDown: (details) => setState(() {
-              print(details.localPosition);
+            onTap: () {
               setState(() => _value = i + 1);
               widget.onChanged?.call(_value);
-            }),
+            },
             child: Icon(
-              i <= _value.ceil()
-                  ? i == _value
+              i < _value
+                  ? i < _value - 0.5
                       ? UniconsSolid.star
                       : UniconsSolid.star_half_alt
                   : UniconsLine.star,
               color: Theme.of(context).colorScheme.primary,
+              size: 28,
             ),
           ),
       ],
