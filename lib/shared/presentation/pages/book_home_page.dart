@@ -26,10 +26,11 @@ class _BookHomePageState extends ConsumerState<BookHomePage>
           title: const UserAppBar(),
         ),
         Expanded(
+          // TODO: lazy loading
           child: ref.watch(myBooksProvider).maybeWhen(
-                data: (books) => books.isEmpty
+                data: (books) => books.data.isEmpty
                     ? const GreetingContent()
-                    : BookCarrouselContent(books: books),
+                    : BookCarrouselContent(books: books.data),
                 orElse: () => const SizedBox(),
               ),
         ),

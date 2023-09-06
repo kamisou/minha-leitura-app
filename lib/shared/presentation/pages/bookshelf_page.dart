@@ -18,6 +18,7 @@ class BookshelfPage extends ConsumerWidget {
           title: const UserAppBar(),
         ),
         Expanded(
+          // TODO: lazy loading
           child: ref.watch(myBooksProvider).maybeWhen(
                 data: (books) => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -46,7 +47,7 @@ class BookshelfPage extends ConsumerWidget {
                               ),
                           children: [
                             TextSpan(
-                              text: '${books.length} livros',
+                              text: '${books.data.length} livros',
                               style:
                                   const TextStyle(fontWeight: FontWeight.w700),
                             ),
@@ -79,7 +80,7 @@ class BookshelfPage extends ConsumerWidget {
                       const SizedBox(height: 20),
                       Expanded(
                         child: Bookshelf(
-                          books: books,
+                          books: books.data,
                           booksPerRow: 3,
                         ),
                       ),

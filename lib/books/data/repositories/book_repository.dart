@@ -1,6 +1,7 @@
 import 'package:reading/books/data/dtos/new_book_dto.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
+import 'package:reading/shared/data/paginated_resource.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
@@ -18,8 +19,29 @@ BookRepository bookRepository(BookRepositoryRef ref) {
 }
 
 @riverpod
-Future<List<BookDetails>> myBooks(MyBooksRef ref) {
-  return ref.read(bookRepositoryProvider).getMyBooks();
+class MyBooks extends _$MyBooks {
+  @override
+  Future<PaginatedResource<BookDetails>> build() async {
+    return _getMyBooks();
+  }
+
+  Future<PaginatedResource<BookDetails>> _getMyBooks() {
+    return ref
+        .read(bookRepositoryProvider)
+        .getMyBooks(state.valueOrNull?.currentPage ?? 1);
+  }
+
+  Future<void> next() async {
+    state = const AsyncLoading();
+
+    final books = await _getMyBooks();
+
+    state = AsyncData(
+      books.copyWith(
+        data: [...state.requireValue.data, ...books.data],
+      ),
+    );
+  }
 }
 
 class OnlineBookRepository extends BookRepository {
@@ -73,15 +95,18 @@ class OnlineBookRepository extends BookRepository {
   }
 
   @override
-  Future<List<BookDetails>> getMyBooks() async {
+  Future<PaginatedResource<BookDetails>> getMyBooks(int page) async {
     final books = await ref
-        .read(restApiProvider)
-        .get('app/reading')
-        .then((response) => (response as Json)['data'] as List)
-        .then((list) => list.cast<Json>().map(BookDetails.fromJson))
-        .then((books) => books.toList());
+        .read(restApiProvider) //
+        .get('app/reading?page=$page')
+        .then(
+          (response) => PaginatedResource.fromJson(
+            response as Json,
+            BookDetails.fromJson,
+          ),
+        );
 
-    saveAll<BookDetails>(books, (book) => book.id).ignore();
+    saveAll<BookDetails>(books.data, (book) => book.id).ignore();
 
     return books;
   }
@@ -101,8 +126,14 @@ class OfflineBookRepository extends BookRepository {
   }
 
   @override
-  Future<List<BookDetails>> getMyBooks() {
-    return ref.read(databaseProvider).getAll<BookDetails>();
+  Future<PaginatedResource<BookDetails>> getMyBooks(int page) async {
+    final books = await ref.read(databaseProvider).getAll<BookDetails>();
+
+    return PaginatedResource(
+      currentPage: page,
+      data: books,
+      perPage: books.length,
+    );
   }
 }
 
@@ -111,5 +142,5 @@ abstract class BookRepository extends Repository with OfflinePersister {
 
   Future<Book> addBook(NewBookDTO data);
   Future<void> addBookAndReading(NewBookDTO data);
-  Future<List<BookDetails>> getMyBooks();
+  Future<PaginatedResource<BookDetails>> getMyBooks(int page);
 }

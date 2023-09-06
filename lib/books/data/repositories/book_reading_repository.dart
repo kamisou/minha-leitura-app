@@ -29,6 +29,7 @@ BookDetails bookDetails(BookDetailsRef ref, int id) {
   return ref
       .watch(myBooksProvider)
       .requireValue
+      .data
       .firstWhere((book) => book.id == id);
 }
 
