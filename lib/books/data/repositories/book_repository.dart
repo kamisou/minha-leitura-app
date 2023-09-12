@@ -28,17 +28,19 @@ class MyBooks extends _$MyBooks {
   Future<PaginatedResource<BookDetails>> _getMyBooks() {
     return ref
         .read(bookRepositoryProvider)
-        .getMyBooks(state.valueOrNull?.currentPage ?? 1);
+        .getMyBooks((state.valueOrNull?.currentPage ?? 0) + 1);
   }
 
   Future<void> next() async {
-    state = const AsyncLoading();
+    state = AsyncData(state.requireValue.copyWith(loading: true));
 
     final books = await _getMyBooks();
 
     state = AsyncData(
       books.copyWith(
         data: [...state.requireValue.data, ...books.data],
+        finished: books.data.length < books.perPage,
+        loading: false,
       ),
     );
   }
@@ -132,7 +134,7 @@ class OfflineBookRepository extends BookRepository {
     return PaginatedResource(
       currentPage: page,
       data: books,
-      perPage: books.length,
+      perPage: books.length - 1,
     );
   }
 }
