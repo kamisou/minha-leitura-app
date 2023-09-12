@@ -87,7 +87,7 @@ abstract class BookReadingRepository extends Repository with OfflinePersister {
 
   @mustBeOverridden
   Future<void> updateReading(int bookId, NewReadingDTO data) async {
-    ref.invalidate(myBooksProvider);
+    return ref.read(myBooksProvider.notifier).refresh();
   }
 
   Future<List<BookReading>> getBookReadings(int bookId);

@@ -80,7 +80,7 @@ class BookCarrouselContent extends HookConsumerWidget {
             valueListenable: page,
             builder: (context, value, child) {
               if (value == books.data.length) {
-                return const SizedBox();
+                return const SizedBox(height: 110);
               }
 
               return BookSummary(

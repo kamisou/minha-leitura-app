@@ -31,6 +31,11 @@ class MyBooks extends _$MyBooks {
         .getMyBooks((state.valueOrNull?.currentPage ?? 0) + 1);
   }
 
+  Future<void> refresh() async {
+    state = const AsyncLoading();
+    state = AsyncData(await ref.read(bookRepositoryProvider).getMyBooks(1));
+  }
+
   Future<void> next() async {
     state = AsyncData(state.requireValue.copyWith(loading: true));
 
@@ -66,7 +71,7 @@ class OnlineBookRepository extends BookRepository {
 
     await save<Book>(book, book.id);
 
-    ref.invalidate(myBooksProvider);
+    ref.read(myBooksProvider.notifier).refresh().ignore();
 
     return book;
   }
@@ -93,7 +98,7 @@ class OnlineBookRepository extends BookRepository {
 
     await save<BookDetails>(reading, reading.id);
 
-    ref.invalidate(myBooksProvider);
+    ref.read(myBooksProvider.notifier).refresh().ignore();
   }
 
   @override
