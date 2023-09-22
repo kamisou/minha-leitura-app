@@ -5,7 +5,6 @@ import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/shared/data/repository.dart';
-import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
@@ -63,15 +62,15 @@ class OnlineBookNoteRepository extends BookNoteRepository
   }
 
   @override
-  Future<void> updateNote(int bookId, BookNote note, NewNoteDTO data) async {
+  Future<void> updateNote(BookNote note, NewNoteDTO data) async {
     final newNote = await ref
         .read(restApiProvider)
-        .put('books/$bookId/notes/${note.id}', body: data.toJson())
+        .put('app/note/${note.id}', body: data.toJson())
         .then((response) => BookNote.fromJson(response as Json));
 
     await save<BookNote>(newNote, note.id);
 
-    return super.updateNote(bookId, note, data);
+    return super.updateNote(note, data);
   }
 
   @override
@@ -89,18 +88,18 @@ class OnlineBookNoteRepository extends BookNoteRepository
       if (note.id == null) {
         await addNote(note.parentId, data);
       } else {
-        await updateNote(note.parentId, note, data);
+        await updateNote(note, data);
       }
     }
   }
 
   @override
-  Future<void> removeNote(int bookId, BookNote note) async {
-    await ref.read(restApiProvider).delete('books/$bookId/notes/${note.id}');
+  Future<void> removeNote(BookNote note) async {
+    await ref.read(restApiProvider).delete('app/note/${note.id}');
 
     ref.read(databaseProvider).removeById<BookNote>(note.id).ignore();
 
-    return super.removeNote(bookId, note);
+    return super.removeNote(note);
   }
 }
 
@@ -133,7 +132,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
   }
 
   @override
-  Future<void> updateNote(int bookId, BookNote note, NewNoteDTO data) async {
+  Future<void> updateNote(BookNote note, NewNoteDTO data) async {
     final db = ref.read(databaseProvider);
 
     var newNote = await (note.id == null
@@ -147,12 +146,12 @@ class OfflineBookNoteRepository extends BookNoteRepository {
 
     await save<OfflineBookNote>(note as OfflineBookNote, note.id);
 
-    return super.updateNote(bookId, note, data);
+    return super.updateNote(note, data);
   }
 
   @override
-  Future<void> removeNote(int bookId, BookNote note) async {
-    throw OnlineOnlyOperationException();
+  Future<void> removeNote(BookNote note) {
+    return ref.read(databaseProvider).removeById<OfflineBookNote>(note.id);
   }
 }
 
@@ -169,12 +168,12 @@ abstract class BookNoteRepository extends Repository with OfflinePersister {
 
   @mustCallSuper
   @mustBeOverridden
-  Future<void> updateNote(int bookId, BookNote note, NewNoteDTO data) async {
+  Future<void> updateNote(BookNote note, NewNoteDTO data) async {
     ref.invalidate(bookNotesProvider);
   }
 
   @mustBeOverridden
-  Future<void> removeNote(int bookId, BookNote note) async {
+  Future<void> removeNote(BookNote note) async {
     ref.invalidate(bookNotesProvider);
   }
 }

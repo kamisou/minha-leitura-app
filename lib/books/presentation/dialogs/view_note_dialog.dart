@@ -91,9 +91,11 @@ class ViewNoteDialog extends HookConsumerWidget {
                     children: [
                       Expanded(
                         child: FilledButton.icon(
-                          onPressed: () => ref
-                              .read(bookNoteRepositoryProvider)
-                              .removeNote(note.parentId, note),
+                          onPressed: note.replies.isEmpty
+                              ? () => ref
+                                  .read(bookNoteRepositoryProvider)
+                                  .removeNote(note)
+                              : null,
                           icon: const Icon(UniconsLine.trash),
                           label: const Text('Remover'),
                           style: ButtonStyle(
@@ -123,7 +125,7 @@ class ViewNoteDialog extends HookConsumerWidget {
                               (value) => value != null
                                   ? ref
                                       .read(newNoteControllerProvider.notifier)
-                                      .updateNote(note.parentId, note, value)
+                                      .updateNote(note, value)
                                   : null,
                             );
                           },

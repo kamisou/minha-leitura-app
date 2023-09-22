@@ -19,17 +19,17 @@ class NewNoteController extends _$NewNoteController {
     );
   }
 
-  Future<void> removeNote(int bookId, BookNote note) async {
+  Future<void> removeNote(BookNote note) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(bookNoteRepositoryProvider).removeNote(bookId, note),
+      () => ref.read(bookNoteRepositoryProvider).removeNote(note),
     );
   }
 
-  Future<void> updateNote(int bookId, BookNote note, NewNoteDTO data) async {
+  Future<void> updateNote(BookNote note, NewNoteDTO data) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(bookNoteRepositoryProvider).updateNote(bookId, note, data),
+      () => ref.read(bookNoteRepositoryProvider).updateNote(note, data),
     );
   }
 }

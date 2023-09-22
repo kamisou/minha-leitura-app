@@ -26,7 +26,6 @@ class _BookHomePageState extends ConsumerState<BookHomePage>
           title: const UserAppBar(),
         ),
         Expanded(
-          // TODO: lazy loading
           child: ref.watch(myBooksProvider).maybeWhen(
                 skipLoadingOnReload: true,
                 data: (books) => books.data.isEmpty
