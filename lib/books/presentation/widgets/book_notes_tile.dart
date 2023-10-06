@@ -51,7 +51,7 @@ class BookNotesTile extends HookWidget {
           author: note.author,
           timestamp: note.createdAt,
         ),
-        if (!response)
+        if (!response && note.replies.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(
               top: 16,

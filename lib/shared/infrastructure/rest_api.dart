@@ -15,7 +15,7 @@ RestApi restApi(RestApiRef ref) {
   final accessToken = ref.watch(tokenRepositoryProvider).valueOrNull;
   log('$accessToken');
   return DioRestApi(
-    server: 'http://marlin.websix.com.br:8021/api/',
+    server: 'http://marlin.websix.com.br:5000/api/',
     headers: accessToken != null //
         ? {'Authorization': 'Bearer $accessToken'}
         : null,

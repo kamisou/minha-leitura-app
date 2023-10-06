@@ -112,8 +112,9 @@ class ViewNoteDialog extends HookConsumerWidget {
                       Expanded(
                         child: FilledButton.icon(
                           onPressed: () {
+                            final newNoteController =
+                                ref.read(newNoteControllerProvider.notifier);
                             context.pop();
-
                             showModalBottomSheet<NewNoteDTO?>(
                               backgroundColor:
                                   Theme.of(context).colorScheme.background,
@@ -123,9 +124,7 @@ class ViewNoteDialog extends HookConsumerWidget {
                               builder: (context) => NewNoteDialog(note: note),
                             ).then(
                               (value) => value != null
-                                  ? ref
-                                      .read(newNoteControllerProvider.notifier)
-                                      .updateNote(note, value)
+                                  ? newNoteController.updateNote(note, value)
                                   : null,
                             );
                           },
