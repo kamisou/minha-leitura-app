@@ -55,7 +55,7 @@ class BookReadingTile extends HookWidget {
               vertical: 4,
             ),
             child: Text(
-              '${reading.page} pág. lida(s)',
+              '${reading.page} pág. lidas',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorExtension?.gray[600],
                   ),

@@ -29,8 +29,7 @@ class BookDetails with _$BookDetails {
     @HiveField(2) DateTime? finishedAt,
     @HiveField(3) required BookStatus status,
     @HiveField(4) required double percentageRead,
-    // TODO: actualPage não deve ser nulável
-    @HiveField(5) int? actualPage,
+    @HiveField(5) required int actualPage,
     @HiveField(6) required Book book,
   }) = _BookDetails;
 

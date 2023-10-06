@@ -36,14 +36,14 @@ class ViewNoteDialog extends HookConsumerWidget {
                 icon: FeatherIcons.chevronLeft,
               ),
               const Spacer(),
-              FilledIconButton(
-                onPressed: () {
-                  // TODO: implement share note
-                  throw UnimplementedError();
-                },
-                icon: FeatherIcons.share2,
-                size: 18,
-              ),
+              // FilledIconButton(
+              //   onPressed: () {
+              //     // TODO: implement share note
+              //     throw UnimplementedError();
+              //   },
+              //   icon: FeatherIcons.share2,
+              //   size: 18,
+              // ),
             ],
           ),
           const SizedBox(height: 28),

@@ -20,10 +20,8 @@ enum BookReadingScore {
 class BookReading with _$BookReading {
   const factory BookReading({
     @HiveField(0) required int id,
-    // TODO: "page" deve ser "pages". no momento representa a página em que parou
     @HiveField(1) required int page,
     @HiveField(2) required DateTime createdAt,
-    // TODO: "reading" representa aqui uma leitura ativa do livro. tratado como "book details" em outras partes do app
     @JsonKey(name: 'reading_id') @HiveField(3) required int bookId,
   }) = _BookReading;
 

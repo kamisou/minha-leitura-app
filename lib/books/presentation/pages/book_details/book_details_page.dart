@@ -59,7 +59,7 @@ class BookDetailsPage extends HookConsumerWidget {
             BookDetailsTile(
               icon: UniconsLine.file,
               label: 'Página Atual',
-              value: '${book.actualPage ?? '-'}',
+              value: '${book.actualPage}',
             ),
             // const Divider(),
             // BookDetailsTile(
