@@ -69,15 +69,19 @@ class HiveDatabase extends Database {
   }
 
   @override
-  Future<List<T>> getAll<T>() async {
+  Future<List<T>> getAll<T>({int? limit, int? offset}) async {
     log('get all $T', name: 'Database');
 
     final box = await _getBox<T>(lazy: false) as Box<T>;
-    final values = box.values.toList();
+    var values = box.values.skip(offset ?? 0);
+
+    if (limit != null) {
+      values = values.take(limit);
+    }
 
     box.close().ignore();
 
-    return values;
+    return values.toList();
   }
 
   @override
@@ -204,7 +208,7 @@ abstract class Database {
 
   Future<void> initialize();
   Future<T> getById<T>(dynamic id);
-  Future<List<T>> getAll<T>();
+  Future<List<T>> getAll<T>({int? offset, int? limit});
   Future<List<T>> getWhere<T>(bool Function(T value) predicate);
   Future<int> insert<T>(T value);
   Future<void> removeById<T>(dynamic id);

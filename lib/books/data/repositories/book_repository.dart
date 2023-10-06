@@ -122,6 +122,8 @@ class OnlineBookRepository extends BookRepository {
 class OfflineBookRepository extends BookRepository {
   const OfflineBookRepository(super.db);
 
+  static const pageSize = 20;
+
   @override
   Future<Book> addBook(NewBookDTO data) {
     throw OnlineOnlyOperationException();
@@ -134,13 +136,15 @@ class OfflineBookRepository extends BookRepository {
 
   @override
   Future<PaginatedResource<BookDetails>> getMyBooks(int page) async {
-    final books = await ref.read(databaseProvider).getAll<BookDetails>();
+    final books = await ref.read(databaseProvider).getAll<BookDetails>(
+          limit: pageSize,
+          offset: (page - 1) * pageSize,
+        );
 
     return PaginatedResource(
       currentPage: page,
       data: books,
-      perPage: books.length,
-      finished: true,
+      perPage: pageSize,
     );
   }
 }
