@@ -3,7 +3,6 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
-import 'package:reading/books/data/repositories/book_note_repository.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
@@ -43,6 +42,7 @@ class ViewNoteDialog extends HookConsumerWidget {
                   throw UnimplementedError();
                 },
                 icon: FeatherIcons.share2,
+                size: 18,
               ),
             ],
           ),
@@ -92,9 +92,12 @@ class ViewNoteDialog extends HookConsumerWidget {
                       Expanded(
                         child: FilledButton.icon(
                           onPressed: note.replies.isEmpty
-                              ? () => ref
-                                  .read(bookNoteRepositoryProvider)
-                                  .removeNote(note)
+                              ? () {
+                                  ref
+                                      .read(newNoteControllerProvider.notifier)
+                                      .removeNote(note);
+                                  context.pop();
+                                }
                               : null,
                           icon: const Icon(UniconsLine.trash),
                           label: const Text('Remover'),

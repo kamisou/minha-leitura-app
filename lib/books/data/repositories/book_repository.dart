@@ -139,7 +139,8 @@ class OfflineBookRepository extends BookRepository {
     return PaginatedResource(
       currentPage: page,
       data: books,
-      perPage: books.length - 1,
+      perPage: books.length,
+      finished: true,
     );
   }
 }

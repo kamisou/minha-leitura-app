@@ -26,13 +26,24 @@ class _BookHomePageState extends ConsumerState<BookHomePage>
           title: const UserAppBar(),
         ),
         Expanded(
-          child: ref.watch(myBooksProvider).maybeWhen(
-                skipLoadingOnReload: true,
-                data: (books) => books.data.isEmpty
-                    ? const GreetingContent()
-                    : const BookCarrouselContent(),
-                orElse: () => const SizedBox(),
+          child: LayoutBuilder(
+            builder: (context, constraints) => RefreshIndicator(
+              onRefresh: ref.read(myBooksProvider.notifier).refresh,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: constraints.maxHeight,
+                  child: ref.watch(myBooksProvider).maybeWhen(
+                        skipLoadingOnReload: true,
+                        data: (books) => books.data.isEmpty
+                            ? const GreetingContent()
+                            : const BookCarrouselContent(),
+                        orElse: () => const SizedBox(),
+                      ),
+                ),
               ),
+            ),
+          ),
         ),
       ],
     );

@@ -5,11 +5,14 @@ class FilledIconButton extends StatelessWidget {
     super.key,
     required this.icon,
     this.onPressed,
+    this.size,
   });
 
   final IconData icon;
 
   final void Function()? onPressed;
+
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +26,7 @@ class FilledIconButton extends StatelessWidget {
       icon: Icon(
         icon,
         color: Theme.of(context).colorScheme.onPrimary,
+        size: size,
       ),
     );
   }

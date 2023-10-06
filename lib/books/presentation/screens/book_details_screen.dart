@@ -205,7 +205,9 @@ class BookDetailsScreen extends HookConsumerWidget {
                       bookId: bookDetails.id,
                       notes: data,
                     ),
-                    error: (error, stackTrace) => Text('$error:\n$stackTrace'),
+                    loading: () => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                     orElse: () => const SizedBox(),
                   ),
             ),

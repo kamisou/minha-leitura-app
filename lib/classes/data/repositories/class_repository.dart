@@ -32,10 +32,7 @@ class OnlineClassRepository extends ClassRepository {
         .then((response) => (response as List).cast<Json>().map(Class.fromJson))
         .then((classes) => classes.toList());
 
-    ref
-        .read(databaseProvider)
-        .updateAll<Class>(classes, ($class) => $class.id)
-        .ignore();
+    saveAll(classes, ($class) => $class.id).ignore();
 
     return classes;
   }

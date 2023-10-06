@@ -51,14 +51,16 @@ class Bookshelf extends HookWidget {
   }
 
   Widget _bookBuilder(BuildContext context, int row, int index) {
+    final width = MediaQuery.of(context).size.width * 0.22;
+
     if (row * booksPerRow + index >= books.length) {
-      return const SizedBox();
+      return SizedBox(width: width);
     }
 
     final book = books[row * booksPerRow + index];
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.22,
+      width: width,
       child: GestureDetector(
         onTap: () => context.go('/book', extra: book.id),
         child: Stack(

@@ -2,7 +2,5 @@ retornar nome do usuário no post de criaçao de nota
 incluir parent_id em cada nota
 data de término está retornando erro na hora de criar leitura
 
-não considerei como seria feita a paginação de recursos no modo offline. optei pela solução de não paginar os recursos e retornar o valor de "perPage" de "PaginatedResource"
-como número de recursos + 1 para que a lógica de paginação dos widgets não tente um carregamento extra.
-
-ref.invalidate não funciona da maneira esperada para os recursos paginados AsyncNotifier. por isso, deve-se usar um método definido "refresh" que reseta o estado do notifier para que não tente buscar a próxima página.
+ref.invalidate não funciona da maneira esperada para os recursos paginados AsyncNotifier. por isso, deve-se usar um método definido "refresh"
+que reseta o estado do notifier para que não tente buscar a próxima página.

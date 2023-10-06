@@ -56,7 +56,8 @@ class BookshelfPage extends HookConsumerWidget {
                               TextSpan(
                                 text: '${books.data.length} livros',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w700),
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                               const TextSpan(text: ' cadastrados.'),
                             ],

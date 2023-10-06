@@ -7,6 +7,7 @@ import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
 import 'package:reading/books/presentation/dialogs/view_note_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
 
 class BookNotesPage extends HookConsumerWidget {
@@ -31,23 +32,34 @@ class BookNotesPage extends HookConsumerWidget {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        ListView.separated(
-          itemCount: notes.length,
-          itemBuilder: (context, index) => GestureDetector(
-            onTap: () => showModalBottomSheet<void>(
-              context: context,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              isScrollControlled: true,
-              shape: const Border(),
-              builder: (context) => ViewNoteDialog(note: notes[index]),
+        if (notes.isEmpty)
+          Align(
+            alignment: Alignment.topCenter,
+            child: Text(
+              'Nenhuma nota',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorExtension?.gray[500],
+                  ),
             ),
-            child: BookNotesTile(
-              note: notes[index],
+          )
+        else
+          ListView.separated(
+            itemCount: notes.length,
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () => showModalBottomSheet<void>(
+                context: context,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                isScrollControlled: true,
+                shape: const Border(),
+                builder: (context) => ViewNoteDialog(note: notes[index]),
+              ),
+              child: BookNotesTile(
+                note: notes[index],
+              ),
             ),
+            padding: EdgeInsets.zero,
+            separatorBuilder: (context, index) => const Divider(),
           ),
-          padding: EdgeInsets.zero,
-          separatorBuilder: (context, index) => const Divider(),
-        ),
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: FilledButton.icon(
