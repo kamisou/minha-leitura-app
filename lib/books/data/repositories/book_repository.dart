@@ -7,6 +7,7 @@ import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
+import 'package:reading/shared/util/file_extension.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'book_repository.g.dart';
@@ -62,8 +63,7 @@ class OnlineBookRepository extends BookRepository {
       'app/book',
       body: {
         'author': data.author.value,
-        // TODO: capa
-        'cover': null,
+        'cover': data.cover?.readAsBase64(),
         'pages': data.pages.value,
         'title': data.title.value,
       },

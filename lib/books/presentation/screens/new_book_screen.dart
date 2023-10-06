@@ -112,12 +112,18 @@ class NewBookScreen extends HookConsumerWidget {
                       vertical: 96,
                     ),
                     child: GestureDetector(
-                      onTap: () =>
-                          ref.read(imagePickerProvider).pickImage().then(
-                                (value) => value == null
-                                    ? null
-                                    : newBookForm.dispatch(value),
-                              ),
+                      onTap: () => ref
+                          .read(imagePickerProvider)
+                          .pickImage(
+                            maxWidth: 300,
+                            maxHeight: 428,
+                            quality: 90,
+                          )
+                          .then(
+                            (value) => value == null
+                                ? null
+                                : newBookForm.dispatch(value),
+                          ),
                       child: newBookForm.state.cover != null
                           ? BookCover.file(
                               file: newBookForm.state.cover,

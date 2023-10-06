@@ -12,10 +12,18 @@ ImagePicker imagePicker(ImagePickerRef ref) {
 
 class ImagePickerImpl with ImagePicker {
   @override
-  Future<File?> pickImage() async {
+  Future<File?> pickImage({
+    double? maxWidth,
+    double? maxHeight,
+    int? quality,
+  }) async {
     final imagePicker = picker.ImagePicker();
-    final image = await imagePicker //
-        .pickImage(source: picker.ImageSource.gallery);
+    final image = await imagePicker.pickImage(
+      source: picker.ImageSource.gallery,
+      maxWidth: maxWidth,
+      maxHeight: maxHeight,
+      imageQuality: quality,
+    );
 
     if (image == null) {
       return null;
@@ -26,5 +34,9 @@ class ImagePickerImpl with ImagePicker {
 }
 
 mixin ImagePicker {
-  Future<File?> pickImage();
+  Future<File?> pickImage({
+    double? maxWidth,
+    double? maxHeight,
+    int? quality,
+  });
 }
