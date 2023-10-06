@@ -105,9 +105,22 @@ class PasswordRecoveryDialog extends HookConsumerWidget {
         .read(emailRecoveryControllerProvider.notifier) //
         .recover(email)
         .then(
-          (value) => ref.read(emailRecoveryControllerProvider).asError == null
-              ? context.pop()
-              : null,
-        );
+      (value) {
+        if (ref.read(emailRecoveryControllerProvider).asError == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  'Caso esteja vinculado à uma conta, um link para recuperação '
+                  'de senha será enviado ao endereço de e-mail',
+                ),
+              ),
+            ),
+          );
+          context.pop();
+        }
+      },
+    );
   }
 }
