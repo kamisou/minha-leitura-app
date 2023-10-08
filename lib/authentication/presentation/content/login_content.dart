@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +9,7 @@ import 'package:reading/authentication/presentation/controllers/login_controller
 import 'package:reading/authentication/presentation/dialogs/password_recovery_dialog.dart';
 import 'package:reading/authentication/presentation/hooks/use_login_form_reducer.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
 
@@ -80,6 +82,13 @@ class LoginContent extends HookConsumerWidget {
               _ => null,
             },
           ),
+          const SizedBox(height: 24),
+          if (kDebugMode)
+            TextFormField(
+              decoration: const InputDecoration(hintText: 'Servidor'),
+              initialValue: ref.read(restApiServerProvider),
+              onChanged: ref.read(restApiServerProvider.notifier).setServer,
+            ),
           const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

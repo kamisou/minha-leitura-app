@@ -11,9 +11,22 @@ part 'rest_api.g.dart';
 typedef Json = Map<String, dynamic>;
 
 @riverpod
+class RestApiServer extends _$RestApiServer {
+  @override
+  String build() {
+    return 'http://marlin.websix.com.br:5000/api/';
+  }
+
+  void setServer(String server) => state = server;
+}
+
+@riverpod
 RestApi restApi(RestApiRef ref) {
   final accessToken = ref.watch(tokenRepositoryProvider).valueOrNull;
-  log('$accessToken');
+  final server = ref.watch(restApiServerProvider);
+
+  log('Server: $server, Authorization: Bearer $accessToken', name: 'RestApi');
+
   return DioRestApi(
     server: 'http://marlin.websix.com.br:5000/api/',
     headers: accessToken != null //
