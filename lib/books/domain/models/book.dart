@@ -15,8 +15,8 @@ class Book with _$Book {
     @HiveField(0) required int id,
     @CoverConverter() @HiveField(1) Uint8List? cover,
     @HiveField(2) required String title,
-    @HiveField(3) String? author,
-    @HiveField(4) int? pages,
+    @HiveField(3) required String author,
+    @HiveField(4) required int pages,
   }) = _Book;
 
   factory Book.fromJson(Json json) => _$BookFromJson(json);

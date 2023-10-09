@@ -41,7 +41,7 @@ class BookCover extends StatelessWidget {
       child: file == null
           ? bytes == null
               ? LoadingImage.url(
-                  src: url!,
+                  src: url,
                   builder: _builder,
                 )
               : LoadingImage.raw(

@@ -24,7 +24,7 @@ class BookDetailsScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabController = useTabController(initialLength: 2);
+    final tabController = useTabController(initialLength: 3);
     final bookDetails = ref.watch(bookDetailsProvider(bookId));
 
     return Scaffold(
@@ -137,7 +137,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    bookDetails.book.author ?? '',
+                    bookDetails.book.author,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorExtension?.gray[500],
                           fontWeight: FontWeight.w700,

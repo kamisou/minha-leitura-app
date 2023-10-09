@@ -16,9 +16,9 @@ class LoadingImage<T extends Object> extends StatelessWidget {
   LoadingImage.url({
     super.key,
     required this.builder,
-    required String src,
+    required String? src,
     this.fit = BoxFit.cover,
-  }) : imageProvider = NetworkImage(src);
+  }) : imageProvider = NetworkImage(src ?? '');
 
   LoadingImage.file({
     super.key,

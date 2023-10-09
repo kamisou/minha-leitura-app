@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
@@ -36,7 +38,11 @@ class OnlineBookNoteRepository extends BookNoteRepository
         ...data.toJson(),
         'reading_id': bookId,
       },
-    ).then((response) => BookNote.fromJson(response as Json));
+    ).then((response) {
+      response['author'] = response['user']['name'];
+      response['parent_id'] = response['reading_id'];
+      return BookNote.fromJson(response as Json);
+    });
 
     await save<BookNote>(note, note.id);
 
