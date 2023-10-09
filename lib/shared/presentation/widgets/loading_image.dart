@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -10,18 +11,30 @@ class LoadingImage extends StatelessWidget {
     required this.builder,
     required this.src,
     this.fit = BoxFit.cover,
-  }) : file = null;
+  })  : file = null,
+        bytes = null;
 
   const LoadingImage.file({
     super.key,
     required this.builder,
     required this.file,
     this.fit = BoxFit.cover,
-  }) : src = null;
+  })  : src = null,
+        bytes = null;
+
+  const LoadingImage.raw({
+    super.key,
+    required this.builder,
+    required this.bytes,
+    this.fit = BoxFit.cover,
+  })  : file = null,
+        src = null;
 
   final String? src;
 
   final File? file;
+
+  final List<int>? bytes;
 
   final Widget Function(Widget image) builder;
 
@@ -29,20 +42,32 @@ class LoadingImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return file == null
-        ? Image.network(
-            src ?? '',
-            fit: fit,
-            errorBuilder: _errorBuilder,
-            loadingBuilder: _loadingBuilder,
-          )
-        : builder(
-            Image.file(
-              file!,
-              fit: fit,
-              errorBuilder: _errorBuilder,
-            ),
-          );
+    return builder(
+      file == null
+          ? bytes == null
+              ? Image.network(
+                  src ?? '',
+                  fit: fit,
+                  errorBuilder: _errorBuilder,
+                  loadingBuilder: _loadingBuilder,
+                )
+              : Image.memory(
+                  bytes! as Uint8List,
+                  fit: fit,
+                  errorBuilder: _errorBuilder,
+                )
+          : bytes == null
+              ? Image.file(
+                  file!,
+                  fit: fit,
+                  errorBuilder: _errorBuilder,
+                )
+              : Image.memory(
+                  bytes! as Uint8List,
+                  fit: fit,
+                  errorBuilder: _errorBuilder,
+                ),
+    );
   }
 
   Widget _errorBuilder(

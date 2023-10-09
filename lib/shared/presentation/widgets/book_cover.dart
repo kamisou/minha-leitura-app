@@ -7,30 +7,55 @@ class BookCover extends StatelessWidget {
   const BookCover({
     super.key,
     required this.url,
-  }) : file = null;
+  })  : file = null,
+        bytes = null,
+        type = BookCoverData.url;
 
   const BookCover.file({
     super.key,
     required this.file,
-  }) : url = null;
+  })  : url = null,
+        bytes = null,
+        type = BookCoverData.file;
+
+  const BookCover.raw({
+    super.key,
+    required this.bytes,
+  })  : file = null,
+        url = null,
+        type = BookCoverData.bytes;
+
+  final BookCoverData type;
 
   final String? url;
 
   final File? file;
+
+  final List<int>? bytes;
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 0.7,
       child: file == null
-          ? LoadingImage(
-              src: url,
-              builder: _builder,
-            )
-          : LoadingImage.file(
-              file: file,
-              builder: _builder,
-            ),
+          ? bytes == null
+              ? LoadingImage(
+                  src: url,
+                  builder: _builder,
+                )
+              : LoadingImage.raw(
+                  builder: _builder,
+                  bytes: bytes,
+                )
+          : bytes == null
+              ? LoadingImage.file(
+                  file: file,
+                  builder: _builder,
+                )
+              : LoadingImage.raw(
+                  builder: _builder,
+                  bytes: bytes,
+                ),
     );
   }
 
@@ -52,3 +77,5 @@ class BookCover extends StatelessWidget {
     );
   }
 }
+
+enum BookCoverData { bytes, file, url }

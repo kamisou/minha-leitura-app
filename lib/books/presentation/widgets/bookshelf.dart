@@ -65,7 +65,7 @@ class Bookshelf extends HookWidget {
         onTap: () => context.go('/book', extra: book.id),
         child: Stack(
           children: [
-            BookCover(url: book.book.cover),
+            BookCover.raw(bytes: book.book.cover),
             Positioned(
               top: 0,
               right: 8,

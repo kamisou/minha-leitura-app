@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/shared/presentation/pages/book_home_page.dart';
 import 'package:reading/shared/presentation/pages/bookshelf_page.dart';
 import 'package:reading/shared/presentation/pages/options_page.dart';
+import 'package:reading/shared/presentation/pages/ranking_page.dart';
 import 'package:reading/shared/presentation/widgets/navbar_home.dart';
 import 'package:unicons/unicons.dart';
 
@@ -24,6 +25,7 @@ class HomeScreen extends HookWidget {
                 OptionsPage(),
                 BookHomePage(),
                 BookshelfPage(),
+                RankingPage(),
               ],
             ),
           ),
@@ -36,6 +38,7 @@ class HomeScreen extends HookWidget {
           UniconsLine.bars,
           UniconsLine.home_alt,
           UniconsLine.book_alt,
+          UniconsLine.medal,
         ],
       ),
     );

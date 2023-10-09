@@ -1,11 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/repositories/book_note_repository.dart';
+import 'package:reading/books/data/repositories/book_rating_repository.dart';
 import 'package:reading/books/data/repositories/book_reading_repository.dart';
 import 'package:reading/books/presentation/pages/book_details/book_details_page.dart';
 import 'package:reading/books/presentation/pages/book_details/book_notes_page.dart';
+import 'package:reading/books/presentation/pages/book_details/book_ratings_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -35,8 +39,8 @@ class BookDetailsScreen extends HookConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Image.network(
-                        bookDetails.book.cover ?? '',
+                      Image.memory(
+                        (bookDetails.book.cover ?? <int>[]) as Uint8List,
                         fit: BoxFit.cover,
                         opacity: const AlwaysStoppedAnimation(0.4),
                         height: MediaQuery.of(context).size.height * 0.2,
@@ -92,7 +96,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                                 ),
                               ],
                             ),
-                            child: BookCover(url: bookDetails.book.cover),
+                            child: BookCover.raw(bytes: bookDetails.book.cover),
                           ),
                         ),
                         const Expanded(
@@ -185,7 +189,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                   Tab(text: 'Detalhes'),
                   Tab(text: 'Anotações'),
                   // Tab(text: 'Histórico'),
-                  // Tab(text: 'Avaliações'),
+                  Tab(text: 'Avaliações'),
                 ],
               ),
             ),
@@ -218,16 +222,16 @@ class BookDetailsScreen extends HookConsumerWidget {
             //         orElse: () => const SizedBox(),
             //       ),
             // ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 24),
-            //   child: ref.watch(bookRatingsProvider(book.id)).maybeWhen(
-            //         data: (data) => BookRatingsPage(
-            //           bookId: book.id,
-            //           ratings: data,
-            //         ),
-            //         orElse: () => const SizedBox(),
-            //       ),
-            // ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: ref.watch(bookRatingsProvider(bookDetails.id)).maybeWhen(
+                    data: (data) => BookRatingsPage(
+                      bookId: bookDetails.id,
+                      ratings: data,
+                    ),
+                    orElse: () => const SizedBox(),
+                  ),
+            ),
           ],
         ),
       ),

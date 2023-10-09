@@ -41,7 +41,7 @@ class BookDetailsPage extends HookConsumerWidget {
             BookDetailsTile(
               icon: UniconsLine.book_alt,
               label: 'Total de Páginas',
-              value: '${book.book.pages ?? '-'}',
+              value: '${book.book.pages}',
             ),
             const Divider(),
             BookDetailsTile(

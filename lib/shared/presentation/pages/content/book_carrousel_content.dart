@@ -68,7 +68,7 @@ class BookCarrouselContent extends HookConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: GestureDetector(
                   onTap: () => context.go('/book', extra: books.data[index].id),
-                  child: BookCover(url: books.data[index].book.cover),
+                  child: BookCover.raw(bytes: books.data[index].book.cover),
                 ),
               );
             },
