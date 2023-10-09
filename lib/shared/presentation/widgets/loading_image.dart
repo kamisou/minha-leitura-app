@@ -5,36 +5,36 @@ import 'package:flutter/material.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
 
-class LoadingImage extends StatelessWidget {
+class LoadingImage<T extends Object> extends StatelessWidget {
   const LoadingImage({
     super.key,
     required this.builder,
-    required this.src,
+    required this.imageProvider,
     this.fit = BoxFit.cover,
-  })  : file = null,
-        bytes = null;
+  });
 
-  const LoadingImage.file({
+  LoadingImage.url({
     super.key,
     required this.builder,
-    required this.file,
+    required String src,
     this.fit = BoxFit.cover,
-  })  : src = null,
-        bytes = null;
+  }) : imageProvider = NetworkImage(src);
 
-  const LoadingImage.raw({
+  LoadingImage.file({
     super.key,
     required this.builder,
-    required this.bytes,
+    required File file,
     this.fit = BoxFit.cover,
-  })  : file = null,
-        src = null;
+  }) : imageProvider = FileImage(file);
 
-  final String? src;
+  LoadingImage.raw({
+    super.key,
+    required this.builder,
+    required Uint8List bytes,
+    this.fit = BoxFit.cover,
+  }) : imageProvider = MemoryImage(bytes);
 
-  final File? file;
-
-  final List<int>? bytes;
+  final ImageProvider imageProvider;
 
   final Widget Function(Widget image) builder;
 
@@ -42,31 +42,11 @@ class LoadingImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return builder(
-      file == null
-          ? bytes == null
-              ? Image.network(
-                  src ?? '',
-                  fit: fit,
-                  errorBuilder: _errorBuilder,
-                  loadingBuilder: _loadingBuilder,
-                )
-              : Image.memory(
-                  bytes! as Uint8List,
-                  fit: fit,
-                  errorBuilder: _errorBuilder,
-                )
-          : bytes == null
-              ? Image.file(
-                  file!,
-                  fit: fit,
-                  errorBuilder: _errorBuilder,
-                )
-              : Image.memory(
-                  bytes! as Uint8List,
-                  fit: fit,
-                  errorBuilder: _errorBuilder,
-                ),
+    return Image(
+      image: imageProvider,
+      fit: fit,
+      errorBuilder: _errorBuilder,
+      loadingBuilder: _loadingBuilder,
     );
   }
 

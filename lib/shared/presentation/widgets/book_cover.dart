@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:reading/shared/presentation/widgets/loading_image.dart';
@@ -31,7 +32,7 @@ class BookCover extends StatelessWidget {
 
   final File? file;
 
-  final List<int>? bytes;
+  final Uint8List? bytes;
 
   @override
   Widget build(BuildContext context) {
@@ -39,22 +40,22 @@ class BookCover extends StatelessWidget {
       aspectRatio: 0.7,
       child: file == null
           ? bytes == null
-              ? LoadingImage(
-                  src: url,
+              ? LoadingImage.url(
+                  src: url!,
                   builder: _builder,
                 )
               : LoadingImage.raw(
                   builder: _builder,
-                  bytes: bytes,
+                  bytes: bytes!,
                 )
           : bytes == null
               ? LoadingImage.file(
-                  file: file,
+                  file: file!,
                   builder: _builder,
                 )
               : LoadingImage.raw(
                   builder: _builder,
-                  bytes: bytes,
+                  bytes: bytes!,
                 ),
     );
   }
