@@ -72,7 +72,11 @@ class OnlineBookNoteRepository extends BookNoteRepository
     final newNote = await ref
         .read(restApiProvider)
         .put('app/note/${note.id}', body: data.toJson())
-        .then((response) => BookNote.fromJson(response as Json));
+        .then((response) {
+      response['author'] = response['user']['name'];
+      response['parent_id'] = response['reading_id'];
+      return BookNote.fromJson(response as Json);
+    });
 
     await save<BookNote>(newNote, note.id);
 
