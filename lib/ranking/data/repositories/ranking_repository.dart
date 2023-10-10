@@ -15,7 +15,7 @@ RankingRepository rankingRepository(RankingRepositoryRef ref) {
 }
 
 @riverpod
-Future<Ranking>? ranking(RankingRef ref, RankingFilterDTO filter) {
+Future<Ranking> ranking(RankingRef ref, RankingFilterDTO filter) {
   final repo = ref.read(rankingRepositoryProvider);
   return switch (filter.type) {
     RankingType.$class => repo.getClassRanking(filter.$class!.id),
@@ -32,7 +32,7 @@ class OnlineRankingRepository extends RankingRepository {
 
   @override
   Future<Ranking> getClassRanking(int classId) async {
-    final spots = await _getSpots('app/reading/classroom/$classId');
+    final spots = await _getSpots('app/ranking/classroom/$classId');
     final ranking = Ranking.$class(spots: spots);
 
     save<Ranking>(ranking, ranking.id).ignore();
@@ -42,7 +42,7 @@ class OnlineRankingRepository extends RankingRepository {
 
   @override
   Future<Ranking> getSchoolRanking(int schoolId) async {
-    final spots = await _getSpots('app/reading/school/$schoolId');
+    final spots = await _getSpots('app/ranking/school/$schoolId');
     final ranking = Ranking.school(spots: spots);
 
     save<Ranking>(ranking, ranking.id).ignore();
@@ -52,7 +52,7 @@ class OnlineRankingRepository extends RankingRepository {
 
   @override
   Future<Ranking> getCityRanking(int schoolId) async {
-    final spots = await _getSpots('app/reading/city/$schoolId');
+    final spots = await _getSpots('app/ranking/city/$schoolId');
     final ranking = Ranking.city(spots: spots);
 
     save<Ranking>(ranking, ranking.id).ignore();
@@ -62,7 +62,7 @@ class OnlineRankingRepository extends RankingRepository {
 
   @override
   Future<Ranking> getStateRanking(int schoolId) async {
-    final spots = await _getSpots('app/reading/state/$schoolId');
+    final spots = await _getSpots('app/ranking/state/$schoolId');
     final ranking = Ranking.state(spots: spots);
 
     save<Ranking>(ranking, ranking.id).ignore();
@@ -72,7 +72,7 @@ class OnlineRankingRepository extends RankingRepository {
 
   @override
   Future<Ranking> getCountryRanking(int schoolId) async {
-    final spots = await _getSpots('app/reading/country/$schoolId');
+    final spots = await _getSpots('app/ranking/country/$schoolId');
     final ranking = Ranking.country(spots: spots);
 
     save<Ranking>(ranking, ranking.id).ignore();
@@ -82,7 +82,7 @@ class OnlineRankingRepository extends RankingRepository {
 
   @override
   Future<Ranking> getGlobalRanking() async {
-    final spots = await _getSpots('app/reading/all');
+    final spots = await _getSpots('app/ranking/all');
     final ranking = Ranking.global(spots: spots);
 
     save<Ranking>(ranking, ranking.id).ignore();
