@@ -12,6 +12,7 @@ class Class with _$Class {
     @HiveField(0) required int id,
     @HiveField(1) required String code,
     @HiveField(2) required String name,
+    @HiveField(3) required String schoolName,
   }) = _Class;
 
   factory Class.fromJson(Json json) => _$ClassFromJson(json);

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
+import 'package:reading/ranking/data/repositories/ranking_repository.dart';
+import 'package:reading/ranking/presentation/dialogs/ranking_filter_dialog.dart';
 import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -9,6 +13,10 @@ class RankingPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final filter = useState(
+      const RankingFilterDTO(type: RankingType.global),
+    );
+
     return Column(
       children: [
         AppBar(
@@ -30,11 +38,47 @@ class RankingPage extends HookConsumerWidget {
         ),
         const SizedBox(height: 32),
         FilledButton.icon(
-          onPressed: () {},
+          onPressed: () => showDialog<RankingFilterDTO?>(
+            context: context,
+            builder: (context) => const RankingFilterDialog(),
+          ).then((value) => value != null ? filter.value = value : null),
           icon: const Icon(FeatherIcons.filter),
           label: const Text('Filtrar'),
         ),
         const SizedBox(height: 32),
+        ref.watch(rankingProvider(filter.value)).maybeWhen(
+              data: (data) => Column(
+                children: [
+                  Text(
+                    filter.value.$class?.name ?? 'Global',
+                  ),
+                  Flexible(
+                    child: Table(
+                      children: [
+                        const TableRow(
+                          children: [
+                            Text('Posição'),
+                            Text('Aluno'),
+                            Text('Páginas'),
+                          ],
+                        ),
+                        for (final spot in data.spots)
+                          TableRow(
+                            children: [
+                              Text('${spot.position}'),
+                              Text(spot.user, overflow: TextOverflow.ellipsis),
+                              Text('${spot.pages}'),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              orElse: () => const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
       ],
     );
   }

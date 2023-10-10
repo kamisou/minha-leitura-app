@@ -18,11 +18,11 @@ RankingRepository rankingRepository(RankingRepositoryRef ref) {
 Future<Ranking>? ranking(RankingRef ref, RankingFilterDTO filter) {
   final repo = ref.read(rankingRepositoryProvider);
   return switch (filter.type) {
-    RankingType.$class => repo.getClassRanking(filter.data),
-    RankingType.school => repo.getSchoolRanking(filter.data),
-    RankingType.city => repo.getCityRanking(filter.data),
-    RankingType.state => repo.getStateRanking(filter.data),
-    RankingType.country => repo.getCountryRanking(filter.data),
+    RankingType.$class => repo.getClassRanking(filter.$class!.id),
+    RankingType.school => repo.getSchoolRanking(filter.$class!.id),
+    RankingType.city => repo.getCityRanking(filter.$class!.id),
+    RankingType.state => repo.getStateRanking(filter.$class!.id),
+    RankingType.country => repo.getCountryRanking(filter.$class!.id),
     RankingType.global => repo.getGlobalRanking(),
   };
 }

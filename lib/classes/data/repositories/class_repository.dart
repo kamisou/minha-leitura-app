@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'package:reading/classes/domain/models/class.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
@@ -29,7 +31,13 @@ class OnlineClassRepository extends ClassRepository {
         .read(restApiProvider)
         .get('app/enrollment')
         .then((response) => (response as Json)['data'])
-        .then((response) => (response as List).cast<Json>().map(Class.fromJson))
+        .then((response) => (response as List).cast<Json>())
+        .then(
+          (list) => list.map((json) {
+            json['school_name'] = json['school']['name'];
+            return Class.fromJson(json);
+          }),
+        )
         .then((classes) => classes.toList());
 
     saveAll(classes, ($class) => $class.id).ignore();

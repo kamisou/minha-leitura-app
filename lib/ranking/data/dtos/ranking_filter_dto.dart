@@ -1,3 +1,5 @@
+import 'package:reading/classes/domain/models/class.dart';
+
 enum RankingType {
   $class,
   school,
@@ -10,10 +12,10 @@ enum RankingType {
 class RankingFilterDTO {
   const RankingFilterDTO({
     required this.type,
-    this.data = 0,
+    this.$class,
   });
 
   final RankingType type;
 
-  final int data;
+  final Class? $class;
 }
