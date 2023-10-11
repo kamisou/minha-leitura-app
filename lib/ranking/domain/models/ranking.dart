@@ -9,39 +9,32 @@ part 'ranking.g.dart';
 @HiveType(typeId: 16)
 class Ranking with _$Ranking {
   const factory Ranking({
-    @HiveField(0) required int id,
-    @HiveField(1) required List<RankingSpot> spots,
+    @HiveField(0) required List<RankingSpot> spots,
   }) = _Ranking;
 
   const factory Ranking.$class({
-    @HiveField(0) @Default(1) int id,
-    @HiveField(1) required List<RankingSpot> spots,
-  }) = _RankingClass;
+    @HiveField(0) required List<RankingSpot> spots,
+  }) = RankingClass;
 
   const factory Ranking.school({
-    @HiveField(0) @Default(2) int id,
-    @HiveField(1) required List<RankingSpot> spots,
-  }) = _RankingSchool;
+    @HiveField(0) required List<RankingSpot> spots,
+  }) = RankingSchool;
 
   const factory Ranking.city({
-    @HiveField(0) @Default(3) int id,
-    @HiveField(1) required List<RankingSpot> spots,
-  }) = _RankingCity;
+    @HiveField(0) required List<RankingSpot> spots,
+  }) = RankingCity;
 
   const factory Ranking.state({
-    @HiveField(0) @Default(4) int id,
-    @HiveField(1) required List<RankingSpot> spots,
-  }) = _RankingState;
+    @HiveField(0) required List<RankingSpot> spots,
+  }) = RankingState;
 
   const factory Ranking.country({
-    @HiveField(0) @Default(5) int id,
-    @HiveField(1) required List<RankingSpot> spots,
-  }) = _RankingCountry;
+    @HiveField(0) required List<RankingSpot> spots,
+  }) = RankingCountry;
 
   const factory Ranking.global({
-    @HiveField(0) @Default(6) int id,
-    @HiveField(1) required List<RankingSpot> spots,
-  }) = _RankingGlobal;
+    @HiveField(0) required List<RankingSpot> spots,
+  }) = RankingGlobal;
 }
 
 @freezed

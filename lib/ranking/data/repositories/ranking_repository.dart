@@ -2,6 +2,7 @@ import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
 import 'package:reading/ranking/domain/models/ranking.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
+import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,7 +16,7 @@ RankingRepository rankingRepository(RankingRepositoryRef ref) {
 }
 
 @riverpod
-Future<Ranking> ranking(RankingRef ref, RankingFilterDTO filter) {
+Future<Ranking?> ranking(RankingRef ref, RankingFilterDTO filter) {
   final repo = ref.read(rankingRepositoryProvider);
   return switch (filter.type) {
     RankingType.$class => repo.getClassRanking(filter.$class!.id),
@@ -31,61 +32,61 @@ class OnlineRankingRepository extends RankingRepository {
   const OnlineRankingRepository(super.ref);
 
   @override
-  Future<Ranking> getClassRanking(int classId) async {
+  Future<Ranking?> getClassRanking(int classId) async {
     final spots = await _getSpots('app/ranking/classroom/$classId');
-    final ranking = Ranking.$class(spots: spots);
+    final ranking = RankingClass(spots: spots);
 
-    save<Ranking>(ranking, ranking.id).ignore();
+    save<RankingClass>(ranking, 1).ignore();
 
     return ranking;
   }
 
   @override
-  Future<Ranking> getSchoolRanking(int schoolId) async {
+  Future<Ranking?> getSchoolRanking(int schoolId) async {
     final spots = await _getSpots('app/ranking/school/$schoolId');
-    final ranking = Ranking.school(spots: spots);
+    final ranking = RankingSchool(spots: spots);
 
-    save<Ranking>(ranking, ranking.id).ignore();
+    save<RankingSchool>(ranking, 1).ignore();
 
     return ranking;
   }
 
   @override
-  Future<Ranking> getCityRanking(int schoolId) async {
+  Future<Ranking?> getCityRanking(int schoolId) async {
     final spots = await _getSpots('app/ranking/city/$schoolId');
-    final ranking = Ranking.city(spots: spots);
+    final ranking = RankingCity(spots: spots);
 
-    save<Ranking>(ranking, ranking.id).ignore();
+    save<RankingCity>(ranking, 1).ignore();
 
     return ranking;
   }
 
   @override
-  Future<Ranking> getStateRanking(int schoolId) async {
+  Future<Ranking?> getStateRanking(int schoolId) async {
     final spots = await _getSpots('app/ranking/state/$schoolId');
-    final ranking = Ranking.state(spots: spots);
+    final ranking = RankingState(spots: spots);
 
-    save<Ranking>(ranking, ranking.id).ignore();
+    save<RankingState>(ranking, 1).ignore();
 
     return ranking;
   }
 
   @override
-  Future<Ranking> getCountryRanking(int schoolId) async {
+  Future<Ranking?> getCountryRanking(int schoolId) async {
     final spots = await _getSpots('app/ranking/country/$schoolId');
-    final ranking = Ranking.country(spots: spots);
+    final ranking = RankingCountry(spots: spots);
 
-    save<Ranking>(ranking, ranking.id).ignore();
+    save<RankingCountry>(ranking, 1).ignore();
 
     return ranking;
   }
 
   @override
-  Future<Ranking> getGlobalRanking() async {
+  Future<Ranking?> getGlobalRanking() async {
     final spots = await _getSpots('app/ranking/all');
-    final ranking = Ranking.global(spots: spots);
+    final ranking = RankingGlobal(spots: spots);
 
-    save<Ranking>(ranking, ranking.id).ignore();
+    save<RankingGlobal>(ranking, 1).ignore();
 
     return ranking;
   }
@@ -103,49 +104,61 @@ class OfflineRankingRepository extends RankingRepository {
   const OfflineRankingRepository(super.ref);
 
   @override
-  Future<Ranking> getCityRanking(int schoolId) {
-    // TODO: implement getCityRanking
-    throw UnimplementedError();
+  Future<Ranking?> getCityRanking(int schoolId) {
+    return ref
+        .read(databaseProvider)
+        .getAll<RankingCity>()
+        .then((value) => value.first);
   }
 
   @override
-  Future<Ranking> getClassRanking(int classId) {
-    // TODO: implement getClassRanking
-    throw UnimplementedError();
+  Future<Ranking?> getClassRanking(int classId) {
+    return ref
+        .read(databaseProvider)
+        .getAll<RankingClass>()
+        .then((value) => value.first);
   }
 
   @override
-  Future<Ranking> getCountryRanking(int schoolId) {
-    // TODO: implement getCountryRanking
-    throw UnimplementedError();
+  Future<Ranking?> getCountryRanking(int schoolId) {
+    return ref
+        .read(databaseProvider)
+        .getAll<RankingCountry>()
+        .then((value) => value.first);
   }
 
   @override
-  Future<Ranking> getSchoolRanking(int schoolId) {
-    // TODO: implement getSchoolRanking
-    throw UnimplementedError();
+  Future<Ranking?> getSchoolRanking(int schoolId) {
+    return ref
+        .read(databaseProvider)
+        .getAll<RankingSchool>()
+        .then((value) => value.first);
   }
 
   @override
-  Future<Ranking> getStateRanking(int schoolId) {
-    // TODO: implement getStateRanking
-    throw UnimplementedError();
+  Future<Ranking?> getStateRanking(int schoolId) {
+    return ref
+        .read(databaseProvider)
+        .getAll<RankingState>()
+        .then((value) => value.first);
   }
 
   @override
-  Future<Ranking> getGlobalRanking() {
-    // TODO: implement getStateRanking
-    throw UnimplementedError();
+  Future<Ranking?> getGlobalRanking() {
+    return ref
+        .read(databaseProvider)
+        .getAll<RankingGlobal>()
+        .then((value) => value.first);
   }
 }
 
 abstract class RankingRepository extends Repository with OfflinePersister {
   const RankingRepository(super.ref);
 
-  Future<Ranking> getClassRanking(int classId);
-  Future<Ranking> getSchoolRanking(int schoolId);
-  Future<Ranking> getCityRanking(int schoolId);
-  Future<Ranking> getStateRanking(int schoolId);
-  Future<Ranking> getCountryRanking(int schoolId);
-  Future<Ranking> getGlobalRanking();
+  Future<Ranking?> getClassRanking(int classId);
+  Future<Ranking?> getSchoolRanking(int schoolId);
+  Future<Ranking?> getCityRanking(int schoolId);
+  Future<Ranking?> getStateRanking(int schoolId);
+  Future<Ranking?> getCountryRanking(int schoolId);
+  Future<Ranking?> getGlobalRanking();
 }

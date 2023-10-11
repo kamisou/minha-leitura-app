@@ -9,8 +9,6 @@ part 'achievement_repository.g.dart';
 
 @riverpod
 AchievementRepository achievementRepository(AchievementRepositoryRef ref) {
-  return FakeAchievementRepository(ref);
-
   return ref.watch(isConnectedProvider)
       ? OnlineAchievementRepository(ref)
       : OfflineAchievementRepository(ref);
@@ -47,58 +45,6 @@ class OfflineAchievementRepository extends AchievementRepository {
   @override
   Future<List<AchievementCategory>> getMyAchivements() {
     return ref.read(databaseProvider).getAll<AchievementCategory>();
-  }
-}
-
-class FakeAchievementRepository extends AchievementRepository {
-  const FakeAchievementRepository(super.ref);
-
-  @override
-  Future<List<AchievementCategory>> getMyAchivements() async {
-    return const [
-      AchievementCategory(
-        id: 1,
-        name: 'Iniciando',
-        achievements: [
-          Achievement(
-            id: 1,
-            name: 'Primeira leitura iniciada',
-            max: 1,
-            achieved: 1,
-          ),
-          Achievement(
-            id: 1,
-            name: 'Primeira leitura iniciada',
-            max: 1,
-            achieved: 0,
-          ),
-        ],
-      ),
-      AchievementCategory(
-        id: 2,
-        name: 'Livros concluídos',
-        achievements: [
-          Achievement(
-            id: 1,
-            name: '5 leituras concluídas',
-            max: 5,
-            achieved: 3,
-          ),
-          Achievement(
-            id: 2,
-            name: '10 leituras concluídas',
-            max: 10,
-            achieved: 3,
-          ),
-          Achievement(
-            id: 3,
-            name: '15 leituras concluídas',
-            max: 15,
-            achieved: 3,
-          ),
-        ],
-      ),
-    ];
   }
 }
 

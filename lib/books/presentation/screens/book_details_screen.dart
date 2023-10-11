@@ -144,31 +144,6 @@ class BookDetailsScreen extends HookConsumerWidget {
                         ),
                     textAlign: TextAlign.center,
                   ),
-                  // const SizedBox(height: 20),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 24),
-                  //   child: Wrap(
-                  //     spacing: 16,
-                  //     children: [
-                  //       FilledButton.icon(
-                  //         onPressed: () {
-                  //           // TODO: implement define goals
-                  //           throw UnimplementedError();
-                  //         },
-                  //         icon: const Icon(UniconsLine.book_open),
-                  //         label: const Text('Definir Meta'),
-                  //       ),
-                  //       OutlinedButton.icon(
-                  //         onPressed: () {
-                  //           // TODO: implement share book
-                  //           throw UnimplementedError();
-                  //         },
-                  //         icon: const Icon(UniconsLine.share_alt),
-                  //         label: const Text('Compartilhar'),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                 ],
               ),
             ),

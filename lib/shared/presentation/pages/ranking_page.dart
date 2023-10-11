@@ -119,38 +119,55 @@ class RankingPage extends HookConsumerWidget {
                                 ),
                               ],
                             ),
-                            for (final (i, spot) in data.spots.indexed)
+                            if (data == null)
                               TableRow(
-                                decoration: BoxDecoration(
-                                  color: i.isEven
-                                      ? Theme.of(context)
-                                          .colorExtension
-                                          ?.gray[150]
-                                      : null,
-                                ),
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 8,
-                                    ),
-                                    child: Text(
-                                      '${spot.position}',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
                                   Text(
-                                    spot.user,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: Text(
-                                      '${spot.pages}',
-                                      textAlign: TextAlign.end,
-                                    ),
+                                    'Não há dados para o filtro',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorExtension
+                                              ?.gray[400],
+                                        ),
                                   ),
                                 ],
-                              ),
+                              )
+                            else
+                              for (final (i, spot) in data.spots.indexed)
+                                TableRow(
+                                  decoration: BoxDecoration(
+                                    color: i.isEven
+                                        ? Theme.of(context)
+                                            .colorExtension
+                                            ?.gray[150]
+                                        : null,
+                                  ),
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 8,
+                                      ),
+                                      child: Text(
+                                        '${spot.position}',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Text(
+                                      spot.user,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 8),
+                                      child: Text(
+                                        '${spot.pages}',
+                                        textAlign: TextAlign.end,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                           ],
                         ),
                       ],
