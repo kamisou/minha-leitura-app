@@ -38,9 +38,54 @@ class MyBooks extends _$MyBooks {
   }
 
   Future<void> next() async {
-    state = AsyncData(state.requireValue.copyWith(loading: true));
+    state = AsyncData(
+      state.requireValue.copyWith(loading: true),
+    );
 
     final books = await _getMyBooks();
+
+    state = AsyncData(
+      books.copyWith(
+        data: [...state.requireValue.data, ...books.data],
+        finished: books.data.length < books.perPage,
+        loading: false,
+      ),
+    );
+  }
+}
+
+@riverpod
+class Books extends _$Books {
+  String? _searchTerm;
+
+  @override
+  Future<PaginatedResource<Book>> build({String? searchTerm}) async {
+    _searchTerm = searchTerm;
+    return _getBooks(searchTerm: searchTerm);
+  }
+
+  Future<PaginatedResource<Book>> _getBooks({String? searchTerm}) {
+    return ref.read(bookRepositoryProvider).getBooks(
+          (state.valueOrNull?.currentPage ?? 0) + 1,
+          searchTerm: searchTerm,
+        );
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncLoading();
+    state = AsyncData(
+      await ref
+          .read(bookRepositoryProvider)
+          .getBooks(1, searchTerm: _searchTerm),
+    );
+  }
+
+  Future<void> next() async {
+    state = AsyncData(
+      state.requireValue.copyWith(loading: true),
+    );
+
+    final books = await _getBooks(searchTerm: _searchTerm);
 
     state = AsyncData(
       books.copyWith(
@@ -56,6 +101,22 @@ class OnlineBookRepository extends BookRepository {
   const OnlineBookRepository(super.ref);
 
   @override
+  Future<PaginatedResource<Book>> getBooks(
+    int page, {
+    String? searchTerm,
+  }) {
+    return ref
+        .read(restApiProvider) //
+        .get('app/reading?page=$page')
+        .then(
+          (response) => PaginatedResource.fromJson(
+            response as Json,
+            Book.fromJson,
+          ),
+        );
+  }
+
+  @override
   Future<Book> addBook(NewBookDTO data) async {
     final book = await ref
         .read(restApiProvider) //
@@ -69,7 +130,8 @@ class OnlineBookRepository extends BookRepository {
       },
     ).then((response) => Book.fromJson(response as Json));
 
-    await save<Book>(book, book.id);
+    // TODO: is this really necessary?
+    // await save<Book>(book, book.id);
 
     ref.read(myBooksProvider.notifier).refresh().ignore();
 
@@ -77,9 +139,7 @@ class OnlineBookRepository extends BookRepository {
   }
 
   @override
-  Future<void> addBookAndReading(NewBookDTO data) async {
-    final book = await addBook(data);
-
+  Future<void> addReading(Book book, NewBookDTO data) async {
     final reading = await ref
         .read(restApiProvider)
         .post(
@@ -99,6 +159,12 @@ class OnlineBookRepository extends BookRepository {
     await save<BookDetails>(reading, reading.id);
 
     ref.read(myBooksProvider.notifier).refresh().ignore();
+  }
+
+  @override
+  Future<void> addBookAndReading(NewBookDTO data) async {
+    final book = await addBook(data);
+    return addReading(book, data);
   }
 
   @override
@@ -125,7 +191,17 @@ class OfflineBookRepository extends BookRepository {
   static const pageSize = 20;
 
   @override
+  Future<PaginatedResource<Book>> getBooks(int page, {String? searchTerm}) {
+    throw OnlineOnlyOperationException();
+  }
+
+  @override
   Future<Book> addBook(NewBookDTO data) {
+    throw OnlineOnlyOperationException();
+  }
+
+  @override
+  Future<void> addReading(Book book, NewBookDTO data) {
     throw OnlineOnlyOperationException();
   }
 
@@ -152,7 +228,9 @@ class OfflineBookRepository extends BookRepository {
 abstract class BookRepository extends Repository with OfflinePersister {
   const BookRepository(super.ref);
 
+  Future<PaginatedResource<Book>> getBooks(int page, {String? searchTerm});
   Future<Book> addBook(NewBookDTO data);
+  Future<void> addReading(Book book, NewBookDTO data);
   Future<void> addBookAndReading(NewBookDTO data);
   Future<PaginatedResource<BookDetails>> getMyBooks(int page);
 }

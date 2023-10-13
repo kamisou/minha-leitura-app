@@ -1,10 +1,13 @@
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart' hide Title;
 import 'package:flutter/services.dart';
+import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/dtos/new_book_dto.dart';
+import 'package:reading/books/data/repositories/book_repository.dart';
+import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/value_objects/date.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
@@ -12,11 +15,13 @@ import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/controllers/new_book_controller.dart';
 import 'package:reading/books/presentation/hooks/use_new_book_form_reducer.dart';
 import 'package:reading/books/presentation/pages/new_book/new_book_page.dart';
+import 'package:reading/books/presentation/widgets/book_search_result.dart';
 import 'package:reading/books/presentation/widgets/selection_button.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/infrastructure/image_picker.dart';
+import 'package:reading/shared/presentation/hooks/use_lazy_scroll_controller.dart';
 import 'package:reading/shared/presentation/hooks/use_page_notifier.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/presentation/widgets/app_bar_leading.dart';
@@ -34,6 +39,10 @@ class NewBookScreen extends HookConsumerWidget {
     final pageController = usePageController();
     final page = usePageNotifier(pageController);
     final newBookForm = useNewBookFormReducer();
+
+    final manualRegister = useState<bool?>(null);
+    final searchTerm = useRef('');
+    final selectedBook = useRef<Book?>(null);
 
     useSnackbarErrorListener(
       ref,
@@ -82,120 +91,209 @@ class NewBookScreen extends HookConsumerWidget {
               controller: pageController,
               children: [
                 NewBookPage(
-                  builder: (context) => SimpleTextField(
-                    autofocus: true,
-                    fontSize: 36,
-                    hintText: 'Título',
-                    onChanged: (value) => newBookForm.dispatch(Title(value)),
+                  builder: (context) => Column(
+                    children: [
+                      SelectionButton(
+                        onPressed: () => manualRegister.value = true,
+                        icon: FeatherIcons.fileText,
+                        text: 'Cadastrar manualmente',
+                        selected: (manualRegister.value ?? false) == true,
+                      ),
+                      SelectionButton(
+                        onPressed: () => manualRegister.value = false,
+                        icon: FeatherIcons.search,
+                        text: 'Pesquisar na nossa base',
+                        selected: manualRegister.value == false,
+                      ),
+                    ],
                   ),
-                  prompt: 'Qual o título do livro?',
-                  onTapNext: newBookForm.state.title.value.isNotEmpty
+                  prompt: 'Como deseja cadastrar seu livro?',
+                  onTapNext: manualRegister.value != null
                       ? () => _onTapNext(context, pageController)
                       : null,
                 ),
-                NewBookPage(
-                  builder: (context) => SimpleTextField(
-                    autofocus: true,
-                    fontSize: 36,
-                    hintText: 'Autor',
-                    onChanged: (value) => newBookForm.dispatch(Name(value)),
-                  ),
-                  prompt: 'Qual o autor?',
-                  onTapNext: newBookForm.state.author.value.isNotEmpty
-                      ? () => _onTapNext(context, pageController)
-                      : null,
-                ),
-                NewBookPage(
-                  builder: (context) => Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 72,
-                      vertical: 96,
-                    ),
-                    child: GestureDetector(
-                      onTap: () => ref
-                          .read(imagePickerProvider)
-                          .pickImage(
-                            maxWidth: 300,
-                            maxHeight: 428,
-                            quality: 90,
-                          )
-                          .then(
-                            (value) => value == null
-                                ? null
-                                : newBookForm.dispatch(value),
+                ...switch (manualRegister.value) {
+                  false => [
+                      Column(
+                        children: [
+                          Expanded(
+                            child: SimpleTextField(
+                              autofocus: true,
+                              fontSize: 36,
+                              hintText: 'Qual o título do livro?',
+                              onChanged: (value) => searchTerm.value = value,
+                            ),
                           ),
-                      child: newBookForm.state.cover != null
-                          ? BookCover.file(
-                              file: newBookForm.state.cover,
-                            )
-                          : AspectRatio(
-                              aspectRatio: 0.7,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color:
-                                      Theme.of(context).colorScheme.background,
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      blurRadius: 12,
-                                      color: Color(0x18000000),
-                                      offset: Offset(0, 4),
-                                    ),
-                                  ],
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: FilledButton(
+                              onPressed: searchTerm.value.isNotEmpty //
+                                  ? () => _onTapNext(context, pageController)
+                                  : null,
+                              child: const Text('Buscar'),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ref
+                          .watch(booksProvider(searchTerm: searchTerm.value))
+                          .maybeWhen(
+                            data: (books) {
+                              final controller = useLazyScrollController(
+                                finished: books.finished,
+                                onEndOfScroll: ref
+                                    .read(
+                                      booksProvider(
+                                        searchTerm: searchTerm.value,
+                                      ).notifier,
+                                    )
+                                    .next,
+                              );
+
+                              return ListView.builder(
+                                controller: controller,
+                                itemCount: books.data.length,
+                                itemBuilder: (context, index) =>
+                                    GestureDetector(
+                                  onTap: () {
+                                    selectedBook.value = books.data[index];
+                                    _onTapNext(context, pageController);
+                                  },
+                                  child: BookSearchResult(
+                                    book: books.data[index],
+                                  ),
                                 ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      UniconsLine.image_plus,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      'Adicionar Imagem',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge
-                                          ?.copyWith(
+                              );
+                            },
+                            orElse: () => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                    ],
+                  true => [
+                      NewBookPage(
+                        builder: (context) => SimpleTextField(
+                          autofocus: true,
+                          fontSize: 36,
+                          hintText: 'Título',
+                          onChanged: (value) =>
+                              newBookForm.dispatch(Title(value)),
+                        ),
+                        prompt: 'Qual o título do livro?',
+                        onTapNext: newBookForm.state.title.value.isNotEmpty
+                            ? () => _onTapNext(context, pageController)
+                            : null,
+                      ),
+                      NewBookPage(
+                        builder: (context) => SimpleTextField(
+                          autofocus: true,
+                          fontSize: 36,
+                          hintText: 'Autor',
+                          onChanged: (value) =>
+                              newBookForm.dispatch(Name(value)),
+                        ),
+                        prompt: 'Qual o autor?',
+                        onTapNext: newBookForm.state.author.value.isNotEmpty
+                            ? () => _onTapNext(context, pageController)
+                            : null,
+                      ),
+                      NewBookPage(
+                        builder: (context) => Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 72,
+                            vertical: 96,
+                          ),
+                          child: GestureDetector(
+                            onTap: () => ref
+                                .read(imagePickerProvider)
+                                .pickImage(
+                                  maxWidth: 300,
+                                  maxHeight: 428,
+                                  quality: 90,
+                                )
+                                .then(
+                                  (value) => value == null
+                                      ? null
+                                      : newBookForm.dispatch(value),
+                                ),
+                            child: newBookForm.state.cover != null
+                                ? BookCover.file(
+                                    file: newBookForm.state.cover,
+                                  )
+                                : AspectRatio(
+                                    aspectRatio: 0.7,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .background,
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            blurRadius: 12,
+                                            color: Color(0x18000000),
+                                            offset: Offset(0, 4),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            UniconsLine.image_plus,
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .primary,
-                                            fontWeight: FontWeight.w400,
                                           ),
+                                          const SizedBox(height: 16),
+                                          Text(
+                                            'Adicionar Imagem',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelLarge
+                                                ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                    ),
-                  ),
-                  prompt: 'Inserir capa',
-                  onTapNext: newBookForm.state.cover != null
-                      ? () => _onTapNext(context, pageController)
-                      : null,
-                  onTapSkip: () => _onTapNext(context, pageController),
-                ),
-                NewBookPage(
-                  builder: (context) => SimpleTextField(
-                    autofocus: true,
-                    fontSize: 36,
-                    hintText: '00',
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
+                                  ),
+                          ),
+                        ),
+                        prompt: 'Inserir capa',
+                        onTapNext: newBookForm.state.cover != null
+                            ? () => _onTapNext(context, pageController)
+                            : null,
+                        onTapSkip: () => _onTapNext(context, pageController),
+                      ),
+                      NewBookPage(
+                        builder: (context) => SimpleTextField(
+                          autofocus: true,
+                          fontSize: 36,
+                          hintText: '00',
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) => newBookForm
+                              .dispatch({'pages': Pages.fromString(value)}),
+                        ),
+                        prompt: 'Número de páginas',
+                        onTapNext: switch (Pages.validate(
+                          '${newBookForm.state.pages.value}',
+                        )) {
+                          null => () => _onTapNext(context, pageController),
+                          _ => null,
+                        },
+                      ),
                     ],
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) => newBookForm
-                        .dispatch({'pages': Pages.fromString(value)}),
-                  ),
-                  prompt: 'Número de páginas',
-                  onTapNext: switch (Pages.validate(
-                    '${newBookForm.state.pages.value}',
-                  )) {
-                    null => () => _onTapNext(context, pageController),
-                    _ => null,
-                  },
-                ),
+                  null => throw UnimplementedError(),
+                },
                 NewBookPage(
                   builder: (context) => Padding(
                     padding: const EdgeInsets.symmetric(
@@ -256,8 +354,12 @@ class NewBookScreen extends HookConsumerWidget {
                   prompt: 'Leitura',
                   onTapNext: newBookForm.state.status != null
                       ? () => switch (newBookForm.state.status) {
-                            BookStatus.pending =>
-                              _finish(context, ref, newBookForm.state),
+                            BookStatus.pending => _finish(
+                                context,
+                                ref,
+                                selectedBook.value,
+                                newBookForm.state,
+                              ),
                             BookStatus.reading ||
                             BookStatus.finished =>
                               _onTapNext(context, pageController),
@@ -305,8 +407,12 @@ class NewBookScreen extends HookConsumerWidget {
                         onTapNext: switch (Pages.validate(
                           '${newBookForm.state.pages.value}',
                         )) {
-                          null => () =>
-                              _finish(context, ref, newBookForm.state),
+                          null => () => _finish(
+                                context,
+                                ref,
+                                selectedBook.value,
+                                newBookForm.state,
+                              ),
                           _ => null,
                         },
                       ),
@@ -350,8 +456,12 @@ class NewBookScreen extends HookConsumerWidget {
                         onTapNext: switch (Date.validate(
                           newBookForm.state.finishedAt.value,
                         )) {
-                          null => () =>
-                              _finish(context, ref, newBookForm.state),
+                          null => () => _finish(
+                                context,
+                                ref,
+                                selectedBook.value,
+                                newBookForm.state,
+                              ),
                           _ => null,
                         },
                       ),
@@ -368,16 +478,26 @@ class NewBookScreen extends HookConsumerWidget {
     );
   }
 
-  void _finish(BuildContext context, WidgetRef ref, NewBookDTO data) {
+  void _finish(
+    BuildContext context,
+    WidgetRef ref,
+    Book? book,
+    NewBookDTO data,
+  ) {
     FocusManager.instance.primaryFocus?.unfocus();
-    ref
-        .read(newBookControllerProvider.notifier) //
-        .addBook(data)
-        .then(
-          (value) => ref.read(newBookControllerProvider).asError == null
-              ? context.pop()
-              : null,
-        );
+
+    final controller = ref.read(newBookControllerProvider.notifier);
+
+    final work = (book == null)
+        ? controller.addBook(data)
+        : controller.addReading(book, data);
+
+    // ignore: cascade_invocations
+    work.then(
+      (value) => ref.read(newBookControllerProvider).asError == null
+          ? context.pop()
+          : null,
+    );
   }
 
   void _onTapBack(BuildContext context, PageController pageController) {
