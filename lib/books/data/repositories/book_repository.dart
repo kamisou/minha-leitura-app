@@ -130,9 +130,6 @@ class OnlineBookRepository extends BookRepository {
       },
     ).then((response) => Book.fromJson(response as Json));
 
-    // TODO: is this really necessary?
-    // await save<Book>(book, book.id);
-
     ref.read(myBooksProvider.notifier).refresh().ignore();
 
     return book;

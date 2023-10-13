@@ -75,14 +75,6 @@ class BookshelfPage extends HookConsumerWidget {
                               icon: const Icon(UniconsLine.plus),
                               label: const Text('Adicionar'),
                             ),
-                            // OutlinedButton.icon(
-                            //   onPressed: () {
-                            //     // TODO: implement search books
-                            //     throw UnimplementedError();
-                            //   },
-                            //   icon: const Icon(UniconsLine.search),
-                            //   label: const Text('Buscar'),
-                            // ),
                           ],
                         ),
                         const SizedBox(height: 20),
