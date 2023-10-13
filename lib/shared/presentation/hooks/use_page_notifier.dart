@@ -5,25 +5,28 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 ///
 /// Unlike useState, it doesn't subscribe to the `ValueNotifer`.
 ValueNotifier<int> usePageNotifier(PageController pageController) {
-  final page = ValueNotifier(pageController.initialPage);
+  final page = useValueNotifier(pageController.initialPage);
 
-  useEffect(() {
-    void listener() {
-      if (!pageController.hasClients) {
-        return;
+  useEffect(
+    () {
+      void listener() {
+        if (!pageController.hasClients) {
+          return;
+        }
+
+        final controllerPage = pageController.page!.round();
+
+        if (controllerPage != page.value) {
+          page.value = controllerPage;
+        }
       }
 
-      final controllerPage = pageController.page!.round();
+      pageController.addListener(listener);
 
-      if (controllerPage != page.value) {
-        page.value = controllerPage;
-      }
-    }
-
-    pageController.addListener(listener);
-
-    return () => pageController.removeListener(listener);
-  });
+      return () => pageController.removeListener(listener);
+    },
+    [pageController],
+  );
 
   return page;
 }

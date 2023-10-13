@@ -17,7 +17,6 @@ class BookCarrouselContent extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final books = ref.watch(myBooksProvider).requireValue;
     final pageController = useLazyPageController(
-      finished: books.finished,
       onEndOfScroll: ref.read(myBooksProvider.notifier).next,
       viewportFraction: 0.72,
     );

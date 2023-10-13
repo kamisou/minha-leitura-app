@@ -14,13 +14,21 @@ class BookSearchResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        BookCover.raw(bytes: book.cover),
+        SizedBox(
+          height: 100,
+          child: BookCover.raw(bytes: book.cover),
+        ),
+        const SizedBox(width: 16),
         Expanded(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 book.title,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Theme.of(context).colorExtension?.gray[800],
                       fontWeight: FontWeight.w600,

@@ -38,6 +38,8 @@ class MyBooks extends _$MyBooks {
   }
 
   Future<void> next() async {
+    if (state.requireValue.finished) return;
+
     state = AsyncData(
       state.requireValue.copyWith(loading: true),
     );
@@ -81,6 +83,8 @@ class Books extends _$Books {
   }
 
   Future<void> next() async {
+    if (state.requireValue.finished) return;
+
     state = AsyncData(
       state.requireValue.copyWith(loading: true),
     );
@@ -107,7 +111,7 @@ class OnlineBookRepository extends BookRepository {
   }) {
     return ref
         .read(restApiProvider) //
-        .get('app/reading?page=$page')
+        .get('app/book?page=$page')
         .then(
           (response) => PaginatedResource.fromJson(
             response as Json,

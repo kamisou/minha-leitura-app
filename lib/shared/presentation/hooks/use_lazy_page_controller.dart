@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 PageController useLazyPageController({
-  required bool finished,
   Future<void> Function()? onEndOfScroll,
   double endOfScrollthreshold = 80,
   double viewportFraction = 1.0,
@@ -21,10 +20,6 @@ PageController useLazyPageController({
         loading.value = true;
         await onEndOfScroll?.call();
         loading.value = false;
-
-        if (controller.position.extentAfter < endOfScrollthreshold) {
-          reachedEnd.value = true;
-        }
       }
     },
     [controller],
@@ -32,13 +27,10 @@ PageController useLazyPageController({
 
   useEffect(
     () {
-      if (!finished) {
-        controller.addListener(listener);
-        return () => controller.removeListener(listener);
-      }
-      return null;
+      controller.addListener(listener);
+      return () => controller.removeListener(listener);
     },
-    [controller, finished],
+    [controller],
   );
 
   return controller;

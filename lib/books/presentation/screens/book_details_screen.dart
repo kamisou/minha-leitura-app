@@ -40,7 +40,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Image.memory(
-                        (bookDetails.book.cover ?? <int>[]) as Uint8List,
+                        bookDetails.book.cover ?? Uint8List(0),
                         fit: BoxFit.cover,
                         opacity: const AlwaysStoppedAnimation(0.4),
                         height: MediaQuery.of(context).size.height * 0.2,

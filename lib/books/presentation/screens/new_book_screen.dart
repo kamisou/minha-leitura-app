@@ -6,7 +6,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/dtos/new_book_dto.dart';
-import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/value_objects/date.dart';
@@ -14,14 +13,13 @@ import 'package:reading/books/domain/value_objects/pages.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/controllers/new_book_controller.dart';
 import 'package:reading/books/presentation/hooks/use_new_book_form_reducer.dart';
+import 'package:reading/books/presentation/pages/new_book/book_search_result_page.dart';
 import 'package:reading/books/presentation/pages/new_book/new_book_page.dart';
-import 'package:reading/books/presentation/widgets/book_search_result.dart';
 import 'package:reading/books/presentation/widgets/selection_button.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/infrastructure/image_picker.dart';
-import 'package:reading/shared/presentation/hooks/use_lazy_scroll_controller.dart';
 import 'package:reading/shared/presentation/hooks/use_page_notifier.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/presentation/widgets/app_bar_leading.dart';
@@ -39,9 +37,8 @@ class NewBookScreen extends HookConsumerWidget {
     final pageController = usePageController();
     final page = usePageNotifier(pageController);
     final newBookForm = useNewBookFormReducer();
-
     final manualRegister = useState<bool?>(null);
-    final searchTerm = useRef('');
+    final searchTerm = useState('');
     final selectedBook = useRef<Book?>(null);
 
     useSnackbarErrorListener(
@@ -89,23 +86,33 @@ class NewBookScreen extends HookConsumerWidget {
           Expanded(
             child: PageView(
               controller: pageController,
+              physics: const NeverScrollableScrollPhysics(),
               children: [
                 NewBookPage(
-                  builder: (context) => Column(
-                    children: [
-                      SelectionButton(
-                        onPressed: () => manualRegister.value = true,
-                        icon: FeatherIcons.fileText,
-                        text: 'Cadastrar manualmente',
-                        selected: (manualRegister.value ?? false) == true,
-                      ),
-                      SelectionButton(
-                        onPressed: () => manualRegister.value = false,
-                        icon: FeatherIcons.search,
-                        text: 'Pesquisar na nossa base',
-                        selected: manualRegister.value == false,
-                      ),
-                    ],
+                  key: const ValueKey(0),
+                  builder: (context) => Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 40,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SelectionButton(
+                          onPressed: () => manualRegister.value = true,
+                          icon: FeatherIcons.fileText,
+                          text: 'Cadastrar manualmente',
+                          selected: (manualRegister.value ?? false) == true,
+                        ),
+                        const SizedBox(height: 16),
+                        SelectionButton(
+                          onPressed: () => manualRegister.value = false,
+                          icon: FeatherIcons.search,
+                          text: 'Pesquisar na nossa base',
+                          selected: manualRegister.value == false,
+                        ),
+                      ],
+                    ),
                   ),
                   prompt: 'Como deseja cadastrar seu livro?',
                   onTapNext: manualRegister.value != null
@@ -115,19 +122,22 @@ class NewBookScreen extends HookConsumerWidget {
                 ...switch (manualRegister.value) {
                   false => [
                       Column(
+                        key: const ValueKey(1),
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Expanded(
                             child: SimpleTextField(
                               autofocus: true,
-                              fontSize: 36,
+                              fontSize: 24,
                               hintText: 'Qual o título do livro?',
+                              initialValue: searchTerm.value,
                               onChanged: (value) => searchTerm.value = value,
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(16),
                             child: FilledButton(
-                              onPressed: searchTerm.value.isNotEmpty //
+                              onPressed: searchTerm.value.isNotEmpty
                                   ? () => _onTapNext(context, pageController)
                                   : null,
                               child: const Text('Buscar'),
@@ -135,43 +145,17 @@ class NewBookScreen extends HookConsumerWidget {
                           ),
                         ],
                       ),
-                      ref
-                          .watch(booksProvider(searchTerm: searchTerm.value))
-                          .maybeWhen(
-                            data: (books) {
-                              final controller = useLazyScrollController(
-                                finished: books.finished,
-                                onEndOfScroll: ref
-                                    .read(
-                                      booksProvider(
-                                        searchTerm: searchTerm.value,
-                                      ).notifier,
-                                    )
-                                    .next,
-                              );
-
-                              return ListView.builder(
-                                controller: controller,
-                                itemCount: books.data.length,
-                                itemBuilder: (context, index) =>
-                                    GestureDetector(
-                                  onTap: () {
-                                    selectedBook.value = books.data[index];
-                                    _onTapNext(context, pageController);
-                                  },
-                                  child: BookSearchResult(
-                                    book: books.data[index],
-                                  ),
-                                ),
-                              );
-                            },
-                            orElse: () => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
+                      BookSearchResultPage(
+                        searchTerm: searchTerm.value,
+                        onTapBook: (book) {
+                          selectedBook.value = book;
+                          _onTapNext(context, pageController);
+                        },
+                      ),
                     ],
                   true => [
                       NewBookPage(
+                        key: const ValueKey(1),
                         builder: (context) => SimpleTextField(
                           autofocus: true,
                           fontSize: 36,
@@ -185,6 +169,7 @@ class NewBookScreen extends HookConsumerWidget {
                             : null,
                       ),
                       NewBookPage(
+                        key: const ValueKey(2),
                         builder: (context) => SimpleTextField(
                           autofocus: true,
                           fontSize: 36,
@@ -198,6 +183,7 @@ class NewBookScreen extends HookConsumerWidget {
                             : null,
                       ),
                       NewBookPage(
+                        key: const ValueKey(3),
                         builder: (context) => Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 72,
@@ -272,6 +258,7 @@ class NewBookScreen extends HookConsumerWidget {
                         onTapSkip: () => _onTapNext(context, pageController),
                       ),
                       NewBookPage(
+                        key: const ValueKey(4),
                         builder: (context) => SimpleTextField(
                           autofocus: true,
                           fontSize: 36,
@@ -292,9 +279,10 @@ class NewBookScreen extends HookConsumerWidget {
                         },
                       ),
                     ],
-                  null => throw UnimplementedError(),
+                  null => <Widget>[],
                 },
                 NewBookPage(
+                  key: const ValueKey(5),
                   builder: (context) => Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
@@ -370,6 +358,7 @@ class NewBookScreen extends HookConsumerWidget {
                 ...switch (newBookForm.state.status) {
                   BookStatus.reading => [
                       NewBookPage(
+                        key: const ValueKey(6),
                         builder: (context) => SimpleTextField(
                           autofocus: true,
                           fontSize: 36,
@@ -391,6 +380,7 @@ class NewBookScreen extends HookConsumerWidget {
                         },
                       ),
                       NewBookPage(
+                        key: const ValueKey(7),
                         builder: (context) => SimpleTextField(
                           autofocus: true,
                           fontSize: 36,
@@ -419,6 +409,7 @@ class NewBookScreen extends HookConsumerWidget {
                     ],
                   BookStatus.finished => [
                       NewBookPage(
+                        key: const ValueKey(6),
                         builder: (context) => SimpleTextField(
                           autofocus: true,
                           fontSize: 36,
@@ -440,6 +431,7 @@ class NewBookScreen extends HookConsumerWidget {
                         },
                       ),
                       NewBookPage(
+                        key: const ValueKey(7),
                         builder: (context) => SimpleTextField(
                           autofocus: true,
                           fontSize: 36,
@@ -467,7 +459,7 @@ class NewBookScreen extends HookConsumerWidget {
                       ),
                     ],
                   _ => [
-                      const SizedBox(),
+                      const SizedBox(key: ValueKey(6)),
                     ],
                 },
               ],

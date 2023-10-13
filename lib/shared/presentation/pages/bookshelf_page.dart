@@ -22,7 +22,6 @@ class BookshelfPage extends HookConsumerWidget {
           child: ref.watch(myBooksProvider).maybeWhen(
                 data: (books) {
                   final controller = useLazyScrollController(
-                    finished: books.finished,
                     onEndOfScroll: ref.read(myBooksProvider.notifier).next,
                   );
 

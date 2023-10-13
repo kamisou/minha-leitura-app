@@ -6,6 +6,7 @@ class SimpleTextField extends StatelessWidget {
   const SimpleTextField({
     super.key,
     this.hintText,
+    this.initialValue,
     this.inputFormatters,
     this.keyboardType,
     this.onChanged,
@@ -15,6 +16,8 @@ class SimpleTextField extends StatelessWidget {
   });
 
   final String? hintText;
+
+  final String? initialValue;
 
   final List<TextInputFormatter>? inputFormatters;
 
@@ -32,7 +35,6 @@ class SimpleTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       autofocus: autofocus,
-      textAlign: TextAlign.center,
       decoration: InputDecoration(
         border: InputBorder.none,
         filled: false,
@@ -42,14 +44,16 @@ class SimpleTextField extends StatelessWidget {
               fontSize: fontSize,
             ),
       ),
-      maxLines: null,
+      initialValue: initialValue,
       inputFormatters: inputFormatters,
       keyboardType: keyboardType,
+      maxLines: null,
       onChanged: onChanged,
       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: Theme.of(context).colorExtension?.gray[600],
             fontSize: fontSize,
           ),
+      textAlign: TextAlign.center,
       validator: validator,
     );
   }
