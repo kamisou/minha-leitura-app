@@ -111,13 +111,19 @@ class OnlineBookRepository extends BookRepository {
   }) {
     return ref
         .read(restApiProvider) //
-        .get('app/book?page=$page')
-        .then(
-          (response) => PaginatedResource.fromJson(
-            response as Json,
-            Book.fromJson,
-          ),
-        );
+        .get(
+      'app/book',
+      query: {
+        'page': page,
+        if (searchTerm != null) //
+          'q': searchTerm,
+      },
+    ).then(
+      (response) => PaginatedResource.fromJson(
+        response as Json,
+        Book.fromJson,
+      ),
+    );
   }
 
   @override

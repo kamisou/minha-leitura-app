@@ -1,6 +1,0 @@
-retornar nome do usuário no post de criaçao de nota
-incluir parent_id em cada nota
-data de término está retornando erro na hora de criar leitura
-
-ref.invalidate não funciona da maneira esperada para os recursos paginados AsyncNotifier. por isso, deve-se usar um método definido "refresh"
-que reseta o estado do notifier para que não tente buscar a próxima página.
