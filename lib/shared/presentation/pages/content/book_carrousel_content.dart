@@ -3,23 +3,22 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:reading/books/presentation/widgets/book_summary.dart';
-import 'package:reading/shared/presentation/hooks/use_lazy_page_controller.dart';
 import 'package:reading/shared/presentation/hooks/use_page_notifier.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
+import 'package:reading/shared/presentation/widgets/new_book_widget.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class BookCarrouselContent extends HookConsumerWidget {
   const BookCarrouselContent({
     super.key,
+    required this.pageController,
   });
+
+  final PageController pageController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final books = ref.watch(myBooksProvider).requireValue;
-    final pageController = useLazyPageController(
-      onEndOfScroll: ref.read(myBooksProvider.notifier).next,
-      viewportFraction: 0.72,
-    );
     final page = usePageNotifier(pageController);
 
     return Column(
@@ -53,13 +52,23 @@ class BookCarrouselContent extends HookConsumerWidget {
         Expanded(
           child: PageView.builder(
             controller: pageController,
-            itemCount: books.data.length + (books.loading ? 1 : 0),
+            itemCount: books.data.length + //
+                ((books.finished || books.loading) ? 1 : 0),
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               if (index == books.data.length) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                if (books.loading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return Center(
+                    child: GestureDetector(
+                      onTap: () => context.go('/book/new'),
+                      child: const NewBookWidget(),
+                    ),
+                  );
+                }
               }
 
               return Container(
