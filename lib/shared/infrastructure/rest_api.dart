@@ -4,11 +4,28 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
+import 'package:reading/shared/infrastructure/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'rest_api.g.dart';
 
 typedef Json = Map<String, dynamic>;
+
+@Riverpod(keepAlive: true)
+class RestApiServer extends _$RestApiServer {
+  @override
+  Future<String> build() async {
+    return ref
+        .read(secureStorageProvider)
+        .read('rest_api_server')
+        .then((value) => value ?? 'http://marlin.websix.com.br:5000/api/');
+  }
+
+  Future<void> set(String value) {
+    state = AsyncData(value);
+    return ref.read(secureStorageProvider).write('rest_api_server', value);
+  }
+}
 
 @riverpod
 RestApi restApi(RestApiRef ref) {
@@ -17,7 +34,7 @@ RestApi restApi(RestApiRef ref) {
   log('$accessToken');
 
   return DioRestApi(
-    server: 'http://marlin.websix.com.br:5000/api/',
+    server: ref.watch(restApiServerProvider).requireValue,
     headers: accessToken != null //
         ? {'Authorization': 'Bearer $accessToken'}
         : null,
@@ -94,7 +111,7 @@ class DioRestApi extends RestApi {
     Object? body,
   }) async {
     log(
-      '$method $path\n'
+      '$method ${_dio.options.baseUrl}$path\n'
       'query: $query\n'
       'body: $body',
       name: 'RestApi',

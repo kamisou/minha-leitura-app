@@ -44,6 +44,9 @@ class ThemeManager extends _$ThemeManager {
       ),
       disabledColor: const Color(0xFFE6E6E6),
       dividerTheme: const DividerThemeData(space: 42),
+      drawerTheme: const DrawerThemeData(
+        backgroundColor: Colors.white,
+      ),
       extensions: const [
         AnimationExtension(
           curve: Curves.easeInOutQuart,

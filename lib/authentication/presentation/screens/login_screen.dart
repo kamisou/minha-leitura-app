@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/presentation/content/login_content.dart';
@@ -7,6 +8,7 @@ import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/presentation/widgets/gradient_intro_background.dart';
+import 'package:reading/shared/presentation/widgets/server_settings_drawer.dart';
 
 class LoginScreen extends HookConsumerWidget {
   const LoginScreen({super.key});
@@ -43,6 +45,7 @@ class LoginScreen extends HookConsumerWidget {
               child: const LoginContent(),
             ),
           ),
+          drawer: kDebugMode ? const ServerSettingsDrawer() : null,
         ),
       ],
     );
