@@ -44,8 +44,8 @@ Future<ProviderContainer> initRiverpod() async {
 
     // async data
     await container.read(introSeenProvider.future);
-    await container.read(profileProvider.future);
     await container.read(restApiServerProvider.future);
+    await container.read(profileProvider.future);
   } catch (error, stackTrace) {
     log(
       'initialization failed:',

@@ -4,6 +4,10 @@ import 'package:reading/books/domain/models/book_rating.dart';
 double useRatingAverage(List<BookRating> ratings) {
   return useMemoized(
     () {
+      if (ratings.isEmpty) {
+        return 0.0;
+      }
+
       var total = 0.0;
 
       for (final rating in ratings) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:reading/books/data/dtos/new_rating_dto.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/rating.dart';
 import 'package:reading/books/presentation/hooks/use_book_rating_form_reducer.dart';
@@ -8,11 +9,16 @@ import 'package:reading/books/presentation/widgets/star_rating_widget.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class NewRatingDialog extends HookWidget {
-  const NewRatingDialog({super.key});
+  const NewRatingDialog({
+    super.key,
+    this.rating,
+  });
+
+  final NewRatingDTO? rating;
 
   @override
   Widget build(BuildContext context) {
-    final bookRatingForm = useBookRatingFormReducer();
+    final bookRatingForm = useBookRatingFormReducer(initialState: rating);
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -29,10 +35,12 @@ class NewRatingDialog extends HookWidget {
           StarRatingWidget(
             onChanged: (value) => bookRatingForm.dispatch(Rating(value)),
             enabled: true,
+            value: bookRatingForm.state.rating.value,
           ),
           const SizedBox(height: 10),
           TextFormField(
             decoration: const InputDecoration(hintText: 'comentário...'),
+            initialValue: bookRatingForm.state.comment.value,
             maxLines: 4,
             onChanged: (value) => bookRatingForm.dispatch(Description(value)),
           ),

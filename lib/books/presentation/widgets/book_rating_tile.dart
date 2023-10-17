@@ -24,7 +24,10 @@ class BookRatingTile extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            StarRatingWidget(value: rating.rating),
+            StarRatingWidget(
+              iconSize: 16,
+              value: rating.rating,
+            ),
             if (rating.author.id == ref.read(profileProvider).requireValue!.id)
               GestureDetector(
                 onTap: () => ref
@@ -33,6 +36,7 @@ class BookRatingTile extends ConsumerWidget {
                 child: Icon(
                   UniconsLine.trash_alt,
                   color: Theme.of(context).colorExtension?.gray[800],
+                  size: 20,
                 ),
               ),
           ],

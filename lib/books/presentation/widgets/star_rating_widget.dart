@@ -6,8 +6,9 @@ class StarRatingWidget extends StatefulWidget {
     super.key,
     this.value,
     this.onChanged,
-    this.stars = 5,
     this.enabled = false,
+    this.iconSize = 28,
+    this.stars = 5,
   }) : assert(
           value == null || value <= stars,
           'The rating cannot be bigger than the number of stars!',
@@ -17,9 +18,11 @@ class StarRatingWidget extends StatefulWidget {
 
   final void Function(double value)? onChanged;
 
-  final double stars;
-
   final bool enabled;
+
+  final double iconSize;
+
+  final double stars;
 
   @override
   State<StarRatingWidget> createState() => _StarRatingWidgetState();
@@ -35,16 +38,26 @@ class _StarRatingWidgetState extends State<StarRatingWidget> {
   }
 
   @override
+  void didUpdateWidget(covariant StarRatingWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!widget.enabled) {
+      _value = widget.value ?? 0;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         for (var i = 0; i < widget.stars; i += 1)
           GestureDetector(
-            onTap: () {
-              setState(() => _value = i + 1);
-              widget.onChanged?.call(_value);
-            },
+            onTap: widget.enabled
+                ? () {
+                    setState(() => _value = i + 1);
+                    widget.onChanged?.call(_value);
+                  }
+                : null,
             child: Icon(
               i < _value
                   ? i < _value - 0.5
@@ -52,7 +65,7 @@ class _StarRatingWidgetState extends State<StarRatingWidget> {
                       : UniconsSolid.star_half_alt
                   : UniconsLine.star,
               color: Theme.of(context).colorScheme.primary,
-              size: 28,
+              size: widget.iconSize,
             ),
           ),
       ],

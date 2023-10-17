@@ -180,9 +180,9 @@ class BookDetailsScreen extends HookConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ref.watch(bookNotesProvider(bookDetails.id)).maybeWhen(
-                    data: (data) => BookNotesPage(
+                    data: (notes) => BookNotesPage(
                       bookId: bookDetails.id,
-                      notes: data,
+                      notes: notes,
                     ),
                     loading: () => const Center(
                       child: CircularProgressIndicator(),
@@ -200,9 +200,12 @@ class BookDetailsScreen extends HookConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ref.watch(bookRatingsProvider(bookDetails.id)).maybeWhen(
-                    data: (data) => BookRatingsPage(
+                    data: (ratings) => BookRatingsPage(
                       bookId: bookDetails.id,
-                      ratings: data,
+                      ratings: ratings.data,
+                    ),
+                    loading: () => const Center(
+                      child: CircularProgressIndicator(),
                     ),
                     orElse: () => const SizedBox(),
                   ),

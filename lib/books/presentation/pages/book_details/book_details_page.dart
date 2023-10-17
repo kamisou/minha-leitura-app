@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/dtos/new_reading_dto.dart';
+import 'package:reading/books/data/repositories/book_note_repository.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/presentation/controllers/new_reading_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_reading_dialog.dart';
@@ -67,12 +68,15 @@ class BookDetailsPage extends HookConsumerWidget {
             //   label: 'Sua Meta Diária',
             //   value: '${book.dailyPageGoal} página(s)',
             // ),
-            // const Divider(),
-            // BookDetailsTile(
-            //   icon: UniconsLine.edit,
-            //   label: 'Suas Anotações',
-            //   value: '${book.dailyPageGoal} nota(s)',
-            // ),
+            const Divider(),
+            BookDetailsTile(
+              icon: UniconsLine.edit,
+              label: 'Suas Anotações',
+              value: ref.watch(bookNotesProvider(book.book.id)).maybeWhen(
+                    data: (data) => '${data.length} nota(s)',
+                    orElse: () => '0 nota(s)',
+                  ),
+            ),
             // const Divider(),
             // BookDetailsTile(
             //   icon: UniconsLine.bookmark,

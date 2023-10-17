@@ -23,9 +23,11 @@ class ViewNoteDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 20,
+      padding: const EdgeInsets.only(
+        top: 40,
+        right: 16,
+        bottom: 16,
+        left: 16,
       ),
       child: Column(
         children: [
