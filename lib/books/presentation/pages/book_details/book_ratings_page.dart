@@ -112,15 +112,29 @@ class BookRatingsPage extends HookConsumerWidget {
           const SliverToBoxAdapter(
             child: SizedBox(height: 24),
           ),
-          SliverList.builder(
-            itemCount: ratings.length,
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: BookRatingTile(
-                rating: ratings[index],
+          if (ratings.isNotEmpty)
+            SliverList.builder(
+              itemCount: ratings.length,
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: BookRatingTile(
+                  rating: ratings[index],
+                ),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.all(8),
+              sliver: SliverToBoxAdapter(
+                child: Text(
+                  'Nenhuma avaliação',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorExtension?.gray[500],
+                      ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
