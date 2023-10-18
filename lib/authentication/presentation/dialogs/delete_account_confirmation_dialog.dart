@@ -33,7 +33,7 @@ class DeleteAccountConfirmationDialog extends ConsumerWidget {
               'Tem certeza que deseja deletar sua conta e todos os seus dados '
               'associados?',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorExtension?.gray[600],
                   ),
             ),
             const SizedBox(height: 16),

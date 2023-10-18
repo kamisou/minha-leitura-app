@@ -38,13 +38,14 @@ Future<ProviderContainer> initRiverpod() async {
 
   try {
     // services
-    await container.read(connectionStatusProvider.future);
-    await container.read(tokenRepositoryProvider.future);
-    await container.read(databaseProvider).initialize();
+    await Future.wait([
+      container.read(connectionStatusProvider.future),
+      container.read(tokenRepositoryProvider.future),
+      container.read(databaseProvider).initialize(),
+      container.read(introSeenProvider.future),
+      container.read(restApiServerProvider.future),
+    ]);
 
-    // async data
-    await container.read(introSeenProvider.future);
-    await container.read(restApiServerProvider.future);
     await container.read(profileProvider.future);
   } catch (error, stackTrace) {
     log(

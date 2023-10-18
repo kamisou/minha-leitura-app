@@ -20,6 +20,7 @@ Future<UserProfile?> profile(ProfileRef ref) async {
   if (ref.read(tokenRepositoryProvider).valueOrNull == null) {
     return null;
   }
+
   return ref.read(profileRepositoryProvider).getMyProfile();
 }
 

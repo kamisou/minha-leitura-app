@@ -481,7 +481,7 @@ class NewBookScreen extends HookConsumerWidget {
     final controller = ref.read(newBookControllerProvider.notifier);
 
     final work = (book == null)
-        ? controller.addBook(data)
+        ? controller.addBookAndReading(data)
         : controller.addReading(book, data);
 
     // ignore: cascade_invocations

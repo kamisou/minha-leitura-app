@@ -25,6 +25,7 @@ Raw<GoRouter> router(RouterRef ref) {
         path: '/',
         redirect: (context, state) {
           final profile = ref.read(profileProvider).valueOrNull;
+
           return profile == null //
               ? '/login'
               : null;

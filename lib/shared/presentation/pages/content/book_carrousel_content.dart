@@ -52,8 +52,7 @@ class BookCarrouselContent extends HookConsumerWidget {
         Expanded(
           child: PageView.builder(
             controller: pageController,
-            itemCount: books.data.length + //
-                ((books.finished || books.loading) ? 1 : 0),
+            itemCount: books.data.length + 1,
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               if (index == books.data.length) {
