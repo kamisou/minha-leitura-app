@@ -119,7 +119,7 @@ class RankingPage extends HookConsumerWidget {
                                 ),
                               ],
                             ),
-                            if (data == null)
+                            if (data?.spots.isEmpty ?? true)
                               TableRow(
                                 children: [
                                   Text(
@@ -136,7 +136,7 @@ class RankingPage extends HookConsumerWidget {
                                 ],
                               )
                             else
-                              for (final (i, spot) in data.spots.indexed)
+                              for (final (i, spot) in data!.spots.indexed)
                                 TableRow(
                                   decoration: BoxDecoration(
                                     color: i.isEven

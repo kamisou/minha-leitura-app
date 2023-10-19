@@ -41,12 +41,7 @@ class DeleteAccountConfirmationDialog extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () {
-                    context.go('/login');
-                    ref
-                        .read(profileControllerProvider.notifier)
-                        .deleteProfile();
-                  },
+                  onPressed: () => _onDelete(context, ref),
                   child: Text(
                     'Confirmar',
                     style: TextStyle(
@@ -67,6 +62,29 @@ class DeleteAccountConfirmationDialog extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _onDelete(BuildContext context, WidgetRef ref) {
+    context.go('/login');
+    ref
+        .read(profileControllerProvider.notifier) //
+        .deleteProfile()
+        .then(
+      (value) {
+        if (ref.read(profileControllerProvider).asError == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  'Sua conta foi removida. Esperamos te ver novamente!',
+                ),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }
