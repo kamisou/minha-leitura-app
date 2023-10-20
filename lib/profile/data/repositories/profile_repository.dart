@@ -52,7 +52,7 @@ class OnlineProfileRepository extends ProfileRepository {
   Future<void> saveProfile(ProfileChangeDTO data) async {
     final profile = await ref
         .read(restApiProvider) //
-        .post('user/my/profile', body: data.toJson())
+        .put('app/student', body: data.toJson())
         .then((response) => UserProfile.fromJson(response as Json));
 
     ref
@@ -82,7 +82,7 @@ class OnlineProfileRepository extends ProfileRepository {
   Future<void> savePassword(PasswordChangeDTO data) {
     return ref
         .read(restApiProvider) //
-        .post('user/my/password', body: data.toJson());
+        .post('auth/reset-password', body: data.toJson());
   }
 
   @override

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/authentication/domain/value_objects/password.dart';
+import 'package:reading/authentication/presentation/dialogs/delete_account_confirmation_dialog.dart';
 import 'package:reading/profile/data/dtos/password_change_dto.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
@@ -13,6 +15,7 @@ import 'package:reading/profile/presentation/widgets/profile_picture.dart';
 import 'package:reading/shared/infrastructure/image_picker.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
+import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
 
 class ProfileScreen extends HookConsumerWidget {
   const ProfileScreen({super.key});
@@ -25,8 +28,23 @@ class ProfileScreen extends HookConsumerWidget {
       initialState: ProfileChangeDTO(
         email: Email(user.email),
         name: Name(user.name),
-        // phone: Phone(user.phone),
       ),
+    );
+    final changed = useMemoized(
+      () =>
+          user.email != profileForm.state.email?.value ||
+          user.name != profileForm.state.name?.value,
+      [user.email, user.name, profileForm.state],
+    );
+    final isValid = useMemoized(
+      () {
+        final form = profileForm.state;
+        return changed &&
+            (form.password?.value.isNotEmpty ?? false) &&
+            (form.name?.value.isNotEmpty ?? false) &&
+            (form.email?.value.isNotEmpty ?? false);
+      },
+      [changed, profileForm.state],
     );
 
     useSnackbarErrorListener(
@@ -40,86 +58,120 @@ class ProfileScreen extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Meus Dados'),
       ),
-      body: Stack(
-        children: [
-          Form(
-            key: formKey.value,
-            child: ListView(
-              children: [
-                Center(
-                  child: GestureDetector(
-                    onTap: () => _changeAvatar(ref),
-                    child: const ProfilePicture(radius: 110),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                TextFormField(
-                  initialValue: user.name,
-                  onChanged: (value) => profileForm.dispatch(Name(value)),
-                  validator: (value) => switch (Name.validate(value)) {
-                    NameError.invalid => 'Informe um nome completo',
-                    _ => null,
-                  },
-                ),
-                const SizedBox(height: 18),
-                TextFormField(
-                  initialValue: user.email,
-                  onChanged: (value) => profileForm.dispatch(Email(value)),
-                  validator: (value) => switch (Email.validate(value)) {
-                    EmailError.invalid =>
-                      'Informe um endereço de e-mail válido',
-                    _ => null,
-                  },
-                ),
-                // const SizedBox(height: 18),
-                // TextFormField(
-                //   initialValue: user.phone,
-                //   onChanged: (value) => profileForm.dispatch(Phone(value)),
-                //   validator: (value) => switch (Phone.validate(value)) {
-                //     PhoneError.invalid => 'Informe um telefone válido',
-                //     _ => null,
-                //   },
-                // ),
-                const SizedBox(height: 12),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () => showDialog<PasswordChangeDTO?>(
-                      context: context,
-                      builder: (context) => const ChangePasswordDialog(),
-                    ).then(
-                      (value) => value != null
-                          ? ref
-                              .read(profileControllerProvider.notifier)
-                              .savePassword(value)
-                          : null,
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Form(
+              key: formKey.value,
+              child: ListView(
+                children: [
+                  Center(
+                    child: GestureDetector(
+                      onTap: () => _changeAvatar(ref),
+                      child: const ProfilePicture(radius: 55),
                     ),
-                    child: const Text('Alterar senha'),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      // TODO: implement delete account
-                      throw UnimplementedError();
+                  const SizedBox(height: 24),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'Nome de usuário',
+                    ),
+                    initialValue: user.name,
+                    onChanged: (value) => profileForm.dispatch(Name(value)),
+                    validator: (value) => switch (Name.validate(value)) {
+                      NameError.invalid => 'Informe um nome completo',
+                      _ => null,
                     },
-                    child: const Text('Excluir conta'),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 18),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'E-mail',
+                    ),
+                    initialValue: user.email,
+                    onChanged: (value) => profileForm.dispatch(Email(value)),
+                    validator: (value) => switch (Email.validate(value)) {
+                      EmailError.invalid =>
+                        'Informe um endereço de e-mail válido',
+                      _ => null,
+                    },
+                  ),
+                  if (changed)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 18),
+                      child: ObfuscatedTextFormField(
+                        decoration: const InputDecoration(
+                          hintText: 'Senha',
+                        ),
+                        onChanged: (value) =>
+                            profileForm.dispatch(Password(value)),
+                        validator: (value) =>
+                            switch (Password.validate(value)) {
+                          PasswordError.empty => 'Confirme sua senha',
+                          _ => null,
+                        },
+                      ),
+                    ),
+                  // const SizedBox(height: 18),
+                  // TextFormField(
+                  //   initialValue: user.phone,
+                  //   onChanged: (value) => profileForm.dispatch(Phone(value)),
+                  //   validator: (value) => switch (Phone.validate(value)) {
+                  //     PhoneError.invalid => 'Informe um telefone válido',
+                  //     _ => null,
+                  //   },
+                  // ),
+                  const SizedBox(height: 12),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => showDialog<PasswordChangeDTO?>(
+                        context: context,
+                        builder: (context) => const ChangePasswordDialog(),
+                      ).then(
+                        (value) => value != null
+                            ? ref
+                                .read(profileControllerProvider.notifier)
+                                .savePassword(value)
+                            : null,
+                      ),
+                      child: const Text('Alterar senha'),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Center(
+                    child: TextButton(
+                      onPressed: () => showDialog<void>(
+                        context: context,
+                        builder: (context) =>
+                            const DeleteAccountConfirmationDialog(),
+                      ),
+                      child: const Text('Excluir conta'),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          ButtonProgressIndicator(
-            onPressed: () => _save(
-              ref,
-              formKey.value.currentState!,
-              profileForm.state,
+            Positioned(
+              left: 0,
+              right: 0,
+              child: ButtonProgressIndicator(
+                onPressed: isValid
+                    ? () => _save(
+                          context,
+                          ref,
+                          formKey.value.currentState!,
+                          profileForm.state,
+                        )
+                    : null,
+                isLoading: ref.watch(profileControllerProvider).isLoading,
+                child: const Text('Salvar'),
+              ),
             ),
-            isLoading: ref.watch(profileControllerProvider).isLoading,
-            child: const Text('Salvar'),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -134,11 +186,32 @@ class ProfileScreen extends HookConsumerWidget {
     return ref.read(profileControllerProvider.notifier).saveAvatar(avatar);
   }
 
-  void _save(WidgetRef ref, FormState form, ProfileChangeDTO data) {
+  void _save(
+    BuildContext context,
+    WidgetRef ref,
+    FormState form,
+    ProfileChangeDTO data,
+  ) {
     if (!form.validate()) {
       return;
     }
 
-    ref.read(profileControllerProvider.notifier).save(data);
+    ref
+        .read(profileControllerProvider.notifier) //
+        .save(data)
+        .then((value) {
+      if (ref.read(profileControllerProvider).asError == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                'As alterações da sua conta foram realizadas',
+              ),
+            ),
+          ),
+        );
+      }
+    });
   }
 }

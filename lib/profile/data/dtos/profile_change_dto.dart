@@ -1,35 +1,35 @@
+import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
-import 'package:reading/profile/domain/value_objects/phone.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 
 class ProfileChangeDTO {
   const ProfileChangeDTO({
     this.name,
     this.email,
-    this.phone,
+    this.password,
   });
 
   final Name? name;
 
   final Email? email;
 
-  final Phone? phone;
+  final Password? password;
 
   ProfileChangeDTO copyWith({
     Name? name,
     Email? email,
-    Phone? phone,
+    Password? password,
   }) =>
       ProfileChangeDTO(
         name: name ?? this.name,
         email: email ?? this.email,
-        phone: phone ?? this.phone,
+        password: password ?? this.password,
       );
 
   Json toJson() => {
         'name': name?.value,
         'email': email?.value,
-        'phone': phone?.value,
+        'password': password?.value,
       };
 }

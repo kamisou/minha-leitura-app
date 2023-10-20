@@ -14,69 +14,88 @@ class ChangePasswordDialog extends HookWidget {
     final passwordForm = usePasswordFormReducer();
 
     return Dialog(
-      child: Column(
-        children: [
-          const Text('Alterar senha'),
-          const SizedBox(height: 16),
-          Form(
-            key: formKey.value,
-            child: Column(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Alterar senha',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+            ),
+            const SizedBox(height: 16),
+            Form(
+              key: formKey.value,
+              child: Column(
+                children: [
+                  ObfuscatedTextFormField(
+                    decoration: const InputDecoration(hintText: 'senha atual'),
+                    textInputAction: TextInputAction.next,
+                    onChanged: (value) =>
+                        passwordForm.dispatch({'old': Password(value)}),
+                    validator: (value) => switch (Password.validate(value)) {
+                      PasswordError.empty => 'Informe a senha',
+                      _ => null,
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  ObfuscatedTextFormField(
+                    decoration: const InputDecoration(hintText: 'nova senha'),
+                    textInputAction: TextInputAction.next,
+                    onChanged: (value) =>
+                        passwordForm.dispatch({'new': Password(value)}),
+                    validator: (value) => switch (Password.validate(value)) {
+                      PasswordError.empty => 'Informe uma senha',
+                      _ => null,
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  ObfuscatedTextFormField(
+                    decoration:
+                        const InputDecoration(hintText: 'repetir senha'),
+                    onChanged: (value) =>
+                        passwordForm.dispatch(PasswordConfirm(value)),
+                    onFieldSubmitted: (value) =>
+                        context.pop(passwordForm.state),
+                    validator: (value) => switch (PasswordConfirm.validate(
+                      value,
+                      passwordForm.state.newPassword.value,
+                    )) {
+                      PasswordError.noMatch => 'As senhas não coincidem',
+                      _ => null,
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
               children: [
-                ObfuscatedTextFormField(
-                  decoration: const InputDecoration(hintText: 'senha atual'),
-                  textInputAction: TextInputAction.next,
-                  onChanged: (value) =>
-                      passwordForm.dispatch({'old': Password(value)}),
-                  validator: (value) => switch (Password.validate(value)) {
-                    PasswordError.empty => 'Informe a senha',
-                    _ => null,
-                  },
+                Expanded(
+                  child: TextButton(
+                    onPressed: context.pop,
+                    child: const Text('Cancelar'),
+                  ),
                 ),
-                ObfuscatedTextFormField(
-                  decoration: const InputDecoration(hintText: 'nova senha'),
-                  textInputAction: TextInputAction.next,
-                  onChanged: (value) =>
-                      passwordForm.dispatch({'new': Password(value)}),
-                  validator: (value) => switch (Password.validate(value)) {
-                    PasswordError.empty => 'Informe uma senha',
-                    _ => null,
-                  },
-                ),
-                ObfuscatedTextFormField(
-                  decoration: const InputDecoration(hintText: 'repetir senha'),
-                  onChanged: (value) =>
-                      passwordForm.dispatch(PasswordConfirm(value)),
-                  onFieldSubmitted: (value) => context.pop(passwordForm.state),
-                  validator: (value) => switch (PasswordConfirm.validate(
-                    value,
-                    passwordForm.state.newPassword.value,
-                  )) {
-                    PasswordError.noMatch => 'As senhas não coincidem',
-                    _ => null,
-                  },
+                const SizedBox(width: 16),
+                Expanded(
+                  child: FilledButton(
+                    onPressed: () {
+                      if (formKey.value.currentState!.validate()) {
+                        context.pop(passwordForm.state);
+                      }
+                    },
+                    child: const Text('Salvar'),
+                  ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 24),
-          Row(
-            children: [
-              Expanded(
-                child: TextButton(
-                  onPressed: context.pop,
-                  child: const Text('Cancelar'),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: FilledButton(
-                  onPressed: () => context.pop(passwordForm.state),
-                  child: const Text('Salvar'),
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

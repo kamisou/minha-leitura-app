@@ -41,7 +41,7 @@ class DeleteAccountConfirmationDialog extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () => _onDelete(context, ref),
+                  onPressed: () => _deleteAccount(context, ref),
                   child: Text(
                     'Confirmar',
                     style: TextStyle(
@@ -65,7 +65,7 @@ class DeleteAccountConfirmationDialog extends ConsumerWidget {
     );
   }
 
-  void _onDelete(BuildContext context, WidgetRef ref) {
+  void _deleteAccount(BuildContext context, WidgetRef ref) {
     context.go('/login');
     ref
         .read(profileControllerProvider.notifier) //
