@@ -1,9 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 
 class ServerSettingsDrawer extends ConsumerStatefulWidget {
   const ServerSettingsDrawer({super.key});
+
+  static ServerSettingsDrawer? buildIfDebugMode({
+    bool overrideDebugMode = false,
+  }) =>
+      kDebugMode ? const ServerSettingsDrawer() : null;
 
   @override
   ConsumerState<ServerSettingsDrawer> createState() =>

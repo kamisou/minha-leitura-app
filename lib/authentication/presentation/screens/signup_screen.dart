@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/presentation/content/signup_content.dart';
@@ -45,7 +44,7 @@ class SignupScreen extends HookConsumerWidget {
               child: const SignupContent(),
             ),
           ),
-          drawer: kDebugMode ? const ServerSettingsDrawer() : null,
+          drawer: ServerSettingsDrawer.buildIfDebugMode(),
         ),
       ],
     );

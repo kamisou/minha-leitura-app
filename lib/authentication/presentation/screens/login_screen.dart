@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/presentation/content/login_content.dart';
@@ -45,7 +44,7 @@ class LoginScreen extends HookConsumerWidget {
               child: const LoginContent(),
             ),
           ),
-          drawer: kDebugMode ? const ServerSettingsDrawer() : null,
+          drawer: ServerSettingsDrawer.buildIfDebugMode(),
         ),
       ],
     );
