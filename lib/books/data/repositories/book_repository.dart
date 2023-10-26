@@ -154,8 +154,8 @@ class OnlineBookRepository extends BookRepository {
           body: {
             'book_id': book.id,
             'status': data.status!.name,
-            'started_at': data.startedAt.value,
-            'finished_at': data.finishedAt.value,
+            'started_at': data.startedAt.value?.toIso8601String(),
+            'finished_at': data.finishedAt.value?.toIso8601String(),
             'actual_page': data.actualPage.value,
             'have_the_book': data.haveTheBook,
           },

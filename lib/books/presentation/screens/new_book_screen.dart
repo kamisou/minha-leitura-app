@@ -5,6 +5,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:reading/books/data/dtos/new_book_dto.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
@@ -368,12 +369,15 @@ class NewBookScreen extends HookConsumerWidget {
                           ],
                           keyboardType: TextInputType.datetime,
                           onChanged: (value) => newBookForm.dispatch(
-                            {'started_at': Date(value)},
+                            {'started_at': Date.fromString(value)},
                           ),
                         ),
                         prompt: 'Quando começou a ler?',
                         onTapNext: switch (Date.validate(
-                          newBookForm.state.startedAt.value,
+                          newBookForm.state.startedAt.value != null
+                              ? DateFormat('dd/MM/yy')
+                                  .format(newBookForm.state.startedAt.value!)
+                              : null,
                         )) {
                           null => () => _onTapNext(context, pageController),
                           _ => null,
@@ -395,7 +399,7 @@ class NewBookScreen extends HookConsumerWidget {
                         ),
                         prompt: 'Parou em qual página?',
                         onTapNext: switch (Pages.validate(
-                          '${newBookForm.state.pages.value}',
+                          '${newBookForm.state.actualPage.value}',
                         )) {
                           null => () => _finish(
                                 context,
@@ -419,12 +423,15 @@ class NewBookScreen extends HookConsumerWidget {
                           ],
                           keyboardType: TextInputType.datetime,
                           onChanged: (value) => newBookForm.dispatch(
-                            {'started_at': Date(value)},
+                            {'started_at': Date.fromString(value)},
                           ),
                         ),
                         prompt: 'Quando você leu?',
                         onTapNext: switch (Date.validate(
-                          newBookForm.state.startedAt.value,
+                          newBookForm.state.startedAt.value != null
+                              ? DateFormat('dd/MM/yy')
+                                  .format(newBookForm.state.startedAt.value!)
+                              : null,
                         )) {
                           null => () => _onTapNext(context, pageController),
                           _ => null,
@@ -441,12 +448,15 @@ class NewBookScreen extends HookConsumerWidget {
                           ],
                           keyboardType: TextInputType.datetime,
                           onChanged: (value) => newBookForm.dispatch(
-                            {'finished_at': Date(value)},
+                            {'finished_at': Date.fromString(value)},
                           ),
                         ),
                         prompt: 'Quando terminou?',
                         onTapNext: switch (Date.validate(
-                          newBookForm.state.finishedAt.value,
+                          newBookForm.state.finishedAt.value != null
+                              ? DateFormat('dd/MM/yy')
+                                  .format(newBookForm.state.finishedAt.value!)
+                              : null,
                         )) {
                           null => () => _finish(
                                 context,
