@@ -44,7 +44,8 @@ class LoginScreen extends HookConsumerWidget {
               child: const LoginContent(),
             ),
           ),
-          drawer: ServerSettingsDrawer.buildIfDebugMode(),
+          drawer:
+              ServerSettingsDrawer.buildIfDebugMode(overrideDebugMode: true),
         ),
       ],
     );

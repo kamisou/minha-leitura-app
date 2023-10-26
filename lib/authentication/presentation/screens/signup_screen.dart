@@ -44,7 +44,8 @@ class SignupScreen extends HookConsumerWidget {
               child: const SignupContent(),
             ),
           ),
-          drawer: ServerSettingsDrawer.buildIfDebugMode(),
+          drawer:
+              ServerSettingsDrawer.buildIfDebugMode(overrideDebugMode: true),
         ),
       ],
     );

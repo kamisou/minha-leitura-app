@@ -9,7 +9,7 @@ class ServerSettingsDrawer extends ConsumerStatefulWidget {
   static ServerSettingsDrawer? buildIfDebugMode({
     bool overrideDebugMode = false,
   }) =>
-      kDebugMode ? const ServerSettingsDrawer() : null;
+      kDebugMode || overrideDebugMode ? const ServerSettingsDrawer() : null;
 
   @override
   ConsumerState<ServerSettingsDrawer> createState() =>

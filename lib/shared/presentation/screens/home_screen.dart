@@ -42,7 +42,7 @@ class HomeScreen extends HookWidget {
           UniconsLine.medal,
         ],
       ),
-      drawer: ServerSettingsDrawer.buildIfDebugMode(),
+      drawer: ServerSettingsDrawer.buildIfDebugMode(overrideDebugMode: true),
     );
   }
 }
