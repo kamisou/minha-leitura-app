@@ -14,7 +14,7 @@ class AchievementCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = achievement.isAccomplished
+    final mainColor = achievement.completed
         ? Theme.of(context).colorExtension!.achieved
         : Theme.of(context).colorExtension!.gray[200]!;
 
@@ -31,7 +31,7 @@ class AchievementCard extends StatelessWidget {
           ),
         ],
         shape: CircleBorder(
-          side: achievement.isAccomplished
+          side: achievement.completed
               ? BorderSide(
                   color: darkerColor,
                   width: 2,
@@ -42,53 +42,53 @@ class AchievementCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (achievement.isAccomplished) const SizedBox(height: 8),
+          if (achievement.completed) const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (achievement.max > 1)
-                Padding(
-                  padding: const EdgeInsets.only(right: 4),
-                  child: Text(
-                    '${achievement.max}',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: darkerColor,
-                          fontWeight: FontWeight.w700,
-                        ),
-                  ),
-                ),
+              // if (achievement.max > 1)
+              //   Padding(
+              //     padding: const EdgeInsets.only(right: 4),
+              //     child: Text(
+              //       '${achievement.max}',
+              //       style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              //             color: darkerColor,
+              //             fontWeight: FontWeight.w700,
+              //           ),
+              //     ),
+              //   ),
               Icon(
                 UniconsLine.book_open,
                 color: darkerColor,
-                size: achievement.isAccomplished ? 28 : 24,
+                size: achievement.completed ? 28 : 24,
               ),
             ],
           ),
-          if (!achievement.isAccomplished) const SizedBox(height: 6),
-          if (achievement.isAccomplished)
+          if (!achievement.completed) const SizedBox(height: 6),
+          if (achievement.completed)
             Icon(
               UniconsLine.check,
               color: darkerColor,
-            )
-          else
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-              width: 40,
-              height: 6,
-              child: FractionallySizedBox(
-                alignment: Alignment.centerLeft,
-                widthFactor: achievement.achieved / achievement.max,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: darkerColor,
-                  ),
-                ),
-              ),
             ),
+          // else
+          //   Container(
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(4),
+          //       color: Theme.of(context).colorScheme.onPrimary,
+          //     ),
+          //     width: 40,
+          //     height: 6,
+          //     child: FractionallySizedBox(
+          //       alignment: Alignment.centerLeft,
+          //       widthFactor: achievement.achieved / achievement.max,
+          //       child: DecoratedBox(
+          //         decoration: BoxDecoration(
+          //           borderRadius: BorderRadius.circular(4),
+          //           color: darkerColor,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );

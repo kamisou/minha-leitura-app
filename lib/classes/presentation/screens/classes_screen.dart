@@ -38,43 +38,49 @@ class ClassesScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 32),
             Expanded(
-              child: ref.watch(myClassesProvider).maybeWhen(
-                    data: (classes) => classes.isNotEmpty
-                        ? ListView.separated(
-                            itemCount: classes.length,
-                            itemBuilder: (context, index) => Text(
-                              '${classes[index].name} - ${classes[index].code}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorExtension
-                                        ?.gray[800],
-                                    fontWeight: FontWeight.w700,
-                                  ),
+              child: RefreshIndicator(
+                onRefresh: () => ref.refresh(myClassesProvider.future),
+                child: ref.watch(myClassesProvider).maybeWhen(
+                      data: (classes) => classes.isNotEmpty
+                          ? ListView.separated(
+                              itemCount: classes.length,
+                              itemBuilder: (context, index) => Text(
+                                '${classes[index].name} - '
+                                '${classes[index].code}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorExtension
+                                          ?.gray[800],
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                              ),
+                              separatorBuilder: (context, index) =>
+                                  const Divider(endIndent: 32),
+                            )
+                          : SingleChildScrollView(
+                              child: Text(
+                                'Você ainda não participa\n'
+                                'de nenhuma turma!',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorExtension
+                                          ?.gray[600],
+                                    ),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                            separatorBuilder: (context, index) =>
-                                const Divider(endIndent: 32),
-                          )
-                        : Text(
-                            'Você ainda não participa\n'
-                            'de nenhuma turma!',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorExtension
-                                      ?.gray[600],
-                                ),
-                            textAlign: TextAlign.center,
-                          ),
-                    loading: () => const Center(
-                      child: CircularProgressIndicator(),
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      orElse: () => const SizedBox(),
                     ),
-                    orElse: () => const SizedBox(),
-                  ),
+              ),
             ),
           ],
         ),

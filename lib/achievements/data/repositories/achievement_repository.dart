@@ -26,9 +26,30 @@ class OnlineAchievementRepository extends AchievementRepository {
   Future<List<AchievementCategory>> getMyAchivements() async {
     final achievements = await ref
         .read(restApiProvider)
-        .get('app/achievements')
+        .get('app/achievement')
         .then((response) => (response as List).cast<Json>())
-        .then((list) => list.map(AchievementCategory.fromJson).toList());
+        .then((list) {
+      final categories = <Json>[];
+
+      for (final category in list) {
+        if (categories.reversed.any((e) => e['id'] == category['id'])) {
+          continue;
+        }
+
+        categories.add(category);
+        categories.last['achievements'] = <Json>[];
+      }
+
+      for (final achievement in list) {
+        final category =
+            categories.firstWhere((e) => e['id'] == achievement['id']);
+        (category['achievements'] as List<Json>).add(achievement);
+      }
+
+      return categories;
+    }).then(
+      (categories) => categories.map(AchievementCategory.fromJson).toList(),
+    );
 
     await saveAll<AchievementCategory>(
       achievements,

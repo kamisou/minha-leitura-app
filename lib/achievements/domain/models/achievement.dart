@@ -9,8 +9,8 @@ part 'achievement.g.dart';
 @HiveType(typeId: 14)
 class AchievementCategory with _$AchievementCategory {
   const factory AchievementCategory({
-    @HiveField(0) required int id,
-    @HiveField(1) required String name,
+    @HiveField(0) @JsonKey(name: 'category_id') required int id,
+    @HiveField(1) @JsonKey(name: 'category_name') required String name,
     @HiveField(2) required List<Achievement> achievements,
   }) = _AchievementCategory;
 
@@ -22,15 +22,10 @@ class AchievementCategory with _$AchievementCategory {
 @HiveType(typeId: 15)
 class Achievement with _$Achievement {
   const factory Achievement({
-    @HiveField(0) required int id,
-    @HiveField(1) required String name,
-    @HiveField(2) required int max,
-    @HiveField(3) required int achieved,
+    @HiveField(0) @JsonKey(name: 'achievement_id') required int id,
+    @HiveField(1) @JsonKey(name: 'achievement_title') required String title,
+    @HiveField(2) @JsonKey(name: 'has_achievement') required bool completed,
   }) = _Achievement;
 
   factory Achievement.fromJson(Json json) => _$AchievementFromJson(json);
-
-  const Achievement._();
-
-  bool get isAccomplished => achieved >= max;
 }
