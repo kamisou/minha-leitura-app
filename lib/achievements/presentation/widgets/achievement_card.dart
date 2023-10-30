@@ -18,14 +18,9 @@ class AchievementCard extends StatelessWidget {
       children: [
         SvgPicture(
           width: 58,
-          colorFilter: !achievement.completed
-              ? const ColorFilter.mode(
-                  Colors.black,
-                  BlendMode.saturation,
-                )
-              : null,
-          const AssetBytesLoader(
-            'assets/vectors/compiled/achievement-completed.svg.vec',
+          AssetBytesLoader(
+            'assets/vectors/compiled/achievement-'
+            '${achievement.completed ? 'completed' : 'pending'}.svg.vec',
           ),
         ),
         const SizedBox(
@@ -35,7 +30,7 @@ class AchievementCard extends StatelessWidget {
           child: Text(
             achievement.title,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: Theme.of(context).colorExtension?.gray[800],
+                  color: Theme.of(context).colorExtension?.gray[600],
                 ),
           ),
         ),
