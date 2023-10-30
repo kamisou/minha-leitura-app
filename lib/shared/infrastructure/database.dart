@@ -143,7 +143,7 @@ class HiveDatabase extends Database {
 
   @override
   Future<void> update<T>(T value, dynamic id) async {
-    log('update $T: $value ($id)', name: 'Database');
+    log('update $T: ($id)', name: 'Database');
 
     final box = await _getBox<T>() as LazyBox<T>;
     await box.put(id, value);

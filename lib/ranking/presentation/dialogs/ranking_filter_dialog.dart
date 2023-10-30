@@ -31,101 +31,124 @@ class RankingFilterDialog extends HookConsumerWidget {
 
     return Dialog(
       child: SizedBox(
-        height: 360,
+        height: 380,
         child: ref.watch(myClassesProvider).maybeWhen(
               orElse: () => const Center(
                 child: CircularProgressIndicator(),
               ),
-              data: (data) => SingleChildScrollView(
+              data: (data) => ListView(
                 padding: const EdgeInsets.all(20),
-                child: ExpansionPanelList(
-                  dividerColor: Colors.white,
-                  elevation: 0,
-                  expandedHeaderPadding: EdgeInsets.zero,
-                  expandIconColor: Colors.white,
-                  expansionCallback: (panelIndex, isExpanded) {
-                    if (panelIndex == 5) {
-                      context.pop(
-                        const RankingFilterDTO(type: RankingType.global),
-                      );
-                    } else {
-                      expanded.value = isExpanded ? panelIndex : null;
-                    }
-                  },
-                  materialGapSize: 0,
-                  children: [
-                    for (final (i, tab, type) in tabs)
-                      ExpansionPanel(
-                        backgroundColor: Colors.white,
-                        canTapOnHeader: true,
-                        isExpanded: expanded.value == i,
-                        headerBuilder: (context, isExpanded) => Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            tab,
-                            style: Theme.of(context)
-                                .textTheme //
-                                .bodyLarge
-                                ?.copyWith(
-                                  color: Theme.of(context)
-                                      .colorExtension
-                                      ?.gray[600],
-                                  fontWeight: FontWeight.w700,
-                                ),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                      'Filtrar por:',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w700,
                           ),
-                        ),
-                        body: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            children: [
-                              for (final $class in data)
-                                GestureDetector(
-                                  onTap: () => context.pop(
-                                    RankingFilterDTO(
-                                      type: type,
-                                      $class: $class,
-                                    ),
-                                  ),
-                                  child: Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      i == 0 ? $class.name : $class.schoolName,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorExtension
-                                                ?.gray[600],
-                                          ),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ExpansionPanel(
-                      backgroundColor: Colors.white,
-                      canTapOnHeader: true,
-                      headerBuilder: (context, isExpanded) => Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          'Global',
-                          style: Theme.of(context)
-                              .textTheme //
-                              .bodyLarge
-                              ?.copyWith(
-                                color:
-                                    Theme.of(context).colorExtension?.gray[600],
-                                fontWeight: FontWeight.w700,
-                              ),
-                        ),
-                      ),
-                      body: const SizedBox(),
                     ),
-                  ],
-                ),
+                  ),
+                  ExpansionPanelList(
+                    dividerColor: Colors.white,
+                    elevation: 0,
+                    expandedHeaderPadding: EdgeInsets.zero,
+                    expandIconColor: Colors.white,
+                    expansionCallback: (panelIndex, isExpanded) =>
+                        expanded.value = isExpanded //
+                            ? panelIndex
+                            : null,
+                    materialGapSize: 0,
+                    children: [
+                      for (final (i, tab, type) in tabs)
+                        ExpansionPanel(
+                          backgroundColor: Colors.white,
+                          canTapOnHeader: true,
+                          isExpanded: expanded.value == i,
+                          headerBuilder: (context, isExpanded) => Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Text(
+                              tab,
+                              style: Theme.of(context)
+                                  .textTheme //
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorExtension
+                                        ?.gray[600],
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                            ),
+                          ),
+                          body: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              children: [
+                                if (data.isEmpty)
+                                  Text(
+                                    'Para filtrar por $tab, '
+                                    'entre em uma turma.',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorExtension
+                                              ?.gray[600],
+                                        ),
+                                  )
+                                else
+                                  for (final $class in data)
+                                    GestureDetector(
+                                      onTap: () => context.pop(
+                                        RankingFilterDTO(
+                                          type: type,
+                                          $class: $class,
+                                        ),
+                                      ),
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          i == 0
+                                              ? $class.name
+                                              : $class.schoolName,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorExtension
+                                                    ?.gray[600],
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: GestureDetector(
+                      onTap: () => context.pop(
+                        const RankingFilterDTO(type: RankingType.global),
+                      ),
+                      child: Text(
+                        'Global',
+                        style: Theme.of(context)
+                            .textTheme //
+                            .bodyLarge
+                            ?.copyWith(
+                              color:
+                                  Theme.of(context).colorExtension?.gray[600],
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
       ),
