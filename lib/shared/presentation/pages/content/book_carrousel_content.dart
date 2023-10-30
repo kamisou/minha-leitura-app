@@ -56,7 +56,7 @@ class BookCarrouselContent extends HookConsumerWidget {
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               if (index == books.data.length) {
-                if (books.loading) {
+                if (books.loading && !books.finished) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );

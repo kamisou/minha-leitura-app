@@ -26,10 +26,16 @@ class MyBooks extends _$MyBooks {
     return _getMyBooks();
   }
 
-  Future<PaginatedResource<BookDetails>> _getMyBooks() {
-    return ref
-        .read(bookRepositoryProvider)
+  Future<PaginatedResource<BookDetails>> _getMyBooks() async {
+    final books = await ref
+        .read(bookRepositoryProvider) //
         .getMyBooks((state.valueOrNull?.currentPage ?? 0) + 1);
+
+    return books.copyWith(
+      data: [...state.valueOrNull?.data ?? [], ...books.data],
+      finished: books.data.length < books.perPage,
+      loading: false,
+    );
   }
 
   Future<void> refresh() async {
@@ -38,20 +44,14 @@ class MyBooks extends _$MyBooks {
   }
 
   Future<void> next() async {
-    if (state.requireValue.finished) return;
+    if (state.valueOrNull?.finished ?? false) return;
 
     state = AsyncData(
       state.requireValue.copyWith(loading: true),
     );
 
-    final books = await _getMyBooks();
-
     state = AsyncData(
-      books.copyWith(
-        data: [...state.requireValue.data, ...books.data],
-        finished: books.data.length < books.perPage,
-        loading: false,
-      ),
+      await _getMyBooks(),
     );
   }
 }
@@ -66,11 +66,19 @@ class Books extends _$Books {
     return _getBooks(searchTerm: searchTerm);
   }
 
-  Future<PaginatedResource<Book>> _getBooks({String? searchTerm}) {
-    return ref.read(bookRepositoryProvider).getBooks(
+  Future<PaginatedResource<Book>> _getBooks({String? searchTerm}) async {
+    final books = await ref
+        .read(bookRepositoryProvider) //
+        .getBooks(
           (state.valueOrNull?.currentPage ?? 0) + 1,
           searchTerm: searchTerm,
         );
+
+    return books.copyWith(
+      data: [...state.valueOrNull?.data ?? [], ...books.data],
+      finished: books.data.length < books.perPage,
+      loading: false,
+    );
   }
 
   Future<void> refresh() async {
@@ -83,20 +91,14 @@ class Books extends _$Books {
   }
 
   Future<void> next() async {
-    if (state.requireValue.finished) return;
+    if (state.valueOrNull?.finished ?? false) return;
 
     state = AsyncData(
       state.requireValue.copyWith(loading: true),
     );
 
-    final books = await _getBooks(searchTerm: _searchTerm);
-
     state = AsyncData(
-      books.copyWith(
-        data: [...state.requireValue.data, ...books.data],
-        finished: books.data.length < books.perPage,
-        loading: false,
-      ),
+      await _getBooks(searchTerm: _searchTerm),
     );
   }
 }
@@ -219,7 +221,9 @@ class OfflineBookRepository extends BookRepository {
 
   @override
   Future<PaginatedResource<BookDetails>> getMyBooks(int page) async {
-    final books = await ref.read(databaseProvider).getAll<BookDetails>(
+    final books = await ref
+        .read(databaseProvider) //
+        .getAll<BookDetails>(
           limit: pageSize,
           offset: (page - 1) * pageSize,
         );
