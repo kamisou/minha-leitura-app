@@ -23,7 +23,7 @@ class AchievementCategory with _$AchievementCategory {
 class Achievement with _$Achievement {
   const factory Achievement({
     @HiveField(0) @JsonKey(name: 'achievement_id') required int id,
-    @HiveField(1) @JsonKey(name: 'achievement_title') required String title,
+    @HiveField(1) @JsonKey(name: 'achivement_title') required String title,
     @HiveField(2) @JsonKey(name: 'has_achievement') required bool completed,
   }) = _Achievement;
 

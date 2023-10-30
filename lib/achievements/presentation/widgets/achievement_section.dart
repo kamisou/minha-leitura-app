@@ -35,16 +35,14 @@ class AchievementSection extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
-          child: GridView(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisExtent: 80,
-            ),
-            shrinkWrap: true,
+          child: Column(
             children: [
               for (var i = 0; i < category.achievements.length; i += 1)
-                AchievementCard(
-                  achievement: category.achievements[i],
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: AchievementCard(
+                    achievement: category.achievements[i],
+                  ),
                 ),
             ],
           ),

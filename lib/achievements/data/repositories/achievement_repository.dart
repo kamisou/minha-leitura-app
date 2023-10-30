@@ -32,7 +32,8 @@ class OnlineAchievementRepository extends AchievementRepository {
       final categories = <Json>[];
 
       for (final category in list) {
-        if (categories.reversed.any((e) => e['id'] == category['id'])) {
+        if (categories
+            .any((e) => e['category_id'] == category['category_id'])) {
           continue;
         }
 
@@ -41,8 +42,9 @@ class OnlineAchievementRepository extends AchievementRepository {
       }
 
       for (final achievement in list) {
-        final category =
-            categories.firstWhere((e) => e['id'] == achievement['id']);
+        final category = categories.firstWhere(
+          (e) => e['category_id'] == achievement['category_id'],
+        );
         (category['achievements'] as List<Json>).add(achievement);
       }
 
