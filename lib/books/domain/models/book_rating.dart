@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:reading/profile/domain/models/user.dart';
+import 'package:reading/shared/domain/local_datetime_converter.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 
 part 'book_rating.freezed.dart';
@@ -14,7 +15,7 @@ class BookRating with _$BookRating {
     @HiveField(1) required double rating,
     @HiveField(2) required String comment,
     @HiveField(3) @JsonKey(name: 'user') required User author,
-    @HiveField(4) required DateTime createdAt,
+    @HiveField(4) @LocalDateTimeConverter() required DateTime createdAt,
     @HiveField(5) required int bookId,
   }) = _BookRating;
 
@@ -23,7 +24,7 @@ class BookRating with _$BookRating {
     @HiveField(1) required double rating,
     @HiveField(2) required String comment,
     @HiveField(3) @JsonKey(name: 'user') required User author,
-    @HiveField(4) DateTime? createdAt,
+    @HiveField(4) @LocalDateTimeConverter() DateTime? createdAt,
     @HiveField(5) required int bookId,
   }) = OfflineBookRating;
 
