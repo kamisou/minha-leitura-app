@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/books/data/repositories/book_repository.dart';
+import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/presentation/widgets/book_summary.dart';
+import 'package:reading/shared/data/paginated_resource.dart';
 import 'package:reading/shared/presentation/hooks/use_page_notifier.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/presentation/widgets/new_book_widget.dart';
@@ -11,14 +12,16 @@ import 'package:reading/shared/util/theme_data_extension.dart';
 class BookCarrouselContent extends HookConsumerWidget {
   const BookCarrouselContent({
     super.key,
+    required this.books,
     required this.pageController,
   });
+
+  final PaginatedResource<BookDetails> books;
 
   final PageController pageController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final books = ref.watch(myBooksProvider).requireValue;
     final page = usePageNotifier(pageController);
 
     return Column(

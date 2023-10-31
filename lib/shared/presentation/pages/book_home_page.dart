@@ -4,6 +4,7 @@ import 'package:reading/books/data/repositories/book_repository.dart';
 import 'package:reading/shared/presentation/hooks/use_lazy_page_controller.dart';
 import 'package:reading/shared/presentation/pages/content/book_carrousel_content.dart';
 import 'package:reading/shared/presentation/pages/content/greeting_content.dart';
+import 'package:reading/shared/presentation/widgets/loading/book_carrousel_loading.dart';
 import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -36,15 +37,21 @@ class _BookHomePageState extends ConsumerState<BookHomePage> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: SizedBox(
                   height: constraints.maxHeight,
-                  child: ref.watch(myBooksProvider).maybeWhen(
-                        skipLoadingOnReload: true,
-                        data: (books) => books.data.isEmpty
-                            ? const GreetingContent()
-                            : BookCarrouselContent(
-                                pageController: pageController,
-                              ),
-                        orElse: () => const SizedBox(),
-                      ),
+                  child: AnimatedSwitcher(
+                    duration: Theme.of(context).animationExtension!.duration,
+                    transitionBuilder: (child, animation) =>
+                        FadeTransition(opacity: animation, child: child),
+                    child: ref.watch(myBooksProvider).maybeWhen(
+                          skipLoadingOnRefresh: false,
+                          data: (books) => books.data.isEmpty
+                              ? const GreetingContent()
+                              : BookCarrouselContent(
+                                  books: books,
+                                  pageController: pageController,
+                                ),
+                          orElse: BookCarrouselLoading.new,
+                        ),
+                  ),
                 ),
               ),
             ),
