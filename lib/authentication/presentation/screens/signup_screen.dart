@@ -16,14 +16,14 @@ class SignupScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeOverride = useIntroScreenThemeOverride();
 
-    useSnackbarErrorListener(
+    useSnackbarListener(
       ref,
       provider: signupControllerProvider,
-      messageBuilder: (error) => switch (error) {
+      onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>
-          'Você precisa estar online para se registrar!',
-        _ => null,
+          'Você precisa estar online para se registrar',
+        _ => 'Não foi possível registrar conta',
       },
     );
 

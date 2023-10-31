@@ -20,15 +20,16 @@ class JoinClassScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final code = useState('');
 
-    useSnackbarErrorListener(
+    useSnackbarListener(
       ref,
       provider: joinClassControllerProvider,
-      messageBuilder: (error) => switch (error) {
+      onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>
-          'Você precisa estar online para se cadastrar!',
-        _ => null,
+          'Você precisa estar online para entrar na turma',
+        _ => 'Não foi possível entrar na turma',
       },
+      onSuccess: () => context.go('/classes'),
     );
 
     return Scaffold(
@@ -84,10 +85,6 @@ class JoinClassScreen extends HookConsumerWidget {
   }
 
   void _join(BuildContext context, WidgetRef ref, String code) {
-    ref.read(joinClassControllerProvider.notifier).joinClass(code).then(
-          (value) => ref.read(joinClassControllerProvider).asError == null
-              ? context.go('/classes')
-              : null,
-        );
+    ref.read(joinClassControllerProvider.notifier).joinClass(code);
   }
 }

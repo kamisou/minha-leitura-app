@@ -43,12 +43,20 @@ class BookRatingsPage extends HookConsumerWidget {
       onEndOfScroll: ref.watch(bookRatingsProvider(bookId).notifier).next,
     );
 
-    useSnackbarErrorListener(
+    useSnackbarListener(
       ref,
       provider: newRatingControllerProvider,
-      messageBuilder: (error) => switch (error) {
-        BadResponseRestException(message: final message) => message,
-        _ => 'Não foi possível salvar a avaliação.',
+      onError: (error) {
+        _onRate(
+          context,
+          ref,
+          ref.read(newRatingControllerProvider).valueOrNull,
+        );
+
+        return switch (error) {
+          BadResponseRestException(message: final message) => message,
+          _ => 'Não foi possível salvar a avaliação',
+        };
       },
     );
 
@@ -140,13 +148,13 @@ class BookRatingsPage extends HookConsumerWidget {
     );
   }
 
-  void _onRate(BuildContext context, WidgetRef ref) {
+  void _onRate(BuildContext context, WidgetRef ref, [NewRatingDTO? rating]) {
     showModalBottomSheet<NewRatingDTO?>(
       backgroundColor: Theme.of(context).colorScheme.background,
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
-      builder: (context) => const NewRatingDialog(),
+      builder: (context) => NewRatingDialog(rating: rating),
     ).then(
       (value) => value != null
           ? ref

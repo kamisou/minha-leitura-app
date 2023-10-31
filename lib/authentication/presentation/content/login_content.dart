@@ -118,13 +118,6 @@ class LoginContent extends HookConsumerWidget {
       return;
     }
 
-    ref
-        .read(loginControllerProvider.notifier) //
-        .login(data)
-        .then(
-          (value) => ref.read(loginControllerProvider).asError == null
-              ? context.go('/')
-              : null,
-        );
+    ref.read(loginControllerProvider.notifier).login(data);
   }
 }

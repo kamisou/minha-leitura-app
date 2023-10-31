@@ -22,14 +22,14 @@ class BookDetailsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useSnackbarErrorListener(
+    useSnackbarListener(
       ref,
       provider: newReadingControllerProvider,
-      messageBuilder: (error) => switch (error) {
+      onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>
-          'É preciso estar online para lançar a leitura.',
-        _ => null,
+          'É preciso estar online para lançar a leitura',
+        _ => 'Não foi possível lançar a leitura',
       },
     );
 
@@ -50,24 +50,12 @@ class BookDetailsPage extends HookConsumerWidget {
               label: 'Início',
               value: usedMMMMy(book.startedAt),
             ),
-            // const Divider(),
-            // BookDetailsTile(
-            //   icon: UniconsLine.clock,
-            //   label: 'Previsão de Término',
-            //   value: usedMMMMy(expectedEnding),
-            // ),
             const Divider(),
             BookDetailsTile(
               icon: UniconsLine.file,
               label: 'Página Atual',
               value: '${book.actualPage}',
             ),
-            // const Divider(),
-            // BookDetailsTile(
-            //   icon: Icons.flag_outlined,
-            //   label: 'Sua Meta Diária',
-            //   value: '${book.dailyPageGoal} página(s)',
-            // ),
             const Divider(),
             BookDetailsTile(
               icon: UniconsLine.edit,
@@ -77,18 +65,6 @@ class BookDetailsPage extends HookConsumerWidget {
                     orElse: () => '0 nota(s)',
                   ),
             ),
-            // const Divider(),
-            // BookDetailsTile(
-            //   icon: UniconsLine.bookmark,
-            //   label: 'Páginas Lidas',
-            //   value: '${book.pagesRead} página(s)',
-            // ),
-            // const Divider(),
-            // BookDetailsTile(
-            //   icon: UniconsLine.calendar_alt,
-            //   label: 'Dias Restantes',
-            //   value: '${remainingDays.inDays} dia(s)',
-            // ),
             const SizedBox(height: 24),
           ],
         ),

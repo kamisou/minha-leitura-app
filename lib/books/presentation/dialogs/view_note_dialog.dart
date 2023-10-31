@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Title;
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
+import 'package:reading/books/domain/value_objects/description.dart';
+import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
 import 'package:reading/shared/presentation/hooks/use_dd_mm_yy_h_m.dart';
@@ -118,7 +120,12 @@ class ViewNoteDialog extends HookConsumerWidget {
                               context: context,
                               isScrollControlled: true,
                               showDragHandle: true,
-                              builder: (context) => NewNoteDialog(note: note),
+                              builder: (context) => NewNoteDialog(
+                                note: NewNoteDTO(
+                                  title: Title(note.title),
+                                  description: Description(note.description),
+                                ),
+                              ),
                             ).then(
                               (value) => value != null
                                   ? newNoteController.updateNote(note, value)

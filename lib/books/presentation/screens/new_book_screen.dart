@@ -42,15 +42,16 @@ class NewBookScreen extends HookConsumerWidget {
     final searchTerm = useState('');
     final selectedBook = useRef<Book?>(null);
 
-    useSnackbarErrorListener(
+    useSnackbarListener(
       ref,
       provider: newBookControllerProvider,
-      messageBuilder: (error) => switch (error) {
+      onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>
-          'Você precisa estar online para registrar um novo livro!',
-        _ => null,
+          'Você precisa estar online para registrar um novo livro',
+        _ => 'Não foi possível registrar o livro',
       },
+      onSuccess: context.pop,
     );
 
     return Scaffold(
@@ -490,16 +491,11 @@ class NewBookScreen extends HookConsumerWidget {
 
     final controller = ref.read(newBookControllerProvider.notifier);
 
-    final work = (book == null)
-        ? controller.addBookAndReading(data)
-        : controller.addReading(book, data);
-
-    // ignore: cascade_invocations
-    work.then(
-      (value) => ref.read(newBookControllerProvider).asError == null
-          ? context.pop()
-          : null,
-    );
+    if (book == null) {
+      controller.addBookAndReading(data);
+    } else {
+      controller.addReading(book, data);
+    }
   }
 
   void _onTapBack(BuildContext context, PageController pageController) {

@@ -6,6 +6,7 @@ import 'package:reading/books/presentation/controllers/new_note_controller.dart'
 import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
 import 'package:reading/books/presentation/dialogs/view_note_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
@@ -23,10 +24,17 @@ class BookNotesPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useSnackbarErrorListener(
+    useSnackbarListener(
       ref,
       provider: newNoteControllerProvider,
-      messageBuilder: (error) => 'Não foi possível salvar a nota.',
+      onError: (error) {
+        _addNote(context, ref, ref.read(newNoteControllerProvider).valueOrNull);
+
+        return switch (error) {
+          BadResponseRestException(message: final message) => message,
+          _ => 'Não foi possível salvar a nota',
+        };
+      },
     );
 
     return Stack(
@@ -63,24 +71,26 @@ class BookNotesPage extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: FilledButton.icon(
-            onPressed: () => showModalBottomSheet<NewNoteDTO?>(
-              backgroundColor: Theme.of(context).colorScheme.background,
-              context: context,
-              isScrollControlled: true,
-              showDragHandle: true,
-              builder: (context) => const NewNoteDialog(),
-            ).then(
-              (value) => value != null
-                  ? ref
-                      .read(newNoteControllerProvider.notifier)
-                      .addNote(bookId, value)
-                  : null,
-            ),
+            onPressed: () => _addNote(context, ref),
             icon: const Icon(UniconsLine.edit),
             label: const Text('Adicionar anotação'),
           ),
         ),
       ],
+    );
+  }
+
+  void _addNote(BuildContext context, WidgetRef ref, [NewNoteDTO? note]) {
+    showModalBottomSheet<NewNoteDTO?>(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => NewNoteDialog(note: note),
+    ).then(
+      (value) => value != null
+          ? ref.read(newNoteControllerProvider.notifier).addNote(bookId, value)
+          : null,
     );
   }
 }

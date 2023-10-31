@@ -116,6 +116,13 @@ class ThemeManager extends _$ThemeManager {
       ),
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
+        contentTextStyle: TextStyle(
+          fontFamily: fontFamily,
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+        ),
+        insetPadding: EdgeInsets.all(12),
+        showCloseIcon: true,
       ),
       tabBarTheme: const TabBarTheme(
         labelColor: Color(0xFF3B4149),

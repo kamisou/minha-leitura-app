@@ -12,6 +12,7 @@ import 'package:reading/profile/presentation/controllers/profile_controller.dart
 import 'package:reading/profile/presentation/dialogs/change_password_dialog.dart';
 import 'package:reading/profile/presentation/hooks/use_profile_form_reducer.dart';
 import 'package:reading/profile/presentation/widgets/profile_picture.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/infrastructure/image_picker.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
@@ -47,11 +48,21 @@ class ProfileScreen extends HookConsumerWidget {
       [changed, profileForm.state],
     );
 
-    useSnackbarErrorListener(
+    useSnackbarListener(
       ref,
       provider: profileControllerProvider,
-      messageBuilder: (error) =>
-          'Ocorreu um erro ao salvar as alterações do perfil.',
+      onError: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        _ => 'Ocorreu um erro ao salvar as alterações do perfil',
+      },
+      onSuccess: () => ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Text('As alterações do perfil foram realizadas'),
+          ),
+        ),
+      ),
     );
 
     return Scaffold(
@@ -196,22 +207,6 @@ class ProfileScreen extends HookConsumerWidget {
       return;
     }
 
-    ref
-        .read(profileControllerProvider.notifier) //
-        .save(data)
-        .then((value) {
-      if (ref.read(profileControllerProvider).asError == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                'As alterações da sua conta foram realizadas',
-              ),
-            ),
-          ),
-        );
-      }
-    });
+    ref.read(profileControllerProvider.notifier).save(data);
   }
 }

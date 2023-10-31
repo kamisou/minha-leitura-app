@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/presentation/content/login_content.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
@@ -16,15 +17,16 @@ class LoginScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeOverride = useIntroScreenThemeOverride();
 
-    useSnackbarErrorListener(
+    useSnackbarListener(
       ref,
       provider: loginControllerProvider,
-      messageBuilder: (error) => switch (error) {
+      onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>
-          'Você precisa estar online para fazer login!',
-        _ => null,
+          'Você precisa estar online para fazer login',
+        _ => 'Não foi possível realizar login',
       },
+      onSuccess: () => context.go('/'),
     );
 
     return Stack(

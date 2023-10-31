@@ -2,7 +2,6 @@ import 'package:flutter/material.dart' hide Title;
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
-import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/hooks/use_book_note_form_reducer.dart';
@@ -14,18 +13,11 @@ class NewNoteDialog extends HookWidget {
     this.note,
   });
 
-  final BookNote? note;
+  final NewNoteDTO? note;
 
   @override
   Widget build(BuildContext context) {
-    final bookNoteForm = useBookNoteFormReducer(
-      note != null
-          ? NewNoteDTO(
-              title: Title(note!.title),
-              description: Description(note!.description),
-            )
-          : null,
-    );
+    final bookNoteForm = useBookNoteFormReducer(note);
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -41,14 +33,14 @@ class NewNoteDialog extends HookWidget {
           const SizedBox(height: 20),
           TextFormField(
             decoration: const InputDecoration(hintText: 'título'),
-            initialValue: note?.title,
+            initialValue: note?.title.value,
             onChanged: (value) => bookNoteForm.dispatch(Title(value)),
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 10),
           TextFormField(
             decoration: const InputDecoration(hintText: 'nota...'),
-            initialValue: note?.description,
+            initialValue: note?.description.value,
             maxLines: 4,
             onChanged: (value) => bookNoteForm.dispatch(Description(value)),
           ),

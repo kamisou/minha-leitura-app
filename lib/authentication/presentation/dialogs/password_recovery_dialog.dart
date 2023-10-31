@@ -17,12 +17,26 @@ class PasswordRecoveryDialog extends HookConsumerWidget {
     final formKey = useRef(GlobalKey<FormState>());
     final email = useState(const Email());
 
-    useSnackbarErrorListener(
+    useSnackbarListener(
       ref,
       provider: emailRecoveryControllerProvider,
-      messageBuilder: (error) => switch (error) {
+      onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
-        _ => null,
+        _ => 'Não foi possível enviar o link de recuperação',
+      },
+      onSuccess: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                'Caso esteja vinculado à uma conta, um link para recuperação '
+                'de senha será enviado ao endereço de e-mail',
+              ),
+            ),
+          ),
+        );
+        context.pop();
       },
     );
 
@@ -101,26 +115,6 @@ class PasswordRecoveryDialog extends HookConsumerWidget {
       return;
     }
 
-    ref
-        .read(emailRecoveryControllerProvider.notifier) //
-        .recover(email)
-        .then(
-      (value) {
-        if (ref.read(emailRecoveryControllerProvider).asError == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  'Caso esteja vinculado à uma conta, um link para recuperação '
-                  'de senha será enviado ao endereço de e-mail',
-                ),
-              ),
-            ),
-          );
-          context.pop();
-        }
-      },
-    );
+    ref.read(emailRecoveryControllerProvider.notifier).recover(email);
   }
 }

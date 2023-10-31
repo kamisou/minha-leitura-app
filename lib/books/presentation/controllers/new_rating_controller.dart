@@ -7,14 +7,17 @@ part 'new_rating_controller.g.dart';
 @riverpod
 class NewRatingController extends _$NewRatingController {
   @override
-  Future<void> build() async {
-    return;
+  Future<NewRatingDTO?> build() async {
+    return null;
   }
 
   Future<void> addRating(int bookId, NewRatingDTO data) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(bookRatingRepositoryProvider).addRating(bookId, data),
+      () async {
+        await ref.read(bookRatingRepositoryProvider).addRating(bookId, data);
+        return data;
+      },
     );
   }
 }

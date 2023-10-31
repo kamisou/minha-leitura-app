@@ -8,28 +8,37 @@ part 'new_note_controller.g.dart';
 @riverpod
 class NewNoteController extends _$NewNoteController {
   @override
-  Future<void> build() async {
-    return;
+  Future<NewNoteDTO?> build() async {
+    return null;
   }
 
   Future<void> addNote(int bookId, NewNoteDTO note) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(bookNoteRepositoryProvider).addNote(bookId, note),
+      () async {
+        await ref.read(bookNoteRepositoryProvider).addNote(bookId, note);
+        return null;
+      },
     );
   }
 
   Future<void> removeNote(BookNote note) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(bookNoteRepositoryProvider).removeNote(note),
+      () async {
+        await ref.read(bookNoteRepositoryProvider).removeNote(note);
+        return const NewNoteDTO();
+      },
     );
   }
 
   Future<void> updateNote(BookNote note, NewNoteDTO data) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(bookNoteRepositoryProvider).updateNote(note, data),
+      () async {
+        await ref.read(bookNoteRepositoryProvider).updateNote(note, data);
+        return data;
+      },
     );
   }
 }
