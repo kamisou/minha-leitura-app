@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:reading/shared/presentation/hooks/use_dd_mm_yy_h_m.dart';
+import 'package:intl/intl.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class AuthorTimestamp extends HookWidget {
@@ -31,7 +31,9 @@ class AuthorTimestamp extends HookWidget {
           ),
           const SizedBox(width: 16),
           Text(
-            timestamp != null ? useddMMyyHm(timestamp!) : 'Não sincronizado',
+            timestamp != null
+                ? DateFormat.yMd().add_jm().format(timestamp!.toLocal())
+                : 'Não sincronizado',
           ),
         ],
       ),

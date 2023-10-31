@@ -2,13 +2,13 @@ import 'package:flutter/material.dart' hide Title;
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
-import 'package:reading/shared/presentation/hooks/use_dd_mm_yy_h_m.dart';
 import 'package:reading/shared/presentation/widgets/filled_icon_button.dart';
 import 'package:reading/shared/util/color_extension.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -58,7 +58,7 @@ class ViewNoteDialog extends HookConsumerWidget {
                   const SizedBox(height: 4),
                   Text(
                     note is! OfflineBookNote
-                        ? useddMMyyHm(note.createdAt!)
+                        ? DateFormat.yMd().add_jm().format(note.createdAt!)
                         : 'Não sincronizado',
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                           color: Theme.of(context).colorExtension?.gray[500],

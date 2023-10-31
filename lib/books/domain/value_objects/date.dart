@@ -4,7 +4,7 @@ enum DateError { empty, invalid }
 
 class Date {
   const Date([this.value]);
-  Date.fromString(String value) : value = DateFormat('dd/MM/yy').parse(value);
+  Date.fromString(String value) : value = DateFormat.yMd().parse(value);
 
   final DateTime? value;
 

@@ -15,9 +15,12 @@ class BookHomePage extends StatefulHookConsumerWidget {
   ConsumerState<BookHomePage> createState() => _BookHomePageState();
 }
 
-class _BookHomePageState extends ConsumerState<BookHomePage> {
+class _BookHomePageState extends ConsumerState<BookHomePage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     final pageController = useLazyPageController(
       onEndOfScroll: ref.read(myBooksProvider.notifier).next,
       viewportFraction: 0.72,
@@ -72,4 +75,7 @@ class _BookHomePageState extends ConsumerState<BookHomePage> {
       curve: theme.animationExtension!.curve,
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -28,7 +28,7 @@ void main() async {
 }
 
 Future<void> initLocale() async {
-  Intl.defaultLocale = 'pt-BR';
+  Intl.defaultLocale = 'pt_BR';
   return initializeDateFormatting(Intl.defaultLocale);
 }
 

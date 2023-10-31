@@ -8,11 +8,19 @@ import 'package:reading/ranking/presentation/dialogs/ranking_filter_dialog.dart'
 import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
-class RankingPage extends HookConsumerWidget {
+class RankingPage extends StatefulHookConsumerWidget {
   const RankingPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _RankingPageState();
+}
+
+class _RankingPageState extends ConsumerState<RankingPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
     final filter = useState(
       const RankingFilterDTO(type: RankingType.global),
     );
@@ -183,4 +191,7 @@ class RankingPage extends HookConsumerWidget {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

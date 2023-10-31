@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:reading/books/data/dtos/new_reading_dto.dart';
 import 'package:reading/books/data/repositories/book_note_repository.dart';
 import 'package:reading/books/domain/models/book_details.dart';
@@ -8,7 +9,6 @@ import 'package:reading/books/presentation/dialogs/new_reading_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_details_tile.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_d_mmmm_y.dart';
 import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
 import 'package:unicons/unicons.dart';
 
@@ -48,7 +48,7 @@ class BookDetailsPage extends HookConsumerWidget {
             BookDetailsTile(
               icon: UniconsLine.calendar_alt,
               label: 'Início',
-              value: usedMMMMy(book.startedAt),
+              value: DateFormat.yMMMMd().format(book.startedAt),
             ),
             const Divider(),
             BookDetailsTile(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:intl/intl.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
-import 'package:reading/shared/presentation/hooks/use_dd_mm_yy_h_m.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class BookReadingTile extends HookWidget {
@@ -35,7 +35,7 @@ class BookReadingTile extends HookWidget {
         Expanded(
           child: Text(
             reading is! OfflineBookReading
-                ? useddMMyyHm(reading.createdAt)
+                ? DateFormat.yMd().add_jm().format(reading.createdAt)
                 : 'Não sincronizado',
             style: Theme.of(context)
                 .textTheme

@@ -376,7 +376,7 @@ class NewBookScreen extends HookConsumerWidget {
                         prompt: 'Quando começou a ler?',
                         onTapNext: switch (Date.validate(
                           newBookForm.state.startedAt.value != null
-                              ? DateFormat('dd/MM/yy')
+                              ? DateFormat.yMd()
                                   .format(newBookForm.state.startedAt.value!)
                               : null,
                         )) {
@@ -430,7 +430,7 @@ class NewBookScreen extends HookConsumerWidget {
                         prompt: 'Quando você leu?',
                         onTapNext: switch (Date.validate(
                           newBookForm.state.startedAt.value != null
-                              ? DateFormat('dd/MM/yy')
+                              ? DateFormat.yMd()
                                   .format(newBookForm.state.startedAt.value!)
                               : null,
                         )) {
@@ -455,7 +455,7 @@ class NewBookScreen extends HookConsumerWidget {
                         prompt: 'Quando terminou?',
                         onTapNext: switch (Date.validate(
                           newBookForm.state.finishedAt.value != null
-                              ? DateFormat('dd/MM/yy')
+                              ? DateFormat.yMd()
                                   .format(newBookForm.state.finishedAt.value!)
                               : null,
                         )) {
