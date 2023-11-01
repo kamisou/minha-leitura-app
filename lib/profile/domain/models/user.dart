@@ -12,7 +12,6 @@ class User with _$User implements HasName {
   const factory User({
     @HiveField(0) required int id,
     @HiveField(1) required String name,
-    @HiveField(2) String? avatar,
   }) = _User;
 
   factory User.fromJson(Json json) => _$UserFromJson(json);

@@ -9,7 +9,7 @@ import 'package:reading/books/presentation/dialogs/new_reading_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_details_tile.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:unicons/unicons.dart';
 
 class BookDetailsPage extends HookConsumerWidget {
@@ -22,9 +22,9 @@ class BookDetailsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useSnackbarListener(
+    useControllerListener(
       ref,
-      provider: newReadingControllerProvider,
+      controller: newReadingControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>

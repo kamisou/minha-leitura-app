@@ -1,23 +1,38 @@
 import 'package:flutter/material.dart' hide Title;
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
+import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/hooks/use_book_note_form_reducer.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
-class NewNoteDialog extends HookWidget {
-  const NewNoteDialog({
+class NoteEditDialog extends HookConsumerWidget {
+  const NoteEditDialog({
     super.key,
-    this.note,
+    required this.title,
+    required this.callback,
+    this.initialState,
   });
 
-  final NewNoteDTO? note;
+  final String title;
+
+  final void Function(NewNoteDTO) Function(NewNoteController controller)
+      callback;
+
+  final NewNoteDTO? initialState;
 
   @override
-  Widget build(BuildContext context) {
-    final bookNoteForm = useBookNoteFormReducer(note);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bookNoteForm = useBookNoteFormReducer(initialState);
+
+    useControllerListener(
+      ref,
+      controller: newNoteControllerProvider,
+      onSuccess: context.pop,
+    );
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -25,7 +40,7 @@ class NewNoteDialog extends HookWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Nova nota',
+            title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   color: Theme.of(context).colorExtension?.gray[800],
                 ),
@@ -33,14 +48,14 @@ class NewNoteDialog extends HookWidget {
           const SizedBox(height: 20),
           TextFormField(
             decoration: const InputDecoration(hintText: 'título'),
-            initialValue: note?.title.value,
+            initialValue: initialState?.title.value,
             onChanged: (value) => bookNoteForm.dispatch(Title(value)),
             textInputAction: TextInputAction.next,
           ),
           const SizedBox(height: 10),
           TextFormField(
             decoration: const InputDecoration(hintText: 'nota...'),
-            initialValue: note?.description.value,
+            initialValue: initialState?.description.value,
             maxLines: 4,
             onChanged: (value) => bookNoteForm.dispatch(Description(value)),
           ),
@@ -56,7 +71,10 @@ class NewNoteDialog extends HookWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: FilledButton(
-                  onPressed: () => context.pop(bookNoteForm.state),
+                  onPressed: () =>
+                      callback(ref.read(newNoteControllerProvider.notifier))(
+                    bookNoteForm.state,
+                  ),
                   child: const Text('Salvar'),
                 ),
               ),

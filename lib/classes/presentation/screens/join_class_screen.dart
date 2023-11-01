@@ -6,7 +6,7 @@ import 'package:reading/classes/presentation/controllers/join_class_controller.d
 import 'package:reading/classes/presentation/widgets/code_input.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/widgets/app_bar_leading.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -20,9 +20,9 @@ class JoinClassScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final code = useState('');
 
-    useSnackbarListener(
+    useControllerListener(
       ref,
-      provider: joinClassControllerProvider,
+      controller: joinClassControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>
@@ -70,10 +70,12 @@ class JoinClassScreen extends HookConsumerWidget {
                   width: double.infinity,
                   child: ButtonProgressIndicator(
                     isLoading: ref.watch(joinClassControllerProvider).isLoading,
-                    onPressed: code.value.length == _codeLength
-                        ? () => _join(context, ref, code.value)
-                        : null,
-                    child: const Text('Confirmar'),
+                    child: FilledButton(
+                      onPressed: code.value.length == _codeLength
+                          ? () => _join(context, ref, code.value)
+                          : null,
+                      child: const Text('Confirmar'),
+                    ),
                   ),
                 ),
               ),

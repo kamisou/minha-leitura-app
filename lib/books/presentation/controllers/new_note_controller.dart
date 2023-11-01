@@ -8,37 +8,36 @@ part 'new_note_controller.g.dart';
 @riverpod
 class NewNoteController extends _$NewNoteController {
   @override
-  Future<NewNoteDTO?> build() async {
-    return null;
+  Future<void> build() async {
+    return;
   }
 
-  Future<void> addNote(int bookId, NewNoteDTO note) async {
+  Future<void> addNote(int bookId, NewNoteDTO data) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () async {
-        await ref.read(bookNoteRepositoryProvider).addNote(bookId, note);
-        return null;
-      },
+      () => ref.read(bookNoteRepositoryProvider).addNote(bookId, data),
+    );
+  }
+
+  Future<void> replyNote(int bookId, int noteId, NewNoteDTO data) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(
+      () =>
+          ref.read(bookNoteRepositoryProvider).replyNote(bookId, noteId, data),
     );
   }
 
   Future<void> removeNote(BookNote note) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () async {
-        await ref.read(bookNoteRepositoryProvider).removeNote(note);
-        return const NewNoteDTO();
-      },
+      () => ref.read(bookNoteRepositoryProvider).removeNote(note),
     );
   }
 
   Future<void> updateNote(BookNote note, NewNoteDTO data) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () async {
-        await ref.read(bookNoteRepositoryProvider).updateNote(note, data);
-        return data;
-      },
+      () => ref.read(bookNoteRepositoryProvider).updateNote(note, data),
     );
   }
 }

@@ -93,13 +93,15 @@ class LoginContent extends HookConsumerWidget {
               ),
               ButtonProgressIndicator(
                 isLoading: ref.watch(loginControllerProvider).isLoading,
-                onPressed: () => _login(
-                  context,
-                  ref,
-                  formKey.value.currentState!,
-                  loginForm.state,
+                child: FilledButton(
+                  onPressed: () => _login(
+                    context,
+                    ref,
+                    formKey.value.currentState!,
+                    loginForm.state,
+                  ),
+                  child: const Text('Entrar'),
                 ),
-                child: const Text('Entrar'),
               ),
             ],
           ),

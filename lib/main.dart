@@ -27,11 +27,6 @@ void main() async {
   );
 }
 
-Future<void> initLocale() async {
-  Intl.defaultLocale = 'pt_BR';
-  return initializeDateFormatting(Intl.defaultLocale);
-}
-
 Future<ProviderContainer> initRiverpod() async {
   final container = ProviderContainer();
 
@@ -56,6 +51,11 @@ Future<ProviderContainer> initRiverpod() async {
   }
 
   return container;
+}
+
+Future<void> initLocale() async {
+  Intl.defaultLocale = 'pt_BR';
+  return initializeDateFormatting(Intl.defaultLocale);
 }
 
 class App extends ConsumerWidget {

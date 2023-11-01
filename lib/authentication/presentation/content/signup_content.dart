@@ -101,13 +101,15 @@ class SignupContent extends HookConsumerWidget {
           const SizedBox(height: 24),
           ButtonProgressIndicator(
             isLoading: ref.watch(signupControllerProvider).isLoading,
-            onPressed: () => _signup(
-              context,
-              ref,
-              formKey.value.currentState!,
-              signupForm.state,
+            child: FilledButton(
+              onPressed: () => _signup(
+                context,
+                ref,
+                formKey.value.currentState!,
+                signupForm.state,
+              ),
+              child: const Text('Cadastrar'),
             ),
-            child: const Text('Cadastrar'),
           ),
         ],
       ),

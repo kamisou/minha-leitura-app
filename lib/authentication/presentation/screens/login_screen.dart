@@ -6,9 +6,9 @@ import 'package:reading/authentication/presentation/controllers/login_controller
 import 'package:reading/intro/presentation/hooks/use_intro_screen_theme_override.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/widgets/gradient_intro_background.dart';
-import 'package:reading/shared/presentation/widgets/server_settings_drawer.dart';
+import 'package:reading/shared/presentation/widgets/debug_settings_drawer.dart';
 
 class LoginScreen extends HookConsumerWidget {
   const LoginScreen({super.key});
@@ -17,9 +17,9 @@ class LoginScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeOverride = useIntroScreenThemeOverride();
 
-    useSnackbarListener(
+    useControllerListener(
       ref,
-      provider: loginControllerProvider,
+      controller: loginControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>
@@ -46,8 +46,7 @@ class LoginScreen extends HookConsumerWidget {
               child: const LoginContent(),
             ),
           ),
-          drawer:
-              ServerSettingsDrawer.buildIfDebugMode(overrideDebugMode: true),
+          drawer: DebugSettingsDrawer.buildIfDebugMode(overrideDebugMode: true),
         ),
       ],
     );

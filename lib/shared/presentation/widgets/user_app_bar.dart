@@ -14,11 +14,6 @@ class UserAppBar extends HookConsumerWidget {
     return Row(
       children: [
         CircleAvatar(
-          foregroundImage: user.avatar != null
-              ? NetworkImage(
-                  user.avatar!,
-                )
-              : null,
           child: Text(
             initials,
             style: const TextStyle(fontWeight: FontWeight.w700),

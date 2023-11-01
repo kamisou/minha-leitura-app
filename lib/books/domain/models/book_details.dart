@@ -29,7 +29,7 @@ class BookDetails with _$BookDetails {
   const factory BookDetails({
     @HiveField(0) required int id,
     @HiveField(1) @LocalDateTimeConverter() required DateTime startedAt,
-    @HiveField(2) DateTime? finishedAt,
+    @HiveField(2) @LocalDateTimeConverter() DateTime? finishedAt,
     @HiveField(3) required BookStatus status,
     @HiveField(4) required double percentageRead,
     @HiveField(5) required int actualPage,

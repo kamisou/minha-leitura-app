@@ -26,11 +26,6 @@ class ProfilePicture extends HookConsumerWidget {
         ),
       ),
       child: CircleAvatar(
-        foregroundImage: user.avatar != null
-            ? NetworkImage(
-                user.avatar!,
-              )
-            : null,
         radius: radius,
         child: Text(
           initials,

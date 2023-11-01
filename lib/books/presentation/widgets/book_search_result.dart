@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
+import 'package:reading/shared/util/bytes_extension.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class BookSearchResult extends StatelessWidget {
@@ -18,7 +19,7 @@ class BookSearchResult extends StatelessWidget {
       children: [
         SizedBox(
           height: 100,
-          child: BookCover.raw(bytes: book.cover),
+          child: BookCover(image: book.cover?.toImage()),
         ),
         const SizedBox(width: 16),
         Expanded(

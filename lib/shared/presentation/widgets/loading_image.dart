@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
@@ -13,28 +10,7 @@ class LoadingImage<T extends Object> extends StatelessWidget {
     this.fit = BoxFit.cover,
   });
 
-  LoadingImage.url({
-    super.key,
-    required this.builder,
-    required String? src,
-    this.fit = BoxFit.cover,
-  }) : imageProvider = NetworkImage(src ?? '');
-
-  LoadingImage.file({
-    super.key,
-    required this.builder,
-    required File file,
-    this.fit = BoxFit.cover,
-  }) : imageProvider = FileImage(file);
-
-  LoadingImage.raw({
-    super.key,
-    required this.builder,
-    required Uint8List bytes,
-    this.fit = BoxFit.cover,
-  }) : imageProvider = MemoryImage(bytes);
-
-  final ImageProvider imageProvider;
+  final ImageProvider? imageProvider;
 
   final Widget Function(Widget image) builder;
 
@@ -42,19 +18,18 @@ class LoadingImage<T extends Object> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image(
-      image: imageProvider,
-      fit: fit,
-      errorBuilder: _errorBuilder,
-      loadingBuilder: _loadingBuilder,
-    );
+    return imageProvider == null
+        ? _errorBuilder(context)
+        : Image(
+            image: imageProvider!,
+            fit: fit,
+            errorBuilder: (context, error, stackTrace) =>
+                _errorBuilder(context),
+            loadingBuilder: _loadingBuilder,
+          );
   }
 
-  Widget _errorBuilder(
-    BuildContext context,
-    Object error,
-    StackTrace? stackTrace,
-  ) {
+  Widget _errorBuilder(BuildContext context) {
     return builder(
       Container(
         alignment: Alignment.center,

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
-import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
+import 'package:reading/books/presentation/dialogs/note_edit_dialog.dart';
 import 'package:reading/books/presentation/dialogs/view_note_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
 
@@ -24,16 +23,12 @@ class BookNotesPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useSnackbarListener(
+    useControllerListener(
       ref,
-      provider: newNoteControllerProvider,
-      onError: (error) {
-        _addNote(context, ref, ref.read(newNoteControllerProvider).valueOrNull);
-
-        return switch (error) {
-          BadResponseRestException(message: final message) => message,
-          _ => 'Não foi possível salvar a nota',
-        };
+      controller: newNoteControllerProvider,
+      onError: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        _ => 'Não foi possível criar a nota',
       },
     );
 
@@ -80,17 +75,16 @@ class BookNotesPage extends HookConsumerWidget {
     );
   }
 
-  void _addNote(BuildContext context, WidgetRef ref, [NewNoteDTO? note]) {
-    showModalBottomSheet<NewNoteDTO?>(
+  void _addNote(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet<void>(
       backgroundColor: Theme.of(context).colorScheme.background,
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
-      builder: (context) => NewNoteDialog(note: note),
-    ).then(
-      (value) => value != null
-          ? ref.read(newNoteControllerProvider.notifier).addNote(bookId, value)
-          : null,
+      builder: (context) => NoteEditDialog(
+        title: 'Nova nota',
+        callback: (controller) => (data) => controller.addNote(bookId, data),
+      ),
     );
   }
 }

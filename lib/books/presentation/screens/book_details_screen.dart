@@ -12,6 +12,8 @@ import 'package:reading/books/presentation/pages/book_details/book_notes_page.da
 import 'package:reading/books/presentation/pages/book_details/book_ratings_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
+import 'package:reading/shared/presentation/widgets/debug_settings_drawer.dart';
+import 'package:reading/shared/util/bytes_extension.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class BookDetailsScreen extends HookConsumerWidget {
@@ -96,7 +98,9 @@ class BookDetailsScreen extends HookConsumerWidget {
                                 ),
                               ],
                             ),
-                            child: BookCover.raw(bytes: bookDetails.book.cover),
+                            child: BookCover(
+                              image: bookDetails.book.cover?.toImage(),
+                            ),
                           ),
                         ),
                         const Expanded(
@@ -163,7 +167,6 @@ class BookDetailsScreen extends HookConsumerWidget {
                 tabs: const [
                   Tab(text: 'Detalhes'),
                   Tab(text: 'Anotações'),
-                  // Tab(text: 'Histórico'),
                   Tab(text: 'Avaliações'),
                 ],
               ),
@@ -190,13 +193,6 @@ class BookDetailsScreen extends HookConsumerWidget {
                     orElse: () => const SizedBox(),
                   ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 24),
-            //   child: ref.watch(bookReadingsProvider(book.id)).maybeWhen(
-            //         data: (data) => BookReadingPage(readings: data),
-            //         orElse: () => const SizedBox(),
-            //       ),
-            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ref.watch(bookRatingsProvider(bookDetails.id)).maybeWhen(
@@ -213,6 +209,7 @@ class BookDetailsScreen extends HookConsumerWidget {
           ],
         ),
       ),
+      drawer: DebugSettingsDrawer.buildIfDebugMode(),
     );
   }
 }

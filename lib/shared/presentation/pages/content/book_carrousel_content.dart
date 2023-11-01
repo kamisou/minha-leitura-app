@@ -7,6 +7,7 @@ import 'package:reading/shared/data/paginated_resource.dart';
 import 'package:reading/shared/presentation/hooks/use_page_notifier.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/presentation/widgets/new_book_widget.dart';
+import 'package:reading/shared/util/bytes_extension.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class BookCarrouselContent extends HookConsumerWidget {
@@ -78,7 +79,9 @@ class BookCarrouselContent extends HookConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: GestureDetector(
                   onTap: () => context.go('/book', extra: books.data[index].id),
-                  child: BookCover.raw(bytes: books.data[index].book.cover),
+                  child: BookCover(
+                    image: books.data[index].book.cover?.toImage(),
+                  ),
                 ),
               );
             },

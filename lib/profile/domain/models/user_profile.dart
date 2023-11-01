@@ -14,12 +14,11 @@ class UserProfile with _$UserProfile implements HasName {
     @HiveField(0) required int id,
     @HiveField(1) required String name,
     @HiveField(2) required String email,
-    @HiveField(3) String? avatar,
   }) = _UserProfile;
 
   const UserProfile._();
 
   factory UserProfile.fromJson(Json json) => _$UserProfileFromJson(json);
 
-  User toUser() => User(id: id, name: name, avatar: avatar);
+  User toUser() => User(id: id, name: name);
 }

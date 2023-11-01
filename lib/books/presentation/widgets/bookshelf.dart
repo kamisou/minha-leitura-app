@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/presentation/hooks/use_status_color.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
+import 'package:reading/shared/util/bytes_extension.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class Bookshelf extends HookWidget {
@@ -65,7 +66,9 @@ class Bookshelf extends HookWidget {
         onTap: () => context.go('/book', extra: book.id),
         child: Stack(
           children: [
-            BookCover.raw(bytes: book.book.cover),
+            BookCover(
+              image: book.book.cover?.toImage(),
+            ),
             Positioned(
               top: 0,
               right: 8,

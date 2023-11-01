@@ -8,7 +8,12 @@ import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
-import 'package:reading/books/presentation/dialogs/new_note_dialog.dart';
+import 'package:reading/books/presentation/dialogs/note_edit_dialog.dart';
+import 'package:reading/profile/data/repositories/profile_repository.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
+import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/presentation/widgets/filled_icon_button.dart';
 import 'package:reading/shared/util/color_extension.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -24,6 +29,17 @@ class ViewNoteDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    useControllerListener(
+      ref,
+      controller: newNoteControllerProvider,
+      onError: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
+        _ => 'Não foi possível alterar a nota',
+      },
+      onSuccess: context.pop,
+    );
+
     return Padding(
       padding: const EdgeInsets.only(
         top: 40,
@@ -82,75 +98,111 @@ class ViewNoteDialog extends HookConsumerWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FilledButton.icon(
-                          onPressed: note.replies.isEmpty
-                              ? () {
-                                  ref
-                                      .read(newNoteControllerProvider.notifier)
-                                      .removeNote(note);
-                                  context.pop();
-                                }
-                              : null,
-                          icon: const Icon(UniconsLine.trash),
-                          label: const Text('Remover'),
-                          style: ButtonStyle(
-                            backgroundColor:
-                                const Color(0xFFF5F5F5).materialStateAll,
-                            foregroundColor: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .materialStateAll,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: FilledButton.icon(
-                          onPressed: () {
-                            final newNoteController =
-                                ref.read(newNoteControllerProvider.notifier);
-                            context.pop();
-                            showModalBottomSheet<NewNoteDTO?>(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.background,
-                              context: context,
-                              isScrollControlled: true,
-                              showDragHandle: true,
-                              builder: (context) => NewNoteDialog(
-                                note: NewNoteDTO(
-                                  title: Title(note.title),
-                                  description: Description(note.description),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: (note.author.id ==
+                            ref.read(profileProvider).requireValue!.id)
+                        ? Row(
+                            children: [
+                              Expanded(
+                                child: ButtonProgressIndicator(
+                                  isLoading: ref
+                                      .watch(newNoteControllerProvider)
+                                      .isLoading,
+                                  child: FilledButton.icon(
+                                    onPressed: note.replies.isEmpty
+                                        ? () => _removeNote(context, ref)
+                                        : null,
+                                    icon: const Icon(UniconsLine.trash),
+                                    label: const Text('Remover'),
+                                    style: ButtonStyle(
+                                      backgroundColor: const Color(0xFFF5F5F5)
+                                          .materialStateAll,
+                                      foregroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .materialStateAll,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ).then(
-                              (value) => value != null
-                                  ? newNoteController.updateNote(note, value)
-                                  : null,
-                            );
-                          },
-                          icon: const Icon(UniconsLine.edit),
-                          label: const Text('Editar'),
-                          style: ButtonStyle(
-                            backgroundColor:
-                                const Color(0xFFF5F5F5).materialStateAll,
-                            foregroundColor: Theme.of(context)
-                                .colorExtension
-                                ?.information
-                                .materialStateAll,
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: FilledButton.icon(
+                                  onPressed: () => _updateNote(
+                                    context,
+                                    ref,
+                                    NewNoteDTO(
+                                      title: Title(note.title),
+                                      description: Description(
+                                        note.description,
+                                      ),
+                                    ),
+                                  ),
+                                  icon: const Icon(UniconsLine.edit),
+                                  label: const Text('Editar'),
+                                  style: ButtonStyle(
+                                    backgroundColor: const Color(0xFFF5F5F5)
+                                        .materialStateAll,
+                                    foregroundColor: Theme.of(context)
+                                        .colorExtension
+                                        ?.information
+                                        .materialStateAll,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : FilledButton.icon(
+                            onPressed: () => _replyNote(context, ref),
+                            icon: const Icon(UniconsLine.trash),
+                            label: const Text('Responder'),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  const Color(0xFFF5F5F5).materialStateAll,
+                              foregroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .materialStateAll,
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _removeNote(BuildContext context, WidgetRef ref) {
+    ref.read(newNoteControllerProvider.notifier).removeNote(note);
+  }
+
+  void _updateNote(BuildContext context, WidgetRef ref, NewNoteDTO? data) {
+    showModalBottomSheet<NewNoteDTO?>(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => NoteEditDialog(
+        title: 'Atualizar nota',
+        callback: (controller) => (data) => controller.updateNote(note, data),
+      ),
+    );
+  }
+
+  void _replyNote(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet<NewNoteDTO?>(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => NoteEditDialog(
+        title: 'Responder nota',
+        callback: (controller) =>
+            (data) => controller.replyNote(note.bookId, note.id!, data),
       ),
     );
   }

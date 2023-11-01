@@ -14,7 +14,7 @@ import 'package:reading/profile/presentation/hooks/use_profile_form_reducer.dart
 import 'package:reading/profile/presentation/widgets/profile_picture.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/infrastructure/image_picker.dart';
-import 'package:reading/shared/presentation/hooks/use_snackbar_error_listener.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
 
@@ -48,9 +48,9 @@ class ProfileScreen extends HookConsumerWidget {
       [changed, profileForm.state],
     );
 
-    useSnackbarListener(
+    useControllerListener(
       ref,
-      provider: profileControllerProvider,
+      controller: profileControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
         _ => 'Ocorreu um erro ao salvar as alterações do perfil',
@@ -169,16 +169,18 @@ class ProfileScreen extends HookConsumerWidget {
               left: 0,
               right: 0,
               child: ButtonProgressIndicator(
-                onPressed: isValid
-                    ? () => _save(
-                          context,
-                          ref,
-                          formKey.value.currentState!,
-                          profileForm.state,
-                        )
-                    : null,
                 isLoading: ref.watch(profileControllerProvider).isLoading,
-                child: const Text('Salvar'),
+                child: FilledButton(
+                  onPressed: isValid
+                      ? () => _save(
+                            context,
+                            ref,
+                            formKey.value.currentState!,
+                            profileForm.state,
+                          )
+                      : null,
+                  child: const Text('Salvar'),
+                ),
               ),
             ),
           ],

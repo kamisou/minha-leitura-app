@@ -39,8 +39,11 @@ class OnlineBookNoteRepository extends BookNoteRepository
         'reading_id': bookId,
       },
     ).then((response) {
-      response['author'] = response['user']['name'];
-      response['parent_id'] = response['reading_id'];
+      response['author'] = {
+        'id': response['user']['id'],
+        'name': response['user']['name'],
+      };
+      response['book_id'] = response['reading_id'];
       return BookNote.fromJson(response as Json);
     });
 
@@ -50,15 +53,43 @@ class OnlineBookNoteRepository extends BookNoteRepository
   }
 
   @override
+  Future<void> replyNote(int bookId, int noteId, NewNoteDTO data) async {
+    final note = await ref.read(restApiProvider).post(
+      'app/note',
+      body: {
+        ...data.toJson(),
+        'reading_id': bookId,
+        'note_id': noteId,
+      },
+    ).then((response) {
+      response['author'] = {
+        'id': response['user']['id'],
+        'name': response['user']['name'],
+      };
+      response['book_id'] = response['reading_id'];
+      return BookNote.fromJson(response as Json);
+    });
+
+    await save<BookNote>(note, note.id);
+
+    return super.replyNote(bookId, noteId, data);
+  }
+
+  @override
   Future<List<BookNote>> getBookNotes(int bookId) async {
     final notes = await ref
         .read(restApiProvider)
         .get('app/note/reading/$bookId')
         .then((response) => (response as Json)['notes'])
         .then(
-          (list) => (list as List)
-              .cast<Json>()
-              .map((note) => BookNote.fromJson({...note, 'parent_id': bookId})),
+          (list) => (list as List).cast<Json>().map((note) {
+            note['author'] = {
+              'id': note['user']['id'],
+              'name': note['user']['name'],
+            };
+
+            return BookNote.fromJson({...note, 'parent_id': bookId});
+          }),
         )
         .then((notes) => notes.toList());
 
@@ -73,8 +104,12 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .read(restApiProvider)
         .put('app/note/${note.id}', body: data.toJson())
         .then((response) {
-      response['author'] = response['user']['name'];
+      response['author'] = {
+        'id': response['user']['id'],
+        'name': response['user']['name'],
+      };
       response['parent_id'] = response['reading_id'];
+
       return BookNote.fromJson(response as Json);
     });
 
@@ -96,7 +131,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
       );
 
       if (note.id == null) {
-        await addNote(note.parentId, data);
+        await addNote(note.bookId, data);
       } else {
         await updateNote(note, data);
       }
@@ -121,8 +156,8 @@ class OfflineBookNoteRepository extends BookNoteRepository {
     final note = OfflineBookNote(
       title: data.title.value,
       description: data.description.value,
-      author: ref.read(profileProvider).requireValue!.name,
-      parentId: bookId,
+      author: ref.read(profileProvider).requireValue!.toUser(),
+      bookId: bookId,
     );
 
     await save<OfflineBookNote>(note);
@@ -131,12 +166,27 @@ class OfflineBookNoteRepository extends BookNoteRepository {
   }
 
   @override
+  Future<void> replyNote(int bookId, int noteId, NewNoteDTO data) async {
+    final note = OfflineBookNote(
+      title: data.title.value,
+      description: data.description.value,
+      author: ref.read(profileProvider).requireValue!.toUser(),
+      bookId: bookId,
+      noteId: noteId,
+    );
+
+    await save<OfflineBookNote>(note);
+
+    return super.replyNote(bookId, noteId, data);
+  }
+
+  @override
   Future<List<BookNote>> getBookNotes(int bookId) async {
     final db = ref.read(databaseProvider);
 
     return Future.wait([
-      db.getWhere<BookNote>((note) => note.parentId == bookId),
-      db.getWhere<OfflineBookNote>((note) => note.parentId == bookId),
+      db.getWhere<BookNote>((note) => note.bookId == bookId),
+      db.getWhere<OfflineBookNote>((note) => note.bookId == bookId),
     ]) //
         .then((notes) => [...notes.first, ...notes.last]);
   }
@@ -171,6 +221,12 @@ abstract class BookNoteRepository extends Repository with OfflinePersister {
   @mustCallSuper
   @mustBeOverridden
   Future<void> addNote(int bookId, NewNoteDTO data) async {
+    ref.invalidate(bookNotesProvider);
+  }
+
+  @mustCallSuper
+  @mustBeOverridden
+  Future<void> replyNote(int bookId, int noteId, NewNoteDTO data) async {
     ref.invalidate(bookNotesProvider);
   }
 

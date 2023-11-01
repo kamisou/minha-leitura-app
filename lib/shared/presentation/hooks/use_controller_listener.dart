@@ -5,23 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void useSnackbarListener(
+void useControllerListener(
   WidgetRef ref, {
-  required ProviderListenable<AsyncValue<dynamic>> provider,
-  required String? Function(Object error) onError,
+  required ProviderListenable<AsyncValue<dynamic>> controller,
+  String? Function(Object error)? onError,
   void Function()? onSuccess,
 }) {
   final context = useContext();
 
   ref.listen(
-    provider,
+    controller,
     (previous, next) {
       if (previous?.hasValue ?? false) {
         onSuccess?.call();
       }
     },
     onError: (error, stackTrace) {
-      final message = onError(error);
+      final message = onError?.call(error);
 
       if (message != null) {
         ScaffoldMessenger.of(context).showSnackBar(

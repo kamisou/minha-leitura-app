@@ -1,34 +1,25 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/shared/infrastructure/error_logger.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
+import 'package:reading/shared/presentation/widgets/debug_log.dart';
 
-class ServerSettingsDrawer extends ConsumerStatefulWidget {
-  const ServerSettingsDrawer({super.key});
+class DebugSettingsDrawer extends HookConsumerWidget {
+  const DebugSettingsDrawer({super.key});
 
-  static ServerSettingsDrawer? buildIfDebugMode({
+  static DebugSettingsDrawer? buildIfDebugMode({
     bool overrideDebugMode = false,
   }) =>
-      kDebugMode || overrideDebugMode ? const ServerSettingsDrawer() : null;
+      kDebugMode || overrideDebugMode ? const DebugSettingsDrawer() : null;
 
   @override
-  ConsumerState<ServerSettingsDrawer> createState() =>
-      _ServerSettingsDrawerState();
-}
-
-class _ServerSettingsDrawerState extends ConsumerState<ServerSettingsDrawer> {
-  late TextEditingController _controller;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _controller = TextEditingController(
-      text: ref.read(restApiServerProvider).requireValue,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = useTextEditingController(
+      text: ref.read(restApiServerProvider).valueOrNull,
     );
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Drawer(
       child: SafeArea(
         child: Padding(
@@ -51,17 +42,34 @@ class _ServerSettingsDrawerState extends ConsumerState<ServerSettingsDrawer> {
                 ),
               ),
               TextField(
-                controller: _controller,
+                controller: controller,
                 maxLines: 4,
                 style: const TextStyle(fontSize: 14),
                 onEditingComplete: () async {
                   final scaffold = Scaffold.of(context);
                   await ref
                       .read(restApiServerProvider.notifier)
-                      .set(_controller.text);
+                      .set(controller.text);
                   scaffold.closeDrawer();
                 },
                 textInputAction: TextInputAction.done,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  'Log de erros',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+              ),
+              Expanded(
+                child: Consumer(
+                  builder: (context, ref, child) => DebugLog(
+                    errors: ref.watch(errorLoggerProvider).errors,
+                  ),
+                ),
               ),
             ],
           ),

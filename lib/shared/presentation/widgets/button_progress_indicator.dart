@@ -5,30 +5,20 @@ class ButtonProgressIndicator extends StatelessWidget {
     super.key,
     required this.isLoading,
     required this.child,
-    this.onPressed,
   });
 
   final bool isLoading;
 
-  final Widget child;
-
-  final void Function()? onPressed;
+  final ButtonStyleButton child;
 
   @override
   Widget build(BuildContext context) {
     return isLoading
         ? Container(
             alignment: Alignment.center,
-            height: Theme.of(context)
-                .filledButtonTheme
-                .style
-                ?.minimumSize
-                ?.resolve({})?.height,
+            height: child.style?.minimumSize?.resolve({})?.height,
             child: const CircularProgressIndicator(),
           )
-        : FilledButton(
-            onPressed: onPressed,
-            child: child,
-          );
+        : child;
   }
 }
