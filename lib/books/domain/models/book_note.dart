@@ -18,7 +18,7 @@ class BookNote with _$BookNote, HiveObjectMixin {
     @HiveField(3) required User author,
     @HiveField(4) @LocalDateTimeConverter() required DateTime createdAt,
     @HiveField(5) @Default([]) List<BookNote> replies,
-    @HiveField(6) required int bookId,
+    @HiveField(6) @JsonKey(name: 'parent_id') required int bookId,
     @HiveField(7) int? noteId,
   }) = _BookNote;
 
@@ -30,7 +30,7 @@ class BookNote with _$BookNote, HiveObjectMixin {
     @HiveField(3) required User author,
     @HiveField(4) @LocalDateTimeConverter() DateTime? createdAt,
     @HiveField(5) @Default([]) List<BookNote> replies,
-    @HiveField(6) required int bookId,
+    @HiveField(6) @JsonKey(name: 'parent_id') required int bookId,
     @HiveField(7) int? noteId,
   }) = OfflineBookNote;
 

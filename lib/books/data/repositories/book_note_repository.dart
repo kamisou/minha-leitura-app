@@ -40,8 +40,8 @@ class OnlineBookNoteRepository extends BookNoteRepository
       },
     ).then((response) {
       response['author'] = {
-        'id': response['user']['id'],
-        'name': response['user']['name'],
+        'id': response['author_id'],
+        'name': response['author_name'],
       };
       response['book_id'] = response['reading_id'];
       return BookNote.fromJson(response as Json);
@@ -63,8 +63,8 @@ class OnlineBookNoteRepository extends BookNoteRepository
       },
     ).then((response) {
       response['author'] = {
-        'id': response['user']['id'],
-        'name': response['user']['name'],
+        'id': response['author_id'],
+        'name': response['author'],
       };
       response['book_id'] = response['reading_id'];
       return BookNote.fromJson(response as Json);
@@ -84,8 +84,8 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .then(
           (list) => (list as List).cast<Json>().map((note) {
             note['author'] = {
-              'id': note['user']['id'],
-              'name': note['user']['name'],
+              'id': note['author_id'],
+              'name': note['author'],
             };
 
             return BookNote.fromJson({...note, 'parent_id': bookId});
@@ -105,8 +105,8 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .put('app/note/${note.id}', body: data.toJson())
         .then((response) {
       response['author'] = {
-        'id': response['user']['id'],
-        'name': response['user']['name'],
+        'id': response['author_id'],
+        'name': response['author'],
       };
       response['parent_id'] = response['reading_id'];
 
