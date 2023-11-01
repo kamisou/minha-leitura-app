@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/domain/models/book_details.dart';
@@ -24,6 +25,12 @@ class BookCarrouselContent extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final page = usePageNotifier(pageController);
+    final pendingBooks = useMemoized(
+      () => books.data
+          .where((book) => book.status != BookStatus.finished)
+          .toList(),
+      [books.data],
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -45,7 +52,7 @@ class BookCarrouselContent extends HookConsumerWidget {
                 ),
             children: [
               TextSpan(
-                text: '${books.data.length} livros',
+                text: '${pendingBooks.length} livros',
                 style: const TextStyle(fontWeight: FontWeight.w700),
               ),
               const TextSpan(text: ' no momento.'),
@@ -56,10 +63,10 @@ class BookCarrouselContent extends HookConsumerWidget {
         Expanded(
           child: PageView.builder(
             controller: pageController,
-            itemCount: books.data.length + 1,
+            itemCount: pendingBooks.length + 1,
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
-              if (index == books.data.length) {
+              if (index == pendingBooks.length) {
                 if (books.loading && !books.finished) {
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -78,9 +85,10 @@ class BookCarrouselContent extends HookConsumerWidget {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: GestureDetector(
-                  onTap: () => context.go('/book', extra: books.data[index].id),
+                  onTap: () =>
+                      context.go('/book', extra: pendingBooks[index].id),
                   child: BookCover(
-                    image: books.data[index].book.cover?.toImage(),
+                    image: pendingBooks[index].book.cover?.toImage(),
                   ),
                 ),
               );
@@ -92,12 +100,12 @@ class BookCarrouselContent extends HookConsumerWidget {
           child: ValueListenableBuilder(
             valueListenable: page,
             builder: (context, value, child) {
-              if (value == books.data.length) {
+              if (value == pendingBooks.length) {
                 return const SizedBox(height: 138);
               }
 
               return BookSummary(
-                book: books.data[value],
+                book: pendingBooks[value],
               );
             },
           ),
