@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/authentication/presentation/dialogs/delete_account_confirmation_dialog.dart';
 import 'package:reading/profile/data/cached/profile.dart';
-import 'package:reading/profile/data/dtos/password_change_dto.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
@@ -112,15 +111,9 @@ class ProfileScreen extends HookConsumerWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () => showDialog<PasswordChangeDTO?>(
+                      onPressed: () => showDialog<void>(
                         context: context,
                         builder: (context) => const ChangePasswordDialog(),
-                      ).then(
-                        (value) => value != null
-                            ? ref
-                                .read(profileControllerProvider.notifier)
-                                .savePassword(value)
-                            : null,
                       ),
                       child: const Text('Alterar senha'),
                     ),
