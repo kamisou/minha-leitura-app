@@ -11,8 +11,8 @@ import 'package:reading/books/presentation/widgets/book_rating_tile.dart';
 import 'package:reading/books/presentation/widgets/star_rating_widget.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_lazy_scroll_controller.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
+import 'package:reading/shared/presentation/hooks/use_lazy_scroll_controller.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
 
