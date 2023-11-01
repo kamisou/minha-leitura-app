@@ -4,7 +4,7 @@ import 'package:reading/authentication/data/dtos/signup_dto.dart';
 import 'package:reading/authentication/data/dtos/token_dto.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
 import 'package:reading/authentication/domain/domain/token.dart';
-import 'package:reading/profile/data/repositories/profile_repository.dart';
+import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';

@@ -6,9 +6,9 @@ import 'package:reading/books/presentation/screens/book_details_screen.dart';
 import 'package:reading/books/presentation/screens/new_book_screen.dart';
 import 'package:reading/classes/presentation/screens/classes_screen.dart';
 import 'package:reading/classes/presentation/screens/join_class_screen.dart';
-import 'package:reading/intro/data/repositories/intro_repository.dart';
+import 'package:reading/intro/data/cached/intro_seen.dart';
 import 'package:reading/intro/presentation/screens/intro_screen.dart';
-import 'package:reading/profile/data/repositories/profile_repository.dart';
+import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/profile/presentation/screens/profile_screen.dart';
 import 'package:reading/shared/presentation/screens/home_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,7 +18,7 @@ part 'routes.g.dart';
 @riverpod
 Raw<GoRouter> router(RouterRef ref) {
   return GoRouter(
-    initialLocation: ref.read(introSeenProvider).value! ? null : '/intro',
+    initialLocation: ref.read(introSeenProvider) ? null : '/intro',
     routes: [
       GoRoute(
         builder: (context, state) => const HomeScreen(),

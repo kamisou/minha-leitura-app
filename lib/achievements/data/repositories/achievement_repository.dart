@@ -14,11 +14,6 @@ AchievementRepository achievementRepository(AchievementRepositoryRef ref) {
       : OfflineAchievementRepository(ref);
 }
 
-@riverpod
-Future<List<AchievementCategory>> achievements(AchievementsRef ref) {
-  return ref.read(achievementRepositoryProvider).getMyAchivements();
-}
-
 class OnlineAchievementRepository extends AchievementRepository {
   const OnlineAchievementRepository(super.ref);
 

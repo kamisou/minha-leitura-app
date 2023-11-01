@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/classes/data/repositories/class_repository.dart';
+import 'package:reading/classes/data/cached/classes.dart';
 import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 

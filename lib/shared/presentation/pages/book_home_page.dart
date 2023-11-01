@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/books/data/repositories/book_repository.dart';
+import 'package:reading/books/data/cached/books.dart';
 import 'package:reading/shared/presentation/hooks/use_lazy_page_controller.dart';
 import 'package:reading/shared/presentation/pages/content/book_carrousel_content.dart';
 import 'package:reading/shared/presentation/pages/content/greeting_content.dart';

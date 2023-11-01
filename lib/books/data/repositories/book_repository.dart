@@ -1,3 +1,4 @@
+import 'package:reading/books/data/cached/books.dart';
 import 'package:reading/books/data/dtos/new_book_dto.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/domain/models/book_details.dart';
@@ -19,90 +20,6 @@ BookRepository bookRepository(BookRepositoryRef ref) {
       : OfflineBookRepository(ref);
 }
 
-@riverpod
-class MyBooks extends _$MyBooks {
-  @override
-  Future<PaginatedResource<BookDetails>> build() async {
-    return _getMyBooks();
-  }
-
-  Future<PaginatedResource<BookDetails>> _getMyBooks() async {
-    final books = await ref
-        .read(bookRepositoryProvider) //
-        .getMyBooks((state.valueOrNull?.currentPage ?? 0) + 1);
-
-    return books.copyWith(
-      data: [...state.valueOrNull?.data ?? [], ...books.data],
-      finished: books.data.length < books.perPage,
-      loading: false,
-    );
-  }
-
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = AsyncData(await ref.read(bookRepositoryProvider).getMyBooks(1));
-  }
-
-  Future<void> next() async {
-    if (state.requireValue.finished) return;
-
-    state = AsyncData(
-      state.requireValue.copyWith(loading: true),
-    );
-
-    state = AsyncData(
-      await _getMyBooks(),
-    );
-  }
-}
-
-@riverpod
-class Books extends _$Books {
-  String? _searchTerm;
-
-  @override
-  Future<PaginatedResource<Book>> build({String? searchTerm}) async {
-    _searchTerm = searchTerm;
-    return _getBooks(searchTerm: searchTerm);
-  }
-
-  Future<PaginatedResource<Book>> _getBooks({String? searchTerm}) async {
-    final books = await ref
-        .read(bookRepositoryProvider) //
-        .getBooks(
-          (state.valueOrNull?.currentPage ?? 0) + 1,
-          searchTerm: searchTerm,
-        );
-
-    return books.copyWith(
-      data: [...state.valueOrNull?.data ?? [], ...books.data],
-      finished: books.data.length < books.perPage,
-      loading: false,
-    );
-  }
-
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = AsyncData(
-      await ref
-          .read(bookRepositoryProvider)
-          .getBooks(1, searchTerm: _searchTerm),
-    );
-  }
-
-  Future<void> next() async {
-    if (state.requireValue.finished) return;
-
-    state = AsyncData(
-      state.requireValue.copyWith(loading: true),
-    );
-
-    state = AsyncData(
-      await _getBooks(searchTerm: _searchTerm),
-    );
-  }
-}
-
 class OnlineBookRepository extends BookRepository {
   const OnlineBookRepository(super.ref);
 
@@ -111,36 +28,36 @@ class OnlineBookRepository extends BookRepository {
     int page, {
     String? searchTerm,
   }) {
+    final query = {
+      'page': page,
+      if (searchTerm != null) //
+        'q': searchTerm,
+    };
+
     return ref
         .read(restApiProvider) //
-        .get(
-      'app/book',
-      query: {
-        'page': page,
-        if (searchTerm != null) //
-          'q': searchTerm,
-      },
-    ).then(
-      (response) => PaginatedResource.fromJson(
-        response as Json,
-        Book.fromJson,
-      ),
-    );
+        .get('app/book', query: query)
+        .then(
+          (response) => PaginatedResource.fromJson(
+            response as Json,
+            Book.fromJson,
+          ),
+        );
   }
 
   @override
   Future<Book> addBook(NewBookDTO data) async {
+    final body = {
+      'author': data.author.value,
+      'cover': data.cover?.readAsBase64(),
+      'pages': data.pages.value,
+      'title': data.title.value,
+    };
+
     final book = await ref
         .read(restApiProvider) //
-        .post(
-      'app/book',
-      body: {
-        'author': data.author.value,
-        'cover': data.cover?.readAsBase64(),
-        'pages': data.pages.value,
-        'title': data.title.value,
-      },
-    ).then((response) => Book.fromJson(response as Json));
+        .post('app/book', body: body)
+        .then((response) => Book.fromJson(response as Json));
 
     ref.read(myBooksProvider.notifier).refresh().ignore();
 
@@ -149,19 +66,18 @@ class OnlineBookRepository extends BookRepository {
 
   @override
   Future<void> addReading(Book book, NewBookDTO data) async {
+    final body = {
+      'book_id': book.id,
+      'status': data.status!.name,
+      'started_at': data.startedAt.value?.toIso8601String(),
+      'finished_at': data.finishedAt.value?.toIso8601String(),
+      'actual_page': data.actualPage.value,
+      'have_the_book': data.haveTheBook,
+    };
+
     final reading = await ref
         .read(restApiProvider)
-        .post(
-          'app/reading',
-          body: {
-            'book_id': book.id,
-            'status': data.status!.name,
-            'started_at': data.startedAt.value?.toIso8601String(),
-            'finished_at': data.finishedAt.value?.toIso8601String(),
-            'actual_page': data.actualPage.value,
-            'have_the_book': data.haveTheBook,
-          },
-        ) //
+        .post('app/reading', body: body) //
         .then((response) => {...response as Json, 'book': book.toJson()})
         .then(BookDetails.fromJson);
 

@@ -9,7 +9,7 @@ import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/note_edit_dialog.dart';
-import 'package:reading/profile/data/repositories/profile_repository.dart';
+import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
@@ -35,7 +35,7 @@ class ViewNoteDialog extends HookConsumerWidget {
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
-        _ => 'Não foi possível alterar a nota',
+        _ => null,
       },
       onSuccess: context.pop,
     );
@@ -101,7 +101,7 @@ class ViewNoteDialog extends HookConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: (note.author.id ==
-                            ref.read(profileProvider).requireValue!.id)
+                            ref.watch(profileProvider).requireValue!.id)
                         ? Row(
                             children: [
                               Expanded(
@@ -180,8 +180,8 @@ class ViewNoteDialog extends HookConsumerWidget {
     ref.read(newNoteControllerProvider.notifier).removeNote(note);
   }
 
-  void _updateNote(BuildContext context, WidgetRef ref, NewNoteDTO? data) {
-    showModalBottomSheet<NewNoteDTO?>(
+  void _updateNote(BuildContext context, WidgetRef ref, NewNoteDTO data) {
+    showModalBottomSheet<void>(
       backgroundColor: Theme.of(context).colorScheme.background,
       context: context,
       isScrollControlled: true,
@@ -189,12 +189,13 @@ class ViewNoteDialog extends HookConsumerWidget {
       builder: (context) => NoteEditDialog(
         title: 'Atualizar nota',
         callback: (controller) => (data) => controller.updateNote(note, data),
+        initialState: data,
       ),
     );
   }
 
   void _replyNote(BuildContext context, WidgetRef ref) {
-    showModalBottomSheet<NewNoteDTO?>(
+    showModalBottomSheet<void>(
       backgroundColor: Theme.of(context).colorScheme.background,
       context: context,
       isScrollControlled: true,

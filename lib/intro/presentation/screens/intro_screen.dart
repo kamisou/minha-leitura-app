@@ -97,7 +97,7 @@ class IntroScreen extends HookConsumerWidget {
                             const SizedBox(height: 10),
                             OutlinedButton(
                               onPressed: () => ref
-                                  .read(introRepositoryProvider)
+                                  .read(introRepositoryProvider.notifier)
                                   .setIntroSeen()
                                   .then((value) => context.go('/login')),
                               child: const Text('Entrar'),

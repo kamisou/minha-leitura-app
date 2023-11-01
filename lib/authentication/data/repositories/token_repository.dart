@@ -6,6 +6,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'token_repository.g.dart';
 
 @Riverpod(keepAlive: true)
+String? token(TokenRef ref) {
+  return ref.watch(tokenRepositoryProvider).valueOrNull;
+}
+
+@Riverpod(keepAlive: true)
 class TokenRepository extends _$TokenRepository {
   @override
   Future<String?> build() {

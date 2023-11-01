@@ -1,11 +1,10 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:reading/books/data/cached/book_notes.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
-import 'package:reading/profile/data/repositories/profile_repository.dart';
+import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
@@ -21,31 +20,21 @@ BookNoteRepository bookNoteRepository(BookNoteRepositoryRef ref) {
       : OfflineBookNoteRepository(ref);
 }
 
-@riverpod
-Future<List<BookNote>> bookNotes(BookNotesRef ref, int bookId) {
-  return ref.read(bookNoteRepositoryProvider).getBookNotes(bookId);
-}
-
 class OnlineBookNoteRepository extends BookNoteRepository
     with OfflineUpdatePusher {
   const OnlineBookNoteRepository(super.ref);
 
   @override
   Future<void> addNote(int bookId, NewNoteDTO data) async {
-    final note = await ref.read(restApiProvider).post(
-      'app/note',
-      body: {
-        ...data.toJson(),
-        'reading_id': bookId,
-      },
-    ).then((response) {
-      response['author'] = {
-        'id': response['author_id'],
-        'name': response['author_name'],
-      };
-      response['book_id'] = response['reading_id'];
-      return BookNote.fromJson(response as Json);
-    });
+    final body = {
+      ...data.toJson(),
+      'reading_id': bookId,
+    };
+
+    final note = await ref
+        .read(restApiProvider)
+        .post('app/note', body: body)
+        .then((response) => BookNote.fromJson(response as Json));
 
     await save<BookNote>(note, note.id);
 
@@ -54,21 +43,16 @@ class OnlineBookNoteRepository extends BookNoteRepository
 
   @override
   Future<void> replyNote(int bookId, int noteId, NewNoteDTO data) async {
-    final note = await ref.read(restApiProvider).post(
-      'app/note',
-      body: {
-        ...data.toJson(),
-        'reading_id': bookId,
-        'note_id': noteId,
-      },
-    ).then((response) {
-      response['author'] = {
-        'id': response['author_id'],
-        'name': response['author'],
-      };
-      response['book_id'] = response['reading_id'];
-      return BookNote.fromJson(response as Json);
-    });
+    final body = {
+      ...data.toJson(),
+      'reading_id': bookId,
+      'note_id': noteId,
+    };
+
+    final note = await ref
+        .read(restApiProvider)
+        .post('app/note', body: body)
+        .then((response) => BookNote.fromJson(response as Json));
 
     await save<BookNote>(note, note.id);
 
@@ -81,16 +65,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .read(restApiProvider)
         .get('app/note/reading/$bookId')
         .then((response) => (response as Json)['notes'])
-        .then(
-          (list) => (list as List).cast<Json>().map((note) {
-            note['author'] = {
-              'id': note['author_id'],
-              'name': note['author'],
-            };
-
-            return BookNote.fromJson({...note, 'parent_id': bookId});
-          }),
-        )
+        .then((list) => (list as List).cast<Json>().map(BookNote.fromJson))
         .then((notes) => notes.toList());
 
     saveAll<BookNote>(notes, (note) => note.id!).ignore();
@@ -103,15 +78,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
     final newNote = await ref
         .read(restApiProvider)
         .put('app/note/${note.id}', body: data.toJson())
-        .then((response) {
-      response['author'] = {
-        'id': response['author_id'],
-        'name': response['author'],
-      };
-      response['parent_id'] = response['reading_id'];
-
-      return BookNote.fromJson(response as Json);
-    });
+        .then((response) => BookNote.fromJson(response as Json));
 
     await save<BookNote>(newNote, note.id);
 
@@ -131,7 +98,11 @@ class OnlineBookNoteRepository extends BookNoteRepository
       );
 
       if (note.id == null) {
-        await addNote(note.bookId, data);
+        if (note.noteId != null) {
+          await replyNote(note.bookId, note.noteId!, data);
+        } else {
+          await addNote(note.bookId, data);
+        }
       } else {
         await updateNote(note, data);
       }

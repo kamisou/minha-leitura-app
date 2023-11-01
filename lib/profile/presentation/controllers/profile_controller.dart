@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:reading/profile/data/dtos/password_change_dto.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
 import 'package:reading/profile/data/repositories/profile_repository.dart';
@@ -18,13 +16,6 @@ class ProfileController extends _$ProfileController {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
       () => ref.read(profileRepositoryProvider).saveProfile(data),
-    );
-  }
-
-  Future<void> saveAvatar(File avatar) async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(
-      () => ref.read(profileRepositoryProvider).saveAvatar(avatar),
     );
   }
 

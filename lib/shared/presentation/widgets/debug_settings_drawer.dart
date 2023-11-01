@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/shared/infrastructure/error_logger.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:reading/shared/presentation/widgets/debug_log.dart';
 
@@ -66,8 +65,9 @@ class DebugSettingsDrawer extends HookConsumerWidget {
               ),
               Expanded(
                 child: Consumer(
-                  builder: (context, ref, child) => DebugLog(
-                    errors: ref.watch(errorLoggerProvider).errors,
+                  builder: (context, ref, child) => const DebugLog(
+                    // errors: ref.watch(errorLoggerProvider).errors,
+                    errors: [],
                   ),
                 ),
               ),

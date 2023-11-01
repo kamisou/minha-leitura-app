@@ -6,7 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
-import 'package:reading/profile/data/repositories/profile_repository.dart';
+import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/routes.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
@@ -36,7 +36,7 @@ Future<ProviderContainer> initRiverpod() async {
       container.read(connectionStatusProvider.future),
       container.read(tokenRepositoryProvider.future),
       container.read(databaseProvider).initialize(),
-      container.read(introSeenProvider.future),
+      container.read(introRepositoryProvider.future),
       container.read(restApiServerProvider.future),
     ]);
 

@@ -3,9 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/authentication/presentation/dialogs/delete_account_confirmation_dialog.dart';
+import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/profile/data/dtos/password_change_dto.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
-import 'package:reading/profile/data/repositories/profile_repository.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/profile/presentation/controllers/profile_controller.dart';
@@ -13,7 +13,6 @@ import 'package:reading/profile/presentation/dialogs/change_password_dialog.dart
 import 'package:reading/profile/presentation/hooks/use_profile_form_reducer.dart';
 import 'package:reading/profile/presentation/widgets/profile_picture.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/infrastructure/image_picker.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
@@ -78,11 +77,8 @@ class ProfileScreen extends HookConsumerWidget {
               key: formKey.value,
               child: ListView(
                 children: [
-                  Center(
-                    child: GestureDetector(
-                      onTap: () => _changeAvatar(ref),
-                      child: const ProfilePicture(radius: 55),
-                    ),
+                  const Center(
+                    child: ProfilePicture(radius: 55),
                   ),
                   const SizedBox(height: 24),
                   TextFormField(
@@ -187,16 +183,6 @@ class ProfileScreen extends HookConsumerWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _changeAvatar(WidgetRef ref) async {
-    final avatar = await ref.read(imagePickerProvider).pickImage();
-
-    if (avatar == null) {
-      return;
-    }
-
-    return ref.read(profileControllerProvider.notifier).saveAvatar(avatar);
   }
 
   void _save(

@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/books/data/cached/book_ratings.dart';
 import 'package:reading/books/data/dtos/new_rating_dto.dart';
-import 'package:reading/books/data/repositories/book_rating_repository.dart';
 import 'package:reading/books/domain/models/book_rating.dart';
-import 'package:reading/books/presentation/controllers/new_rating_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_rating_dialog.dart';
 import 'package:reading/books/presentation/hooks/use_rating_average.dart';
 import 'package:reading/books/presentation/widgets/book_rating_tile.dart';
 import 'package:reading/books/presentation/widgets/star_rating_widget.dart';
-import 'package:reading/profile/data/repositories/profile_repository.dart';
-import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
+import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/shared/presentation/hooks/use_lazy_scroll_controller.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
@@ -34,30 +31,13 @@ class BookRatingsPage extends HookConsumerWidget {
       () => ratings.cast<BookRating?>().firstWhere(
             (rating) =>
                 rating!.author.id == //
-                ref.read(profileProvider).requireValue!.id,
+                ref.watch(profileProvider).requireValue!.id,
             orElse: () => null,
           ),
       [ratings],
     );
     final scrollController = useLazyScrollController(
       onEndOfScroll: ref.watch(bookRatingsProvider(bookId).notifier).next,
-    );
-
-    useControllerListener(
-      ref,
-      controller: newRatingControllerProvider,
-      onError: (error) {
-        _onRate(
-          context,
-          ref,
-          ref.read(newRatingControllerProvider).valueOrNull,
-        );
-
-        return switch (error) {
-          BadResponseRestException(message: final message) => message,
-          _ => 'Não foi possível salvar a avaliação',
-        };
-      },
     );
 
     return RefreshIndicator(
@@ -149,18 +129,15 @@ class BookRatingsPage extends HookConsumerWidget {
   }
 
   void _onRate(BuildContext context, WidgetRef ref, [NewRatingDTO? rating]) {
-    showModalBottomSheet<NewRatingDTO?>(
+    showModalBottomSheet<void>(
       backgroundColor: Theme.of(context).colorScheme.background,
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
-      builder: (context) => NewRatingDialog(rating: rating),
-    ).then(
-      (value) => value != null
-          ? ref
-              .read(newRatingControllerProvider.notifier)
-              .addRating(bookId, value)
-          : null,
+      builder: (context) => NewRatingDialog(
+        bookId: bookId,
+        initialState: rating,
+      ),
     );
   }
 }

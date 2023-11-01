@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
 import 'package:reading/authentication/domain/domain/token.dart';
+import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/profile/data/dtos/password_change_dto.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
 import 'package:reading/profile/domain/models/user_profile.dart';
@@ -14,15 +13,6 @@ import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'profile_repository.g.dart';
-
-@Riverpod(keepAlive: true)
-Future<UserProfile?> profile(ProfileRef ref) async {
-  if (ref.read(tokenRepositoryProvider).valueOrNull == null) {
-    return null;
-  }
-
-  return ref.read(profileRepositoryProvider).getMyProfile();
-}
 
 @riverpod
 ProfileRepository profileRepository(ProfileRepositoryRef ref) {
@@ -61,21 +51,6 @@ class OnlineProfileRepository extends ProfileRepository {
         .ignore();
 
     return super.saveProfile(data);
-  }
-
-  @override
-  Future<void> saveAvatar(File avatar) async {
-    final profile = await ref
-        .read(restApiProvider)
-        .upload('user/my/avatar', {'avatar': avatar}) //
-        .then((response) => UserProfile.fromJson(response as Json));
-
-    ref
-        .read(encryptedDatabaseProvider)
-        .update<UserProfile>(profile, profile.id)
-        .ignore();
-
-    return super.saveAvatar(avatar);
   }
 
   @override
@@ -121,11 +96,6 @@ class OfflineProfileRepository extends ProfileRepository {
   }
 
   @override
-  Future<void> saveAvatar(File avatar) {
-    throw OnlineOnlyOperationException();
-  }
-
-  @override
   Future<void> savePassword(PasswordChangeDTO data) {
     throw OnlineOnlyOperationException();
   }
@@ -148,11 +118,6 @@ abstract class ProfileRepository extends Repository with OfflinePersister {
 
   @mustBeOverridden
   Future<void> saveProfile(ProfileChangeDTO data) async {
-    ref.invalidate(profileProvider);
-  }
-
-  @mustBeOverridden
-  Future<void> saveAvatar(File avatar) async {
     ref.invalidate(profileProvider);
   }
 

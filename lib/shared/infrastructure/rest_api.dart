@@ -27,9 +27,9 @@ class RestApiServer extends _$RestApiServer {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 RestApi restApi(RestApiRef ref) {
-  final accessToken = ref.watch(tokenRepositoryProvider).valueOrNull;
+  final accessToken = ref.watch(tokenProvider);
 
   log('$accessToken');
 

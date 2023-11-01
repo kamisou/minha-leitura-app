@@ -49,7 +49,7 @@ class NewBookScreen extends HookConsumerWidget {
         BadResponseRestException(message: final message) => message,
         OnlineOnlyOperationException() =>
           'Você precisa estar online para registrar um novo livro',
-        _ => 'Não foi possível registrar o livro',
+        _ => null,
       },
       onSuccess: context.pop,
     );

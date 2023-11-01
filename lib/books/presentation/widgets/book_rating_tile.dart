@@ -4,7 +4,7 @@ import 'package:reading/books/data/repositories/book_rating_repository.dart';
 import 'package:reading/books/domain/models/book_rating.dart';
 import 'package:reading/books/presentation/widgets/author_timestamp.dart';
 import 'package:reading/books/presentation/widgets/star_rating_widget.dart';
-import 'package:reading/profile/data/repositories/profile_repository.dart';
+import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
 
@@ -28,7 +28,7 @@ class BookRatingTile extends ConsumerWidget {
               iconSize: 16,
               value: rating.rating,
             ),
-            if (rating.author.id == ref.read(profileProvider).requireValue!.id)
+            if (rating.author.id == ref.watch(profileProvider).requireValue!.id)
               GestureDetector(
                 onTap: () => ref
                     .read(bookRatingRepositoryProvider)

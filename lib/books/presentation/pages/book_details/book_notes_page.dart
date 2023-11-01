@@ -28,7 +28,7 @@ class BookNotesPage extends HookConsumerWidget {
       controller: newNoteControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
-        _ => 'Não foi possível criar a nota',
+        _ => null,
       },
     );
 

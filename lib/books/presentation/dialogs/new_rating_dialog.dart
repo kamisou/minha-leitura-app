@@ -1,24 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/dtos/new_rating_dto.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/rating.dart';
+import 'package:reading/books/presentation/controllers/new_rating_controller.dart';
 import 'package:reading/books/presentation/hooks/use_book_rating_form_reducer.dart';
 import 'package:reading/books/presentation/widgets/star_rating_widget.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
-class NewRatingDialog extends HookWidget {
+class NewRatingDialog extends HookConsumerWidget {
   const NewRatingDialog({
     super.key,
-    this.rating,
+    required this.bookId,
+    this.initialState,
   });
 
-  final NewRatingDTO? rating;
+  final int bookId;
+
+  final NewRatingDTO? initialState;
 
   @override
-  Widget build(BuildContext context) {
-    final bookRatingForm = useBookRatingFormReducer(initialState: rating);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bookRatingForm = useBookRatingFormReducer(initialState: initialState);
+
+    useControllerListener(
+      ref,
+      controller: newRatingControllerProvider,
+      onError: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
+        _ => null,
+      },
+      onSuccess: context.pop,
+    );
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -56,7 +74,9 @@ class NewRatingDialog extends HookWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: FilledButton(
-                  onPressed: () => context.pop(bookRatingForm.state),
+                  onPressed: () => ref
+                      .read(newRatingControllerProvider.notifier)
+                      .addRating(bookId, bookRatingForm.state),
                   child: const Text('Salvar'),
                 ),
               ),

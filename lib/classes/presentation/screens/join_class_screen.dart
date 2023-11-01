@@ -25,9 +25,8 @@ class JoinClassScreen extends HookConsumerWidget {
       controller: joinClassControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
-        OnlineOnlyOperationException() =>
-          'Você precisa estar online para entrar na turma',
-        _ => 'Não foi possível entrar na turma',
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
+        _ => null,
       },
       onSuccess: () => context.go('/classes'),
     );
@@ -72,7 +71,9 @@ class JoinClassScreen extends HookConsumerWidget {
                     isLoading: ref.watch(joinClassControllerProvider).isLoading,
                     child: FilledButton(
                       onPressed: code.value.length == _codeLength
-                          ? () => _join(context, ref, code.value)
+                          ? () => ref
+                              .read(joinClassControllerProvider.notifier)
+                              .joinClass(code.value)
                           : null,
                       child: const Text('Confirmar'),
                     ),
@@ -84,9 +85,5 @@ class JoinClassScreen extends HookConsumerWidget {
         ),
       ),
     );
-  }
-
-  void _join(BuildContext context, WidgetRef ref, String code) {
-    ref.read(joinClassControllerProvider.notifier).joinClass(code);
   }
 }

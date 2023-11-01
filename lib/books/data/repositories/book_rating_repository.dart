@@ -1,11 +1,10 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:reading/books/data/cached/book_ratings.dart';
 import 'package:reading/books/data/dtos/new_rating_dto.dart';
 import 'package:reading/books/domain/models/book_rating.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/rating.dart';
-import 'package:reading/profile/data/repositories/profile_repository.dart';
+import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/shared/data/paginated_resource.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
@@ -21,48 +20,6 @@ BookRatingRepository bookRatingRepository(BookRatingRepositoryRef ref) {
   return ref.read(isConnectedProvider)
       ? OnlineBookRatingRepository(ref)
       : OfflineBookRatingRepository(ref);
-}
-
-@riverpod
-class BookRatings extends _$BookRatings {
-  int? _bookId;
-
-  @override
-  Future<PaginatedResource<BookRating>> build(int bookId) async {
-    _bookId = bookId;
-    return _getRatings();
-  }
-
-  Future<PaginatedResource<BookRating>> _getRatings() {
-    return ref
-        .read(bookRatingRepositoryProvider)
-        .getRatings((state.valueOrNull?.currentPage ?? 0) + 1, _bookId!);
-  }
-
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = AsyncData(
-      await ref.read(bookRatingRepositoryProvider).getRatings(1, _bookId!),
-    );
-  }
-
-  Future<void> next() async {
-    if (state.requireValue.finished) return;
-
-    state = AsyncData(
-      state.requireValue.copyWith(loading: true),
-    );
-
-    final ratings = await _getRatings();
-
-    state = AsyncData(
-      ratings.copyWith(
-        data: [...state.requireValue.data, ...ratings.data],
-        finished: ratings.data.length < ratings.perPage,
-        loading: false,
-      ),
-    );
-  }
 }
 
 class OnlineBookRatingRepository extends BookRatingRepository
@@ -88,16 +45,15 @@ class OnlineBookRatingRepository extends BookRatingRepository
 
   @override
   Future<void> addRating(int bookId, NewRatingDTO data) async {
-    final rating = await ref.read(restApiProvider).post(
-      'app/review',
-      body: {
-        ...data.toJson(),
-        'book_id': bookId,
-      },
-    ).then((response) {
-      response['user'] = ref.read(profileProvider).requireValue!.toJson();
-      return BookRating.fromJson(response as Json);
-    });
+    final body = {
+      ...data.toJson(),
+      'book_id': bookId,
+    };
+
+    final rating = await ref
+        .read(restApiProvider)
+        .post('app/review', body: body)
+        .then((response) => BookRating.fromJson(response as Json));
 
     await save<BookRating>(rating, rating.id);
 

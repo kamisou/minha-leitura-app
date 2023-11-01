@@ -1,5 +1,4 @@
-// ignore_for_file: avoid_dynamic_calls
-
+import 'package:reading/classes/data/cached/classes.dart';
 import 'package:reading/classes/domain/models/class.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
@@ -15,11 +14,6 @@ ClassRepository classRepository(ClassRepositoryRef ref) {
   return ref.read(isConnectedProvider)
       ? OnlineClassRepository(ref)
       : OfflineClassRepository(ref);
-}
-
-@riverpod
-Future<List<Class>> myClasses(MyClassesRef ref) {
-  return ref.watch(classRepositoryProvider).getMyClasses();
 }
 
 class OnlineClassRepository extends ClassRepository {
