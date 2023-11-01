@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:reading/profile/presentation/controllers/profile_controller.dart';
+import 'package:reading/profile/presentation/controllers/delete_profile_controller.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class DeleteAccountConfirmationDialog extends ConsumerWidget {
@@ -9,6 +12,31 @@ class DeleteAccountConfirmationDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    useControllerListener(
+      ref,
+      controller: deleteProfileControllerProvider,
+      onError: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
+        _ => null,
+      },
+      onSuccess: () {
+        context
+          ..pop()
+          ..go('/login');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                'Sua conta foi removida. Esperamos te ver novamente!',
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
     return Dialog(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -41,7 +69,9 @@ class DeleteAccountConfirmationDialog extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: () => _deleteAccount(context, ref),
+                  onPressed: ref
+                      .read(deleteProfileControllerProvider.notifier)
+                      .deleteProfile,
                   child: Text(
                     'Confirmar',
                     style: TextStyle(
@@ -51,7 +81,7 @@ class DeleteAccountConfirmationDialog extends ConsumerWidget {
                   ),
                 ),
                 TextButton(
-                  onPressed: () => context.pop(),
+                  onPressed: context.pop,
                   child: const Text(
                     'Cancelar',
                     style: TextStyle(fontSize: 16),
@@ -62,29 +92,6 @@ class DeleteAccountConfirmationDialog extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
-
-  void _deleteAccount(BuildContext context, WidgetRef ref) {
-    context.go('/login');
-    ref
-        .read(profileControllerProvider.notifier) //
-        .deleteProfile()
-        .then(
-      (value) {
-        if (ref.read(profileControllerProvider).asError == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  'Sua conta foi removida. Esperamos te ver novamente!',
-                ),
-              ),
-            ),
-          );
-        }
-      },
     );
   }
 }

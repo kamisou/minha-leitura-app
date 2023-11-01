@@ -12,6 +12,7 @@ import 'package:reading/profile/presentation/controllers/profile_controller.dart
 import 'package:reading/profile/presentation/dialogs/change_password_dialog.dart';
 import 'package:reading/profile/presentation/hooks/use_profile_form_reducer.dart';
 import 'package:reading/profile/presentation/widgets/profile_picture.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
@@ -24,35 +25,21 @@ class ProfileScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(profileProvider).requireValue!;
     final formKey = useRef(GlobalKey<FormState>());
-    final profileForm = useProfileFormReducer(
-      initialState: ProfileChangeDTO(
+    final initialState = useRef(
+      ProfileChangeDTO(
         email: Email(user.email),
         name: Name(user.name),
       ),
     );
-    final changed = useMemoized(
-      () =>
-          user.email != profileForm.state.email?.value ||
-          user.name != profileForm.state.name?.value,
-      [user.email, user.name, profileForm.state],
-    );
-    final isValid = useMemoized(
-      () {
-        final form = profileForm.state;
-        return changed &&
-            (form.password?.value.isNotEmpty ?? false) &&
-            (form.name?.value.isNotEmpty ?? false) &&
-            (form.email?.value.isNotEmpty ?? false);
-      },
-      [changed, profileForm.state],
-    );
+    final profileForm = useProfileFormReducer(initialState: initialState.value);
 
     useControllerListener(
       ref,
       controller: profileControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
-        _ => 'Ocorreu um erro ao salvar as alterações do perfil',
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
+        _ => null,
       },
       onSuccess: () => ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -105,7 +92,7 @@ class ProfileScreen extends HookConsumerWidget {
                       _ => null,
                     },
                   ),
-                  if (changed)
+                  if (profileForm.state == initialState.value)
                     Padding(
                       padding: const EdgeInsets.only(top: 18),
                       child: ObfuscatedTextFormField(
@@ -121,15 +108,6 @@ class ProfileScreen extends HookConsumerWidget {
                         },
                       ),
                     ),
-                  // const SizedBox(height: 18),
-                  // TextFormField(
-                  //   initialValue: user.phone,
-                  //   onChanged: (value) => profileForm.dispatch(Phone(value)),
-                  //   validator: (value) => switch (Phone.validate(value)) {
-                  //     PhoneError.invalid => 'Informe um telefone válido',
-                  //     _ => null,
-                  //   },
-                  // ),
                   const SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerRight,
@@ -167,13 +145,16 @@ class ProfileScreen extends HookConsumerWidget {
               child: ButtonProgressIndicator(
                 isLoading: ref.watch(profileControllerProvider).isLoading,
                 child: FilledButton(
-                  onPressed: isValid
-                      ? () => _save(
-                            context,
-                            ref,
-                            formKey.value.currentState!,
-                            profileForm.state,
-                          )
+                  onPressed: profileForm.state.validate()
+                      ? () {
+                          if (!formKey.value.currentState!.validate()) {
+                            return;
+                          }
+
+                          ref
+                              .read(profileControllerProvider.notifier)
+                              .save(profileForm.state);
+                        }
                       : null,
                   child: const Text('Salvar'),
                 ),
@@ -183,18 +164,5 @@ class ProfileScreen extends HookConsumerWidget {
         ),
       ),
     );
-  }
-
-  void _save(
-    BuildContext context,
-    WidgetRef ref,
-    FormState form,
-    ProfileChangeDTO data,
-  ) {
-    if (!form.validate()) {
-      return;
-    }
-
-    ref.read(profileControllerProvider.notifier).save(data);
   }
 }
