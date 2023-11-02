@@ -16,26 +16,29 @@ void useControllerListener(
   ref.listen(
     controller,
     (previous, next) {
-      if (previous?.hasValue ?? false) {
-        onSuccess?.call();
-      }
-    },
-    onError: (error, stackTrace) {
-      final message = onError?.call(error);
+      final error = next.asError?.error;
 
-      if (message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(message),
+      if (error == null) {
+        if ((previous?.hasValue ?? false) && next.asData != null) {
+          onSuccess?.call();
+        }
+      } else {
+        final message = onError?.call(error);
+
+        if (message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(message),
+              ),
             ),
-          ),
-        );
-      }
+          );
+        }
 
-      if (kDebugMode) {
-        throw error;
+        if (kDebugMode) {
+          throw error;
+        }
       }
     },
   );

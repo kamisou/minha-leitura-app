@@ -50,7 +50,7 @@ class RankingFilterDialog extends HookConsumerWidget {
                     ),
                   ),
                   ExpansionPanelList(
-                    dividerColor: Colors.white,
+                    dividerColor: Colors.transparent,
                     elevation: 0,
                     expandedHeaderPadding: EdgeInsets.zero,
                     expandIconColor: Colors.white,
@@ -62,7 +62,7 @@ class RankingFilterDialog extends HookConsumerWidget {
                     children: [
                       for (final (i, tab, type) in tabs)
                         ExpansionPanel(
-                          backgroundColor: Colors.white,
+                          backgroundColor: Colors.transparent,
                           canTapOnHeader: true,
                           isExpanded: expanded.value == i,
                           headerBuilder: (context, isExpanded) => Padding(

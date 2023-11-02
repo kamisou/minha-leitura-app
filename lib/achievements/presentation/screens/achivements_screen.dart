@@ -11,9 +11,7 @@ class AchivementsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const UserAppBar(),
-      ),
+      appBar: const UserAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: CustomScrollView(

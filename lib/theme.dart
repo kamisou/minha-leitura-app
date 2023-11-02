@@ -39,6 +39,7 @@ class ThemeManager extends _$ThemeManager {
         onInverseSurface: Colors.white,
         outlineVariant: Color(0xFFDDE0E4),
         primary: primaryColor,
+        surfaceTint: Color(0x01FFFFFF),
       ),
       disabledColor: const Color(0xFFE6E6E6),
       dividerTheme: const DividerThemeData(space: 42),
@@ -89,9 +90,14 @@ class ThemeManager extends _$ThemeManager {
         fillColor: const Color(0x189A9A9A),
         filled: true,
       ),
-      filledButtonTheme: const FilledButtonThemeData(
+      filledButtonTheme: FilledButtonThemeData(
         style: ButtonStyle(
-          padding: MaterialStatePropertyAll(
+          backgroundColor: MaterialStateProperty.resolveWith(
+            (states) => states.contains(MaterialState.disabled)
+                ? const Color(0xFFFBB4AF)
+                : null,
+          ),
+          padding: const MaterialStatePropertyAll(
             EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 16,

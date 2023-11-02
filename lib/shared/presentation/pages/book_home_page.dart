@@ -28,10 +28,7 @@ class _BookHomePageState extends ConsumerState<BookHomePage>
 
     return Column(
       children: [
-        AppBar(
-          automaticallyImplyLeading: false,
-          title: const UserAppBar(),
-        ),
+        const UserAppBar(),
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) => RefreshIndicator(

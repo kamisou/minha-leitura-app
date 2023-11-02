@@ -13,9 +13,8 @@ class ClassesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        leading: const AppBarLeading(),
-        title: const UserAppBar(),
+      appBar: const UserAppBar(
+        leading: AppBarLeading(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),

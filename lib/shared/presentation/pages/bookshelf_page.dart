@@ -15,9 +15,7 @@ class BookshelfPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        AppBar(
-          title: const UserAppBar(),
-        ),
+        const UserAppBar(),
         Expanded(
           child: ref.watch(myBooksProvider).maybeWhen(
                 data: (books) {

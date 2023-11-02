@@ -27,9 +27,7 @@ class _RankingPageState extends ConsumerState<RankingPage>
 
     return Column(
       children: [
-        AppBar(
-          title: const UserAppBar(),
-        ),
+        const UserAppBar(),
         Expanded(
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 20),

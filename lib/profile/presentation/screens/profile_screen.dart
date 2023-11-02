@@ -91,7 +91,7 @@ class ProfileScreen extends HookConsumerWidget {
                       _ => null,
                     },
                   ),
-                  if (profileForm.state == initialState.value)
+                  if (profileForm.state != initialState.value)
                     Padding(
                       padding: const EdgeInsets.only(top: 18),
                       child: ObfuscatedTextFormField(
@@ -138,7 +138,8 @@ class ProfileScreen extends HookConsumerWidget {
               child: ButtonProgressIndicator(
                 isLoading: ref.watch(profileControllerProvider).isLoading,
                 child: FilledButton(
-                  onPressed: profileForm.state.validate()
+                  onPressed: profileForm.state != initialState.value &&
+                          profileForm.state.validate()
                       ? () {
                           if (!formKey.value.currentState!.validate()) {
                             return;

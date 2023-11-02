@@ -10,12 +10,15 @@ import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/routes.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
+import 'package:reading/shared/infrastructure/error_logger.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:reading/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initLocale();
+
+  Intl.defaultLocale = 'pt_BR';
+  await initializeDateFormatting(Intl.defaultLocale);
 
   final riverpod = await initRiverpod();
 
@@ -32,6 +35,9 @@ Future<ProviderContainer> initRiverpod() async {
 
   try {
     // services
+    container.read(errorLoggerProvider);
+
+    // session
     await Future.wait([
       container.read(connectionStatusProvider.future),
       container.read(tokenRepositoryProvider.future),
@@ -51,11 +57,6 @@ Future<ProviderContainer> initRiverpod() async {
   }
 
   return container;
-}
-
-Future<void> initLocale() async {
-  Intl.defaultLocale = 'pt_BR';
-  return initializeDateFormatting(Intl.defaultLocale);
 }
 
 class App extends ConsumerWidget {
