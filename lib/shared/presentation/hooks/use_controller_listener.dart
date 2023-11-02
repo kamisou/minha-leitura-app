@@ -16,14 +16,14 @@ void useControllerListener(
   ref.listen(
     controller,
     (previous, next) {
-      final error = next.asError?.error;
+      final error = next.asError;
 
       if (error == null) {
         if ((previous?.hasValue ?? false) && next.asData != null) {
           onSuccess?.call();
         }
       } else {
-        final message = onError?.call(error);
+        final message = onError?.call(error.error);
 
         if (message != null) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -37,7 +37,7 @@ void useControllerListener(
         }
 
         if (kDebugMode) {
-          throw error;
+          throw error.error;
         }
       }
     },

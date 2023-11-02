@@ -21,8 +21,7 @@ class SignupScreen extends HookConsumerWidget {
       controller: signupControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
-        OnlineOnlyOperationException() =>
-          'Você precisa estar online para se registrar',
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
         _ => 'Não foi possível registrar conta',
       },
     );

@@ -170,7 +170,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
         ? db.getById<OfflineBookNote>(note.key)
         : db.getById<BookNote>(note.id));
 
-    newNote = newNote.copyWith(
+    newNote = newNote!.copyWith(
       title: data.title.value,
       description: data.description.value,
     );

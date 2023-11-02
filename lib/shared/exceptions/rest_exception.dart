@@ -10,8 +10,18 @@ class BadResponseRestException extends RestException {
 
   final int code;
   final String message;
+
+  @override
+  String toString() {
+    return '[BadResponseRestException] Bad response: $code $message.';
+  }
 }
 
 class NoResponseRestException extends RestException {
   const NoResponseRestException();
+
+  @override
+  String toString() {
+    return '[NoResponseRestException] Communication with the server failed.';
+  }
 }

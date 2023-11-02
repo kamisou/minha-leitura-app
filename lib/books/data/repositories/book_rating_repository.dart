@@ -127,7 +127,7 @@ class OfflineBookRatingRepository extends BookRatingRepository {
 
   @override
   Future<void> removeRating(int bookId, BookRating rating) {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('removeRating');
   }
 }
 

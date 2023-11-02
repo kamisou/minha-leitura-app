@@ -22,8 +22,7 @@ class LoginScreen extends HookConsumerWidget {
       controller: loginControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
-        OnlineOnlyOperationException() =>
-          'Você precisa estar online para fazer login',
+        OnlineOnlyOperationException() => 'Você precisa contetar-se à internet',
         _ => 'Não foi possível realizar login',
       },
       onSuccess: () => context.go('/'),

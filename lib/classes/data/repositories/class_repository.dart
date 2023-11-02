@@ -63,7 +63,7 @@ class OfflineClassRepository extends ClassRepository {
 
   @override
   Future<void> joinClass(String code) {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('joinClass');
   }
 }
 

@@ -117,22 +117,22 @@ class OfflineBookRepository extends BookRepository {
 
   @override
   Future<PaginatedResource<Book>> getBooks(int page, {String? searchTerm}) {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('getBooks');
   }
 
   @override
   Future<Book> addBook(NewBookDTO data) {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('addBook');
   }
 
   @override
   Future<void> addReading(Book book, NewBookDTO data) {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('addReading');
   }
 
   @override
   Future<void> addBookAndReading(NewBookDTO data) {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('addBookAndReading');
   }
 
   @override

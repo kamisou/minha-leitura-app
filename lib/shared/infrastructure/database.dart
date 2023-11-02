@@ -15,7 +15,6 @@ import 'package:reading/books/domain/models/book_reading.dart';
 import 'package:reading/classes/domain/models/class.dart';
 import 'package:reading/profile/domain/models/user.dart';
 import 'package:reading/profile/domain/models/user_profile.dart';
-import 'package:reading/shared/exceptions/database_exception.dart';
 import 'package:reading/shared/infrastructure/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -53,17 +52,13 @@ class HiveDatabase extends Database {
   }
 
   @override
-  Future<T> getById<T>(dynamic id) async {
+  Future<T?> getById<T>(dynamic id) async {
     log('get $T by $id', name: 'Database');
 
     final box = await _getBox<T>() as LazyBox<T>;
     final value = await box.get(id);
 
     box.close().ignore();
-
-    if (value == null) {
-      throw const NoRowFoundException();
-    }
 
     return value;
   }
@@ -215,7 +210,7 @@ abstract class Database {
   const Database();
 
   Future<void> initialize();
-  Future<T> getById<T>(dynamic id);
+  Future<T?> getById<T>(dynamic id);
   Future<List<T>> getAll<T>({int? offset, int? limit});
   Future<List<T>> getWhere<T>(
     bool Function(T value) predicate, {

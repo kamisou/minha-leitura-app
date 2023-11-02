@@ -13,6 +13,8 @@ class BookshelfPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // TODO: loading state para bookshelf
+
     return Column(
       children: [
         const UserAppBar(),

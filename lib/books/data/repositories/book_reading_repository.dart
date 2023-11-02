@@ -52,7 +52,7 @@ class OfflineBookReadingRepository extends BookReadingRepository {
 
   @override
   Future<void> updateReading(int bookId, NewReadingDTO data) async {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('updateReading');
   }
 
   @override

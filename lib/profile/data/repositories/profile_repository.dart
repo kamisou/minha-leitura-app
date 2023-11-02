@@ -81,7 +81,7 @@ class OfflineProfileRepository extends ProfileRepository {
         .getWhere<Token>((token) => token.accessToken == accessToken);
 
     if (tokens.isEmpty) {
-      throw UnauthorizedException();
+      throw const UnauthorizedException();
     }
 
     final users = await ref
@@ -89,7 +89,7 @@ class OfflineProfileRepository extends ProfileRepository {
         .getWhere<UserProfile>((user) => user.id == tokens.first.userId);
 
     if (users.isEmpty) {
-      throw UnauthorizedException();
+      throw const UnauthorizedException();
     }
 
     return users.first;
@@ -97,17 +97,17 @@ class OfflineProfileRepository extends ProfileRepository {
 
   @override
   Future<void> savePassword(PasswordChangeDTO data) {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('savePassword');
   }
 
   @override
   Future<void> saveProfile(ProfileChangeDTO data) {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('saveProfile');
   }
 
   @override
   Future<void> deleteProfile() {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('deleteProfile');
   }
 }
 

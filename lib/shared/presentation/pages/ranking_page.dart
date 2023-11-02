@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/ranking/data/cached/ranking.dart';
 import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
 import 'package:reading/ranking/presentation/dialogs/ranking_filter_dialog.dart';
+import 'package:reading/shared/presentation/hooks/use_asyncvalue_listener.dart';
 import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -24,6 +25,8 @@ class _RankingPageState extends ConsumerState<RankingPage>
     final filter = useState(
       const RankingFilterDTO(type: RankingType.global),
     );
+
+    logAsyncValueError(ref, rankingProvider(filter.value));
 
     return Column(
       children: [

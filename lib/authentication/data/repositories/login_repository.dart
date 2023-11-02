@@ -80,17 +80,17 @@ class OfflineLoginRepository extends LoginRepository {
 
   @override
   Future<void> login(LoginDTO data) {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('login');
   }
 
   @override
   Future<void> signup(SignupDTO data) {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('signUp');
   }
 
   @override
   Future<void> recover(Email email) {
-    throw OnlineOnlyOperationException();
+    throw const OnlineOnlyOperationException('recover');
   }
 }
 

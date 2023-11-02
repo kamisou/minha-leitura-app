@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/cached/books.dart';
 import 'package:reading/books/domain/models/book.dart';
 import 'package:reading/books/presentation/widgets/book_search_result.dart';
+import 'package:reading/shared/presentation/hooks/use_asyncvalue_listener.dart';
 import 'package:reading/shared/presentation/hooks/use_lazy_scroll_controller.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -19,13 +20,16 @@ class BookSearchResultPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final booksResult = booksProvider(searchTerm: searchTerm);
     final booksScrollController = useLazyScrollController(
       onEndOfScroll: ref
           .read(booksProvider(searchTerm: searchTerm).notifier) //
           .next,
     );
 
-    return ref.watch(booksProvider(searchTerm: searchTerm)).maybeWhen(
+    logAsyncValueError(ref, booksResult);
+
+    return ref.watch(booksResult).maybeWhen(
           data: (books) => books.data.isNotEmpty
               ? ListView.separated(
                   controller: booksScrollController,

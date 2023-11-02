@@ -47,8 +47,7 @@ class NewBookScreen extends HookConsumerWidget {
       controller: newBookControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
-        OnlineOnlyOperationException() =>
-          'Você precisa estar online para registrar um novo livro',
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
         _ => null,
       },
       onSuccess: context.pop,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/cached/books.dart';
+import 'package:reading/shared/presentation/hooks/use_asyncvalue_listener.dart';
 import 'package:reading/shared/presentation/hooks/use_lazy_page_controller.dart';
 import 'package:reading/shared/presentation/pages/content/book_carrousel_content.dart';
 import 'package:reading/shared/presentation/pages/content/greeting_content.dart';
@@ -25,6 +26,8 @@ class _BookHomePageState extends ConsumerState<BookHomePage>
       onEndOfScroll: ref.read(myBooksProvider.notifier).next,
       viewportFraction: 0.72,
     );
+
+    logAsyncValueError(ref, myBooksProvider);
 
     return Column(
       children: [
