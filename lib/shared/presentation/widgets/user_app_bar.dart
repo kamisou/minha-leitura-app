@@ -32,7 +32,7 @@ class UserAppBar extends HookConsumerWidget implements PreferredSizeWidget {
             child: RichText(
               text: TextSpan(
                 text: 'Olá, ',
-                style: DefaultTextStyle.of(context).style,
+                style: Theme.of(context).appBarTheme.titleTextStyle,
                 children: [
                   TextSpan(
                     text: user.name,
