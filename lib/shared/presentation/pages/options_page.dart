@@ -38,14 +38,6 @@ class OptionsPage extends ConsumerWidget {
                     label: 'Conquistas',
                     onTap: () => context.go('/achievements'),
                   ),
-                  // ProfileMenuOption(
-                  //   icon: UniconsLine.setting,
-                  //   label: 'Ajustes',
-                  //   onTap: () {
-                  //     // TODO: implement go to settings
-                  //     throw UnimplementedError();
-                  //   },
-                  // ),
                 ],
               ),
             ),

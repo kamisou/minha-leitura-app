@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/cached/books.dart';
+import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/presentation/widgets/bookshelf.dart';
 import 'package:reading/shared/presentation/hooks/use_lazy_scroll_controller.dart';
+import 'package:reading/shared/presentation/widgets/bookshelf_label.dart';
 import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
@@ -81,6 +83,10 @@ class BookshelfPage extends HookConsumerWidget {
                           books: books.data,
                           booksPerRow: 3,
                         ),
+                        const SizedBox(height: 32),
+                        const BookshelfLabel(status: BookStatus.pending),
+                        const BookshelfLabel(status: BookStatus.reading),
+                        const BookshelfLabel(status: BookStatus.finished),
                       ],
                     ),
                   );

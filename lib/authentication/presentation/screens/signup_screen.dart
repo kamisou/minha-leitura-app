@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/presentation/content/signup_content.dart';
 import 'package:reading/authentication/presentation/controllers/signup_controller.dart';
@@ -6,7 +7,7 @@ import 'package:reading/intro/presentation/hooks/use_intro_screen_theme_override
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
-import 'package:reading/shared/presentation/widgets/debug_settings_drawer.dart';
+import 'package:reading/shared/presentation/widgets/debug_drawer.dart';
 import 'package:reading/shared/presentation/widgets/gradient_intro_background.dart';
 
 class SignupScreen extends HookConsumerWidget {
@@ -24,6 +25,7 @@ class SignupScreen extends HookConsumerWidget {
         OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
         _ => 'Não foi possível registrar conta',
       },
+      onSuccess: () => context.go('/'),
     );
 
     return Stack(
@@ -43,7 +45,7 @@ class SignupScreen extends HookConsumerWidget {
               child: const SignupContent(),
             ),
           ),
-          drawer: DebugSettingsDrawer.buildIfDebugMode(overrideDebugMode: true),
+          drawer: DebugDrawer.buildIfDebugMode(overrideDebugMode: true),
         ),
       ],
     );

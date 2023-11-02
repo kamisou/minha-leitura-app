@@ -4,7 +4,7 @@ import 'package:reading/shared/presentation/pages/book_home_page.dart';
 import 'package:reading/shared/presentation/pages/bookshelf_page.dart';
 import 'package:reading/shared/presentation/pages/options_page.dart';
 import 'package:reading/shared/presentation/pages/ranking_page.dart';
-import 'package:reading/shared/presentation/widgets/debug_settings_drawer.dart';
+import 'package:reading/shared/presentation/widgets/debug_drawer.dart';
 import 'package:reading/shared/presentation/widgets/navbar_home.dart';
 import 'package:unicons/unicons.dart';
 
@@ -42,7 +42,7 @@ class HomeScreen extends HookWidget {
           UniconsLine.medal,
         ],
       ),
-      drawer: DebugSettingsDrawer.buildIfDebugMode(overrideDebugMode: true),
+      drawer: DebugDrawer.buildIfDebugMode(overrideDebugMode: true),
     );
   }
 }

@@ -30,6 +30,7 @@ class BookRatingTile extends ConsumerWidget {
             ),
             if (rating.author.id == ref.watch(profileProvider).requireValue!.id)
               GestureDetector(
+                // TODO: debounce
                 onTap: () => ref
                     .read(bookRatingRepositoryProvider)
                     .removeRating(rating.bookId, rating),

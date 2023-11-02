@@ -56,11 +56,9 @@ class NewBookScreen extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: AppBarLeading(
-          onTap: () {
-            page.value == 0 //
-                ? context.pop()
-                : _onTapBack(context, pageController);
-          },
+          onTap: () => page.value == 0 //
+              ? context.pop()
+              : _onTapBack(context, pageController),
         ),
         title: const Text('Cadastrar Novo Livro'),
       ),

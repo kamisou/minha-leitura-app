@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/shared/infrastructure/error_logger.dart';
+import 'package:reading/shared/presentation/widgets/clipboard_copiable.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class DebugLog extends HookConsumerWidget {
@@ -27,19 +28,26 @@ class DebugLog extends HookConsumerWidget {
               return ListView.builder(
                 padding: const EdgeInsets.all(8),
                 itemCount: errors.length,
-                itemBuilder: (context, index) => RichText(
-                  text: TextSpan(
-                    text: '${errors[index].exception}\n',
-                    style: TextStyle(
-                      color: Theme.of(context).colorExtension?.gray[200],
-                      fontWeight: FontWeight.w600,
-                      fontSize: fontSize.value + 2,
-                    ),
-                    children: hideStack.value
-                        ? null
-                        : [
+                itemBuilder: (context, index) {
+                  final exception = '${errors[index].exception}';
+                  final stack = !hideStack.value //
+                      ? '\n${errors[index].stack}'
+                      : '';
+
+                  return ClipboardCopiable(
+                    content: '$exception$stack',
+                    child: RichText(
+                      text: TextSpan(
+                        text: exception,
+                        style: TextStyle(
+                          color: Theme.of(context).colorExtension?.gray[200],
+                          fontWeight: FontWeight.w600,
+                          fontSize: fontSize.value + 2,
+                        ),
+                        children: [
+                          if (!hideStack.value)
                             TextSpan(
-                              text: '${errors[index].stack}',
+                              text: stack,
                               style: TextStyle(
                                 color:
                                     Theme.of(context).colorExtension?.gray[600],
@@ -47,9 +55,11 @@ class DebugLog extends HookConsumerWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                          ],
-                  ),
-                ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               );
             },
           ),

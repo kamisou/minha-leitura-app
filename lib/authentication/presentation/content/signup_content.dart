@@ -126,13 +126,6 @@ class SignupContent extends HookConsumerWidget {
       return;
     }
 
-    ref
-        .read(signupControllerProvider.notifier)
-        .signup(data) //
-        .then(
-          (value) => ref.read(signupControllerProvider).asError == null
-              ? context.go('/')
-              : null,
-        );
+    ref.read(signupControllerProvider.notifier).signup(data);
   }
 }

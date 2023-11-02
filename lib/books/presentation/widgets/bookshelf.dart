@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/books/domain/models/book_details.dart';
-import 'package:reading/books/presentation/hooks/use_status_color.dart';
+import 'package:reading/books/presentation/hooks/use_status_info.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/util/bytes_extension.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -75,7 +75,7 @@ class Bookshelf extends HookWidget {
               child: CustomPaint(
                 size: const Size(14, 20),
                 painter: _FlairPainter(
-                  color: useStatusColor(book.status),
+                  color: useStatusInfo(book.status).color,
                 ),
               ),
             ),
