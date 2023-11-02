@@ -14,7 +14,7 @@ class ThemeManager extends _$ThemeManager {
 
     return ThemeData(
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFFFFFFFF),
+        backgroundColor: Colors.white,
         titleTextStyle: TextStyle(
           color: Color(0xFF697B86),
           fontFamily: fontFamily,
@@ -36,7 +36,7 @@ class ThemeManager extends _$ThemeManager {
       ),
       colorScheme: const ColorScheme.light(
         inverseSurface: Color(0xFF202020),
-        onInverseSurface: Color(0xFFFFFFFF),
+        onInverseSurface: Colors.white,
         outlineVariant: Color(0xFFDDE0E4),
         primary: primaryColor,
         surfaceTint: Color(0x01FFFFFF),
@@ -44,7 +44,7 @@ class ThemeManager extends _$ThemeManager {
       disabledColor: const Color(0xFFE6E6E6),
       dividerTheme: const DividerThemeData(space: 42),
       drawerTheme: const DrawerThemeData(
-        backgroundColor: Color(0xFFFFFFFF),
+        backgroundColor: Colors.white,
       ),
       extensions: const [
         AnimationExtension(
@@ -96,9 +96,6 @@ class ThemeManager extends _$ThemeManager {
             (states) => states.contains(MaterialState.disabled)
                 ? const Color(0xFFFBB4AF)
                 : null,
-          ),
-          foregroundColor: const MaterialStatePropertyAll(
-            Color(0xFFFFFFFF),
           ),
           padding: const MaterialStatePropertyAll(
             EdgeInsets.symmetric(

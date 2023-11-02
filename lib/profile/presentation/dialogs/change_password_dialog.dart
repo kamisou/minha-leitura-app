@@ -1,34 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
-import 'package:reading/profile/domain/value_objects/email.dart';
-import 'package:reading/profile/presentation/controllers/profile_controller.dart';
 import 'package:reading/profile/presentation/hooks/use_password_form_reducer.dart';
-import 'package:reading/shared/exceptions/repository_exception.dart';
-import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
 
-class ChangePasswordDialog extends HookConsumerWidget {
+class ChangePasswordDialog extends HookWidget {
   const ChangePasswordDialog({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final formKey = useRef(GlobalKey<FormState>());
     final passwordForm = usePasswordFormReducer();
-
-    useControllerListener(
-      ref,
-      controller: profileControllerProvider,
-      onError: (error) => switch (error) {
-        BadResponseRestException(message: final message) => message,
-        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
-        _ => null,
-      },
-      onSuccess: context.pop,
-    );
 
     return Dialog(
       child: Padding(
@@ -49,17 +32,6 @@ class ChangePasswordDialog extends HookConsumerWidget {
               key: formKey.value,
               child: Column(
                 children: [
-                  TextFormField(
-                    decoration: const InputDecoration(hintText: 'E-mail'),
-                    textInputAction: TextInputAction.next,
-                    onChanged: (value) => passwordForm.dispatch(Email(value)),
-                    validator: (value) => switch (Email.validate(value)) {
-                      EmailError.empty => 'Informe seu e-mail',
-                      EmailError.invalid => 'Informe um e-mail válido',
-                      _ => null,
-                    },
-                  ),
-                  const SizedBox(height: 16),
                   ObfuscatedTextFormField(
                     decoration: const InputDecoration(hintText: 'senha atual'),
                     textInputAction: TextInputAction.next,
@@ -113,13 +85,9 @@ class ChangePasswordDialog extends HookConsumerWidget {
                 Expanded(
                   child: FilledButton(
                     onPressed: () {
-                      if (!formKey.value.currentState!.validate()) {
-                        return;
+                      if (formKey.value.currentState!.validate()) {
+                        context.pop(passwordForm.state);
                       }
-
-                      ref
-                          .read(profileControllerProvider.notifier)
-                          .savePassword(passwordForm.state);
                     },
                     child: const Text('Salvar'),
                   ),
