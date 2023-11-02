@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/authentication/presentation/dialogs/delete_account_confirmation_dialog.dart';
 import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
@@ -15,7 +14,6 @@ import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
-import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
 
 class ProfileScreen extends HookConsumerWidget {
   const ProfileScreen({super.key});
@@ -91,22 +89,6 @@ class ProfileScreen extends HookConsumerWidget {
                       _ => null,
                     },
                   ),
-                  if (profileForm.state != initialState.value)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 18),
-                      child: ObfuscatedTextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Senha',
-                        ),
-                        onChanged: (value) =>
-                            profileForm.dispatch(Password(value)),
-                        validator: (value) =>
-                            switch (Password.validate(value)) {
-                          PasswordError.empty => 'Confirme sua senha',
-                          _ => null,
-                        },
-                      ),
-                    ),
                   const SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerRight,

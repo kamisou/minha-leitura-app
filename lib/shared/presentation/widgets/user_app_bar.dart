@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/shared/presentation/hooks/use_initials.dart';
@@ -21,10 +22,13 @@ class UserAppBar extends HookConsumerWidget implements PreferredSizeWidget {
       leading: leading,
       title: Row(
         children: [
-          CircleAvatar(
-            child: Text(
-              initials,
-              style: const TextStyle(fontWeight: FontWeight.w700),
+          GestureDetector(
+            onTap: () => context.go('/profile'),
+            child: CircleAvatar(
+              child: Text(
+                initials,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
           ),
           const SizedBox(width: 10),
