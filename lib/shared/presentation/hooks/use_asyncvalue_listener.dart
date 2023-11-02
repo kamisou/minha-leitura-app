@@ -9,7 +9,7 @@ void logAsyncValueError(
     final error = next.asError;
 
     if (error != null) {
-      ref.read(errorLoggerProvider).logError(error.error, error.stackTrace);
+      ref.read(errorLoggerProvider.notifier).log(error.error, error.stackTrace);
     }
   });
 }

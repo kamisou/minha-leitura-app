@@ -4,40 +4,36 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'error_logger.g.dart';
 
 @Riverpod(keepAlive: true)
-ErrorLogger errorLogger(ErrorLoggerRef ref) {
-  return ErrorLoggerImpl();
-}
-
-class ErrorLoggerImpl extends ErrorLogger {
-  ErrorLoggerImpl() {
+class ErrorLogger extends _$ErrorLogger with ErrorLoggerMixin {
+  @override
+  List<ErrorLog> build() {
     FlutterError.onError = (details) {
-      logError(details.exception, details.stack);
+      log(details.exception, details.stack);
       FlutterError.presentError(details);
     };
 
     PlatformDispatcher.instance.onError = (exception, stackTrace) {
-      logError(exception, stackTrace);
+      log(exception, stackTrace);
       return false;
     };
+
+    return [];
   }
 
   @override
-  void logError(Object exception, StackTrace? stack) {
-    _errors.insert(0, ErrorLog(exception, stack));
+  void log(Object exception, StackTrace? stack) {
+    state = [ErrorLog(exception, stack), ...state];
   }
 
   @override
-  void clearErrors() {
-    _errors.clear();
+  void clear() {
+    state = [];
   }
 }
 
-abstract class ErrorLogger {
-  final List<ErrorLog> _errors = [];
-  List<ErrorLog> get errors => _errors;
-
-  void logError(Object exception, StackTrace? stack);
-  void clearErrors();
+mixin ErrorLoggerMixin {
+  void log(Object exception, StackTrace? stack);
+  void clear();
 }
 
 class ErrorLog {
