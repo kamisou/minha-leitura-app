@@ -21,7 +21,10 @@ class BookCarrouselLoading extends StatelessWidget {
         ),
         Expanded(
           child: PageView.builder(
-            controller: PageController(initialPage: 1),
+            controller: PageController(
+              initialPage: 1,
+              viewportFraction: 0.72,
+            ),
             itemCount: 3,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) => const Center(

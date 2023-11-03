@@ -21,7 +21,6 @@ class HomeScreen extends HookWidget {
           Expanded(
             child: PageView(
               controller: pageController,
-              physics: const NeverScrollableScrollPhysics(),
               children: const [
                 OptionsPage(),
                 BookHomePage(),

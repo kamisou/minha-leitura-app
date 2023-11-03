@@ -28,6 +28,7 @@ class OnlineClassRepository extends ClassRepository {
         .then((response) => (response as List).cast<Json>())
         .then(
           (list) => list.map((json) {
+            // ignore: avoid_dynamic_calls
             json['school_name'] = json['school']['name'];
             return Class.fromJson(json);
           }),

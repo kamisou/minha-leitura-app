@@ -31,7 +31,7 @@ class DebugLog extends HookConsumerWidget {
                 itemBuilder: (context, index) {
                   final exception = '${errors[index].exception}';
                   final stack = !hideStack.value //
-                      ? '\n${errors[index].stack}'
+                      ? '\n${errors[index].stack ?? ''}'
                       : '';
 
                   return ClipboardCopiable(

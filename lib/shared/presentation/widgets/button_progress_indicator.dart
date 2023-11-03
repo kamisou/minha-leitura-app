@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class ButtonProgressIndicator extends StatelessWidget {
+class ButtonProgressIndicator extends HookWidget {
   const ButtonProgressIndicator({
     super.key,
     required this.isLoading,
