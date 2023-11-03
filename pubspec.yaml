@@ -7,7 +7,7 @@ environment:
   sdk: ">=3.0.3 <4.0.0"
 
 dependencies:
-  connectivity_plus: ^5.0.1
+  connectivity_plus: ^4.0.1
   cupertino_icons: ^1.0.2
   dio: ^5.2.1+1
   easy_mask: ^2.0.1
@@ -18,7 +18,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: ^2.3.6
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^8.0.0
   flutter_svg: ^2.0.6
   freezed: ^2.3.5
   freezed_annotation: ^2.2.0
