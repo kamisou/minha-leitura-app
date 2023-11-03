@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reading/books/data/repositories/book_rating_repository.dart';
 import 'package:reading/books/domain/models/book_rating.dart';
+import 'package:reading/books/presentation/controllers/new_rating_controller.dart';
 import 'package:reading/books/presentation/widgets/author_timestamp.dart';
 import 'package:reading/books/presentation/widgets/star_rating_widget.dart';
 import 'package:reading/profile/data/cached/profile.dart';
+import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
 
@@ -30,23 +31,26 @@ class BookRatingTile extends ConsumerWidget {
             ),
             if (rating.author.id == ref.watch(profileProvider).requireValue!.id)
               GestureDetector(
-                // TODO: debounce
                 onTap: () => ref
-                    .read(bookRatingRepositoryProvider)
+                    .read(newRatingControllerProvider.notifier)
                     .removeRating(rating.bookId, rating),
-                child: Icon(
-                  UniconsLine.trash_alt,
-                  color: Theme.of(context).colorExtension?.gray[800],
-                  size: 20,
+                child: ButtonProgressIndicator(
+                  isLoading: ref.watch(newRatingControllerProvider).isLoading,
+                  child: Icon(
+                    UniconsLine.trash_alt,
+                    color: Theme.of(context).colorExtension?.gray[800],
+                    size: 20,
+                  ),
                 ),
               ),
           ],
         ),
         Text(
           rating.comment,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorExtension?.gray[600],
-              ),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: Theme.of(context).colorExtension?.gray[600]),
         ),
         AuthorTimestamp(
           author: rating.author.name,

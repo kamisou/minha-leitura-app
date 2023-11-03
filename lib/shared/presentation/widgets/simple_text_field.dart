@@ -54,6 +54,7 @@ class SimpleTextField extends StatelessWidget {
             fontSize: fontSize,
           ),
       textAlign: TextAlign.center,
+      textInputAction: TextInputAction.done,
       validator: validator,
     );
   }

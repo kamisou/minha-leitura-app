@@ -484,8 +484,6 @@ class NewBookScreen extends HookConsumerWidget {
     Book? book,
     NewBookDTO data,
   ) {
-    FocusManager.instance.primaryFocus?.unfocus();
-
     final controller = ref.read(newBookControllerProvider.notifier);
 
     if (book == null) {
@@ -496,7 +494,6 @@ class NewBookScreen extends HookConsumerWidget {
   }
 
   void _onTapBack(BuildContext context, PageController pageController) {
-    FocusManager.instance.primaryFocus?.unfocus();
     pageController.previousPage(
       duration: Theme.of(context).animationExtension!.duration,
       curve: Theme.of(context).animationExtension!.curve,
@@ -504,7 +501,6 @@ class NewBookScreen extends HookConsumerWidget {
   }
 
   void _onTapNext(BuildContext context, PageController pageController) {
-    FocusManager.instance.primaryFocus?.unfocus();
     pageController.nextPage(
       duration: Theme.of(context).animationExtension!.duration,
       curve: Theme.of(context).animationExtension!.curve,

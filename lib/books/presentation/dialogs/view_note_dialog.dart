@@ -109,52 +109,87 @@ class ViewNoteDialog extends HookConsumerWidget {
                                   isLoading: ref
                                       .watch(newNoteControllerProvider)
                                       .isLoading,
-                                  child: FilledButton.icon(
-                                    onPressed: note.replies.isEmpty
-                                        ? () => _removeNote(context, ref)
-                                        : null,
-                                    icon: const Icon(UniconsLine.trash),
-                                    label: const Text('Remover'),
-                                    style: ButtonStyle(
-                                      backgroundColor: const Color(0xFFF5F5F5)
-                                          .materialStateAll,
-                                      foregroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .primary
-                                          .materialStateAll,
+                                  child: ButtonProgressIndicator(
+                                    isLoading: ref
+                                        .watch(newNoteControllerProvider)
+                                        .isLoading,
+                                    child: FilledButton.icon(
+                                      onPressed: note.replies.isEmpty
+                                          ? () => ref
+                                              .read(
+                                                newNoteControllerProvider
+                                                    .notifier,
+                                              )
+                                              .removeNote(note)
+                                          : null,
+                                      icon: const Icon(UniconsLine.trash),
+                                      label: const Text('Remover'),
+                                      style: ButtonStyle(
+                                        backgroundColor: const Color(0xFFF5F5F5)
+                                            .materialStateAll,
+                                        foregroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            .materialStateAll,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
-                                child: FilledButton.icon(
-                                  onPressed: () => _updateNote(
-                                    context,
-                                    ref,
-                                    NewNoteDTO(
-                                      title: Title(note.title),
-                                      description: Description(
-                                        note.description,
+                                child: ButtonProgressIndicator(
+                                  isLoading: ref
+                                      .watch(newNoteControllerProvider)
+                                      .isLoading,
+                                  child: FilledButton.icon(
+                                    onPressed: () => showModalBottomSheet<void>(
+                                      backgroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .background,
+                                      context: context,
+                                      isScrollControlled: true,
+                                      showDragHandle: true,
+                                      builder: (context) => NoteEditDialog(
+                                        title: 'Atualizar nota',
+                                        callback: (controller) => (data) =>
+                                            controller.updateNote(note, data),
+                                        initialState: NewNoteDTO(
+                                          title: Title(note.title),
+                                          description: Description(
+                                            note.description,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  icon: const Icon(UniconsLine.edit),
-                                  label: const Text('Editar'),
-                                  style: ButtonStyle(
-                                    backgroundColor: const Color(0xFFF5F5F5)
-                                        .materialStateAll,
-                                    foregroundColor: Theme.of(context)
-                                        .colorExtension
-                                        ?.information
-                                        .materialStateAll,
+                                    icon: const Icon(UniconsLine.edit),
+                                    label: const Text('Editar'),
+                                    style: ButtonStyle(
+                                      backgroundColor: const Color(0xFFF5F5F5)
+                                          .materialStateAll,
+                                      foregroundColor: Theme.of(context)
+                                          .colorExtension
+                                          ?.information
+                                          .materialStateAll,
+                                    ),
                                   ),
                                 ),
                               ),
                             ],
                           )
                         : FilledButton.icon(
-                            onPressed: () => _replyNote(context, ref),
+                            onPressed: () => showModalBottomSheet<void>(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.background,
+                              context: context,
+                              isScrollControlled: true,
+                              showDragHandle: true,
+                              builder: (context) => NoteEditDialog(
+                                title: 'Responder nota',
+                                callback: (controller) => (data) => controller
+                                    .replyNote(note.bookId, note.id!, data),
+                              ),
+                            ),
                             icon: const Icon(UniconsLine.trash),
                             label: const Text('Responder'),
                             style: ButtonStyle(
@@ -172,38 +207,6 @@ class ViewNoteDialog extends HookConsumerWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  void _removeNote(BuildContext context, WidgetRef ref) {
-    ref.read(newNoteControllerProvider.notifier).removeNote(note);
-  }
-
-  void _updateNote(BuildContext context, WidgetRef ref, NewNoteDTO data) {
-    showModalBottomSheet<void>(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) => NoteEditDialog(
-        title: 'Atualizar nota',
-        callback: (controller) => (data) => controller.updateNote(note, data),
-        initialState: data,
-      ),
-    );
-  }
-
-  void _replyNote(BuildContext context, WidgetRef ref) {
-    showModalBottomSheet<void>(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) => NoteEditDialog(
-        title: 'Responder nota',
-        callback: (controller) =>
-            (data) => controller.replyNote(note.bookId, note.id!, data),
       ),
     );
   }

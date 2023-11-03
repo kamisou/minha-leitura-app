@@ -7,6 +7,7 @@ import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
+import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:reading/theme.dart';
 
@@ -88,14 +89,21 @@ class PasswordRecoveryDialog extends HookConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextButton(
-                      onPressed: () => _recoverPassword(
-                        context,
-                        ref,
-                        formKey.value.currentState!,
-                        email.value,
+                    ButtonProgressIndicator(
+                      isLoading:
+                          ref.watch(emailRecoveryControllerProvider).isLoading,
+                      child: TextButton(
+                        onPressed: () {
+                          if (!formKey.value.currentState!.validate()) {
+                            return;
+                          }
+
+                          ref
+                              .read(emailRecoveryControllerProvider.notifier)
+                              .recover(email.value);
+                        },
+                        child: const Text('Recuperar'),
                       ),
-                      child: const Text('Recuperar'),
                     ),
                   ],
                 ),
@@ -105,18 +113,5 @@ class PasswordRecoveryDialog extends HookConsumerWidget {
         ),
       ),
     );
-  }
-
-  void _recoverPassword(
-    BuildContext context,
-    WidgetRef ref,
-    FormState form,
-    Email email,
-  ) {
-    if (!form.validate()) {
-      return;
-    }
-
-    ref.read(emailRecoveryControllerProvider.notifier).recover(email);
   }
 }

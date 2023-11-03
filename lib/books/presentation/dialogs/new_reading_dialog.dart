@@ -9,6 +9,7 @@ import 'package:reading/books/presentation/hooks/use_book_reading_form_reducer.d
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
+import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/presentation/widgets/simple_text_field.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -81,11 +82,14 @@ class NewReadingDialog extends HookConsumerWidget {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: FilledButton(
-                  onPressed: () => ref
-                      .read(newReadingControllerProvider.notifier)
-                      .updateReading(book.id, readingForm.state),
-                  child: const Text('Salvar'),
+                child: ButtonProgressIndicator(
+                  isLoading: ref.watch(newReadingControllerProvider).isLoading,
+                  child: FilledButton(
+                    onPressed: () => ref
+                        .read(newReadingControllerProvider.notifier)
+                        .updateReading(book.id, readingForm.state),
+                    child: const Text('Salvar'),
+                  ),
                 ),
               ),
             ],

@@ -66,25 +66,22 @@ class BookNotesPage extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: FilledButton.icon(
-            onPressed: () => _addNote(context, ref),
+            onPressed: () => showModalBottomSheet<void>(
+              backgroundColor: Theme.of(context).colorScheme.background,
+              context: context,
+              isScrollControlled: true,
+              showDragHandle: true,
+              builder: (context) => NoteEditDialog(
+                title: 'Nova nota',
+                callback: (controller) =>
+                    (data) => controller.addNote(bookId, data),
+              ),
+            ),
             icon: const Icon(UniconsLine.edit),
             label: const Text('Adicionar anotação'),
           ),
         ),
       ],
-    );
-  }
-
-  void _addNote(BuildContext context, WidgetRef ref) {
-    showModalBottomSheet<void>(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) => NoteEditDialog(
-        title: 'Nova nota',
-        callback: (controller) => (data) => controller.addNote(bookId, data),
-      ),
     );
   }
 }

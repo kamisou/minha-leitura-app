@@ -7,6 +7,7 @@ import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/hooks/use_book_note_form_reducer.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
+import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class NoteEditDialog extends HookConsumerWidget {
@@ -70,12 +71,15 @@ class NoteEditDialog extends HookConsumerWidget {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: FilledButton(
-                  onPressed: () =>
-                      callback(ref.read(newNoteControllerProvider.notifier))(
-                    bookNoteForm.state,
+                child: ButtonProgressIndicator(
+                  isLoading: ref.watch(newNoteControllerProvider).isLoading,
+                  child: FilledButton(
+                    onPressed: () =>
+                        callback(ref.read(newNoteControllerProvider.notifier))(
+                      bookNoteForm.state,
+                    ),
+                    child: const Text('Salvar'),
                   ),
-                  child: const Text('Salvar'),
                 ),
               ),
             ],

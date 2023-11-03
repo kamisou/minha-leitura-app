@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/cached/book_ratings.dart';
-import 'package:reading/books/data/dtos/new_rating_dto.dart';
 import 'package:reading/books/domain/models/book_rating.dart';
 import 'package:reading/books/presentation/dialogs/new_rating_dialog.dart';
 import 'package:reading/books/presentation/hooks/use_rating_average.dart';
@@ -84,8 +83,17 @@ class BookRatingsPage extends HookConsumerWidget {
                   ],
                 ),
                 FilledButton.icon(
-                  onPressed:
-                      myRating == null ? () => _onRate(context, ref) : null,
+                  onPressed: myRating == null //
+                      ? () => showModalBottomSheet<void>(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.background,
+                            context: context,
+                            isScrollControlled: true,
+                            showDragHandle: true,
+                            builder: (context) =>
+                                NewRatingDialog(bookId: bookId),
+                          )
+                      : null,
                   icon: const Icon(UniconsSolid.star),
                   label: const Text('Avaliar'),
                   style: const ButtonStyle(
@@ -124,19 +132,6 @@ class BookRatingsPage extends HookConsumerWidget {
               ),
             ),
         ],
-      ),
-    );
-  }
-
-  void _onRate(BuildContext context, WidgetRef ref, [NewRatingDTO? rating]) {
-    showModalBottomSheet<void>(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (context) => NewRatingDialog(
-        bookId: bookId,
-        initialState: rating,
       ),
     );
   }

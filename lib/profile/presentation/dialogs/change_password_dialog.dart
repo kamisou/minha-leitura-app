@@ -8,6 +8,7 @@ import 'package:reading/profile/presentation/hooks/use_password_form_reducer.dar
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
+import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
 
 class ChangePasswordDialog extends HookConsumerWidget {
@@ -99,17 +100,20 @@ class ChangePasswordDialog extends HookConsumerWidget {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: FilledButton(
-                    onPressed: () {
-                      if (!formKey.value.currentState!.validate()) {
-                        return;
-                      }
+                  child: ButtonProgressIndicator(
+                    isLoading: ref.watch(profileControllerProvider).isLoading,
+                    child: FilledButton(
+                      onPressed: () {
+                        if (!formKey.value.currentState!.validate()) {
+                          return;
+                        }
 
-                      ref
-                          .read(profileControllerProvider.notifier)
-                          .savePassword(passwordForm.state);
-                    },
-                    child: const Text('Salvar'),
+                        ref
+                            .read(profileControllerProvider.notifier)
+                            .savePassword(passwordForm.state);
+                      },
+                      child: const Text('Salvar'),
+                    ),
                   ),
                 ),
               ],

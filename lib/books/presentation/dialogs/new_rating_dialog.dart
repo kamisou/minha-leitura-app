@@ -10,6 +10,7 @@ import 'package:reading/books/presentation/widgets/star_rating_widget.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
+import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class NewRatingDialog extends HookConsumerWidget {
@@ -73,11 +74,14 @@ class NewRatingDialog extends HookConsumerWidget {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: FilledButton(
-                  onPressed: () => ref
-                      .read(newRatingControllerProvider.notifier)
-                      .addRating(bookId, bookRatingForm.state),
-                  child: const Text('Salvar'),
+                child: ButtonProgressIndicator(
+                  isLoading: ref.watch(newRatingControllerProvider).isLoading,
+                  child: FilledButton(
+                    onPressed: () => ref
+                        .read(newRatingControllerProvider.notifier)
+                        .addRating(bookId, bookRatingForm.state),
+                    child: const Text('Salvar'),
+                  ),
                 ),
               ),
             ],
