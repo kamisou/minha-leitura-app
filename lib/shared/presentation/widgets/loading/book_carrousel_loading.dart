@@ -6,42 +6,47 @@ class BookCarrouselLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(height: 8),
-        LoadingPlaceholder(
+        const SizedBox(height: 8),
+        const LoadingPlaceholder(
           width: 160,
           height: 28,
         ),
-        SizedBox(height: 12),
-        LoadingPlaceholder(
+        const SizedBox(height: 12),
+        const LoadingPlaceholder(
           width: 230,
           height: 12,
         ),
         Expanded(
-          child: Center(
-            child: LoadingPlaceholder(
-              width: 245,
-              height: 356,
+          child: PageView.builder(
+            controller: PageController(initialPage: 1),
+            itemCount: 3,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) => const Center(
+              child: LoadingPlaceholder(
+                width: 230,
+                height: 328,
+              ),
             ),
           ),
         ),
-        LoadingPlaceholder(
+        const LoadingPlaceholder(
           width: 100,
           height: 6,
         ),
-        SizedBox(height: 16),
-        LoadingPlaceholder(
+        const SizedBox(height: 16),
+        const LoadingPlaceholder(
           width: 220,
           height: 22,
         ),
-        SizedBox(height: 12),
-        LoadingPlaceholder(
+        const SizedBox(height: 12),
+        const LoadingPlaceholder(
           width: 140,
           height: 12,
         ),
-        SizedBox(height: 64),
+        const SizedBox(height: 64),
       ],
     );
   }

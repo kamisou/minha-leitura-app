@@ -79,10 +79,7 @@ class BookshelfPage extends HookConsumerWidget {
                           ],
                         ),
                         const SizedBox(height: 20),
-                        Bookshelf(
-                          books: books.data,
-                          booksPerRow: 3,
-                        ),
+                        Bookshelf(books: books.data),
                         const SizedBox(height: 32),
                         const BookshelfLabel(status: BookStatus.pending),
                         const BookshelfLabel(status: BookStatus.reading),

@@ -10,7 +10,7 @@ class NewBookWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 230,
-      height: 356,
+      height: 328,
       decoration: ShapeDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         shape: RoundedRectangleBorder(
