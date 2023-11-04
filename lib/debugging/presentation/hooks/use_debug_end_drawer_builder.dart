@@ -9,7 +9,7 @@ Widget Function(BuildContext context, Widget? child) useDebugEndDrawerBuilder(
 ) {
   return useCallback(
     (context, child) => Scaffold(
-      body: child,
+      body: ScaffoldMessenger(child: child!),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       floatingActionButton: Builder(
         builder: (context) => FloatingActionButton.small(
