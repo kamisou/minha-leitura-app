@@ -7,7 +7,6 @@ import 'package:reading/intro/presentation/hooks/use_intro_screen_theme_override
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
-import 'package:reading/shared/presentation/widgets/debug_drawer.dart';
 import 'package:reading/shared/presentation/widgets/gradient_intro_background.dart';
 
 class SignupScreen extends HookConsumerWidget {
@@ -45,7 +44,6 @@ class SignupScreen extends HookConsumerWidget {
               child: const SignupContent(),
             ),
           ),
-          drawer: DebugDrawer.buildIfDebugMode(overrideDebugMode: true),
         ),
       ],
     );

@@ -13,7 +13,6 @@ import 'package:reading/books/presentation/pages/book_details/book_ratings_page.
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
 import 'package:reading/shared/presentation/hooks/use_asyncvalue_listener.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
-import 'package:reading/shared/presentation/widgets/debug_drawer.dart';
 import 'package:reading/shared/util/bytes_extension.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -224,7 +223,6 @@ class BookDetailsScreen extends HookConsumerWidget {
           ],
         ),
       ),
-      drawer: DebugDrawer.buildIfDebugMode(),
     );
   }
 }

@@ -2,17 +2,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
+import 'package:reading/debugging/presentation/controllers/debug_drawer_controller.dart';
+import 'package:reading/debugging/presentation/hooks/use_debug_end_drawer_builder.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/routes.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
-import 'package:reading/shared/infrastructure/error_logger.dart';
-import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:reading/theme.dart';
 
 void main() async {
@@ -36,17 +36,16 @@ Future<ProviderContainer> initRiverpod() async {
 
   try {
     // services
-    container.read(errorLoggerProvider);
+    await container.read(debugDrawerControllerProvider.future);
 
-    // session
     await Future.wait([
       container.read(connectionStatusProvider.future),
       container.read(tokenRepositoryProvider.future),
       container.read(databaseProvider).initialize(),
       container.read(introRepositoryProvider.future),
-      container.read(restApiServerProvider.future),
     ]);
 
+    // session
     await container.read(profileProvider.future);
   } catch (error, stackTrace) {
     log(
@@ -60,7 +59,7 @@ Future<ProviderContainer> initRiverpod() async {
   return container;
 }
 
-class App extends ConsumerWidget {
+class App extends HookConsumerWidget {
   const App({super.key});
 
   @override
@@ -69,6 +68,7 @@ class App extends ConsumerWidget {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
+      builder: useDebugEndDrawerBuilder(ref),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       routerConfig: router,

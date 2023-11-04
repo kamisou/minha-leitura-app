@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
+import 'package:reading/debugging/presentation/controllers/debug_drawer_controller.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/infrastructure/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'rest_api.g.dart';
@@ -12,29 +12,16 @@ part 'rest_api.g.dart';
 typedef Json = Map<String, dynamic>;
 
 @Riverpod(keepAlive: true)
-class RestApiServer extends _$RestApiServer {
-  @override
-  Future<String> build() async {
-    return ref
-        .read(secureStorageProvider)
-        .read('rest_api_server')
-        .then((value) => value ?? 'http://marlin.websix.com.br:5000/api/');
-  }
-
-  Future<void> set(String value) {
-    state = AsyncData(value);
-    return ref.read(secureStorageProvider).write('rest_api_server', value);
-  }
-}
-
-@Riverpod(keepAlive: true)
 RestApi restApi(RestApiRef ref) {
   final accessToken = ref.watch(tokenProvider);
+  final debugDrawerController = ref.watch(debugDrawerStateProvider);
 
   log('$accessToken');
 
   return DioRestApi(
-    server: ref.watch(restApiServerProvider).requireValue,
+    server: debugDrawerController.isDebugMode
+        ? debugDrawerController.restApiServer
+        : 'http://marlin.websix.com.br:5000/api/',
     headers: accessToken != null //
         ? {'Authorization': 'Bearer $accessToken'}
         : null,

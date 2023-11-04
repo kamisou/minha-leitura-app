@@ -1,24 +1,18 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
-import 'package:reading/shared/infrastructure/rest_api.dart';
+import 'package:reading/debugging/presentation/controllers/debug_drawer_controller.dart';
+import 'package:reading/debugging/presentation/widgets/debug_log.dart';
 import 'package:reading/shared/presentation/widgets/clipboard_copiable.dart';
-import 'package:reading/shared/presentation/widgets/debug_log.dart';
 
 class DebugDrawer extends HookConsumerWidget {
   const DebugDrawer({super.key});
 
-  static DebugDrawer? buildIfDebugMode({
-    bool overrideDebugMode = false,
-  }) =>
-      kDebugMode || overrideDebugMode ? const DebugDrawer() : null;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverController = useTextEditingController(
-      text: ref.read(restApiServerProvider).valueOrNull,
+      text: ref.read(debugDrawerStateProvider).restApiServer,
     );
 
     return Drawer(
@@ -40,8 +34,8 @@ class DebugDrawer extends HookConsumerWidget {
                 maxLines: 4,
                 style: const TextStyle(fontSize: 14),
                 onEditingComplete: () => ref
-                    .read(restApiServerProvider.notifier)
-                    .set(serverController.text),
+                    .read(debugDrawerControllerProvider.notifier)
+                    .saveRestApiUrl(serverController.text),
                 textInputAction: TextInputAction.done,
               ),
               const Padding(
