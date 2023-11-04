@@ -1,6 +1,6 @@
 import 'package:reading/achievements/domain/models/achievement.dart';
+import 'package:reading/shared/data/cached/connection_status.dart';
 import 'package:reading/shared/data/repository.dart';
-import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

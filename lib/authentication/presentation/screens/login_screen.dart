@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/presentation/content/login_content.dart';
 import 'package:reading/authentication/presentation/controllers/login_controller.dart';
+import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
 import 'package:reading/intro/presentation/hooks/use_intro_screen_theme_override.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
@@ -36,7 +37,7 @@ class LoginScreen extends HookConsumerWidget {
           ),
         ),
         const GradientIntroBackground(),
-        Scaffold(
+        DebugScaffold(
           backgroundColor: Colors.transparent,
           body: SafeArea(
             child: Theme(

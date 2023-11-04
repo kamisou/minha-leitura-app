@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reading/debugging/presentation/controllers/debug_drawer_controller.dart';
 
 void useControllerListener(
   WidgetRef ref, {
@@ -36,9 +35,7 @@ void useControllerListener(
           );
         }
 
-        if (ref.read(debugDrawerStateProvider).isDebugMode) {
-          throw error.error;
-        }
+        throw error.error;
       }
     },
   );

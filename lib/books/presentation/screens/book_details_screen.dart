@@ -11,6 +11,7 @@ import 'package:reading/books/presentation/pages/book_details/book_details_page.
 import 'package:reading/books/presentation/pages/book_details/book_notes_page.dart';
 import 'package:reading/books/presentation/pages/book_details/book_ratings_page.dart';
 import 'package:reading/books/presentation/widgets/animation_percentage_meter.dart';
+import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
 import 'package:reading/shared/presentation/hooks/use_asyncvalue_listener.dart';
 import 'package:reading/shared/presentation/widgets/book_cover.dart';
 import 'package:reading/shared/util/bytes_extension.dart';
@@ -29,7 +30,7 @@ class BookDetailsScreen extends HookConsumerWidget {
     final tabController = useTabController(initialLength: 3);
     final bookDetails = ref.watch(bookDetailsProvider(bookId));
 
-    return Scaffold(
+    return DebugScaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverToBoxAdapter(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/debugging/presentation/controllers/debug_drawer_controller.dart';
+import 'package:reading/shared/infrastructure/debugger.dart';
 import 'package:reading/shared/presentation/widgets/clipboard_copiable.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -24,7 +25,8 @@ class DebugLog extends HookConsumerWidget {
           ),
           child: Consumer(
             builder: (context, ref, child) {
-              final errors = ref.watch(debugDrawerStateProvider).errorLogs;
+              final errors = ref.watch(debuggerProvider);
+
               return ListView.builder(
                 padding: const EdgeInsets.all(8),
                 itemCount: errors.length,
@@ -102,8 +104,9 @@ class DebugLog extends HookConsumerWidget {
                     icon: const Icon(Icons.line_weight_sharp),
                   ),
                 IconButton.filled(
-                  onPressed:
-                      ref.read(debugDrawerControllerProvider.notifier).clear,
+                  onPressed: ref
+                      .read(debugDrawerControllerProvider.notifier)
+                      .clearLogs,
                   icon: const Icon(Icons.delete),
                 ),
               ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reading/classes/data/cached/classes.dart';
+import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
 import 'package:reading/shared/presentation/hooks/use_asyncvalue_listener.dart';
 import 'package:reading/shared/presentation/widgets/app_bar_leading.dart';
 import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
@@ -15,7 +16,7 @@ class ClassesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     logAsyncValueError(ref, myClassesProvider);
 
-    return Scaffold(
+    return DebugScaffold(
       appBar: const UserAppBar(
         leading: AppBarLeading(),
       ),

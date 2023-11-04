@@ -66,11 +66,13 @@ class _BookHomePageState extends ConsumerState<BookHomePage>
 
     await ref.read(myBooksProvider.notifier).refresh();
 
-    return pageController.animateToPage(
-      0,
-      duration: theme.animationExtension!.duration,
-      curve: theme.animationExtension!.curve,
-    );
+    if (pageController.hasClients) {
+      await pageController.animateToPage(
+        0,
+        duration: theme.animationExtension!.duration,
+        curve: theme.animationExtension!.curve,
+      );
+    }
   }
 
   @override

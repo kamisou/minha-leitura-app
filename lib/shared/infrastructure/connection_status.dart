@@ -5,11 +5,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'connection_status.g.dart';
 
-@riverpod
-bool isConnected(IsConnectedRef ref) {
-  return ref.watch(connectionStatusProvider).value ?? false;
-}
-
 @Riverpod(keepAlive: true)
 class ConnectionStatus extends _$ConnectionStatus {
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reading/debugging/presentation/controllers/debug_drawer_controller.dart';
+import 'package:reading/shared/infrastructure/debugger.dart';
 
 void logAsyncValueError(
   WidgetRef ref,
@@ -10,7 +10,7 @@ void logAsyncValueError(
 
     if (error != null) {
       ref
-          .read(debugDrawerControllerProvider.notifier)
+          .read(debuggerProvider.notifier)
           .logException(error.error, error.stackTrace);
     }
   });

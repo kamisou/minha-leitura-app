@@ -4,6 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
 import 'package:reading/debugging/presentation/controllers/debug_drawer_controller.dart';
 import 'package:reading/debugging/presentation/widgets/debug_log.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
+import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/presentation/widgets/clipboard_copiable.dart';
 
 class DebugDrawer extends HookConsumerWidget {
@@ -12,7 +14,7 @@ class DebugDrawer extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final serverController = useTextEditingController(
-      text: ref.read(debugDrawerStateProvider).restApiServer,
+      text: ref.read(restApiServerProvider).requireValue,
     );
 
     return Drawer(
@@ -33,10 +35,22 @@ class DebugDrawer extends HookConsumerWidget {
                 controller: serverController,
                 maxLines: 4,
                 style: const TextStyle(fontSize: 14),
-                onEditingComplete: () => ref
-                    .read(debugDrawerControllerProvider.notifier)
-                    .saveRestApiUrl(serverController.text),
                 textInputAction: TextInputAction.done,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ButtonProgressIndicator(
+                    isLoading:
+                        ref.watch(debugDrawerControllerProvider).isLoading,
+                    child: TextButton(
+                      onPressed: () => ref
+                          .read(debugDrawerControllerProvider.notifier)
+                          .setRestApiUrl(serverController.text),
+                      child: const Text('Salvar'),
+                    ),
+                  ),
+                ],
               ),
               const Padding(
                 padding: EdgeInsets.all(8),
@@ -45,18 +59,13 @@ class DebugDrawer extends HookConsumerWidget {
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
               ),
-              Consumer(
-                builder: (context, ref, child) {
-                  final token = ref.watch(tokenProvider);
-                  return ClipboardCopiable(
-                    content: token,
-                    child: TextFormField(
-                      enabled: false,
-                      initialValue: token,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  );
-                },
+              ClipboardCopiable(
+                content: ref.watch(tokenProvider),
+                child: TextFormField(
+                  enabled: false,
+                  initialValue: ref.watch(tokenProvider),
+                  style: const TextStyle(fontSize: 14),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),

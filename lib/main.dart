@@ -6,13 +6,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
-import 'package:reading/debugging/presentation/controllers/debug_drawer_controller.dart';
-import 'package:reading/debugging/presentation/hooks/use_debug_end_drawer_builder.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/routes.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
+import 'package:reading/shared/infrastructure/debugger.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:reading/theme.dart';
 
 void main() async {
@@ -36,9 +36,10 @@ Future<ProviderContainer> initRiverpod() async {
 
   try {
     // services
-    await container.read(debugDrawerControllerProvider.future);
+    container.read(debuggerProvider);
 
     await Future.wait([
+      container.read(restApiServerProvider.future),
       container.read(connectionStatusProvider.future),
       container.read(tokenRepositoryProvider.future),
       container.read(databaseProvider).initialize(),
@@ -68,7 +69,6 @@ class App extends HookConsumerWidget {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
-      builder: useDebugEndDrawerBuilder(ref),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       routerConfig: router,

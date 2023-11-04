@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/classes/presentation/controllers/join_class_controller.dart';
 import 'package:reading/classes/presentation/widgets/code_input.dart';
+import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
@@ -31,7 +32,7 @@ class JoinClassScreen extends HookConsumerWidget {
       onSuccess: () => context.go('/classes'),
     );
 
-    return Scaffold(
+    return DebugScaffold(
       appBar: AppBar(
         leading: const AppBarLeading(),
         title: Text(

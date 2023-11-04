@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/authentication/presentation/dialogs/delete_account_confirmation_dialog.dart';
+import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
 import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
@@ -50,7 +51,7 @@ class ProfileScreen extends HookConsumerWidget {
       ),
     );
 
-    return Scaffold(
+    return DebugScaffold(
       appBar: AppBar(
         title: const Text('Meus Dados'),
       ),

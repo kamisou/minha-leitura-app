@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reading/achievements/data/cached/achievements.dart';
 import 'package:reading/achievements/presentation/widgets/achievement_section.dart';
+import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
 import 'package:reading/shared/presentation/hooks/use_asyncvalue_listener.dart';
 import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -13,7 +14,7 @@ class AchivementsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     logAsyncValueError(ref, achievementsProvider);
 
-    return Scaffold(
+    return DebugScaffold(
       appBar: const UserAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(24),

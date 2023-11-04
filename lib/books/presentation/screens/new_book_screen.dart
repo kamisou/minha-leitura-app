@@ -17,6 +17,7 @@ import 'package:reading/books/presentation/hooks/use_new_book_form_reducer.dart'
 import 'package:reading/books/presentation/pages/new_book/book_search_result_page.dart';
 import 'package:reading/books/presentation/pages/new_book/new_book_page.dart';
 import 'package:reading/books/presentation/widgets/selection_button.dart';
+import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
@@ -53,7 +54,7 @@ class NewBookScreen extends HookConsumerWidget {
       onSuccess: context.pop,
     );
 
-    return Scaffold(
+    return DebugScaffold(
       appBar: AppBar(
         leading: AppBarLeading(
           onTap: () => page.value == 0 //

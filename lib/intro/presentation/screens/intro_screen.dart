@@ -3,6 +3,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/intro/presentation/hooks/use_intro_screen_theme_override.dart';
 import 'package:reading/intro/presentation/pages/intro_page.dart';
@@ -17,7 +18,7 @@ class IntroScreen extends HookConsumerWidget {
     final themeOverride = useIntroScreenThemeOverride();
     final pageController = usePageController();
 
-    return Scaffold(
+    return DebugScaffold(
       body: Theme(
         data: themeOverride,
         child: Builder(
