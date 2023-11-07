@@ -74,7 +74,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
                 'name': json['author'],
               };
 
-              (json['replies'] as List<Json>).map((reply) {
+              (json['replies'] as List).cast<Json>().map((reply) {
                 reply['user'] = {
                   'id': reply['author_id'],
                   'name': json['author'],
