@@ -100,7 +100,7 @@ class ViewNoteDialog extends HookConsumerWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
-                    child: (note.author.id ==
+                    child: (note.user.id ==
                             ref.watch(profileProvider).requireValue!.id)
                         ? Row(
                             children: [

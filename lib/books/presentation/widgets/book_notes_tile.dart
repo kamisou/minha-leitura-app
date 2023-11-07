@@ -48,7 +48,7 @@ class BookNotesTile extends HookWidget {
         ),
         const SizedBox(height: 8),
         AuthorTimestamp(
-          author: note.author.name,
+          author: note.user.name,
           timestamp: note.createdAt,
         ),
         if (!response && note.replies.isNotEmpty)
