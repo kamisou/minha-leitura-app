@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/classes/data/cached/classes.dart';
 import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
+import 'package:reading/shared/presentation/hooks/use_filter_name.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class RankingFilterDialog extends HookConsumerWidget {
@@ -109,10 +110,7 @@ class RankingFilterDialog extends HookConsumerWidget {
                                       child: Container(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          i == 0
-                                              ? $class.name
-                                              : '${$class.schoolName}'
-                                                  ' - ${$class.name}',
+                                          useFilterName(type, $class),
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium

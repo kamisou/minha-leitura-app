@@ -26,13 +26,7 @@ class OnlineClassRepository extends ClassRepository {
         .get('app/enrollment')
         .then((response) => (response as Json)['data'])
         .then((response) => (response as List).cast<Json>())
-        .then(
-          (list) => list.map((json) {
-            // ignore: avoid_dynamic_calls
-            json['school_name'] = json['school']['name'];
-            return Class.fromJson(json);
-          }),
-        )
+        .then((list) => list.map(Class.fromJson))
         .then((classes) => classes.toList());
 
     saveAll(classes, ($class) => $class.id).ignore();

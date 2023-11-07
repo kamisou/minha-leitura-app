@@ -94,7 +94,7 @@ class OfflineRankingRepository extends RankingRepository {
     return ref
         .read(databaseProvider)
         .getAll<RankingCity>()
-        .then((value) => value.first);
+        .then((value) => value.firstOrNull);
   }
 
   @override
@@ -102,7 +102,7 @@ class OfflineRankingRepository extends RankingRepository {
     return ref
         .read(databaseProvider)
         .getAll<RankingClass>()
-        .then((value) => value.first);
+        .then((value) => value.firstOrNull);
   }
 
   @override
@@ -110,7 +110,7 @@ class OfflineRankingRepository extends RankingRepository {
     return ref
         .read(databaseProvider)
         .getAll<RankingCountry>()
-        .then((value) => value.first);
+        .then((value) => value.firstOrNull);
   }
 
   @override
@@ -118,7 +118,7 @@ class OfflineRankingRepository extends RankingRepository {
     return ref
         .read(databaseProvider)
         .getAll<RankingSchool>()
-        .then((value) => value.first);
+        .then((value) => value.firstOrNull);
   }
 
   @override
@@ -126,7 +126,7 @@ class OfflineRankingRepository extends RankingRepository {
     return ref
         .read(databaseProvider)
         .getAll<RankingState>()
-        .then((value) => value.first);
+        .then((value) => value.firstOrNull);
   }
 
   @override
@@ -134,7 +134,7 @@ class OfflineRankingRepository extends RankingRepository {
     return ref
         .read(databaseProvider)
         .getAll<RankingGlobal>()
-        .then((value) => value.first);
+        .then((value) => value.firstOrNull);
   }
 }
 

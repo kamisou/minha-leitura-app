@@ -1,12 +1,17 @@
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:reading/classes/domain/models/class.dart';
 import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
 
-String useFilterName(RankingFilterDTO filter) {
-  return switch (filter.type) {
-    RankingType.$class => filter.$class!.name,
-    RankingType.school => filter.$class!.schoolName,
-    RankingType.city => 'Cidade - ${filter.$class!.schoolName}',
-    RankingType.state => 'Estado - ${filter.$class!.schoolName}',
-    RankingType.country => 'País - ${filter.$class!.schoolName}',
-    RankingType.global => 'Global',
-  };
+String useFilterName(RankingType type, [Class? $class]) {
+  return useMemoized(
+    () => switch (type) {
+      RankingType.$class => $class!.name,
+      RankingType.school => $class!.school.name,
+      RankingType.city => $class!.school.city,
+      RankingType.state => $class!.school.state,
+      RankingType.country => $class!.school.country,
+      RankingType.global => 'Global',
+    },
+    [type, $class],
+  );
 }

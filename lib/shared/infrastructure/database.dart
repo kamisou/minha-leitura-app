@@ -15,6 +15,7 @@ import 'package:reading/books/domain/models/book_reading.dart';
 import 'package:reading/classes/domain/models/class.dart';
 import 'package:reading/profile/domain/models/user.dart';
 import 'package:reading/profile/domain/models/user_profile.dart';
+import 'package:reading/ranking/domain/models/ranking.dart';
 import 'package:reading/shared/infrastructure/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -38,17 +39,21 @@ class HiveDatabase extends Database {
     await Hive.initFlutter('hive');
     Hive
       ..registerAdapter(TokenAdapter())
-      ..registerAdapter(BookDetailsAdapter())
-      ..registerAdapter(BookNoteAdapter())
-      ..registerAdapter(BookRatingAdapter())
-      ..registerAdapter(BookReadingAdapter())
-      ..registerAdapter(BookAdapter())
-      ..registerAdapter(ClassAdapter())
-      ..registerAdapter(UserProfileAdapter())
       ..registerAdapter(UserAdapter())
+      ..registerAdapter(UserProfileAdapter())
+      ..registerAdapter(ClassAdapter())
+      ..registerAdapter(BookAdapter())
+      ..registerAdapter(BookDetailsAdapter())
+      ..registerAdapter(BookReadingAdapter())
+      ..registerAdapter(BookReadingScoreAdapter())
+      ..registerAdapter(BookRatingAdapter())
+      ..registerAdapter(BookNoteAdapter())
       ..registerAdapter(BookStatusAdapter())
       ..registerAdapter(AchievementCategoryAdapter())
-      ..registerAdapter(AchievementAdapter());
+      ..registerAdapter(AchievementAdapter())
+      ..registerAdapter(RankingAdapter())
+      ..registerAdapter(RankingSpotAdapter())
+      ..registerAdapter(SchoolAdapter());
   }
 
   @override

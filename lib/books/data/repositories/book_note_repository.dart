@@ -65,8 +65,28 @@ class OnlineBookNoteRepository extends BookNoteRepository
         .read(restApiProvider)
         .get('app/note/reading/$bookId')
         .then((response) => (response as Json)['notes'])
-        .then((list) => (list as List).cast<Json>().map(BookNote.fromJson))
-        .then((notes) => notes.toList());
+        .then((list) => (list as List).cast<Json>())
+        .then(
+          (list) => list.map(
+            (json) {
+              json['user'] = {
+                'id': json['author_id'],
+                'name': json['author'],
+              };
+
+              (json['replies'] as List<Json>).map((reply) {
+                reply['user'] = {
+                  'id': reply['author_id'],
+                  'name': json['author'],
+                };
+
+                return reply;
+              });
+
+              return BookNote.fromJson(json);
+            },
+          ).toList(),
+        );
 
     saveAll<BookNote>(notes, (note) => note.id!).ignore();
 
@@ -127,7 +147,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
     final note = OfflineBookNote(
       title: data.title.value,
       description: data.description.value,
-      author: ref.read(profileProvider).requireValue!.toUser(),
+      user: ref.read(profileProvider).requireValue!.toUser(),
       bookId: bookId,
     );
 
@@ -141,7 +161,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
     final note = OfflineBookNote(
       title: data.title.value,
       description: data.description.value,
-      author: ref.read(profileProvider).requireValue!.toUser(),
+      user: ref.read(profileProvider).requireValue!.toUser(),
       bookId: bookId,
       noteId: noteId,
     );
