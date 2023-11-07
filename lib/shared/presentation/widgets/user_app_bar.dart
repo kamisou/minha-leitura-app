@@ -19,6 +19,7 @@ class UserAppBar extends HookConsumerWidget implements PreferredSizeWidget {
 
     return AppBar(
       automaticallyImplyLeading: false,
+      actions: const [SizedBox()],
       leading: leading,
       title: Row(
         children: [

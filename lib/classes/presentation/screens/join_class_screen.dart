@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/classes/presentation/controllers/join_class_controller.dart';
-import 'package:reading/classes/presentation/widgets/code_input.dart';
+import 'package:reading/classes/presentation/screens/content/join_class_content.dart';
+import 'package:reading/classes/presentation/screens/content/offline_join_class_content.dart';
 import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
-import 'package:reading/shared/exceptions/repository_exception.dart';
+import 'package:reading/shared/data/cached/connection_status.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/widgets/app_bar_leading.dart';
-import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
-import 'package:reading/shared/util/theme_data_extension.dart';
 
 class JoinClassScreen extends HookConsumerWidget {
   const JoinClassScreen({super.key});
 
-  static const _codeLength = 6;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final code = useState('');
-
     useControllerListener(
       ref,
       controller: joinClassControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
-        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
         _ => null,
       },
       onSuccess: () => context.go('/classes'),
@@ -42,48 +35,9 @@ class JoinClassScreen extends HookConsumerWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          children: [
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Text(
-                  'Qual o código da turma?',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).colorExtension?.gray[800],
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 3,
-              child: CodeInput(
-                length: _codeLength,
-                onChanged: (value) => code.value = value,
-              ),
-            ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ButtonProgressIndicator(
-                    isLoading: ref.watch(joinClassControllerProvider).isLoading,
-                    child: FilledButton(
-                      onPressed: code.value.length == _codeLength
-                          ? () => ref
-                              .read(joinClassControllerProvider.notifier)
-                              .joinClass(code.value)
-                          : null,
-                      child: const Text('Confirmar'),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: ref.watch(isConnectedProvider)
+            ? const JoinClassContent()
+            : const OfflineJoinClassContent(),
       ),
     );
   }
