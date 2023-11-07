@@ -112,29 +112,24 @@ class ViewNoteDialog extends HookConsumerWidget {
                                   isLoading: ref
                                       .watch(newNoteControllerProvider)
                                       .isLoading,
-                                  child: ButtonProgressIndicator(
-                                    isLoading: ref
-                                        .watch(newNoteControllerProvider)
-                                        .isLoading,
-                                    child: FilledButton.icon(
-                                      onPressed: note.replies.isEmpty
-                                          ? () => ref
-                                              .read(
-                                                newNoteControllerProvider
-                                                    .notifier,
-                                              )
-                                              .removeNote(note)
-                                          : null,
-                                      icon: const Icon(UniconsLine.trash),
-                                      label: const Text('Remover'),
-                                      style: ButtonStyle(
-                                        backgroundColor: const Color(0xFFF5F5F5)
-                                            .materialStateAll,
-                                        foregroundColor: Theme.of(context)
-                                            .colorScheme
-                                            .primary
-                                            .materialStateAll,
-                                      ),
+                                  child: FilledButton.icon(
+                                    onPressed: note.replies.isEmpty
+                                        ? () => ref
+                                            .read(
+                                              newNoteControllerProvider
+                                                  .notifier,
+                                            )
+                                            .removeNote(note)
+                                        : null,
+                                    icon: const Icon(UniconsLine.trash),
+                                    label: const Text('Remover'),
+                                    style: ButtonStyle(
+                                      backgroundColor: const Color(0xFFF5F5F5)
+                                          .materialStateAll,
+                                      foregroundColor: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .materialStateAll,
                                     ),
                                   ),
                                 ),
