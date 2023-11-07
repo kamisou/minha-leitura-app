@@ -27,16 +27,7 @@ class DebugScaffold extends StatelessWidget {
             backgroundColor: backgroundColor,
             body: body,
             bottomSheet: bottomSheet,
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.miniEndTop,
-            floatingActionButton: Builder(
-              builder: (context) => FloatingActionButton.small(
-                onPressed: Scaffold.of(context).openEndDrawer,
-                child: const Icon(Icons.developer_mode),
-              ),
-            ),
             endDrawer: Debugger.isDebugMode ? const DebugDrawer() : null,
-            endDrawerEnableOpenDragGesture: false,
           )
         : Scaffold(body: body);
   }
