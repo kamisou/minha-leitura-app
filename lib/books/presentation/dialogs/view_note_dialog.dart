@@ -22,8 +22,11 @@ import 'package:unicons/unicons.dart';
 class ViewNoteDialog extends HookConsumerWidget {
   const ViewNoteDialog({
     super.key,
+    required this.bookId,
     required this.note,
   });
+
+  final int bookId;
 
   final BookNote note;
 
@@ -187,7 +190,7 @@ class ViewNoteDialog extends HookConsumerWidget {
                               builder: (context) => NoteEditDialog(
                                 title: 'Responder nota',
                                 callback: (controller) => (data) => controller
-                                    .replyNote(note.bookId, note.id!, data),
+                                    .replyNote(bookId, note.id!, data),
                               ),
                             ),
                             icon: const Icon(UniconsLine.trash),

@@ -74,14 +74,15 @@ class OnlineBookNoteRepository extends BookNoteRepository
                 'name': json['author'],
               };
 
-              (json['replies'] as List).cast<Json>().map((reply) {
+              json['replies'] =
+                  (json['replies'] as List).cast<Json>().map((reply) {
                 reply['user'] = {
                   'id': reply['author_id'],
-                  'name': json['author'],
+                  'name': reply['author'],
                 };
 
                 return reply;
-              });
+              }).toList();
 
               return BookNote.fromJson(json);
             },
@@ -119,9 +120,9 @@ class OnlineBookNoteRepository extends BookNoteRepository
 
       if (note.id == null) {
         if (note.noteId != null) {
-          await replyNote(note.bookId, note.noteId!, data);
+          await replyNote(note.bookId!, note.noteId!, data);
         } else {
-          await addNote(note.bookId, data);
+          await addNote(note.bookId!, data);
         }
       } else {
         await updateNote(note, data);
