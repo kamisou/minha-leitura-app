@@ -1,5 +1,5 @@
 import 'package:reading/shared/infrastructure/debugger.dart';
-import 'package:reading/shared/infrastructure/secure_storage.dart';
+import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'debug_drawer_controller.g.dart';
@@ -18,7 +18,7 @@ class DebugDrawerController extends _$DebugDrawerController {
   Future<void> setRestApiUrl(String value) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-      () => ref.read(secureStorageProvider).write('rest_api_server', value),
+      () => ref.read(restApiServerProvider.notifier).set(value),
     );
   }
 }
