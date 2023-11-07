@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:reading/books/data/cached/book_ratings.dart';
 import 'package:reading/books/data/dtos/new_rating_dto.dart';
@@ -53,7 +55,14 @@ class OnlineBookRatingRepository extends BookRatingRepository
     final rating = await ref
         .read(restApiProvider)
         .post('app/review', body: body)
-        .then((response) => BookRating.fromJson(response as Json));
+        .then((response) {
+      response['user'] = {
+        'id': response['user_id'],
+        'name': ref.read(profileProvider).requireValue!.name,
+      };
+
+      return BookRating.fromJson(response as Json);
+    });
 
     await save<BookRating>(rating, rating.id);
 

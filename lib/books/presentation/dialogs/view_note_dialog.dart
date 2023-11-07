@@ -13,7 +13,6 @@ import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
-import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/presentation/widgets/filled_icon_button.dart';
 import 'package:reading/shared/util/color_extension.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -105,76 +104,71 @@ class ViewNoteDialog extends HookConsumerWidget {
                     padding: const EdgeInsets.only(top: 16),
                     child: (note.user.id ==
                             ref.watch(profileProvider).requireValue!.id)
-                        ? Row(
-                            children: [
-                              Expanded(
-                                child: ButtonProgressIndicator(
-                                  isLoading: ref
-                                      .watch(newNoteControllerProvider)
-                                      .isLoading,
-                                  child: FilledButton.icon(
-                                    onPressed: note.replies.isEmpty
-                                        ? () => ref
-                                            .read(
-                                              newNoteControllerProvider
-                                                  .notifier,
-                                            )
-                                            .removeNote(note)
-                                        : null,
-                                    icon: const Icon(UniconsLine.trash),
-                                    label: const Text('Remover'),
-                                    style: ButtonStyle(
-                                      backgroundColor: const Color(0xFFF5F5F5)
-                                          .materialStateAll,
-                                      foregroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .primary
-                                          .materialStateAll,
+                        ? ref.watch(newNoteControllerProvider).isLoading
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : Row(
+                                children: [
+                                  Expanded(
+                                    child: FilledButton.icon(
+                                      onPressed: note.replies.isNotEmpty
+                                          ? () => ref
+                                              .read(
+                                                newNoteControllerProvider
+                                                    .notifier,
+                                              )
+                                              .removeNote(note)
+                                          : null,
+                                      icon: const Icon(UniconsLine.trash),
+                                      label: const Text('Remover'),
+                                      style: ButtonStyle(
+                                        backgroundColor: const Color(0xFFF5F5F5)
+                                            .materialStateAll,
+                                        foregroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            .materialStateAll,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: ButtonProgressIndicator(
-                                  isLoading: ref
-                                      .watch(newNoteControllerProvider)
-                                      .isLoading,
-                                  child: FilledButton.icon(
-                                    onPressed: () => showModalBottomSheet<void>(
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .background,
-                                      context: context,
-                                      isScrollControlled: true,
-                                      showDragHandle: true,
-                                      builder: (context) => NoteEditDialog(
-                                        title: 'Atualizar nota',
-                                        callback: (controller) => (data) =>
-                                            controller.updateNote(note, data),
-                                        initialState: NewNoteDTO(
-                                          title: Title(note.title),
-                                          description: Description(
-                                            note.description,
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: FilledButton.icon(
+                                      onPressed: () =>
+                                          showModalBottomSheet<void>(
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .background,
+                                        context: context,
+                                        isScrollControlled: true,
+                                        showDragHandle: true,
+                                        builder: (context) => NoteEditDialog(
+                                          title: 'Atualizar nota',
+                                          callback: (controller) => (data) =>
+                                              controller.updateNote(note, data),
+                                          initialState: NewNoteDTO(
+                                            title: Title(note.title),
+                                            description: Description(
+                                              note.description,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    icon: const Icon(UniconsLine.edit),
-                                    label: const Text('Editar'),
-                                    style: ButtonStyle(
-                                      backgroundColor: const Color(0xFFF5F5F5)
-                                          .materialStateAll,
-                                      foregroundColor: Theme.of(context)
-                                          .colorExtension
-                                          ?.information
-                                          .materialStateAll,
+                                      icon: const Icon(UniconsLine.edit),
+                                      label: const Text('Editar'),
+                                      style: ButtonStyle(
+                                        backgroundColor: const Color(0xFFF5F5F5)
+                                            .materialStateAll,
+                                        foregroundColor: Theme.of(context)
+                                            .colorExtension
+                                            ?.information
+                                            .materialStateAll,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          )
+                                ],
+                              )
                         : FilledButton.icon(
                             onPressed: () => showModalBottomSheet<void>(
                               backgroundColor:

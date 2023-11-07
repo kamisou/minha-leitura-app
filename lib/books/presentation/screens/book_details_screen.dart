@@ -204,13 +204,16 @@ class BookDetailsScreen extends HookConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Consumer(
                 builder: (context, ref, child) {
-                  logAsyncValueError(ref, bookRatingsProvider(bookDetails.id));
+                  logAsyncValueError(
+                    ref,
+                    bookRatingsProvider(bookDetails.book.id),
+                  );
 
                   return ref
-                      .watch(bookRatingsProvider(bookDetails.id))
+                      .watch(bookRatingsProvider(bookDetails.book.id))
                       .maybeWhen(
                         data: (ratings) => BookRatingsPage(
-                          bookId: bookDetails.id,
+                          book: bookDetails,
                           ratings: ratings.data,
                         ),
                         loading: () => const Center(

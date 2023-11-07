@@ -30,16 +30,21 @@ class BookRatingTile extends ConsumerWidget {
               value: rating.rating,
             ),
             if (rating.author.id == ref.watch(profileProvider).requireValue!.id)
-              GestureDetector(
-                onTap: () => ref
-                    .read(newRatingControllerProvider.notifier)
-                    .removeRating(rating.bookId, rating),
+              SizedBox(
+                width: 24,
+                height: 24,
                 child: ButtonProgressIndicator(
                   isLoading: ref.watch(newRatingControllerProvider).isLoading,
-                  child: Icon(
-                    UniconsLine.trash_alt,
-                    color: Theme.of(context).colorExtension?.gray[800],
-                    size: 20,
+                  child: IconButton(
+                    onPressed: () => ref
+                        .read(newRatingControllerProvider.notifier)
+                        .removeRating(rating.bookId, rating),
+                    iconSize: 20,
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      UniconsLine.trash_alt,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
               ),
@@ -52,6 +57,7 @@ class BookRatingTile extends ConsumerWidget {
               .bodyMedium
               ?.copyWith(color: Theme.of(context).colorExtension?.gray[600]),
         ),
+        const SizedBox(height: 16),
         AuthorTimestamp(
           author: rating.author.name,
           timestamp: rating.createdAt,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/cached/book_ratings.dart';
+import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/models/book_rating.dart';
 import 'package:reading/books/presentation/dialogs/new_rating_dialog.dart';
 import 'package:reading/books/presentation/hooks/use_rating_average.dart';
@@ -16,12 +17,12 @@ class BookRatingsPage extends HookConsumerWidget {
   const BookRatingsPage({
     super.key,
     required this.ratings,
-    required this.bookId,
+    required this.book,
   });
 
   final List<BookRating> ratings;
 
-  final int bookId;
+  final BookDetails book;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,11 +37,11 @@ class BookRatingsPage extends HookConsumerWidget {
       [ratings],
     );
     final scrollController = useLazyScrollController(
-      onEndOfScroll: ref.watch(bookRatingsProvider(bookId).notifier).next,
+      onEndOfScroll: ref.watch(bookRatingsProvider(book.book.id).notifier).next,
     );
 
     return RefreshIndicator(
-      onRefresh: () => ref.refresh(bookRatingsProvider(bookId).future),
+      onRefresh: () => ref.refresh(bookRatingsProvider(book.book.id).future),
       child: CustomScrollView(
         controller: scrollController,
         slivers: [
@@ -83,17 +84,18 @@ class BookRatingsPage extends HookConsumerWidget {
                   ],
                 ),
                 FilledButton.icon(
-                  onPressed: myRating == null //
-                      ? () => showModalBottomSheet<void>(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.background,
-                            context: context,
-                            isScrollControlled: true,
-                            showDragHandle: true,
-                            builder: (context) =>
-                                NewRatingDialog(bookId: bookId),
-                          )
-                      : null,
+                  onPressed:
+                      book.status == BookStatus.finished && myRating == null
+                          ? () => showModalBottomSheet<void>(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.background,
+                                context: context,
+                                isScrollControlled: true,
+                                showDragHandle: true,
+                                builder: (context) =>
+                                    NewRatingDialog(bookId: book.book.id),
+                              )
+                          : null,
                   icon: const Icon(UniconsSolid.star),
                   label: const Text('Avaliar'),
                   style: const ButtonStyle(

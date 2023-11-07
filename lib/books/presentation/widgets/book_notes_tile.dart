@@ -18,7 +18,7 @@ class BookNotesTile extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
           note.title,
@@ -61,7 +61,7 @@ class BookNotesTile extends HookWidget {
               children: [
                 ...note.replies.map(
                   (e) => BookNotesTile(
-                    note: note,
+                    note: e,
                     response: true,
                   ),
                 ),

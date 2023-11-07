@@ -4,7 +4,7 @@ import 'package:reading/achievements/data/cached/achievements.dart';
 import 'package:reading/achievements/presentation/widgets/achievement_section.dart';
 import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
 import 'package:reading/shared/presentation/hooks/use_asyncvalue_listener.dart';
-import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
+import 'package:reading/shared/presentation/widgets/app_bar_leading.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class AchivementsScreen extends ConsumerWidget {
@@ -15,12 +15,15 @@ class AchivementsScreen extends ConsumerWidget {
     logAsyncValueError(ref, achievementsProvider);
 
     return DebugScaffold(
-      appBar: const UserAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
+      appBar: AppBar(
+        actions: const [SizedBox()],
+        leading: const AppBarLeading(),
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 16),
+            sliver: SliverToBoxAdapter(
               child: Column(
                 children: [
                   Text(
@@ -41,19 +44,22 @@ class AchivementsScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            ref.watch(achievementsProvider).maybeWhen(
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            sliver: ref.watch(achievementsProvider).maybeWhen(
                   data: (achievements) => SliverList.builder(
                     itemCount: achievements.length,
                     itemBuilder: (context, index) => AchievementSection(
                       category: achievements[index],
                     ),
                   ),
-                  orElse: () => const SliverToBoxAdapter(
-                    child: SizedBox(),
+                  orElse: () => const Center(
+                    child: CircularProgressIndicator(),
                   ),
                 ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
