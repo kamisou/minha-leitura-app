@@ -111,7 +111,8 @@ class RankingFilterDialog extends HookConsumerWidget {
                                         child: Text(
                                           i == 0
                                               ? $class.name
-                                              : $class.schoolName,
+                                              : '${$class.schoolName}'
+                                                  ' - ${$class.name}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium
