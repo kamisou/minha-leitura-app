@@ -192,10 +192,9 @@ class BookDetailsScreen extends HookConsumerWidget {
                           bookId: bookDetails.id,
                           notes: notes,
                         ),
-                        loading: () => const Center(
+                        orElse: () => const Center(
                           child: CircularProgressIndicator(),
                         ),
-                        orElse: () => const SizedBox(),
                       );
                 },
               ),
@@ -216,10 +215,9 @@ class BookDetailsScreen extends HookConsumerWidget {
                           book: bookDetails,
                           ratings: ratings.data,
                         ),
-                        loading: () => const Center(
+                        orElse: () => const Center(
                           child: CircularProgressIndicator(),
                         ),
-                        orElse: () => const SizedBox(),
                       );
                 },
               ),

@@ -40,6 +40,8 @@ class BookRatingsPage extends HookConsumerWidget {
       onEndOfScroll: ref.watch(bookRatingsProvider(book.book.id).notifier).next,
     );
 
+    useAutomaticKeepAlive();
+
     return RefreshIndicator(
       onRefresh: () => ref.refresh(bookRatingsProvider(book.book.id).future),
       child: CustomScrollView(
