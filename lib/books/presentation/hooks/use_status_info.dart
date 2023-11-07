@@ -20,12 +20,12 @@ StatusInfo useStatusInfo(BookStatus status) {
           color: Color(0xFFF74235),
           name: 'em andamento',
         ),
-      BookStatus.finished => const StatusInfo(
-          color: Color(0xFF29BD1C),
-          name: 'emprestados',
-        ),
       BookStatus.reading => const StatusInfo(
           color: Color(0xFFF4B234),
+          name: 'emprestados',
+        ),
+      BookStatus.finished => const StatusInfo(
+          color: Color(0xFF29BD1C),
           name: 'concluídos',
         ),
     },
