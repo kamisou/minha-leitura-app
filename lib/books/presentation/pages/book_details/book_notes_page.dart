@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/note_edit_dialog.dart';
-import 'package:reading/books/presentation/dialogs/view_note_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
@@ -51,20 +50,9 @@ class BookNotesPage extends HookConsumerWidget {
         else
           ListView.separated(
             itemCount: notes.length,
-            itemBuilder: (context, index) => GestureDetector(
-              onTap: () => showModalBottomSheet<void>(
-                context: context,
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                isScrollControlled: true,
-                shape: const Border(),
-                builder: (context) => ViewNoteDialog(
-                  bookId: bookId,
-                  note: notes[index],
-                ),
-              ),
-              child: BookNotesTile(
-                note: notes[index],
-              ),
+            itemBuilder: (context, index) => BookNotesTile(
+              bookId: bookId,
+              note: notes[index],
             ),
             padding: EdgeInsets.zero,
             separatorBuilder: (context, index) => const Divider(),

@@ -160,10 +160,6 @@ class BookDetailsScreen extends HookConsumerWidget {
                 controller: tabController,
                 indicator: const BoxDecoration(),
                 isScrollable: true,
-                padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.3,
-                ),
-                physics: const NeverScrollableScrollPhysics(),
                 splashFactory: NoSplash.splashFactory,
                 tabs: const [
                   Tab(text: 'Detalhes'),

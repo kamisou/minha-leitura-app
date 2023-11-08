@@ -44,7 +44,7 @@ class BookDetailsPage extends HookConsumerWidget {
             BookDetailsTile(
               icon: UniconsLine.edit,
               label: 'Suas Anotações',
-              value: ref.watch(bookNotesProvider(book.book.id)).maybeWhen(
+              value: ref.watch(bookNotesProvider(book.id)).maybeWhen(
                     data: (data) => '${data.length} nota(s)',
                     orElse: () => '0 nota(s)',
                   ),
