@@ -9,6 +9,7 @@ class DebugScaffold extends StatelessWidget {
     this.backgroundColor,
     this.body,
     this.bottomSheet,
+    this.resizeToAvoidBottomInset,
   });
 
   final PreferredSizeWidget? appBar;
@@ -19,6 +20,8 @@ class DebugScaffold extends StatelessWidget {
 
   final Widget? bottomSheet;
 
+  final bool? resizeToAvoidBottomInset;
+
   @override
   Widget build(BuildContext context) {
     return Debugger.isDebugMode
@@ -27,8 +30,15 @@ class DebugScaffold extends StatelessWidget {
             backgroundColor: backgroundColor,
             body: body,
             bottomSheet: bottomSheet,
-            endDrawer: Debugger.isDebugMode ? const DebugDrawer() : null,
+            endDrawer: const DebugDrawer(),
+            resizeToAvoidBottomInset: resizeToAvoidBottomInset,
           )
-        : Scaffold(body: body);
+        : Scaffold(
+            appBar: appBar,
+            backgroundColor: backgroundColor,
+            body: body,
+            bottomSheet: bottomSheet,
+            resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+          );
   }
 }

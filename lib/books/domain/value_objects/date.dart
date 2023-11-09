@@ -4,7 +4,15 @@ enum DateError { empty, invalid }
 
 class Date {
   const Date([this.value]);
-  Date.fromString(String value) : value = DateFormat.yMd().parse(value);
+  Date.fromString(String value) : value = _parse(value);
+
+  static DateTime? _parse(String value) {
+    try {
+      return DateFormat.yMd().parse(value);
+    } on FormatException {
+      return null;
+    }
+  }
 
   final DateTime? value;
 

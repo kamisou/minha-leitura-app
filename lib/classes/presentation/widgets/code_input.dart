@@ -43,7 +43,6 @@ class _CodeInputState extends State<CodeInput> {
                   filled: false,
                 ),
                 keyboardType: TextInputType.visiblePassword,
-                inputFormatters: [_ReplaceLowercaseTextInputFormatter()],
                 maxLength: 1,
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
                 onChanged: (value) {
@@ -68,21 +67,6 @@ class _CodeInputState extends State<CodeInput> {
             ),
           ),
       ],
-    );
-  }
-}
-
-class _ReplaceLowercaseTextInputFormatter implements TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    return newValue.copyWith(
-      text: newValue.text.replaceAllMapped(
-        RegExp('[a-z]'),
-        (match) => match[0]!.toUpperCase(),
-      ),
     );
   }
 }

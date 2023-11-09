@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class NewBookPage extends StatelessWidget {
@@ -9,6 +10,7 @@ class NewBookPage extends StatelessWidget {
     required this.prompt,
     this.onTapNext,
     this.onTapSkip,
+    this.isLoading = false,
   });
 
   final WidgetBuilder builder;
@@ -18,6 +20,8 @@ class NewBookPage extends StatelessWidget {
   final void Function()? onTapNext;
 
   final void Function()? onTapSkip;
+
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +51,18 @@ class NewBookPage extends StatelessWidget {
                 const SizedBox(width: 16),
               ],
               Expanded(
-                child: FilledButton(
-                  onPressed: onTapNext,
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Próximo'),
-                      SizedBox(width: 10),
-                      Icon(FeatherIcons.arrowRight),
-                    ],
+                child: ButtonProgressIndicator(
+                  isLoading: isLoading,
+                  child: FilledButton(
+                    onPressed: onTapNext,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Próximo'),
+                        SizedBox(width: 10),
+                        Icon(FeatherIcons.arrowRight),
+                      ],
+                    ),
                   ),
                 ),
               ),

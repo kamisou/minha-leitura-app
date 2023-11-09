@@ -55,6 +55,7 @@ class NewBookScreen extends HookConsumerWidget {
     );
 
     return DebugScaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: AppBarLeading(
           onTap: () => page.value == 0 //
@@ -354,6 +355,7 @@ class NewBookScreen extends HookConsumerWidget {
                             _ => null,
                           }
                       : null,
+                  isLoading: ref.watch(newBookControllerProvider).isLoading,
                 ),
                 ...switch (newBookForm.state.status) {
                   BookStatus.reading => [
@@ -408,6 +410,8 @@ class NewBookScreen extends HookConsumerWidget {
                               ),
                           _ => null,
                         },
+                        isLoading:
+                            ref.watch(newBookControllerProvider).isLoading,
                       ),
                     ],
                   BookStatus.finished => [
@@ -465,6 +469,8 @@ class NewBookScreen extends HookConsumerWidget {
                               ),
                           _ => null,
                         },
+                        isLoading:
+                            ref.watch(newBookControllerProvider).isLoading,
                       ),
                     ],
                   _ => [

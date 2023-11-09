@@ -95,13 +95,13 @@ class ViewNoteDialog extends HookConsumerWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
-                    child: (note.user.id ==
-                            ref.watch(profileProvider).requireValue!.id)
-                        ? ref.watch(newNoteControllerProvider).isLoading
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : Row(
+                    child: ref.watch(newNoteControllerProvider).isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : (note.user.id ==
+                                ref.watch(profileProvider).requireValue!.id)
+                            ? Row(
                                 children: [
                                   if (note.replies.isEmpty) ...[
                                     Expanded(
@@ -163,30 +163,35 @@ class ViewNoteDialog extends HookConsumerWidget {
                                   ),
                                 ],
                               )
-                        : FilledButton.icon(
-                            onPressed: () => showModalBottomSheet<void>(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.background,
-                              context: context,
-                              isScrollControlled: true,
-                              showDragHandle: true,
-                              builder: (context) => NoteEditDialog(
-                                title: 'Responder nota',
-                                callback: (controller) => (data) => controller
-                                    .replyNote(bookId, note.id!, data),
+                            : FilledButton.icon(
+                                onPressed: () => showModalBottomSheet<void>(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.background,
+                                  context: context,
+                                  isScrollControlled: true,
+                                  showDragHandle: true,
+                                  builder: (context) => NoteEditDialog(
+                                    title: 'Responder nota',
+                                    callback: (controller) =>
+                                        (data) => controller.replyNote(
+                                              bookId,
+                                              note.id!,
+                                              data,
+                                            ),
+                                  ),
+                                ),
+                                icon:
+                                    const Icon(UniconsLine.corner_up_left_alt),
+                                label: const Text('Responder'),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      const Color(0xFFF5F5F5).materialStateAll,
+                                  foregroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .materialStateAll,
+                                ),
                               ),
-                            ),
-                            icon: const Icon(UniconsLine.trash),
-                            label: const Text('Responder'),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  const Color(0xFFF5F5F5).materialStateAll,
-                              foregroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .materialStateAll,
-                            ),
-                          ),
                   ),
                 ],
               ),
