@@ -60,7 +60,7 @@ class _RankingPageState extends ConsumerState<RankingPage>
                     onPressed: () => showDialog<RankingFilterDTO?>(
                       context: context,
                       builder: (context) => RankingFilterDialog(
-                        filter: filter.value,
+                        initialState: filter.value,
                       ),
                     ).then(
                       (value) => value != null ? filter.value = value : null,

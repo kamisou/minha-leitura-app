@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:reading/classes/data/cached/classes.dart';
+import 'package:reading/ranking/data/cached/filters.dart';
 import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
 import 'package:reading/shared/presentation/hooks/use_filter_name.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -10,10 +10,10 @@ import 'package:reading/shared/util/theme_data_extension.dart';
 class RankingFilterDialog extends HookConsumerWidget {
   const RankingFilterDialog({
     super.key,
-    this.filter,
+    this.initialState,
   });
 
-  final RankingFilterDTO? filter;
+  final RankingFilterDTO? initialState;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,17 +27,17 @@ class RankingFilterDialog extends HookConsumerWidget {
       ],
     );
     final expanded = useState<int?>(
-      tabs.indexWhere((tab) => tab.$3 == filter?.type),
+      tabs.indexWhere((tab) => tab.$3 == initialState?.type),
     );
 
     return Dialog(
       child: SizedBox(
         height: 380,
-        child: ref.watch(myClassesProvider).maybeWhen(
+        child: ref.watch(filtersProvider).maybeWhen(
               orElse: () => const Center(
                 child: CircularProgressIndicator(),
               ),
-              data: (data) => ListView(
+              data: (filters) => ListView(
                 padding: const EdgeInsets.all(20),
                 children: [
                   Padding(
@@ -81,49 +81,48 @@ class RankingFilterDialog extends HookConsumerWidget {
                                   ),
                             ),
                           ),
-                          body: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              children: [
-                                if (data.isEmpty)
-                                  Text(
-                                    'Para filtrar por $tab, '
-                                    'entre em uma turma.',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorExtension
-                                              ?.gray[600],
-                                        ),
-                                  )
-                                else
-                                  for (final $class in data)
-                                    GestureDetector(
-                                      onTap: () => context.pop(
-                                        RankingFilterDTO(
-                                          type: type,
-                                          $class: $class,
-                                        ),
+                          body: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (filters[type]?.isEmpty ?? true)
+                                Text(
+                                  'Para filtrar por $tab, '
+                                  'entre em uma turma.',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorExtension
+                                            ?.gray[600],
                                       ),
-                                      child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          useFilterName(type, $class),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                color: Theme.of(context)
-                                                    .colorExtension
-                                                    ?.gray[600],
-                                              ),
-                                        ),
+                                )
+                              else
+                                for (final filter in filters[type]!)
+                                  GestureDetector(
+                                    onTap: () => context.pop(
+                                      RankingFilterDTO(
+                                        type: type,
+                                        $class: filter,
                                       ),
                                     ),
-                              ],
-                            ),
+                                    child: Container(
+                                      alignment: Alignment.centerLeft,
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        useFilterName(type, filter),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorExtension
+                                                  ?.gray[600],
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                            ],
                           ),
                         ),
                     ],
