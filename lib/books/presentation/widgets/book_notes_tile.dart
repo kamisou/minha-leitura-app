@@ -56,10 +56,11 @@ class BookNotesTile extends HookWidget {
                       ),
                 ),
               ),
-              Icon(
-                Icons.chevron_right,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              if (!response)
+                Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
             ],
           ),
           const SizedBox(height: 8),
