@@ -2,9 +2,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:reading/books/data/cached/books.dart';
 import 'package:reading/books/data/dtos/new_reading_dto.dart';
 import 'package:reading/books/domain/models/book_reading.dart';
+import 'package:reading/books/domain/value_objects/pages.dart';
 import 'package:reading/shared/data/cached/connection_status.dart';
 import 'package:reading/shared/data/repository.dart';
-import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,7 +18,8 @@ BookReadingRepository bookReadingRepository(BookReadingRepositoryRef ref) {
       : OfflineBookReadingRepository(ref);
 }
 
-class OnlineBookReadingRepository extends BookReadingRepository {
+class OnlineBookReadingRepository extends BookReadingRepository
+    with OfflineUpdatePusher {
   const OnlineBookReadingRepository(super.ref);
 
   @override
@@ -45,6 +46,21 @@ class OnlineBookReadingRepository extends BookReadingRepository {
 
     return readings;
   }
+
+  @override
+  Future<void> pushUpdates() async {
+    final readings = await ref
+        .read(databaseProvider) //
+        .getAll<OfflineBookReading>();
+
+    for (final reading in readings) {
+      final data = NewReadingDTO(
+        page: Pages(reading.page),
+      );
+
+      await updateReading(reading.bookId, data);
+    }
+  }
 }
 
 class OfflineBookReadingRepository extends BookReadingRepository {
@@ -52,7 +68,15 @@ class OfflineBookReadingRepository extends BookReadingRepository {
 
   @override
   Future<void> updateReading(int bookId, NewReadingDTO data) async {
-    throw const OnlineOnlyOperationException('updateReading');
+    final reading = OfflineBookReading(
+      page: data.page.value!,
+      createdAt: DateTime.now().toUtc(),
+      bookId: bookId,
+    );
+
+    await save<OfflineBookReading>(reading);
+
+    return super.updateReading(bookId, data);
   }
 
   @override
@@ -70,6 +94,7 @@ class OfflineBookReadingRepository extends BookReadingRepository {
 abstract class BookReadingRepository extends Repository with OfflinePersister {
   const BookReadingRepository(super.ref);
 
+  @mustCallSuper
   @mustBeOverridden
   Future<void> updateReading(int bookId, NewReadingDTO data) async {
     return ref.read(myBooksProvider.notifier).refresh();
