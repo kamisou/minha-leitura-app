@@ -99,12 +99,15 @@ class ViewNoteDialog extends ConsumerWidget {
                                   if (note.replies.isEmpty) ...[
                                     Expanded(
                                       child: FilledButton.icon(
-                                        onPressed: () => ref
-                                            .read(
-                                              newNoteControllerProvider
-                                                  .notifier,
-                                            )
-                                            .removeNote(note),
+                                        onPressed: () {
+                                          ref
+                                              .read(
+                                                newNoteControllerProvider
+                                                    .notifier,
+                                              )
+                                              .removeNote(note);
+                                          context.pop();
+                                        },
                                         icon: const Icon(UniconsLine.trash),
                                         label: const Text('Remover'),
                                         style: ButtonStyle(
