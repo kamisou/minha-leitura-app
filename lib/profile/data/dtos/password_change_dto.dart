@@ -26,7 +26,8 @@ class PasswordChangeDTO {
       );
 
   Json toJson() => {
-        'password': oldPassword.value,
-        'new_password': newPassword.value,
+        'current_password': oldPassword.value,
+        'password': newPassword.value,
+        'password_confirmation': passwordConfirm.value,
       };
 }

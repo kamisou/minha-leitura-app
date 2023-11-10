@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
-class OfflineJoinClassContent extends StatelessWidget {
-  const OfflineJoinClassContent({super.key});
+class OfflineScreenContent extends StatelessWidget {
+  const OfflineScreenContent({super.key});
 
   @override
   Widget build(BuildContext context) {

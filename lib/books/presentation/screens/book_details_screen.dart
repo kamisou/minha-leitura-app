@@ -184,6 +184,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                   logAsyncValueError(ref, bookNotesProvider(bookDetails.id));
 
                   return ref.watch(bookNotesProvider(bookDetails.id)).maybeWhen(
+                        skipLoadingOnRefresh: false,
                         data: (notes) => BookNotesPage(
                           bookId: bookDetails.id,
                           notes: notes,
@@ -207,6 +208,7 @@ class BookDetailsScreen extends HookConsumerWidget {
                   return ref
                       .watch(bookRatingsProvider(bookDetails.book.id))
                       .maybeWhen(
+                        skipLoadingOnRefresh: false,
                         data: (ratings) => BookRatingsPage(
                           book: bookDetails,
                           ratings: ratings.data,

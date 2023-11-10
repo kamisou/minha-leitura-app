@@ -57,7 +57,7 @@ class OnlineProfileRepository extends ProfileRepository {
   Future<void> savePassword(PasswordChangeDTO data) {
     return ref
         .read(restApiProvider) //
-        .post('auth/reset-password', body: data.toJson());
+        .put('app/student/change-password', body: data.toJson());
   }
 
   @override

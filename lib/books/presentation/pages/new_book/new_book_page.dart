@@ -53,16 +53,10 @@ class NewBookPage extends StatelessWidget {
               Expanded(
                 child: ButtonProgressIndicator(
                   isLoading: isLoading,
-                  child: FilledButton(
+                  child: FilledButton.icon(
                     onPressed: onTapNext,
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Próximo'),
-                        SizedBox(width: 10),
-                        Icon(FeatherIcons.arrowRight),
-                      ],
-                    ),
+                    icon: const Icon(FeatherIcons.arrowRight),
+                    label: const Text('Próximo'),
                   ),
                 ),
               ),

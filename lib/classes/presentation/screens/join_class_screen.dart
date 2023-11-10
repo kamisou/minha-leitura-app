@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/classes/presentation/controllers/join_class_controller.dart';
 import 'package:reading/classes/presentation/screens/content/join_class_content.dart';
-import 'package:reading/classes/presentation/screens/content/offline_join_class_content.dart';
+import 'package:reading/classes/presentation/screens/content/offline_screen_content.dart';
 import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
 import 'package:reading/shared/data/cached/connection_status.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
@@ -37,7 +37,7 @@ class JoinClassScreen extends HookConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: ref.watch(isConnectedProvider)
             ? const JoinClassContent()
-            : const OfflineJoinClassContent(),
+            : const OfflineScreenContent(),
       ),
     );
   }

@@ -76,8 +76,7 @@ class ChangePasswordDialog extends HookConsumerWidget {
                         const InputDecoration(hintText: 'repetir senha'),
                     onChanged: (value) =>
                         passwordForm.dispatch(PasswordConfirm(value)),
-                    onFieldSubmitted: (value) =>
-                        context.pop(passwordForm.state),
+                    textInputAction: TextInputAction.done,
                     validator: (value) => switch (PasswordConfirm.validate(
                       value,
                       passwordForm.state.newPassword.value,

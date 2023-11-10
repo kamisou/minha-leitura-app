@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:reading/books/data/cached/book_notes.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/note_edit_dialog.dart';
@@ -37,26 +38,30 @@ class BookNotesPage extends HookConsumerWidget {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        if (notes.isEmpty)
-          Align(
-            alignment: Alignment.topCenter,
-            child: Text(
-              'Nenhuma nota',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorExtension?.gray[500],
+        RefreshIndicator(
+          onRefresh: () => ref.refresh(bookNotesProvider(bookId).future),
+          child: notes.isEmpty
+              ? SingleChildScrollView(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      'Nenhuma nota',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorExtension?.gray[500],
+                          ),
+                    ),
                   ),
-            ),
-          )
-        else
-          ListView.separated(
-            itemCount: notes.length,
-            itemBuilder: (context, index) => BookNotesTile(
-              bookId: bookId,
-              note: notes[index],
-            ),
-            padding: EdgeInsets.zero,
-            separatorBuilder: (context, index) => const Divider(),
-          ),
+                )
+              : ListView.separated(
+                  itemCount: notes.length,
+                  itemBuilder: (context, index) => BookNotesTile(
+                    bookId: bookId,
+                    note: notes[index],
+                  ),
+                  padding: EdgeInsets.zero,
+                  separatorBuilder: (context, index) => const Divider(),
+                ),
+        ),
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: FilledButton.icon(
