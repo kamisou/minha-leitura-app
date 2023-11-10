@@ -22,10 +22,11 @@ class Class with _$Class {
 @HiveType(typeId: 18)
 class School with _$School {
   const factory School({
-    @HiveField(0) required String name,
-    @HiveField(1) required String city,
-    @HiveField(2) required String state,
-    @HiveField(3) required String country,
+    @HiveField(0) required int id,
+    @HiveField(1) required String name,
+    @HiveField(2) required String city,
+    @HiveField(3) required String state,
+    @HiveField(4) required String country,
   }) = _School;
 
   factory School.fromJson(Json json) => _$SchoolFromJson(json);

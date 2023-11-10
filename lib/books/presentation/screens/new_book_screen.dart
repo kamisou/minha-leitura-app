@@ -58,6 +58,7 @@ class NewBookScreen extends HookConsumerWidget {
 
     return DebugScaffold(
       appBar: AppBar(
+        actions: const [SizedBox()],
         leading: AppBarLeading(
           onTap: () => page.value == 0 //
               ? context.pop()
@@ -76,7 +77,7 @@ class NewBookScreen extends HookConsumerWidget {
                     controller: pageController,
                     count: switch (newBookForm.state.status) {
                       BookStatus.reading || BookStatus.finished => 7,
-                      _ => 5,
+                      _ => 6,
                     },
                     effect: WormEffect(
                       activeDotColor: Theme.of(context).colorScheme.primary,
@@ -95,7 +96,6 @@ class NewBookScreen extends HookConsumerWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       NewBookPage(
-                        key: const ValueKey(0),
                         builder: (context) => Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 24,
@@ -129,7 +129,6 @@ class NewBookScreen extends HookConsumerWidget {
                       ...switch (manualRegister.value) {
                         false => [
                             Column(
-                              key: const ValueKey(1),
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Expanded(
@@ -164,7 +163,6 @@ class NewBookScreen extends HookConsumerWidget {
                           ],
                         true => [
                             NewBookPage(
-                              key: const ValueKey(1),
                               builder: (context) => SimpleTextField(
                                 autofocus: true,
                                 fontSize: 36,
@@ -179,7 +177,6 @@ class NewBookScreen extends HookConsumerWidget {
                                   : null,
                             ),
                             NewBookPage(
-                              key: const ValueKey(2),
                               builder: (context) => SimpleTextField(
                                 autofocus: true,
                                 fontSize: 36,
@@ -194,7 +191,6 @@ class NewBookScreen extends HookConsumerWidget {
                                   : null,
                             ),
                             NewBookPage(
-                              key: const ValueKey(3),
                               builder: (context) => Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 72,
@@ -274,7 +270,6 @@ class NewBookScreen extends HookConsumerWidget {
                                   _onTapNext(context, pageController),
                             ),
                             NewBookPage(
-                              key: const ValueKey(4),
                               builder: (context) => SimpleTextField(
                                 autofocus: true,
                                 fontSize: 36,
@@ -300,7 +295,6 @@ class NewBookScreen extends HookConsumerWidget {
                         null => <Widget>[],
                       },
                       NewBookPage(
-                        key: const ValueKey(5),
                         builder: (context) => Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 24,
@@ -378,7 +372,6 @@ class NewBookScreen extends HookConsumerWidget {
                       ...switch (newBookForm.state.status) {
                         BookStatus.reading => [
                             NewBookPage(
-                              key: const ValueKey(6),
                               builder: (context) => SimpleTextField(
                                 autofocus: true,
                                 fontSize: 36,
@@ -405,7 +398,6 @@ class NewBookScreen extends HookConsumerWidget {
                               },
                             ),
                             NewBookPage(
-                              key: const ValueKey(7),
                               builder: (context) => SimpleTextField(
                                 autofocus: true,
                                 fontSize: 36,
@@ -437,7 +429,6 @@ class NewBookScreen extends HookConsumerWidget {
                           ],
                         BookStatus.finished => [
                             NewBookPage(
-                              key: const ValueKey(6),
                               builder: (context) => SimpleTextField(
                                 autofocus: true,
                                 fontSize: 36,
@@ -464,7 +455,6 @@ class NewBookScreen extends HookConsumerWidget {
                               },
                             ),
                             NewBookPage(
-                              key: const ValueKey(7),
                               builder: (context) => SimpleTextField(
                                 autofocus: true,
                                 fontSize: 36,
@@ -498,9 +488,7 @@ class NewBookScreen extends HookConsumerWidget {
                                   .isLoading,
                             ),
                           ],
-                        _ => [
-                            const SizedBox(key: ValueKey(6)),
-                          ],
+                        _ => [const SizedBox()],
                       },
                     ],
                   ),
@@ -531,6 +519,7 @@ class NewBookScreen extends HookConsumerWidget {
       duration: Theme.of(context).animationExtension!.duration,
       curve: Theme.of(context).animationExtension!.curve,
     );
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   void _onTapNext(BuildContext context, PageController pageController) {

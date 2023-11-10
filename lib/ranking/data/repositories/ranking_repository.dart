@@ -22,7 +22,7 @@ class OnlineRankingRepository extends RankingRepository {
     final spots = await _getSpots('app/ranking/classroom/$classId');
     final ranking = RankingClass(spots: spots);
 
-    save<RankingClass>(ranking, 1).ignore();
+    save<RankingClass>(ranking, classId).ignore();
 
     return ranking;
   }
@@ -32,7 +32,7 @@ class OnlineRankingRepository extends RankingRepository {
     final spots = await _getSpots('app/ranking/school/$schoolId');
     final ranking = RankingSchool(spots: spots);
 
-    save<RankingSchool>(ranking, 1).ignore();
+    save<RankingSchool>(ranking, schoolId).ignore();
 
     return ranking;
   }
@@ -42,7 +42,7 @@ class OnlineRankingRepository extends RankingRepository {
     final spots = await _getSpots('app/ranking/city/$schoolId');
     final ranking = RankingCity(spots: spots);
 
-    save<RankingCity>(ranking, 1).ignore();
+    save<RankingCity>(ranking, schoolId).ignore();
 
     return ranking;
   }
@@ -52,7 +52,7 @@ class OnlineRankingRepository extends RankingRepository {
     final spots = await _getSpots('app/ranking/state/$schoolId');
     final ranking = RankingState(spots: spots);
 
-    save<RankingState>(ranking, 1).ignore();
+    save<RankingState>(ranking, schoolId).ignore();
 
     return ranking;
   }
@@ -62,7 +62,7 @@ class OnlineRankingRepository extends RankingRepository {
     final spots = await _getSpots('app/ranking/country/$schoolId');
     final ranking = RankingCountry(spots: spots);
 
-    save<RankingCountry>(ranking, 1).ignore();
+    save<RankingCountry>(ranking, schoolId).ignore();
 
     return ranking;
   }
@@ -91,42 +91,27 @@ class OfflineRankingRepository extends RankingRepository {
 
   @override
   Future<Ranking?> getCityRanking(int schoolId) {
-    return ref
-        .read(databaseProvider)
-        .getAll<RankingCity>()
-        .then((value) => value.firstOrNull);
+    return ref.read(databaseProvider).getById<RankingCity>(schoolId);
   }
 
   @override
   Future<Ranking?> getClassRanking(int classId) {
-    return ref
-        .read(databaseProvider)
-        .getAll<RankingClass>()
-        .then((value) => value.firstOrNull);
+    return ref.read(databaseProvider).getById<RankingClass>(classId);
   }
 
   @override
   Future<Ranking?> getCountryRanking(int schoolId) {
-    return ref
-        .read(databaseProvider)
-        .getAll<RankingCountry>()
-        .then((value) => value.firstOrNull);
+    return ref.read(databaseProvider).getById<RankingCountry>(schoolId);
   }
 
   @override
   Future<Ranking?> getSchoolRanking(int schoolId) {
-    return ref
-        .read(databaseProvider)
-        .getAll<RankingSchool>()
-        .then((value) => value.firstOrNull);
+    return ref.read(databaseProvider).getById<RankingSchool>(schoolId);
   }
 
   @override
   Future<Ranking?> getStateRanking(int schoolId) {
-    return ref
-        .read(databaseProvider)
-        .getAll<RankingState>()
-        .then((value) => value.firstOrNull);
+    return ref.read(databaseProvider).getById<RankingState>(schoolId);
   }
 
   @override

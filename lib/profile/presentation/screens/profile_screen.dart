@@ -95,6 +95,7 @@ class ProfileScreen extends HookConsumerWidget {
 
     return DebugScaffold(
       appBar: AppBar(
+        actions: const [SizedBox()],
         title: const Text('Meus Dados'),
       ),
       body: Padding(

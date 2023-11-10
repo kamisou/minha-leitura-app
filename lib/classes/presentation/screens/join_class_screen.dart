@@ -27,6 +27,7 @@ class JoinClassScreen extends HookConsumerWidget {
 
     return DebugScaffold(
       appBar: AppBar(
+        actions: const [SizedBox()],
         leading: const AppBarLeading(),
         title: Text(
           'Ingressar em turma',

@@ -18,8 +18,8 @@ class UserAppBar extends HookConsumerWidget implements PreferredSizeWidget {
     final initials = useInitials(user);
 
     return AppBar(
-      automaticallyImplyLeading: false,
       actions: const [SizedBox()],
+      automaticallyImplyLeading: false,
       leading: leading,
       title: Row(
         children: [
