@@ -43,13 +43,17 @@ class BookNotesPage extends HookConsumerWidget {
         RefreshIndicator(
           onRefresh: () => ref.refresh(bookNotesProvider(bookId).future),
           child: notes.isEmpty
-              ? SingleChildScrollView(
-                  child: Text(
-                    'Nenhuma nota',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Theme.of(context).colorExtension?.gray[500],
-                        ),
-                  ),
+              ? ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    Text(
+                      'Nenhuma nota',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorExtension?.gray[500],
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 )
               : ListView.separated(
                   itemCount: notes.length,
