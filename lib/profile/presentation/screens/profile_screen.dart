@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
 import 'package:reading/authentication/presentation/dialogs/delete_account_confirmation_dialog.dart';
@@ -8,7 +9,9 @@ import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/profile/domain/value_objects/name.dart';
+import 'package:reading/profile/presentation/controllers/delete_profile_controller.dart';
 import 'package:reading/profile/presentation/controllers/profile_controller.dart';
+import 'package:reading/profile/presentation/controllers/profile_password_controller.dart';
 import 'package:reading/profile/presentation/dialogs/change_password_dialog.dart';
 import 'package:reading/profile/presentation/hooks/use_profile_form_reducer.dart';
 import 'package:reading/profile/presentation/widgets/profile_picture.dart';
@@ -49,6 +52,45 @@ class ProfileScreen extends HookConsumerWidget {
           ),
         ),
       ),
+    );
+
+    useControllerListener(
+      ref,
+      controller: profilePasswordControllerProvider,
+      onError: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
+        _ => null,
+      },
+      onSuccess: () => ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Text('A senha foi alterada com sucesso'),
+          ),
+        ),
+      ),
+    );
+
+    useControllerListener(
+      ref,
+      controller: deleteProfileControllerProvider,
+      onError: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
+        _ => null,
+      },
+      onSuccess: () {
+        context.go('/login');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Text('Sua conta foi removida com sucesso'),
+            ),
+          ),
+        );
+      },
     );
 
     return DebugScaffold(

@@ -27,7 +27,7 @@ class BookSearchResultPage extends HookConsumerWidget {
           .next,
     );
 
-    logAsyncValueError(ref, booksResult);
+    useAsyncValueListener(ref, booksResult);
 
     return ref.watch(booksResult).maybeWhen(
           data: (books) => books.data.isNotEmpty

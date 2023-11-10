@@ -10,24 +10,17 @@ import 'package:reading/shared/presentation/hooks/use_filter_name.dart';
 import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
-class RankingPage extends StatefulHookConsumerWidget {
+class RankingPage extends HookConsumerWidget {
   const RankingPage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _RankingPageState();
-}
-
-class _RankingPageState extends ConsumerState<RankingPage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
+  Widget build(BuildContext context, WidgetRef ref) {
     final filter = useState(
       const RankingFilterDTO(type: RankingType.global),
     );
 
-    logAsyncValueError(ref, rankingProvider(filter.value));
+    useAutomaticKeepAlive();
+    useAsyncValueListener(ref, rankingProvider(filter.value));
 
     return Column(
       children: [
@@ -203,7 +196,4 @@ class _RankingPageState extends ConsumerState<RankingPage>
       ],
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

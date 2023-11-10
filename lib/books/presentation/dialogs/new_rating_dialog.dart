@@ -7,10 +7,6 @@ import 'package:reading/books/domain/value_objects/rating.dart';
 import 'package:reading/books/presentation/controllers/new_rating_controller.dart';
 import 'package:reading/books/presentation/hooks/use_book_rating_form_reducer.dart';
 import 'package:reading/books/presentation/widgets/star_rating_widget.dart';
-import 'package:reading/shared/exceptions/repository_exception.dart';
-import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
-import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class NewRatingDialog extends HookConsumerWidget {
@@ -27,17 +23,6 @@ class NewRatingDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookRatingForm = useBookRatingFormReducer(initialState: initialState);
-
-    useControllerListener(
-      ref,
-      controller: newRatingControllerProvider,
-      onError: (error) => switch (error) {
-        BadResponseRestException(message: final message) => message,
-        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
-        _ => null,
-      },
-      onSuccess: context.pop,
-    );
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -74,14 +59,14 @@ class NewRatingDialog extends HookConsumerWidget {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: ButtonProgressIndicator(
-                  isLoading: ref.watch(newRatingControllerProvider).isLoading,
-                  child: FilledButton(
-                    onPressed: () => ref
+                child: FilledButton(
+                  onPressed: () {
+                    ref
                         .read(newRatingControllerProvider.notifier)
-                        .addRating(bookId, bookRatingForm.state),
-                    child: const Text('Salvar'),
-                  ),
+                        .addRating(bookId, bookRatingForm.state);
+                    context.pop();
+                  },
+                  child: const Text('Salvar'),
                 ),
               ),
             ],

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reading/shared/infrastructure/debugger.dart';
 
-void logAsyncValueError(
+void useAsyncValueListener(
   WidgetRef ref,
   ProviderListenable<AsyncValue<dynamic>> asyncValue,
 ) {

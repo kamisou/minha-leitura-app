@@ -14,7 +14,7 @@ class ClassesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    logAsyncValueError(ref, myClassesProvider);
+    useAsyncValueListener(ref, myClassesProvider);
 
     return DebugScaffold(
       appBar: const UserAppBar(

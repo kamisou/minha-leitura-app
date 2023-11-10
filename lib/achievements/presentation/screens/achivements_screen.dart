@@ -12,7 +12,7 @@ class AchivementsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    logAsyncValueError(ref, achievementsProvider);
+    useAsyncValueListener(ref, achievementsProvider);
 
     return DebugScaffold(
       appBar: AppBar(

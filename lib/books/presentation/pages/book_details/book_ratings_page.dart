@@ -4,11 +4,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/cached/book_ratings.dart';
 import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/models/book_rating.dart';
+import 'package:reading/books/presentation/controllers/new_rating_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_rating_dialog.dart';
 import 'package:reading/books/presentation/hooks/use_rating_average.dart';
 import 'package:reading/books/presentation/widgets/book_rating_tile.dart';
 import 'package:reading/books/presentation/widgets/star_rating_widget.dart';
 import 'package:reading/profile/data/cached/profile.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/hooks/use_lazy_scroll_controller.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
@@ -41,6 +45,16 @@ class BookRatingsPage extends HookConsumerWidget {
     );
 
     useAutomaticKeepAlive();
+
+    useControllerListener(
+      ref,
+      controller: newRatingControllerProvider,
+      onError: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
+        _ => null,
+      },
+    );
 
     return RefreshIndicator(
       onRefresh: () => ref.refresh(bookRatingsProvider(book.book.id).future),

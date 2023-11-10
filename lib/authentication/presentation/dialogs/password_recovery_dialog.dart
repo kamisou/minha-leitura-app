@@ -4,9 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/presentation/controllers/email_recovery_controller.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
-import 'package:reading/shared/exceptions/repository_exception.dart';
-import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:reading/theme.dart';
@@ -18,30 +15,6 @@ class PasswordRecoveryDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useRef(GlobalKey<FormState>());
     final email = useState(const Email());
-
-    useControllerListener(
-      ref,
-      controller: emailRecoveryControllerProvider,
-      onError: (error) => switch (error) {
-        BadResponseRestException(message: final message) => message,
-        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
-        _ => null,
-      },
-      onSuccess: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                'Caso esteja vinculado à uma conta, um link para recuperação '
-                'de senha será enviado ao endereço de e-mail',
-              ),
-            ),
-          ),
-        );
-        context.pop();
-      },
-    );
 
     return Theme(
       data: ref.read(themeManagerProvider),
@@ -101,6 +74,8 @@ class PasswordRecoveryDialog extends HookConsumerWidget {
                           ref
                               .read(emailRecoveryControllerProvider.notifier)
                               .recover(email.value);
+
+                          context.pop();
                         },
                         child: const Text('Recuperar'),
                       ),

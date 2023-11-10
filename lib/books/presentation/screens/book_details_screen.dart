@@ -181,7 +181,7 @@ class BookDetailsScreen extends HookConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Consumer(
                 builder: (context, ref, child) {
-                  logAsyncValueError(ref, bookNotesProvider(bookDetails.id));
+                  useAsyncValueListener(ref, bookNotesProvider(bookDetails.id));
 
                   return ref.watch(bookNotesProvider(bookDetails.id)).maybeWhen(
                         skipLoadingOnRefresh: false,
@@ -200,7 +200,7 @@ class BookDetailsScreen extends HookConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Consumer(
                 builder: (context, ref, child) {
-                  logAsyncValueError(
+                  useAsyncValueListener(
                     ref,
                     bookRatingsProvider(bookDetails.book.id),
                   );

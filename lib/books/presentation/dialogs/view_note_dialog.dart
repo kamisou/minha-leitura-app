@@ -10,13 +10,12 @@ import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/note_edit_dialog.dart';
 import 'package:reading/profile/data/cached/profile.dart';
-import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/widgets/filled_icon_button.dart';
 import 'package:reading/shared/util/color_extension.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
 
-class ViewNoteDialog extends HookConsumerWidget {
+class ViewNoteDialog extends ConsumerWidget {
   const ViewNoteDialog({
     super.key,
     required this.bookId,
@@ -29,12 +28,6 @@ class ViewNoteDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useControllerListener(
-      ref,
-      controller: newNoteControllerProvider,
-      onSuccess: context.pop,
-    );
-
     return Padding(
       padding: const EdgeInsets.only(
         top: 40,
@@ -148,7 +141,7 @@ class ViewNoteDialog extends HookConsumerWidget {
                                             ),
                                           ),
                                         ),
-                                      ),
+                                      ).then((value) => context.pop()),
                                       icon: const Icon(UniconsLine.edit),
                                       label: const Text('Editar'),
                                       style: ButtonStyle(
@@ -179,7 +172,7 @@ class ViewNoteDialog extends HookConsumerWidget {
                                               data,
                                             ),
                                   ),
-                                ),
+                                ).then((value) => context.pop()),
                                 icon:
                                     const Icon(UniconsLine.corner_up_left_alt),
                                 label: const Text('Responder'),

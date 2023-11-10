@@ -3,11 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/authentication/domain/value_objects/password.dart';
-import 'package:reading/profile/presentation/controllers/profile_controller.dart';
+import 'package:reading/profile/presentation/controllers/profile_password_controller.dart';
 import 'package:reading/profile/presentation/hooks/use_password_form_reducer.dart';
-import 'package:reading/shared/exceptions/repository_exception.dart';
-import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/presentation/widgets/obsfuscated_text_form_field.dart';
 
@@ -18,17 +15,6 @@ class ChangePasswordDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useRef(GlobalKey<FormState>());
     final passwordForm = usePasswordFormReducer();
-
-    useControllerListener(
-      ref,
-      controller: profileControllerProvider,
-      onError: (error) => switch (error) {
-        BadResponseRestException(message: final message) => message,
-        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
-        _ => null,
-      },
-      onSuccess: context.pop,
-    );
 
     return Dialog(
       child: Padding(
@@ -100,7 +86,9 @@ class ChangePasswordDialog extends HookConsumerWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: ButtonProgressIndicator(
-                    isLoading: ref.watch(profileControllerProvider).isLoading,
+                    isLoading: ref
+                        .watch(profilePasswordControllerProvider) //
+                        .isLoading,
                     child: FilledButton(
                       onPressed: () {
                         if (!formKey.value.currentState!.validate()) {
@@ -108,8 +96,10 @@ class ChangePasswordDialog extends HookConsumerWidget {
                         }
 
                         ref
-                            .read(profileControllerProvider.notifier)
+                            .read(profilePasswordControllerProvider.notifier)
                             .savePassword(passwordForm.state);
+
+                        context.pop();
                       },
                       child: const Text('Salvar'),
                     ),

@@ -2,41 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/profile/presentation/controllers/delete_profile_controller.dart';
-import 'package:reading/shared/exceptions/repository_exception.dart';
-import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
-class DeleteAccountConfirmationDialog extends HookConsumerWidget {
+class DeleteAccountConfirmationDialog extends ConsumerWidget {
   const DeleteAccountConfirmationDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useControllerListener(
-      ref,
-      controller: deleteProfileControllerProvider,
-      onError: (error) => switch (error) {
-        BadResponseRestException(message: final message) => message,
-        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
-        _ => null,
-      },
-      onSuccess: () {
-        context
-          ..pop()
-          ..go('/login');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                'Sua conta foi removida. Esperamos te ver novamente!',
-              ),
-            ),
-          ),
-        );
-      },
-    );
-
     return Dialog(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -69,9 +41,13 @@ class DeleteAccountConfirmationDialog extends HookConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: ref
-                      .read(deleteProfileControllerProvider.notifier)
-                      .deleteProfile,
+                  onPressed: () {
+                    ref
+                        .read(deleteProfileControllerProvider.notifier)
+                        .deleteProfile();
+
+                    context.pop();
+                  },
                   child: Text(
                     'Confirmar',
                     style: TextStyle(

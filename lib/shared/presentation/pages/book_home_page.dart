@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/data/cached/books.dart';
 import 'package:reading/shared/presentation/hooks/use_asyncvalue_listener.dart';
@@ -8,25 +9,18 @@ import 'package:reading/shared/presentation/widgets/loading/book_carrousel_loadi
 import 'package:reading/shared/presentation/widgets/user_app_bar.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
-class BookHomePage extends StatefulHookConsumerWidget {
+class BookHomePage extends HookConsumerWidget {
   const BookHomePage({super.key});
 
   @override
-  ConsumerState<BookHomePage> createState() => _BookHomePageState();
-}
-
-class _BookHomePageState extends ConsumerState<BookHomePage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
+  Widget build(BuildContext context, WidgetRef ref) {
     final pageController = useLazyPageController(
       onEndOfScroll: ref.read(myBooksProvider.notifier).next,
       viewportFraction: 0.72,
     );
 
-    logAsyncValueError(ref, myBooksProvider);
+    useAutomaticKeepAlive();
+    useAsyncValueListener(ref, myBooksProvider);
 
     return Column(
       children: [
@@ -34,7 +28,7 @@ class _BookHomePageState extends ConsumerState<BookHomePage>
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) => RefreshIndicator(
-              onRefresh: () => _onRefresh(pageController),
+              onRefresh: () => _onRefresh(context, ref, pageController),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: SizedBox(
@@ -61,7 +55,11 @@ class _BookHomePageState extends ConsumerState<BookHomePage>
     );
   }
 
-  Future<void> _onRefresh(PageController pageController) async {
+  Future<void> _onRefresh(
+    BuildContext context,
+    WidgetRef ref,
+    PageController pageController,
+  ) async {
     final theme = Theme.of(context);
 
     await ref.read(myBooksProvider.notifier).refresh();
@@ -74,7 +72,4 @@ class _BookHomePageState extends ConsumerState<BookHomePage>
       );
     }
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

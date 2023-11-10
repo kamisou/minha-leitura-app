@@ -3,8 +3,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:reading/books/data/cached/book_notes.dart';
 import 'package:reading/books/domain/models/book_details.dart';
+import 'package:reading/books/presentation/controllers/new_reading_controller.dart';
 import 'package:reading/books/presentation/dialogs/new_reading_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_details_tile.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:unicons/unicons.dart';
 
 class BookDetailsPage extends HookConsumerWidget {
@@ -17,6 +21,16 @@ class BookDetailsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    useControllerListener(
+      ref,
+      controller: newReadingControllerProvider,
+      onError: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
+        _ => null,
+      },
+    );
+
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [

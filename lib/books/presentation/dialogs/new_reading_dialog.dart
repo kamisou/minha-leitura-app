@@ -6,10 +6,6 @@ import 'package:reading/books/domain/models/book_details.dart';
 import 'package:reading/books/domain/value_objects/pages.dart';
 import 'package:reading/books/presentation/controllers/new_reading_controller.dart';
 import 'package:reading/books/presentation/hooks/use_book_reading_form_reducer.dart';
-import 'package:reading/shared/exceptions/repository_exception.dart';
-import 'package:reading/shared/exceptions/rest_exception.dart';
-import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
-import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/presentation/widgets/simple_text_field.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
@@ -24,17 +20,6 @@ class NewReadingDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final readingForm = useBookReadingFormReducer();
-
-    useControllerListener(
-      ref,
-      controller: newReadingControllerProvider,
-      onError: (error) => switch (error) {
-        BadResponseRestException(message: final message) => message,
-        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
-        _ => null,
-      },
-      onSuccess: context.pop,
-    );
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -82,14 +67,14 @@ class NewReadingDialog extends HookConsumerWidget {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: ButtonProgressIndicator(
-                  isLoading: ref.watch(newReadingControllerProvider).isLoading,
-                  child: FilledButton(
-                    onPressed: () => ref
+                child: FilledButton(
+                  onPressed: () {
+                    ref
                         .read(newReadingControllerProvider.notifier)
-                        .updateReading(book.id, readingForm.state),
-                    child: const Text('Salvar'),
-                  ),
+                        .updateReading(book.id, readingForm.state);
+                    context.pop();
+                  },
+                  child: const Text('Salvar'),
                 ),
               ),
             ],

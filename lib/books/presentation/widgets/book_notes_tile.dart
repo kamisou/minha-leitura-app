@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/books/domain/models/book_note.dart';
+import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/view_note_dialog.dart';
 import 'package:reading/books/presentation/widgets/author_timestamp.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
+import 'package:reading/shared/exceptions/rest_exception.dart';
+import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
-class BookNotesTile extends HookWidget {
+class BookNotesTile extends HookConsumerWidget {
   const BookNotesTile({
     super.key,
     required this.bookId,
@@ -20,7 +24,17 @@ class BookNotesTile extends HookWidget {
   final bool response;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    useControllerListener(
+      ref,
+      controller: newNoteControllerProvider,
+      onError: (error) => switch (error) {
+        BadResponseRestException(message: final message) => message,
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
+        _ => null,
+      },
+    );
+
     return GestureDetector(
       behavior: response ? null : HitTestBehavior.deferToChild,
       onTap: () => showModalBottomSheet<void>(
@@ -28,10 +42,7 @@ class BookNotesTile extends HookWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         isScrollControlled: true,
         shape: const Border(),
-        builder: (context) => ViewNoteDialog(
-          bookId: bookId,
-          note: note,
-        ),
+        builder: (context) => ViewNoteDialog(bookId: bookId, note: note),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -6,6 +6,7 @@ import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/note_edit_dialog.dart';
 import 'package:reading/books/presentation/widgets/book_notes_tile.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/exceptions/rest_exception.dart';
 import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
@@ -31,6 +32,7 @@ class BookNotesPage extends HookConsumerWidget {
       controller: newNoteControllerProvider,
       onError: (error) => switch (error) {
         BadResponseRestException(message: final message) => message,
+        OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
         _ => null,
       },
     );

@@ -60,7 +60,7 @@ Future<ProviderContainer> initRiverpod() async {
   return container;
 }
 
-class App extends HookConsumerWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override

@@ -6,8 +6,6 @@ import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/hooks/use_book_note_form_reducer.dart';
-import 'package:reading/shared/presentation/hooks/use_controller_listener.dart';
-import 'package:reading/shared/presentation/widgets/button_progress_indicator.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 
 class NoteEditDialog extends HookConsumerWidget {
@@ -28,12 +26,6 @@ class NoteEditDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookNoteForm = useBookNoteFormReducer(initialState);
-
-    useControllerListener(
-      ref,
-      controller: newNoteControllerProvider,
-      onSuccess: context.pop,
-    );
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -71,15 +63,14 @@ class NoteEditDialog extends HookConsumerWidget {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: ButtonProgressIndicator(
-                  isLoading: ref.watch(newNoteControllerProvider).isLoading,
-                  child: FilledButton(
-                    onPressed: () =>
-                        callback(ref.read(newNoteControllerProvider.notifier))(
+                child: FilledButton(
+                  onPressed: () {
+                    callback(ref.read(newNoteControllerProvider.notifier))(
                       bookNoteForm.state,
-                    ),
-                    child: const Text('Salvar'),
-                  ),
+                    );
+                    context.pop();
+                  },
+                  child: const Text('Salvar'),
                 ),
               ),
             ],
