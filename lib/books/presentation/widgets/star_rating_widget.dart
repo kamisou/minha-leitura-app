@@ -6,6 +6,7 @@ class StarRatingWidget extends StatefulWidget {
     super.key,
     this.value,
     this.onChanged,
+    this.color,
     this.enabled = false,
     this.iconSize = 28,
     this.stars = 5,
@@ -17,6 +18,8 @@ class StarRatingWidget extends StatefulWidget {
   final double? value;
 
   final void Function(double value)? onChanged;
+
+  final Color? color;
 
   final bool enabled;
 
@@ -64,7 +67,7 @@ class _StarRatingWidgetState extends State<StarRatingWidget> {
                       ? UniconsSolid.star
                       : UniconsSolid.star_half_alt
                   : UniconsLine.star,
-              color: Theme.of(context).colorScheme.primary,
+              color: widget.color ?? Theme.of(context).colorScheme.primary,
               size: widget.iconSize,
             ),
           ),

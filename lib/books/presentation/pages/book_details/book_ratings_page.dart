@@ -57,7 +57,7 @@ class BookRatingsPage extends HookConsumerWidget {
     );
 
     return RefreshIndicator(
-      onRefresh: () => ref.refresh(bookRatingsProvider(book.book.id).future),
+      onRefresh: ref.read(bookRatingsProvider(book.book.id).notifier).refresh,
       child: CustomScrollView(
         controller: scrollController,
         physics: const AlwaysScrollableScrollPhysics(),

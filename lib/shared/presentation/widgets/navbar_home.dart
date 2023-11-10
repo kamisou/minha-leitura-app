@@ -65,7 +65,7 @@ class NavBarHome extends HookWidget {
       ),
       padding: EdgeInsets.symmetric(
         vertical: 16,
-        horizontal: MediaQuery.of(context).size.width * .23,
+        horizontal: MediaQuery.of(context).size.width * .18,
       ),
       child: LayoutBuilder(
         builder: (context, constraints) => Stack(

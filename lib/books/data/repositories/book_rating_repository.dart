@@ -10,7 +10,6 @@ import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/shared/data/cached/connection_status.dart';
 import 'package:reading/shared/data/paginated_resource.dart';
 import 'package:reading/shared/data/repository.dart';
-import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -26,7 +25,9 @@ BookRatingRepository bookRatingRepository(BookRatingRepositoryRef ref) {
 
 class OnlineBookRatingRepository extends BookRatingRepository
     with OfflineUpdatePusher {
-  const OnlineBookRatingRepository(super.ref);
+  OnlineBookRatingRepository(super.ref) {
+    pushUpdates();
+  }
 
   @override
   Future<PaginatedResource<BookRating>> getRatings(int page, int bookId) async {
@@ -82,7 +83,7 @@ class OnlineBookRatingRepository extends BookRatingRepository
   Future<void> pushUpdates() async {
     final ratings = await ref
         .read(databaseProvider) //
-        .getAll<OfflineBookRating>();
+        .getWhere<BookRating>((rating) => rating.id == null);
 
     for (final rating in ratings) {
       final data = NewRatingDTO(
@@ -91,6 +92,8 @@ class OnlineBookRatingRepository extends BookRatingRepository
       );
 
       await addRating(rating.bookId, data);
+
+      rating.delete().ignore();
     }
   }
 }
@@ -102,41 +105,42 @@ class OfflineBookRatingRepository extends BookRatingRepository {
 
   @override
   Future<PaginatedResource<BookRating>> getRatings(int page, int bookId) async {
-    final db = ref.read(databaseProvider);
-    final bookRatings = await Future.wait([
-      db.getWhere<OfflineBookRating>((rating) => rating.bookId == bookId),
-      ref
-          .read(databaseProvider) //
-          .getAll<BookRating>(
-            limit: pageSize,
-            offset: (page - 1) * pageSize,
-          ),
-    ]);
+    final ratings = await ref
+        .read(databaseProvider) //
+        .getWhere<BookRating>(
+          (rating) => rating.bookId == bookId,
+          limit: pageSize,
+          offset: (page - 1) * pageSize,
+        );
 
     return PaginatedResource(
       currentPage: page,
-      data: [...bookRatings.first, ...bookRatings.last],
+      data: ratings..sort((a, b) => a.compareTo(b)),
       perPage: pageSize,
     );
   }
 
   @override
   Future<void> addRating(int bookId, NewRatingDTO data) async {
-    final rating = OfflineBookRating(
+    final rating = BookRating(
       rating: data.rating.value!,
       comment: data.comment.value,
       author: ref.read(profileProvider).requireValue!.toUser(),
       bookId: bookId,
     );
 
-    await save<OfflineBookRating>(rating);
+    await save<BookRating>(rating);
 
     return super.addRating(bookId, data);
   }
 
   @override
-  Future<void> removeRating(int bookId, BookRating rating) {
-    throw const OnlineOnlyOperationException('removeRating');
+  Future<void> removeRating(int bookId, BookRating rating) async {
+    await ref
+        .read(databaseProvider)
+        .removeById<BookRating>(rating.id ?? rating.key);
+
+    return super.removeRating(bookId, rating);
   }
 }
 
@@ -151,6 +155,7 @@ abstract class BookRatingRepository extends Repository with OfflinePersister {
 
   Future<PaginatedResource<BookRating>> getRatings(int page, int bookId);
 
+  @mustCallSuper
   @mustBeOverridden
   Future<void> removeRating(int bookId, BookRating rating) async {
     ref.invalidate(bookRatingsProvider);

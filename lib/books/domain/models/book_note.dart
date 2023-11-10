@@ -12,27 +12,26 @@ part 'book_note.g.dart';
 class BookNote with _$BookNote, HiveObjectMixin {
   @With<HiveObjectMixin>()
   factory BookNote({
-    @HiveField(0) required int id,
-    @HiveField(1) required String title,
-    @HiveField(2) required String description,
-    @HiveField(3) required User user,
-    @HiveField(4) @LocalDateTimeConverter() required DateTime createdAt,
-    @HiveField(5) @Default([]) List<BookNote> replies,
-    @HiveField(6) @JsonKey(name: 'reading_id') required int? bookId,
-    @HiveField(7) int? noteId,
-  }) = _BookNote;
-
-  @With<HiveObjectMixin>()
-  factory BookNote.offline({
     @HiveField(0) int? id,
     @HiveField(1) required String title,
     @HiveField(2) required String description,
     @HiveField(3) required User user,
     @HiveField(4) @LocalDateTimeConverter() DateTime? createdAt,
     @HiveField(5) @Default([]) List<BookNote> replies,
-    @HiveField(6) @JsonKey(name: 'reading_id') required int? bookId,
+    @HiveField(6) @JsonKey(name: 'reading_id') int? bookId,
     @HiveField(7) int? noteId,
-  }) = OfflineBookNote;
+  }) = _BookNote;
+
+  @With<HiveObjectMixin>()
+  BookNote._();
 
   factory BookNote.fromJson(Json json) => _$BookNoteFromJson(json);
+
+  int compareTo(BookNote b) {
+    if (createdAt == null || b.createdAt == null) {
+      return 0;
+    }
+
+    return b.createdAt!.compareTo(createdAt!);
+  }
 }

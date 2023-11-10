@@ -37,13 +37,16 @@ class BookNotesTile extends HookConsumerWidget {
 
     return GestureDetector(
       behavior: response ? null : HitTestBehavior.deferToChild,
-      onTap: () => showModalBottomSheet<void>(
-        context: context,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        isScrollControlled: true,
-        shape: const Border(),
-        builder: (context) => ViewNoteDialog(bookId: bookId, note: note),
-      ),
+      onTap: response
+          ? null
+          : () => showModalBottomSheet<void>(
+                context: context,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                isScrollControlled: true,
+                shape: const Border(),
+                builder: (context) =>
+                    ViewNoteDialog(bookId: bookId, note: note),
+              ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

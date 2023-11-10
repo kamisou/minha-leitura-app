@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/debugging/presentation/widgets/debug_scaffold.dart';
 import 'package:reading/shared/presentation/pages/book_home_page.dart';
+import 'package:reading/shared/presentation/pages/book_ranking_page.dart';
 import 'package:reading/shared/presentation/pages/bookshelf_page.dart';
 import 'package:reading/shared/presentation/pages/options_page.dart';
 import 'package:reading/shared/presentation/pages/ranking_page.dart';
@@ -27,6 +28,7 @@ class HomeScreen extends HookConsumerWidget {
                 BookHomePage(),
                 BookshelfPage(),
                 RankingPage(),
+                BookRankingPage(),
               ],
             ),
           ),
@@ -40,6 +42,7 @@ class HomeScreen extends HookConsumerWidget {
           UniconsLine.home_alt,
           UniconsLine.book_alt,
           UniconsLine.medal,
+          UniconsLine.book_reader,
         ],
       ),
     );

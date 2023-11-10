@@ -15,6 +15,7 @@ import 'package:reading/books/domain/models/book_reading.dart';
 import 'package:reading/classes/domain/models/class.dart';
 import 'package:reading/profile/domain/models/user.dart';
 import 'package:reading/profile/domain/models/user_profile.dart';
+import 'package:reading/ranking/domain/models/book_ranking.dart';
 import 'package:reading/ranking/domain/models/ranking.dart';
 import 'package:reading/shared/infrastructure/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -45,7 +46,6 @@ class HiveDatabase extends Database {
       ..registerAdapter(BookAdapter())
       ..registerAdapter(BookDetailsAdapter())
       ..registerAdapter(BookReadingAdapter())
-      ..registerAdapter(BookReadingScoreAdapter())
       ..registerAdapter(BookRatingAdapter())
       ..registerAdapter(BookNoteAdapter())
       ..registerAdapter(BookStatusAdapter())
@@ -53,17 +53,17 @@ class HiveDatabase extends Database {
       ..registerAdapter(AchievementAdapter())
       ..registerAdapter(RankingAdapter())
       ..registerAdapter(RankingSpotAdapter())
-      ..registerAdapter(SchoolAdapter());
+      ..registerAdapter(SchoolAdapter())
+      ..registerAdapter(BookRankingAdapter())
+      ..registerAdapter(BookRankingSpotAdapter());
   }
 
   @override
   Future<T?> getById<T>(dynamic id) async {
     log('get $T by $id', name: 'Database');
 
-    final box = await _getBox<T>() as LazyBox<T>;
-    final value = await box.get(id);
-
-    box.close().ignore();
+    final box = await _getBox<T>();
+    final value = box.get(id);
 
     return value;
   }
@@ -72,14 +72,12 @@ class HiveDatabase extends Database {
   Future<List<T>> getAll<T>({int? limit, int? offset}) async {
     log('get all $T', name: 'Database');
 
-    final box = await _getBox<T>(lazy: false) as Box<T>;
+    final box = await _getBox<T>();
     var values = box.values.skip(offset ?? 0);
 
     if (limit != null) {
       values = values.take(limit);
     }
-
-    box.close().ignore();
 
     return values.toList();
   }
@@ -92,14 +90,12 @@ class HiveDatabase extends Database {
   }) async {
     log('get $T where', name: 'Database');
 
-    final box = await _getBox<T>(lazy: false) as Box<T>;
+    final box = await _getBox<T>();
     var values = box.values.where(predicate).skip(offset ?? 0);
 
     if (limit != null) {
       values = values.take(limit);
     }
-
-    box.close().ignore();
 
     return values.toList();
   }
@@ -108,10 +104,8 @@ class HiveDatabase extends Database {
   Future<int> insert<T>(T value) async {
     log('insert $T: $value', name: 'Database');
 
-    final box = await _getBox<T>() as LazyBox<T>;
+    final box = await _getBox<T>();
     final id = await box.add(value);
-
-    box.close().ignore();
 
     return id;
   }
@@ -120,10 +114,8 @@ class HiveDatabase extends Database {
   Future<void> removeById<T>(dynamic id) async {
     log('remove $T by $id', name: 'Database');
 
-    final box = await _getBox<T>() as LazyBox<T>;
+    final box = await _getBox<T>();
     await box.delete(id);
-
-    box.close().ignore();
   }
 
   @override
@@ -133,22 +125,18 @@ class HiveDatabase extends Database {
   ) async {
     log('remove $T where', name: 'Database');
 
-    final box = await _getBox<T>(lazy: false) as Box<T>;
+    final box = await _getBox<T>();
     final ids = box.values.where(predicate).map(id);
 
     await box.deleteAll(ids);
-
-    box.close().ignore();
   }
 
   @override
   Future<void> update<T>(T value, dynamic id) async {
     log('update $T: ($id)', name: 'Database');
 
-    final box = await _getBox<T>() as LazyBox<T>;
+    final box = await _getBox<T>();
     await box.put(id, value);
-
-    box.close().ignore();
   }
 
   @override
@@ -158,13 +146,11 @@ class HiveDatabase extends Database {
   ) async {
     log('update all $T', name: 'Database');
 
-    final box = await _getBox<T>() as LazyBox<T>;
+    final box = await _getBox<T>();
     await box.putAll({
       for (final value in values) //
         id(value): value,
     });
-
-    box.close().ignore();
   }
 
   @override
@@ -177,12 +163,14 @@ class HiveDatabase extends Database {
     await hive.delete(recursive: true);
   }
 
-  Future<BoxBase<T>> _getBox<T>({bool lazy = true}) async {
-    if (lazy) {
-      return Hive.openLazyBox<T>(T.toString());
-    } else {
-      return Hive.openBox<T>(T.toString());
+  FutureOr<Box<T>> _getBox<T>() {
+    final boxName = T.toString();
+
+    if (Hive.isBoxOpen(boxName)) {
+      return Hive.box<T>(boxName);
     }
+
+    return Hive.openBox<T>(boxName);
   }
 }
 
@@ -192,7 +180,7 @@ class EncryptedHiveDatabase extends HiveDatabase {
   final SecureStorage secureStorage;
 
   @override
-  Future<BoxBase<T>> _getBox<T>({bool lazy = true}) async {
+  Future<Box<T>> _getBox<T>() async {
     var key = await secureStorage.read('hive_key');
 
     if (key == null) {
@@ -203,11 +191,13 @@ class EncryptedHiveDatabase extends HiveDatabase {
 
     final cipher = HiveAesCipher(base64Decode(key));
 
-    if (lazy) {
-      return Hive.openLazyBox<T>(T.toString(), encryptionCipher: cipher);
-    } else {
-      return Hive.openBox<T>(T.toString(), encryptionCipher: cipher);
+    final boxName = T.toString();
+
+    if (Hive.isBoxOpen(boxName)) {
+      return Hive.box(boxName);
     }
+
+    return Hive.openBox<T>(boxName, encryptionCipher: cipher);
   }
 }
 

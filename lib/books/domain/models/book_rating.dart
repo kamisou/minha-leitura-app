@@ -10,24 +10,27 @@ part 'book_rating.g.dart';
 
 @Freezed(fallbackUnion: 'default')
 @HiveType(typeId: 9)
-class BookRating with _$BookRating {
-  const factory BookRating({
-    @HiveField(0) required int id,
-    @HiveField(1) @RatingConverter() required double rating,
-    @HiveField(2) required String comment,
-    @HiveField(3) @JsonKey(name: 'user') required User author,
-    @HiveField(4) @LocalDateTimeConverter() required DateTime createdAt,
-    @HiveField(5) required int bookId,
-  }) = _BookRating;
-
-  const factory BookRating.offline({
+class BookRating with _$BookRating, HiveObjectMixin {
+  @With<HiveObjectMixin>()
+  factory BookRating({
     @HiveField(0) int? id,
     @HiveField(1) @RatingConverter() required double rating,
     @HiveField(2) required String comment,
     @HiveField(3) @JsonKey(name: 'user') required User author,
     @HiveField(4) @LocalDateTimeConverter() DateTime? createdAt,
     @HiveField(5) required int bookId,
-  }) = OfflineBookRating;
+  }) = _BookRating;
+
+  @With<HiveObjectMixin>()
+  BookRating._();
 
   factory BookRating.fromJson(Json json) => _$BookRatingFromJson(json);
+
+  int compareTo(BookRating b) {
+    if (createdAt == null || b.createdAt == null) {
+      return 0;
+    }
+
+    return b.createdAt!.compareTo(createdAt!);
+  }
 }

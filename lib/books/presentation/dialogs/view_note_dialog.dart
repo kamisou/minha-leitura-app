@@ -61,7 +61,7 @@ class ViewNoteDialog extends ConsumerWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    note is! OfflineBookNote
+                    note.createdAt != null
                         ? DateFormat.yMd().add_jm().format(note.createdAt!)
                         : 'Não sincronizado',
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(

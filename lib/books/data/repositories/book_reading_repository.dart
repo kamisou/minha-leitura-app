@@ -20,7 +20,9 @@ BookReadingRepository bookReadingRepository(BookReadingRepositoryRef ref) {
 
 class OnlineBookReadingRepository extends BookReadingRepository
     with OfflineUpdatePusher {
-  const OnlineBookReadingRepository(super.ref);
+  OnlineBookReadingRepository(super.ref) {
+    pushUpdates();
+  }
 
   @override
   Future<void> updateReading(int bookId, NewReadingDTO data) async {
@@ -35,23 +37,10 @@ class OnlineBookReadingRepository extends BookReadingRepository
   }
 
   @override
-  Future<List<BookReading>> getBookReadings(int bookId) async {
-    final readings = await ref
-        .read(restApiProvider)
-        .get('books/$bookId/readings')
-        .then((response) => (response as List<Json>).map(BookReading.fromJson))
-        .then((bookReadings) => bookReadings.toList());
-
-    saveAll<BookReading>(readings, (value) => value.id).ignore();
-
-    return readings;
-  }
-
-  @override
   Future<void> pushUpdates() async {
     final readings = await ref
         .read(databaseProvider) //
-        .getAll<OfflineBookReading>();
+        .getAll<BookReading>();
 
     for (final reading in readings) {
       final data = NewReadingDTO(
@@ -59,6 +48,8 @@ class OnlineBookReadingRepository extends BookReadingRepository
       );
 
       await updateReading(reading.bookId, data);
+
+      reading.delete().ignore();
     }
   }
 }
@@ -68,26 +59,14 @@ class OfflineBookReadingRepository extends BookReadingRepository {
 
   @override
   Future<void> updateReading(int bookId, NewReadingDTO data) async {
-    final reading = OfflineBookReading(
+    final reading = BookReading(
       page: data.page.value!,
-      createdAt: DateTime.now().toUtc(),
       bookId: bookId,
     );
 
-    await save<OfflineBookReading>(reading);
+    await save<BookReading>(reading);
 
     return super.updateReading(bookId, data);
-  }
-
-  @override
-  Future<List<BookReading>> getBookReadings(int bookId) {
-    final db = ref.read(databaseProvider);
-
-    return Future.wait([
-      db.getWhere<BookReading>((reading) => reading.bookId == bookId),
-      db.getWhere<OfflineBookReading>((reading) => reading.bookId == bookId),
-    ]) //
-        .then((readings) => [...readings.first, ...readings.last]);
   }
 }
 
@@ -99,6 +78,4 @@ abstract class BookReadingRepository extends Repository with OfflinePersister {
   Future<void> updateReading(int bookId, NewReadingDTO data) async {
     return ref.read(myBooksProvider.notifier).refresh();
   }
-
-  Future<List<BookReading>> getBookReadings(int bookId);
 }
