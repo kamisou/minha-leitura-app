@@ -150,7 +150,7 @@ class RankingPage extends HookConsumerWidget {
                                           vertical: 8,
                                         ),
                                         child: Text(
-                                          '${spot.position}',
+                                          '${i + 1}',
                                           textAlign: TextAlign.center,
                                         ),
                                       ),

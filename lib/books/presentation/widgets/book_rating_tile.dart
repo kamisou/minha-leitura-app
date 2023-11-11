@@ -9,7 +9,7 @@ import 'package:reading/shared/presentation/widgets/button_progress_indicator.da
 import 'package:reading/shared/util/theme_data_extension.dart';
 import 'package:unicons/unicons.dart';
 
-class BookRatingTile extends ConsumerWidget {
+class BookRatingTile extends ConsumerStatefulWidget {
   const BookRatingTile({
     super.key,
     required this.rating,
@@ -18,7 +18,14 @@ class BookRatingTile extends ConsumerWidget {
   final BookRating rating;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BookRatingTile> createState() => _BookRatingTileState();
+}
+
+class _BookRatingTileState extends ConsumerState<BookRatingTile> {
+  bool _loading = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -27,18 +34,25 @@ class BookRatingTile extends ConsumerWidget {
           children: [
             StarRatingWidget(
               iconSize: 16,
-              value: rating.rating,
+              value: widget.rating.rating,
             ),
-            if (rating.author.id == ref.watch(profileProvider).requireValue!.id)
+            if (widget.rating.author.id ==
+                ref.watch(profileProvider).requireValue!.id)
               SizedBox(
                 width: 24,
                 height: 24,
                 child: ButtonProgressIndicator(
-                  isLoading: ref.watch(newRatingControllerProvider).isLoading,
+                  isLoading: _loading,
                   child: IconButton(
-                    onPressed: () => ref
-                        .read(newRatingControllerProvider.notifier)
-                        .removeRating(rating.bookId, rating),
+                    onPressed: () async {
+                      setState(() => _loading = true);
+
+                      await ref
+                          .read(newRatingControllerProvider.notifier)
+                          .removeRating(widget.rating.bookId, widget.rating);
+
+                      setState(() => _loading = false);
+                    },
                     iconSize: 20,
                     padding: EdgeInsets.zero,
                     icon: Icon(
@@ -51,7 +65,7 @@ class BookRatingTile extends ConsumerWidget {
           ],
         ),
         Text(
-          rating.comment,
+          widget.rating.comment,
           style: Theme.of(context)
               .textTheme
               .bodyMedium
@@ -59,8 +73,8 @@ class BookRatingTile extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         AuthorTimestamp(
-          author: rating.author.name,
-          timestamp: rating.createdAt,
+          author: widget.rating.author.name,
+          timestamp: widget.rating.createdAt,
         ),
       ],
     );

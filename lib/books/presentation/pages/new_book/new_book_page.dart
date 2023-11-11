@@ -35,7 +35,8 @@ class NewBookPage extends StatelessWidget {
               ),
         ),
         Expanded(
-          child: Center(
+          child: Align(
+            alignment: const Alignment(0, -0.5),
             child: builder(context),
           ),
         ),
