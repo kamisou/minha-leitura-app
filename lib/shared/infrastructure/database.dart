@@ -73,13 +73,18 @@ class HiveDatabase extends Database {
     log('get all $T', name: 'Database');
 
     final box = await _getBox<T>();
-    var values = box.values.skip(offset ?? 0);
 
-    if (limit != null) {
-      values = values.take(limit);
+    try {
+      var values = box.values.skip(offset ?? 0);
+
+      if (limit != null) {
+        values = values.take(limit);
+      }
+
+      return values.toList();
+    } catch (e) {
+      return [];
     }
-
-    return values.toList();
   }
 
   @override
@@ -91,13 +96,18 @@ class HiveDatabase extends Database {
     log('get $T where', name: 'Database');
 
     final box = await _getBox<T>();
-    var values = box.values.where(predicate).skip(offset ?? 0);
 
-    if (limit != null) {
-      values = values.take(limit);
+    try {
+      var values = box.values.where(predicate).skip(offset ?? 0);
+
+      if (limit != null) {
+        values = values.take(limit);
+      }
+
+      return values.toList();
+    } catch (e) {
+      return [];
     }
-
-    return values.toList();
   }
 
   @override
