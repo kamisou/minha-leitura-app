@@ -15,10 +15,16 @@ class BookRatings extends _$BookRatings {
     return _getRatings();
   }
 
-  Future<PaginatedResource<BookRating>> _getRatings() {
-    return ref
+  Future<PaginatedResource<BookRating>> _getRatings() async {
+    final ratings = await ref
         .read(bookRatingRepositoryProvider)
         .getRatings((state.valueOrNull?.currentPage ?? 0) + 1, _bookId!);
+
+    return ratings.copyWith(
+      data: [...state.valueOrNull?.data ?? [], ...ratings.data],
+      finished: ratings.data.length < ratings.perPage,
+      loading: false,
+    );
   }
 
   Future<void> refresh() async {
@@ -35,14 +41,8 @@ class BookRatings extends _$BookRatings {
       state.requireValue.copyWith(loading: true),
     );
 
-    final ratings = await _getRatings();
-
     state = AsyncData(
-      ratings.copyWith(
-        data: [...state.requireValue.data, ...ratings.data],
-        finished: ratings.data.length < ratings.perPage,
-        loading: false,
-      ),
+      await _getRatings(),
     );
   }
 }
