@@ -29,6 +29,16 @@ class BookDetailsPage extends HookConsumerWidget {
         OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
         _ => null,
       },
+      onSuccess: () => ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              'A leitura foi salva com sucesso',
+            ),
+          ),
+        ),
+      ),
     );
 
     return Stack(

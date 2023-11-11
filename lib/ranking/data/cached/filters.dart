@@ -23,7 +23,7 @@ AsyncValue<Map<RankingType, List<Class>>> filters(FiltersRef ref) {
             }
           }
 
-          for (final $class in classes) {
+          for (final $class in classes.data) {
             addFilter(RankingType.$class, $class, (e) => e.name);
             addFilter(RankingType.school, $class, (e) => e.school.name);
             addFilter(RankingType.city, $class, (e) => e.school.city);

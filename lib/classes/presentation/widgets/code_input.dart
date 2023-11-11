@@ -45,6 +45,7 @@ class _CodeInputState extends State<CodeInput> {
                 keyboardType: TextInputType.visiblePassword,
                 maxLength: 1,
                 maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                inputFormatters: [_ReplaceLowercaseTextInputFormatter()],
                 onChanged: (value) {
                   digits[i] = value;
 
@@ -55,6 +56,10 @@ class _CodeInputState extends State<CodeInput> {
                       focus?.nextFocus();
                     } else {
                       focus?.unfocus();
+                    }
+                  } else {
+                    if (i != 0) {
+                      focus?.previousFocus();
                     }
                   }
 
@@ -67,6 +72,21 @@ class _CodeInputState extends State<CodeInput> {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _ReplaceLowercaseTextInputFormatter implements TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    return newValue.copyWith(
+      text: newValue.text.replaceAllMapped(
+        RegExp('[a-z]'),
+        (match) => match[0]!.toUpperCase(),
+      ),
     );
   }
 }

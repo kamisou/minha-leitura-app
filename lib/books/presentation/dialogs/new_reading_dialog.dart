@@ -46,7 +46,7 @@ class NewReadingDialog extends HookConsumerWidget {
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
             ],
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(signed: true),
             onChanged: (value) => readingForm.dispatch(Pages.fromString(value)),
             validator: (value) => switch (Pages.validate(value)) {
               PagesError.empty => 'Informe o número da página',

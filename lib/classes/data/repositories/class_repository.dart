@@ -1,6 +1,7 @@
 import 'package:reading/classes/data/cached/classes.dart';
 import 'package:reading/classes/domain/models/class.dart';
 import 'package:reading/shared/data/cached/connection_status.dart';
+import 'package:reading/shared/data/paginated_resource.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/database.dart';
@@ -20,16 +21,18 @@ class OnlineClassRepository extends ClassRepository {
   const OnlineClassRepository(super.ref);
 
   @override
-  Future<List<Class>> getMyClasses() async {
+  Future<PaginatedResource<Class>> getMyClasses(int page) async {
     final classes = await ref
-        .read(restApiProvider)
-        .get('app/enrollment')
-        .then((response) => (response as Json)['data'])
-        .then((response) => (response as List).cast<Json>())
-        .then((list) => list.map(Class.fromJson))
-        .then((classes) => classes.toList());
+        .read(restApiProvider) //
+        .get('app/enrollment?page=$page&limit=200')
+        .then(
+          (response) => PaginatedResource.fromJson(
+            response as Json,
+            Class.fromJson,
+          ),
+        );
 
-    saveAll(classes, ($class) => $class.id).ignore();
+    saveAll(classes.data, ($class) => $class.id).ignore();
 
     return classes;
   }
@@ -44,16 +47,29 @@ class OnlineClassRepository extends ClassRepository {
 
     save<Class>($class, $class.id).ignore();
 
-    ref.invalidate(myClassesProvider);
+    return ref.read(myClassesProvider.notifier).refresh();
   }
 }
 
 class OfflineClassRepository extends ClassRepository {
   const OfflineClassRepository(super.ref);
 
+  static const pageSize = 200;
+
   @override
-  Future<List<Class>> getMyClasses() {
-    return ref.read(databaseProvider).getAll<Class>();
+  Future<PaginatedResource<Class>> getMyClasses(int page) async {
+    final classes = await ref
+        .read(databaseProvider) //
+        .getAll<Class>(
+          limit: pageSize,
+          offset: (page - 1) * pageSize,
+        );
+
+    return PaginatedResource(
+      currentPage: page,
+      data: classes,
+      perPage: pageSize,
+    );
   }
 
   @override
@@ -65,6 +81,6 @@ class OfflineClassRepository extends ClassRepository {
 abstract class ClassRepository extends Repository with OfflinePersister {
   const ClassRepository(super.ref);
 
-  Future<List<Class>> getMyClasses();
+  Future<PaginatedResource<Class>> getMyClasses(int page);
   Future<void> joinClass(String code);
 }

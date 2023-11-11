@@ -22,7 +22,19 @@ class JoinClassScreen extends HookConsumerWidget {
         BadResponseRestException(message: final message) => message,
         _ => null,
       },
-      onSuccess: () => context.go('/classes'),
+      onSuccess: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                'O cadastro com a turma foi realizado',
+              ),
+            ),
+          ),
+        );
+        context.go('/classes');
+      },
     );
 
     return DebugScaffold(

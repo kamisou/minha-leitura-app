@@ -277,7 +277,10 @@ class NewBookScreen extends HookConsumerWidget {
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
                                 ],
-                                keyboardType: TextInputType.number,
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                  signed: true,
+                                ),
                                 onChanged: (value) => newBookForm.dispatch(
                                   {'pages': Pages.fromString(value)},
                                 ),
@@ -405,7 +408,10 @@ class NewBookScreen extends HookConsumerWidget {
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
                                 ],
-                                keyboardType: TextInputType.number,
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                  signed: true,
+                                ),
                                 onChanged: (value) => newBookForm.dispatch(
                                   {'actual_page': Pages.fromString(value)},
                                 ),

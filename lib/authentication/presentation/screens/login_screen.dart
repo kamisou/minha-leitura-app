@@ -37,19 +37,17 @@ class LoginScreen extends HookConsumerWidget {
         OnlineOnlyOperationException() => 'Você precisa conectar-se à internet',
         _ => null,
       },
-      onSuccess: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                'Caso esteja vinculado à uma conta, um link para recuperação '
-                'de senha será enviado ao endereço de e-mail',
-              ),
+      onSuccess: () => ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              'Caso esteja vinculado à uma conta, um link para recuperação '
+              'de senha será enviado ao endereço de e-mail',
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
 
     return Stack(
