@@ -60,7 +60,6 @@ class BookRatingsPage extends HookConsumerWidget {
       onRefresh: ref.read(bookRatingsProvider(book.book.id).notifier).refresh,
       child: CustomScrollView(
         controller: scrollController,
-        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
             child: Row(

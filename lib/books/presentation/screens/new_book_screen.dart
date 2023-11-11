@@ -378,9 +378,9 @@ class NewBookScreen extends HookConsumerWidget {
                               builder: (context) => SimpleTextField(
                                 autofocus: true,
                                 fontSize: 36,
-                                hintText: 'dd/mm/aa',
+                                hintText: 'dd/mm/aaaa',
                                 inputFormatters: [
-                                  TextInputMask(mask: '99/99/99'),
+                                  TextInputMask(mask: '99/99/9999'),
                                 ],
                                 keyboardType: TextInputType.datetime,
                                 onChanged: (value) => newBookForm.dispatch(
@@ -438,9 +438,9 @@ class NewBookScreen extends HookConsumerWidget {
                               builder: (context) => SimpleTextField(
                                 autofocus: true,
                                 fontSize: 36,
-                                hintText: 'dd/mm/aa',
+                                hintText: 'dd/mm/aaaa',
                                 inputFormatters: [
-                                  TextInputMask(mask: '99/99/99'),
+                                  TextInputMask(mask: '99/99/9999'),
                                 ],
                                 keyboardType: TextInputType.datetime,
                                 onChanged: (value) => newBookForm.dispatch(
@@ -464,9 +464,9 @@ class NewBookScreen extends HookConsumerWidget {
                               builder: (context) => SimpleTextField(
                                 autofocus: true,
                                 fontSize: 36,
-                                hintText: 'dd/mm/aa',
+                                hintText: 'dd/mm/aaaa',
                                 inputFormatters: [
-                                  TextInputMask(mask: '99/99/99'),
+                                  TextInputMask(mask: '99/99/9999'),
                                 ],
                                 keyboardType: TextInputType.datetime,
                                 onChanged: (value) => newBookForm.dispatch(
