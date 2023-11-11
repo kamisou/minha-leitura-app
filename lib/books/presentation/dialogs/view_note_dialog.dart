@@ -139,9 +139,11 @@ class ViewNoteDialog extends ConsumerWidget {
                                           showDragHandle: true,
                                           builder: (context) => NoteEditDialog(
                                             title: 'Atualizar nota',
-                                            callback: (controller) => (data) =>
-                                                controller.updateNote(
-                                                    note, data),
+                                            callback: (controller) =>
+                                                (data) => controller.updateNote(
+                                                      note,
+                                                      data,
+                                                    ),
                                             initialState: NewNoteDTO(
                                               title: Title(note.title),
                                               description: Description(
@@ -184,7 +186,8 @@ class ViewNoteDialog extends ConsumerWidget {
                                     ),
                                   ).then((value) => context.pop()),
                                   icon: const Icon(
-                                      UniconsLine.corner_up_left_alt),
+                                    UniconsLine.corner_up_left_alt,
+                                  ),
                                   label: const Text('Responder'),
                                   style: ButtonStyle(
                                     backgroundColor: const Color(0xFFF5F5F5)
