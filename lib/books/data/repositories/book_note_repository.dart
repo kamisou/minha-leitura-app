@@ -7,6 +7,7 @@ import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/shared/data/cached/connection_status.dart';
 import 'package:reading/shared/data/repository.dart';
+import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -58,7 +59,7 @@ class OnlineBookNoteRepository extends BookNoteRepository
 
     await save<BookNote>(note, note.id);
 
-    return super.replyNote(bookId, noteId, data);
+    ref.invalidate(bookNotesProvider);
   }
 
   @override
@@ -164,17 +165,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
 
   @override
   Future<void> replyNote(int bookId, int noteId, NewNoteDTO data) async {
-    final note = BookNote(
-      title: data.title.value,
-      description: data.description.value,
-      user: ref.read(profileProvider).requireValue!.toUser(),
-      bookId: bookId,
-      noteId: noteId,
-    );
-
-    await save<BookNote>(note);
-
-    return super.replyNote(bookId, noteId, data);
+    throw const OnlineOnlyOperationException('replyNote');
   }
 
   @override
@@ -219,12 +210,7 @@ abstract class BookNoteRepository extends Repository with OfflinePersister {
     ref.invalidate(bookNotesProvider);
   }
 
-  @mustCallSuper
-  @mustBeOverridden
-  Future<void> replyNote(int bookId, int noteId, NewNoteDTO data) async {
-    ref.invalidate(bookNotesProvider);
-  }
-
+  Future<void> replyNote(int bookId, int noteId, NewNoteDTO data);
   Future<List<BookNote>> getBookNotes(int bookId);
 
   @mustCallSuper
