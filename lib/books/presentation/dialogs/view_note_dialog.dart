@@ -20,11 +20,14 @@ class ViewNoteDialog extends ConsumerWidget {
     super.key,
     required this.bookId,
     required this.note,
+    this.response = false,
   });
 
   final int bookId;
 
   final BookNote note;
+
+  final bool response;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -86,109 +89,113 @@ class ViewNoteDialog extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: ref.watch(newNoteControllerProvider).isLoading
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : (note.user.id ==
-                                ref.watch(profileProvider).requireValue!.id)
-                            ? Row(
-                                children: [
-                                  if (note.replies.isEmpty) ...[
+                  if (!response)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: ref.watch(newNoteControllerProvider).isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : (note.user.id ==
+                                  ref.watch(profileProvider).requireValue!.id)
+                              ? Row(
+                                  children: [
+                                    if (note.replies.isEmpty) ...[
+                                      Expanded(
+                                        child: FilledButton.icon(
+                                          onPressed: () {
+                                            ref
+                                                .read(
+                                                  newNoteControllerProvider
+                                                      .notifier,
+                                                )
+                                                .removeNote(note);
+                                            context.pop();
+                                          },
+                                          icon: const Icon(UniconsLine.trash),
+                                          label: const Text('Remover'),
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                const Color(0xFFF5F5F5)
+                                                    .materialStateAll,
+                                            foregroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .materialStateAll,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                    ],
                                     Expanded(
                                       child: FilledButton.icon(
-                                        onPressed: () {
-                                          ref
-                                              .read(
-                                                newNoteControllerProvider
-                                                    .notifier,
-                                              )
-                                              .removeNote(note);
-                                          context.pop();
-                                        },
-                                        icon: const Icon(UniconsLine.trash),
-                                        label: const Text('Remover'),
+                                        onPressed: () =>
+                                            showModalBottomSheet<void>(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .background,
+                                          context: context,
+                                          isScrollControlled: true,
+                                          showDragHandle: true,
+                                          builder: (context) => NoteEditDialog(
+                                            title: 'Atualizar nota',
+                                            callback: (controller) => (data) =>
+                                                controller.updateNote(
+                                                    note, data),
+                                            initialState: NewNoteDTO(
+                                              title: Title(note.title),
+                                              description: Description(
+                                                note.description,
+                                              ),
+                                            ),
+                                          ),
+                                        ).then((value) => context.pop()),
+                                        icon: const Icon(UniconsLine.edit),
+                                        label: const Text('Editar'),
                                         style: ButtonStyle(
                                           backgroundColor:
                                               const Color(0xFFF5F5F5)
                                                   .materialStateAll,
                                           foregroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary
+                                              .colorExtension
+                                              ?.information
                                               .materialStateAll,
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(width: 16),
                                   ],
-                                  Expanded(
-                                    child: FilledButton.icon(
-                                      onPressed: () =>
-                                          showModalBottomSheet<void>(
-                                        backgroundColor: Theme.of(context)
-                                            .colorScheme
-                                            .background,
-                                        context: context,
-                                        isScrollControlled: true,
-                                        showDragHandle: true,
-                                        builder: (context) => NoteEditDialog(
-                                          title: 'Atualizar nota',
-                                          callback: (controller) => (data) =>
-                                              controller.updateNote(note, data),
-                                          initialState: NewNoteDTO(
-                                            title: Title(note.title),
-                                            description: Description(
-                                              note.description,
-                                            ),
-                                          ),
-                                        ),
-                                      ).then((value) => context.pop()),
-                                      icon: const Icon(UniconsLine.edit),
-                                      label: const Text('Editar'),
-                                      style: ButtonStyle(
-                                        backgroundColor: const Color(0xFFF5F5F5)
-                                            .materialStateAll,
-                                        foregroundColor: Theme.of(context)
-                                            .colorExtension
-                                            ?.information
-                                            .materialStateAll,
-                                      ),
+                                )
+                              : FilledButton.icon(
+                                  onPressed: () => showModalBottomSheet<void>(
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .background,
+                                    context: context,
+                                    isScrollControlled: true,
+                                    showDragHandle: true,
+                                    builder: (context) => NoteEditDialog(
+                                      title: 'Responder nota',
+                                      callback: (controller) =>
+                                          (data) => controller.replyNote(
+                                                bookId,
+                                                note.id!,
+                                                data,
+                                              ),
                                     ),
+                                  ).then((value) => context.pop()),
+                                  icon: const Icon(
+                                      UniconsLine.corner_up_left_alt),
+                                  label: const Text('Responder'),
+                                  style: ButtonStyle(
+                                    backgroundColor: const Color(0xFFF5F5F5)
+                                        .materialStateAll,
+                                    foregroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .materialStateAll,
                                   ),
-                                ],
-                              )
-                            : FilledButton.icon(
-                                onPressed: () => showModalBottomSheet<void>(
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.background,
-                                  context: context,
-                                  isScrollControlled: true,
-                                  showDragHandle: true,
-                                  builder: (context) => NoteEditDialog(
-                                    title: 'Responder nota',
-                                    callback: (controller) =>
-                                        (data) => controller.replyNote(
-                                              bookId,
-                                              note.id!,
-                                              data,
-                                            ),
-                                  ),
-                                ).then((value) => context.pop()),
-                                icon:
-                                    const Icon(UniconsLine.corner_up_left_alt),
-                                label: const Text('Responder'),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      const Color(0xFFF5F5F5).materialStateAll,
-                                  foregroundColor: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .materialStateAll,
                                 ),
-                              ),
-                  ),
+                    ),
                 ],
               ),
             ),

@@ -35,73 +35,78 @@ class BookNotesTile extends HookConsumerWidget {
       },
     );
 
-    return GestureDetector(
-      behavior: response ? null : HitTestBehavior.deferToChild,
-      onTap: response
-          ? null
-          : () => showModalBottomSheet<void>(
-                context: context,
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                isScrollControlled: true,
-                shape: const Border(),
-                builder: (context) =>
-                    ViewNoteDialog(bookId: bookId, note: note),
-              ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            note.title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorExtension?.gray[800],
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        GestureDetector(
+          onTap: () => showModalBottomSheet<void>(
+            context: context,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            isScrollControlled: true,
+            shape: const Border(),
+            builder: (context) => ViewNoteDialog(
+              bookId: bookId,
+              note: note,
+              response: response,
+            ),
           ),
-          Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(
-                child: Text(
-                  note.description,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorExtension?.gray[600],
-                      ),
-                ),
+              Text(
+                note.title,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorExtension?.gray[800],
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
-              if (!response)
-                Icon(
-                  Icons.chevron_right,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          AuthorTimestamp(
-            author: note.user.name,
-            timestamp: note.createdAt,
-          ),
-          if (!response && note.replies.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 16,
-                left: 20,
-              ),
-              child: Column(
+              Row(
                 children: [
-                  ...note.replies.map(
-                    (e) => BookNotesTile(
-                      bookId: bookId,
-                      note: e,
-                      response: true,
+                  Expanded(
+                    child: Text(
+                      note.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorExtension?.gray[600],
+                          ),
                     ),
                   ),
+                  if (!response)
+                    Icon(
+                      Icons.chevron_right,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                 ],
               ),
+              const SizedBox(height: 8),
+              AuthorTimestamp(
+                author: note.user.name,
+                timestamp: note.createdAt,
+              ),
+            ],
+          ),
+        ),
+        if (!response && note.replies.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 16,
+              left: 20,
             ),
-        ],
-      ),
+            child: Column(
+              children: [
+                ...note.replies.map(
+                  (e) => BookNotesTile(
+                    bookId: bookId,
+                    note: e,
+                    response: true,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }

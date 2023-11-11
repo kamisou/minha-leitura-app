@@ -149,15 +149,15 @@ abstract class BookRatingRepository extends Repository with OfflinePersister {
 
   @mustBeOverridden
   @mustCallSuper
-  Future<void> addRating(int bookId, NewRatingDTO data) async {
-    ref.invalidate(bookRatingsProvider);
+  Future<void> addRating(int bookId, NewRatingDTO data) {
+    return ref.read(bookRatingsProvider(bookId).notifier).refresh();
   }
 
   Future<PaginatedResource<BookRating>> getRatings(int page, int bookId);
 
   @mustCallSuper
   @mustBeOverridden
-  Future<void> removeRating(int bookId, BookRating rating) async {
-    ref.invalidate(bookRatingsProvider);
+  Future<void> removeRating(int bookId, BookRating rating) {
+    return ref.read(bookRatingsProvider(bookId).notifier).refresh();
   }
 }

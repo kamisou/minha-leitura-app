@@ -70,7 +70,7 @@ class BookRatingsPage extends HookConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '$average',
+                      average.toStringAsFixed(1),
                       style:
                           Theme.of(context).textTheme.headlineMedium?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
