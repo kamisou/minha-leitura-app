@@ -37,7 +37,7 @@ RestApi restApi(RestApiRef ref) {
   return DioRestApi(
     server: Debugger.isDebugMode
         ? ref.watch(restApiServerProvider).requireValue
-        : 'https://minha-leitura-back-php.k8s.senailondrina.com/',
+        : 'https://minha-leitura-back-php.k8s.senailondrina.com/api/',
     headers: accessToken != null //
         ? {'Authorization': 'Bearer $accessToken'}
         : null,
