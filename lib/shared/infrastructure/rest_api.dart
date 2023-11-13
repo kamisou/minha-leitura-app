@@ -37,7 +37,7 @@ RestApi restApi(RestApiRef ref) {
   return DioRestApi(
     server: Debugger.isDebugMode
         ? ref.watch(restApiServerProvider).requireValue
-        : 'http://marlin.websix.com.br:5000/api/',
+        : 'https://minha-leitura-back-php.k8s.senailondrina.com/',
     headers: accessToken != null //
         ? {'Authorization': 'Bearer $accessToken'}
         : null,
