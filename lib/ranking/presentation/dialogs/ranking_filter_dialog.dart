@@ -85,17 +85,24 @@ class RankingFilterDialog extends HookConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               if (filters[type]?.isEmpty ?? true)
-                                Text(
-                                  'Para filtrar por $tab, '
-                                  'entre em uma turma.',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorExtension
-                                            ?.gray[600],
-                                      ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 8,
+                                    bottom: 8,
+                                    left: 8,
+                                  ),
+                                  child: Text(
+                                    'Para filtrar por $tab, '
+                                    'entre em uma turma.',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorExtension
+                                              ?.gray[300],
+                                        ),
+                                  ),
                                 )
                               else
                                 for (final filter in filters[type]!)
