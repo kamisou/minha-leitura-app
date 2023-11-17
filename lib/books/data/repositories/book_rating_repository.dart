@@ -115,7 +115,7 @@ class OfflineBookRatingRepository extends BookRatingRepository {
 
     return PaginatedResource(
       currentPage: page,
-      data: ratings..sort((a, b) => a.compareTo(b)),
+      data: ratings..sort((a, b) => a.compareByCreationDate(b)),
       perPage: pageSize,
     );
   }

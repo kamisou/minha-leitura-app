@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:reading/profile/domain/models/user.dart';
+import 'package:reading/shared/domain/has_creation_date.dart';
 import 'package:reading/shared/domain/local_datetime_converter.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
 
@@ -9,7 +10,7 @@ part 'book_note.g.dart';
 
 @Freezed(fallbackUnion: 'default')
 @HiveType(typeId: 12)
-class BookNote with _$BookNote, HiveObjectMixin {
+class BookNote with _$BookNote, HiveObjectMixin, HasCreationDate {
   @With<HiveObjectMixin>()
   factory BookNote({
     @HiveField(0) int? id,
@@ -26,12 +27,4 @@ class BookNote with _$BookNote, HiveObjectMixin {
   BookNote._();
 
   factory BookNote.fromJson(Json json) => _$BookNoteFromJson(json);
-
-  int compareTo(BookNote b) {
-    if (createdAt == null || b.createdAt == null) {
-      return 0;
-    }
-
-    return b.createdAt!.compareTo(createdAt!);
-  }
 }

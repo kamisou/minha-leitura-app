@@ -1,0 +1,10 @@
+Hive não é uma boa ferramenta para salvamento offline, é necessário ficar sincronizando
+"id" (conceito do banco de dados relacional) com as "keys" (chave do banco de dados de documento do Hive).
+
+Modo offline deve salvar modelos que possam ser diferenciados de suas contrapartes online. Devem se comportar
+como modelos online o máximo possível para facilitar na montagem da interface, mas devem ser diferenciáveis para
+pequenas indicações na interface e para que ao entrar no modo online, a aplicação possa iterar sobre esses modelos
+aplicando suas alterações no remoto.
+
+Os modelos offline devem ser fáceis de iterar. Todas as alterações realizadas em modo offline devem idealmente ser
+aplicadas no mesmo momento quando o dispositivo tiver internet.

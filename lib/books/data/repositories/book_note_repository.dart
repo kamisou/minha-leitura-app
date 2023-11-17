@@ -173,7 +173,7 @@ class OfflineBookNoteRepository extends BookNoteRepository {
     return ref
         .read(databaseProvider)
         .getWhere<BookNote>((note) => note.bookId == bookId)
-        .then((notes) => notes..sort((a, b) => a.compareTo(b)));
+        .then((notes) => notes..sort((a, b) => a.compareByCreationDate(b)));
   }
 
   @override

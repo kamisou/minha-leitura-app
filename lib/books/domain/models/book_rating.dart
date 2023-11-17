@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:reading/profile/domain/models/user.dart';
+import 'package:reading/shared/domain/has_creation_date.dart';
 import 'package:reading/shared/domain/local_datetime_converter.dart';
 import 'package:reading/shared/domain/rating_converter.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
@@ -10,7 +11,7 @@ part 'book_rating.g.dart';
 
 @Freezed(fallbackUnion: 'default')
 @HiveType(typeId: 9)
-class BookRating with _$BookRating, HiveObjectMixin {
+class BookRating with _$BookRating, HiveObjectMixin, HasCreationDate {
   @With<HiveObjectMixin>()
   factory BookRating({
     @HiveField(0) int? id,
@@ -25,12 +26,4 @@ class BookRating with _$BookRating, HiveObjectMixin {
   BookRating._();
 
   factory BookRating.fromJson(Json json) => _$BookRatingFromJson(json);
-
-  int compareTo(BookRating b) {
-    if (createdAt == null || b.createdAt == null) {
-      return 0;
-    }
-
-    return b.createdAt!.compareTo(createdAt!);
-  }
 }
