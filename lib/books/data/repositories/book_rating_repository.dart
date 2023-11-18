@@ -81,19 +81,25 @@ class OnlineBookRatingRepository extends BookRatingRepository
 
   @override
   Future<void> pushUpdates() async {
-    final ratings = await ref
-        .read(databaseProvider) //
-        .getWhere<BookRating>((rating) => rating.id == null);
+    final ratings = await ref.read(databaseProvider).getAll<BookRating>();
 
     for (final rating in ratings) {
+      if (rating.id != null && !rating.markedForDeletion) {
+        continue;
+      }
+
       final data = NewRatingDTO(
         comment: Description(rating.comment),
         rating: Rating(rating.rating),
       );
 
-      await addRating(rating.bookId, data);
-
-      rating.delete().ignore();
+      if (rating.id == null) {
+        await addRating(rating.bookId, data);
+      } else {
+        if (rating.markedForDeletion) {
+          await removeRating(rating.bookId, rating);
+        }
+      }
     }
   }
 }
@@ -108,14 +114,14 @@ class OfflineBookRatingRepository extends BookRatingRepository {
     final ratings = await ref
         .read(databaseProvider) //
         .getWhere<BookRating>(
-          (rating) => rating.bookId == bookId,
+          (rating) => rating.bookId == bookId && !rating.markedForDeletion,
           limit: pageSize,
           offset: (page - 1) * pageSize,
         );
 
     return PaginatedResource(
       currentPage: page,
-      data: ratings..sort((a, b) => a.compareByCreationDate(b)),
+      data: ratings..sort(),
       perPage: pageSize,
     );
   }
@@ -136,9 +142,12 @@ class OfflineBookRatingRepository extends BookRatingRepository {
 
   @override
   Future<void> removeRating(int bookId, BookRating rating) async {
-    await ref
-        .read(databaseProvider)
-        .removeById<BookRating>(rating.id ?? rating.key);
+    if (rating.id == null) {
+      await ref.read(databaseProvider).removeById<BookRating>(rating.key);
+    } else {
+      final marked = rating.copyWith(markedForDeletion: true);
+      await save<BookRating>(marked, rating.key);
+    }
 
     return super.removeRating(bookId, rating);
   }
