@@ -82,7 +82,7 @@ class OnlineRankingRepository extends RankingRepository {
         .read(restApiProvider)
         .get('$endpoint${id == null ? '' : '/$id'}')
         .then((response) => (response as List).cast<Json>())
-        .then((list) => list.map(RankingSpot.fromJson).toList());
+        .then((list) => _rankify(list).map(RankingSpot.fromJson).toList());
   }
 }
 
@@ -125,6 +125,21 @@ class OfflineRankingRepository extends RankingRepository {
 
 abstract class RankingRepository extends Repository with OfflinePersister {
   const RankingRepository(super.ref);
+
+  List<Json> _rankify(List<Json> spots) {
+    var rank = 1;
+    var max = (spots.firstOrNull?['total_pages_readed'] as int?) ?? 0;
+
+    for (final spot in spots) {
+      if ((spot['total_pages_readed'] as int) < max) {
+        max = spot['total_pages_readed'] as int;
+        rank = rank + 1;
+      }
+      spot['rank'] = rank;
+    }
+
+    return spots;
+  }
 
   Future<Ranking?> getClassRanking(int classId);
   Future<Ranking?> getSchoolRanking(int schoolId);

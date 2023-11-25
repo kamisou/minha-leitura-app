@@ -135,7 +135,7 @@ class RankingPage extends HookConsumerWidget {
                                     ),
                                   ],
                                 ),
-                                for (final (i, spot) in data!.spots.indexed)
+                                for (final (i, entry) in data!.spots.indexed)
                                   TableRow(
                                     decoration: BoxDecoration(
                                       color: i.isEven
@@ -150,19 +150,19 @@ class RankingPage extends HookConsumerWidget {
                                           vertical: 8,
                                         ),
                                         child: Text(
-                                          '${i + 1}',
+                                          '${entry.rank}',
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
                                       Text(
-                                        spot.user,
+                                        entry.user,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(right: 8),
                                         child: Text(
-                                          '${spot.pages}',
+                                          '${entry.pages}',
                                           textAlign: TextAlign.end,
                                         ),
                                       ),

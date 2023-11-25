@@ -42,10 +42,11 @@ class BookRanking with _$BookRanking {
 @HiveType(typeId: 20)
 class BookRankingSpot with _$BookRankingSpot {
   const factory BookRankingSpot({
-    @HiveField(0) required int position,
-    @HiveField(1) required String title,
-    @HiveField(2) required String author,
-    @HiveField(3) @RatingConverter() required double ratingAvg,
+    @HiveField(0) required int rank,
+    @HiveField(1) required int position,
+    @HiveField(2) required String title,
+    @HiveField(3) required String author,
+    @HiveField(4) @RatingConverter() required double ratingAvg,
   }) = _BookRankingSpot;
 
   factory BookRankingSpot.fromJson(Json json) =>

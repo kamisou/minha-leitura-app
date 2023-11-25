@@ -77,12 +77,15 @@ class OnlineBookRankingRepository extends BookRankingRepository {
     return ranking;
   }
 
-  Future<List<BookRankingSpot>> _getSpots(String endpoint, [int? id]) {
+  Future<List<BookRankingSpot>> _getSpots(
+    String endpoint, [
+    int? id,
+  ]) {
     return ref
         .read(restApiProvider)
         .get('$endpoint${id == null ? '' : '/$id'}')
         .then((response) => (response as List).cast<Json>())
-        .then((list) => list.map(BookRankingSpot.fromJson).toList());
+        .then((list) => _rankify(list).map(BookRankingSpot.fromJson).toList());
   }
 }
 
@@ -125,6 +128,24 @@ class OfflineBookRankingRepository extends BookRankingRepository {
 
 abstract class BookRankingRepository extends Repository with OfflinePersister {
   const BookRankingRepository(super.ref);
+
+  List<Json> _rankify(List<Json> spots) {
+    var rank = 1;
+    var max = double.tryParse(
+          (spots.firstOrNull?['rating_avg'] as String?) ?? '',
+        ) ??
+        0.0;
+
+    for (final spot in spots) {
+      if (double.parse(spot['rating_avg'] as String) < max) {
+        max = double.parse(spot['rating_avg'] as String);
+        rank = rank + 1;
+      }
+      spot['rank'] = rank;
+    }
+
+    return spots;
+  }
 
   Future<BookRanking?> getClassBookRanking(int classId);
   Future<BookRanking?> getSchoolBookRanking(int schoolId);

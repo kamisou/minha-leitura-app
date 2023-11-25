@@ -139,7 +139,7 @@ class BookRankingPage extends HookConsumerWidget {
                                     ),
                                   ],
                                 ),
-                                for (final (i, spot) in data!.spots.indexed)
+                                for (final (i, entry) in data!.spots.indexed)
                                   TableRow(
                                     decoration: BoxDecoration(
                                       color: i.isEven
@@ -154,12 +154,12 @@ class BookRankingPage extends HookConsumerWidget {
                                           vertical: 8,
                                         ),
                                         child: Text(
-                                          '${spot.position}',
+                                          '${entry.rank}',
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
                                       Text(
-                                        spot.title,
+                                        entry.title,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       Padding(
@@ -168,12 +168,12 @@ class BookRankingPage extends HookConsumerWidget {
                                         child: Row(
                                           children: [
                                             Text(
-                                              '${spot.ratingAvg}',
+                                              '${entry.ratingAvg}',
                                               textAlign: TextAlign.end,
                                             ),
                                             const SizedBox(width: 8),
                                             StarRatingWidget(
-                                              value: spot.ratingAvg,
+                                              value: entry.ratingAvg,
                                               iconSize: 14,
                                               color: Theme.of(context)
                                                   .colorExtension

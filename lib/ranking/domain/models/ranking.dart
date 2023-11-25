@@ -41,8 +41,9 @@ class Ranking with _$Ranking {
 @HiveType(typeId: 17)
 class RankingSpot with _$RankingSpot {
   const factory RankingSpot({
-    @HiveField(0) @JsonKey(name: 'user_name') required String user,
-    @HiveField(1) @JsonKey(name: 'total_pages_readed') required int pages,
+    @HiveField(0) required int rank,
+    @HiveField(1) @JsonKey(name: 'user_name') required String user,
+    @HiveField(2) @JsonKey(name: 'total_pages_readed') required int pages,
   }) = _RankingSpot;
 
   factory RankingSpot.fromJson(Json json) => _$RankingSpotFromJson(json);
