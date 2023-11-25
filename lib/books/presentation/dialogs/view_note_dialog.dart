@@ -2,13 +2,13 @@ import 'package:flutter/material.dart' hide Title;
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:reading/books/data/dtos/new_note_dto.dart';
 import 'package:reading/books/domain/models/book_note.dart';
 import 'package:reading/books/domain/value_objects/description.dart';
 import 'package:reading/books/domain/value_objects/title.dart';
 import 'package:reading/books/presentation/controllers/new_note_controller.dart';
 import 'package:reading/books/presentation/dialogs/note_edit_dialog.dart';
+import 'package:reading/books/presentation/widgets/author_timestamp.dart';
 import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/shared/presentation/widgets/filled_icon_button.dart';
 import 'package:reading/shared/util/color_extension.dart';
@@ -63,13 +63,9 @@ class ViewNoteDialog extends ConsumerWidget {
                         ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    note.createdAt != null
-                        ? DateFormat.yMd().add_jm().format(note.createdAt!)
-                        : 'Não sincronizado',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: Theme.of(context).colorExtension?.gray[500],
-                        ),
+                  AuthorTimestamp(
+                    author: note.user.name,
+                    timestamp: note.createdAt,
                   ),
                   const SizedBox(height: 16),
                   Expanded(

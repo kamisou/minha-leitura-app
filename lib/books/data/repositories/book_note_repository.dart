@@ -114,9 +114,15 @@ class OnlineBookNoteRepository extends BookNoteRepository
   @override
   Future<void> pushUpdates() async {
     final db = ref.read(databaseProvider);
-    final notes = await db.getWhere<BookNote>((value) => value.id == null);
+    final notes = await db.getAll<BookNote>();
 
     for (final note in notes) {
+      if (note.id != null &&
+          !note.markedForDeletion &&
+          !note.markedForEditing) {
+        continue;
+      }
+
       final data = NewNoteDTO(
         description: Description(note.description),
         title: Title(note.title),
@@ -129,10 +135,12 @@ class OnlineBookNoteRepository extends BookNoteRepository
           await addNote(note.bookId!, data);
         }
       } else {
-        await updateNote(note, data);
+        if (note.markedForDeletion) {
+          await removeNote(note);
+        } else if (note.markedForEditing) {
+          await updateNote(note, data);
+        }
       }
-
-      note.delete().ignore();
     }
   }
 
@@ -172,30 +180,50 @@ class OfflineBookNoteRepository extends BookNoteRepository {
   Future<List<BookNote>> getBookNotes(int bookId) {
     return ref
         .read(databaseProvider)
-        .getWhere<BookNote>((note) => note.bookId == bookId)
-        .then((notes) => notes..sort((a, b) => a.compareTo(b)));
+        .getWhere<BookNote>(
+          (note) => note.bookId == bookId && !note.markedForDeletion,
+        )
+        .then((notes) => notes..sort());
   }
 
   @override
   Future<void> updateNote(BookNote note, NewNoteDTO data) async {
-    final db = ref.read(databaseProvider);
+    if (note.id == null) {
+      var newNote = await ref
+          .read(databaseProvider) //
+          .getById<BookNote>(note.key);
 
-    var newNote = await db.getById<BookNote>(note.id ?? note.key);
-    newNote = newNote!.copyWith(
-      title: data.title.value,
-      description: data.description.value,
-    );
+      newNote = newNote!.copyWith(
+        title: data.title.value,
+        description: data.description.value,
+      );
 
-    await save<BookNote>(newNote, note.id ?? note.key);
+      await save<BookNote>(newNote, note.key);
+    } else {
+      var newNote = await ref
+          .read(databaseProvider) //
+          .getById<BookNote>(note.id);
+
+      newNote = newNote!.copyWith(
+        title: data.title.value,
+        description: data.description.value,
+        markedForEditing: true,
+      );
+
+      await save<BookNote>(newNote, note.id);
+    }
 
     return super.updateNote(note, data);
   }
 
   @override
   Future<void> removeNote(BookNote note) async {
-    await ref
-        .read(databaseProvider) //
-        .removeById<BookNote>(note.id ?? note.key);
+    if (note.id == null) {
+      await ref.read(databaseProvider).removeById<BookNote>(note.key);
+    } else {
+      final marked = note.copyWith(markedForDeletion: true);
+      await save<BookNote>(marked, note.key);
+    }
 
     return super.removeNote(note);
   }

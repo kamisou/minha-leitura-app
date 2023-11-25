@@ -10,7 +10,9 @@ part 'book_rating.g.dart';
 
 @Freezed(fallbackUnion: 'default')
 @HiveType(typeId: 9)
-class BookRating with _$BookRating, HiveObjectMixin {
+class BookRating
+    with _$BookRating, HiveObjectMixin
+    implements Comparable<BookRating> {
   @With<HiveObjectMixin>()
   factory BookRating({
     @HiveField(0) int? id,
@@ -19,6 +21,8 @@ class BookRating with _$BookRating, HiveObjectMixin {
     @HiveField(3) @JsonKey(name: 'user') required User author,
     @HiveField(4) @LocalDateTimeConverter() DateTime? createdAt,
     @HiveField(5) required int bookId,
+    @HiveField(6) @Default(false) bool markedForDeletion,
+    @HiveField(7) @Default(false) bool markedForEditing,
   }) = _BookRating;
 
   @With<HiveObjectMixin>()
@@ -26,11 +30,12 @@ class BookRating with _$BookRating, HiveObjectMixin {
 
   factory BookRating.fromJson(Json json) => _$BookRatingFromJson(json);
 
-  int compareTo(BookRating b) {
-    if (createdAt == null || b.createdAt == null) {
-      return 0;
+  @override
+  int compareTo(BookRating other) {
+    if (createdAt == null) {
+      return -1;
     }
 
-    return b.createdAt!.compareTo(createdAt!);
+    return other.createdAt?.compareTo(createdAt!) ?? 1;
   }
 }

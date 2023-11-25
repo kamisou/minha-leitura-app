@@ -9,7 +9,9 @@ part 'book_note.g.dart';
 
 @Freezed(fallbackUnion: 'default')
 @HiveType(typeId: 12)
-class BookNote with _$BookNote, HiveObjectMixin {
+class BookNote
+    with _$BookNote, HiveObjectMixin
+    implements Comparable<BookNote> {
   @With<HiveObjectMixin>()
   factory BookNote({
     @HiveField(0) int? id,
@@ -20,6 +22,8 @@ class BookNote with _$BookNote, HiveObjectMixin {
     @HiveField(5) @Default([]) List<BookNote> replies,
     @HiveField(6) @JsonKey(name: 'reading_id') int? bookId,
     @HiveField(7) int? noteId,
+    @HiveField(8) @Default(false) bool markedForDeletion,
+    @HiveField(9) @Default(false) bool markedForEditing,
   }) = _BookNote;
 
   @With<HiveObjectMixin>()
@@ -27,11 +31,12 @@ class BookNote with _$BookNote, HiveObjectMixin {
 
   factory BookNote.fromJson(Json json) => _$BookNoteFromJson(json);
 
-  int compareTo(BookNote b) {
-    if (createdAt == null || b.createdAt == null) {
-      return 0;
+  @override
+  int compareTo(BookNote other) {
+    if (createdAt == null) {
+      return -1;
     }
 
-    return b.createdAt!.compareTo(createdAt!);
+    return other.createdAt?.compareTo(createdAt!) ?? 1;
   }
 }
