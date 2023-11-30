@@ -23,9 +23,7 @@ BookNoteRepository bookNoteRepository(BookNoteRepositoryRef ref) {
 
 class OnlineBookNoteRepository extends BookNoteRepository
     with OfflineUpdatePusher {
-  OnlineBookNoteRepository(super.ref) {
-    pushUpdates();
-  }
+  const OnlineBookNoteRepository(super.ref);
 
   @override
   Future<void> addNote(int bookId, NewNoteDTO data) async {

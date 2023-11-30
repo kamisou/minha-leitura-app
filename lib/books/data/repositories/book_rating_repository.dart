@@ -25,9 +25,7 @@ BookRatingRepository bookRatingRepository(BookRatingRepositoryRef ref) {
 
 class OnlineBookRatingRepository extends BookRatingRepository
     with OfflineUpdatePusher {
-  OnlineBookRatingRepository(super.ref) {
-    pushUpdates();
-  }
+  const OnlineBookRatingRepository(super.ref);
 
   @override
   Future<PaginatedResource<BookRating>> getRatings(int page, int bookId) async {

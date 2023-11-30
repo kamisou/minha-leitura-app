@@ -20,9 +20,7 @@ BookReadingRepository bookReadingRepository(BookReadingRepositoryRef ref) {
 
 class OnlineBookReadingRepository extends BookReadingRepository
     with OfflineUpdatePusher {
-  OnlineBookReadingRepository(super.ref) {
-    pushUpdates();
-  }
+  const OnlineBookReadingRepository(super.ref);
 
   @override
   Future<void> updateReading(int bookId, NewReadingDTO data) async {
