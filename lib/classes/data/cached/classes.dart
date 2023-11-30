@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'classes.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class MyClasses extends _$MyClasses {
   @override
   Future<PaginatedResource<Class>> build() async {

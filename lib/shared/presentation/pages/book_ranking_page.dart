@@ -28,7 +28,8 @@ class BookRankingPage extends HookConsumerWidget {
         const UserAppBar(),
         Expanded(
           child: RefreshIndicator(
-            onRefresh: () async {},
+            onRefresh: () =>
+                ref.refresh(bookRankingProvider(filter.value).future),
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               children: [
