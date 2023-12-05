@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/ranking/data/cached/filters.dart';
 import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
+import 'package:reading/ranking/domain/models/ranking.dart';
 import 'package:reading/shared/presentation/hooks/use_filter_name.dart';
 import 'package:reading/shared/util/theme_data_extension.dart';
 

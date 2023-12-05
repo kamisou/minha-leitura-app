@@ -1,6 +1,6 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reading/classes/domain/models/class.dart';
-import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
+import 'package:reading/ranking/domain/models/ranking.dart';
 
 String useFilterName(RankingType type, [Class? $class]) {
   return useMemoized(

@@ -1,14 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:reading/classes/domain/models/class.dart';
-
-enum RankingType {
-  $class,
-  school,
-  city,
-  state,
-  country,
-  global,
-}
+import 'package:reading/ranking/domain/models/ranking.dart';
 
 @immutable
 class RankingFilterDTO {

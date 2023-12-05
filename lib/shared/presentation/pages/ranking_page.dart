@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/ranking/data/cached/ranking.dart';
 import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
+import 'package:reading/ranking/domain/models/ranking.dart';
 import 'package:reading/ranking/presentation/dialogs/ranking_filter_dialog.dart';
 import 'package:reading/shared/presentation/hooks/use_asyncvalue_listener.dart';
 import 'package:reading/shared/presentation/hooks/use_filter_name.dart';

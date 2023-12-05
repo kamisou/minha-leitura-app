@@ -1,6 +1,7 @@
 import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
 import 'package:reading/ranking/data/repositories/book_ranking_repository.dart';
 import 'package:reading/ranking/domain/models/book_ranking.dart';
+import 'package:reading/ranking/domain/models/ranking.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'book_ranking.g.dart';

@@ -52,6 +52,7 @@ class HiveDatabase extends Database {
       ..registerAdapter(AchievementCategoryAdapter())
       ..registerAdapter(AchievementAdapter())
       ..registerAdapter(RankingAdapter())
+      ..registerAdapter(RankingTypeAdapter())
       ..registerAdapter(RankingSpotAdapter())
       ..registerAdapter(SchoolAdapter())
       ..registerAdapter(BookRankingAdapter())

@@ -1,4 +1,5 @@
 import 'package:reading/ranking/domain/models/book_ranking.dart';
+import 'package:reading/ranking/domain/models/ranking.dart';
 import 'package:reading/shared/data/cached/connection_status.dart';
 import 'package:reading/shared/data/repository.dart';
 import 'package:reading/shared/infrastructure/database.dart';
@@ -20,9 +21,13 @@ class OnlineBookRankingRepository extends BookRankingRepository {
   @override
   Future<BookRanking?> getClassBookRanking(int classId) async {
     final spots = await _getSpots('app/book_ranking/classroom/$classId');
-    final ranking = BookRankingClass(spots: spots);
+    final ranking = BookRanking(
+      id: classId,
+      type: RankingType.$class,
+      spots: spots,
+    );
 
-    save<BookRankingClass>(ranking, classId).ignore();
+    save<BookRanking>(ranking, '${RankingType.$class.name}$classId').ignore();
 
     return ranking;
   }
@@ -30,9 +35,13 @@ class OnlineBookRankingRepository extends BookRankingRepository {
   @override
   Future<BookRanking?> getSchoolBookRanking(int schoolId) async {
     final spots = await _getSpots('app/book_ranking/school/$schoolId');
-    final ranking = BookRankingSchool(spots: spots);
+    final ranking = BookRanking(
+      id: schoolId,
+      type: RankingType.school,
+      spots: spots,
+    );
 
-    save<BookRankingSchool>(ranking, schoolId).ignore();
+    save<BookRanking>(ranking, '${RankingType.school.name}$schoolId').ignore();
 
     return ranking;
   }
@@ -40,9 +49,13 @@ class OnlineBookRankingRepository extends BookRankingRepository {
   @override
   Future<BookRanking?> getCityBookRanking(int schoolId) async {
     final spots = await _getSpots('app/book_ranking/city/$schoolId');
-    final ranking = BookRankingCity(spots: spots);
+    final ranking = BookRanking(
+      id: schoolId,
+      type: RankingType.city,
+      spots: spots,
+    );
 
-    save<BookRankingCity>(ranking, schoolId).ignore();
+    save<BookRanking>(ranking, '${RankingType.city.name}$schoolId').ignore();
 
     return ranking;
   }
@@ -50,9 +63,13 @@ class OnlineBookRankingRepository extends BookRankingRepository {
   @override
   Future<BookRanking?> getStateBookRanking(int schoolId) async {
     final spots = await _getSpots('app/book_ranking/state/$schoolId');
-    final ranking = BookRankingState(spots: spots);
+    final ranking = BookRanking(
+      id: schoolId,
+      type: RankingType.state,
+      spots: spots,
+    );
 
-    save<BookRankingState>(ranking, schoolId).ignore();
+    save<BookRanking>(ranking, '${RankingType.state.name}$schoolId').ignore();
 
     return ranking;
   }
@@ -60,9 +77,13 @@ class OnlineBookRankingRepository extends BookRankingRepository {
   @override
   Future<BookRanking?> getCountryBookRanking(int schoolId) async {
     final spots = await _getSpots('app/book_ranking/country/$schoolId');
-    final ranking = BookRankingCountry(spots: spots);
+    final ranking = BookRanking(
+      id: schoolId,
+      type: RankingType.country,
+      spots: spots,
+    );
 
-    save<BookRankingCountry>(ranking, schoolId).ignore();
+    save<BookRanking>(ranking, '${RankingType.country.name}$schoolId').ignore();
 
     return ranking;
   }
@@ -70,9 +91,9 @@ class OnlineBookRankingRepository extends BookRankingRepository {
   @override
   Future<BookRanking?> getGlobalBookRanking() async {
     final spots = await _getSpots('app/book_ranking/all');
-    final ranking = BookRankingGlobal(spots: spots);
+    final ranking = BookRanking(type: RankingType.global, spots: spots);
 
-    save<BookRankingGlobal>(ranking, 1).ignore();
+    save<BookRanking>(ranking, RankingType.global.name).ignore();
 
     return ranking;
   }
@@ -94,35 +115,38 @@ class OfflineBookRankingRepository extends BookRankingRepository {
 
   @override
   Future<BookRanking?> getCityBookRanking(int schoolId) {
-    return ref.read(databaseProvider).getById<BookRankingCity>(schoolId);
+    return _getRanking(RankingType.city, schoolId);
   }
 
   @override
   Future<BookRanking?> getClassBookRanking(int classId) {
-    return ref.read(databaseProvider).getById<BookRankingClass>(classId);
+    return _getRanking(RankingType.$class, classId);
   }
 
   @override
   Future<BookRanking?> getCountryBookRanking(int schoolId) {
-    return ref.read(databaseProvider).getById<BookRankingCountry>(schoolId);
+    return _getRanking(RankingType.country, schoolId);
   }
 
   @override
   Future<BookRanking?> getSchoolBookRanking(int schoolId) {
-    return ref.read(databaseProvider).getById<BookRankingSchool>(schoolId);
+    return _getRanking(RankingType.school, schoolId);
   }
 
   @override
   Future<BookRanking?> getStateBookRanking(int schoolId) {
-    return ref.read(databaseProvider).getById<BookRankingState>(schoolId);
+    return _getRanking(RankingType.state, schoolId);
   }
 
   @override
   Future<BookRanking?> getGlobalBookRanking() {
+    return _getRanking(RankingType.global);
+  }
+
+  Future<BookRanking?> _getRanking(RankingType type, [int? id]) {
     return ref
         .read(databaseProvider)
-        .getAll<BookRankingGlobal>()
-        .then((value) => value.firstOrNull);
+        .getById<BookRanking>('${type.name}${id ?? ''}');
   }
 }
 

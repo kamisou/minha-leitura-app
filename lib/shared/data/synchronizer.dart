@@ -8,6 +8,9 @@ import 'package:reading/classes/data/cached/classes.dart';
 import 'package:reading/ranking/data/cached/book_ranking.dart';
 import 'package:reading/ranking/data/cached/ranking.dart';
 import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
+import 'package:reading/ranking/domain/models/ranking.dart';
+import 'package:reading/shared/data/cached/authenticated.dart';
+import 'package:reading/shared/data/cached/connection_status.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -45,9 +48,13 @@ class SynchronizerImpl extends Synchronizer {
   }
 
   Future<void> _syncRankings() async {
+    final schools = <int>[];
+
     for (final $class in ref.read(myClassesProvider).requireValue.data) {
       for (final type in RankingType.values) {
-        if (type == RankingType.global) {
+        if (type == RankingType.global ||
+            (type != RankingType.$class &&
+                schools.contains($class.school.id))) {
           continue;
         }
 
@@ -60,6 +67,8 @@ class SynchronizerImpl extends Synchronizer {
           ).future,
         );
       }
+
+      schools.add($class.school.id);
     }
 
     await ref.read(
@@ -68,9 +77,13 @@ class SynchronizerImpl extends Synchronizer {
   }
 
   Future<void> _syncBookRankings() async {
+    final schools = <int>[];
+
     for (final $class in ref.read(myClassesProvider).requireValue.data) {
       for (final type in RankingType.values) {
-        if (type == RankingType.global) {
+        if (type == RankingType.global ||
+            (type != RankingType.$class &&
+                schools.contains($class.school.id))) {
           continue;
         }
 
@@ -82,6 +95,8 @@ class SynchronizerImpl extends Synchronizer {
             ),
           ).future,
         );
+
+        schools.add($class.school.id);
       }
     }
 
@@ -109,6 +124,10 @@ class SynchronizerImpl extends Synchronizer {
 
   @override
   Future<void> syncAll() async {
+    if (!ref.read(isConnectedProvider) || !ref.read(isAuthenticatedProvider)) {
+      return;
+    }
+
     log('SyncAll', name: 'Synchronizer');
 
     _syncing = true;
