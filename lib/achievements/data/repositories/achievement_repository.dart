@@ -48,10 +48,10 @@ class OnlineAchievementRepository extends AchievementRepository {
       (categories) => categories.map(AchievementCategory.fromJson).toList(),
     );
 
-    await saveAll<AchievementCategory>(
+    saveAll<AchievementCategory>(
       achievements,
       (achievement) => achievement.id,
-    );
+    ).ignore();
 
     return achievements;
   }
