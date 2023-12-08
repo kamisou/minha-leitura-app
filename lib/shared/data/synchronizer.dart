@@ -5,7 +5,9 @@ import 'package:reading/books/data/repositories/book_note_repository.dart';
 import 'package:reading/books/data/repositories/book_rating_repository.dart';
 import 'package:reading/books/data/repositories/book_reading_repository.dart';
 import 'package:reading/classes/data/cached/classes.dart';
+import 'package:reading/classes/domain/models/class.dart';
 import 'package:reading/ranking/data/cached/book_ranking.dart';
+import 'package:reading/ranking/data/cached/book_reading_ranking.dart';
 import 'package:reading/ranking/data/cached/ranking.dart';
 import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
 import 'package:reading/ranking/domain/models/ranking.dart';
@@ -40,70 +42,46 @@ class SynchronizerImpl extends Synchronizer {
   bool _syncing = false;
   bool get syncing => _syncing;
 
-  Future<void> _syncClasses() async {
+  Future<List<Class>> _syncClasses() async {
     await ref.read(myClassesProvider.future);
     while (!ref.read(myClassesProvider).requireValue.finished) {
       await ref.read(myClassesProvider.notifier).next();
     }
+
+    return ref.read(myClassesProvider).requireValue.data;
   }
 
-  Future<void> _syncRankings() async {
-    final schools = <int>[];
+  Future<void> _syncRankings(List<Class> classes) async {
+    for (final type in RankingType.values) {
+      if (type == RankingType.global) {
+        const filter = RankingFilterDTO(type: RankingType.global);
 
-    for (final $class in ref.read(myClassesProvider).requireValue.data) {
-      for (final type in RankingType.values) {
-        if (type == RankingType.global ||
-            (type != RankingType.$class &&
-                schools.contains($class.school.id))) {
-          continue;
+        await Future.wait([
+          ref.read(rankingProvider(filter).future),
+          ref.read(bookRankingProvider(filter).future),
+          ref.read(bookReadingRankingProvider(filter).future),
+        ]);
+      } else {
+        final schools = <int>[];
+
+        for (final $class in classes) {
+          if (type != RankingType.$class &&
+              schools.contains($class.school.id)) {
+            continue;
+          }
+
+          final filter = RankingFilterDTO(type: type, $class: $class);
+
+          await Future.wait([
+            ref.read(rankingProvider(filter).future),
+            ref.read(bookRankingProvider(filter).future),
+            ref.read(bookReadingRankingProvider(filter).future),
+          ]);
+
+          schools.add($class.school.id);
         }
-
-        await ref.read(
-          rankingProvider(
-            RankingFilterDTO(
-              type: type,
-              $class: $class,
-            ),
-          ).future,
-        );
-      }
-
-      schools.add($class.school.id);
-    }
-
-    await ref.read(
-      rankingProvider(const RankingFilterDTO(type: RankingType.global)).future,
-    );
-  }
-
-  Future<void> _syncBookRankings() async {
-    final schools = <int>[];
-
-    for (final $class in ref.read(myClassesProvider).requireValue.data) {
-      for (final type in RankingType.values) {
-        if (type == RankingType.global ||
-            (type != RankingType.$class &&
-                schools.contains($class.school.id))) {
-          continue;
-        }
-
-        await ref.read(
-          bookRankingProvider(
-            RankingFilterDTO(
-              type: type,
-              $class: $class,
-            ),
-          ).future,
-        );
-
-        schools.add($class.school.id);
       }
     }
-
-    await ref.read(
-      bookRankingProvider(const RankingFilterDTO(type: RankingType.global))
-          .future,
-    );
   }
 
   Future<void> _syncBookNotes() async {
@@ -132,11 +110,10 @@ class SynchronizerImpl extends Synchronizer {
 
     _syncing = true;
 
-    await _syncClasses();
+    final classes = await _syncClasses();
 
     await Future.wait([
-      _syncRankings(),
-      _syncBookRankings(),
+      _syncRankings(classes),
       _syncBookNotes(),
       _syncBookRatings(),
       _syncBookReadings(),

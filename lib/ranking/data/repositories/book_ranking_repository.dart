@@ -99,6 +99,99 @@ class OnlineBookRankingRepository extends BookRankingRepository {
     return ranking;
   }
 
+  @override
+  Future<BookReadingRanking?> getCityBookReadingRanking(int schoolId) async {
+    final spots =
+        await _getReadingSpots('app/book_readed_ranking/city/$schoolId');
+    final ranking = BookReadingRanking(
+      id: schoolId,
+      type: RankingType.city,
+      spots: spots,
+    );
+
+    save<BookReadingRanking>(ranking, '${RankingType.city.name}$schoolId')
+        .ignore();
+
+    return ranking;
+  }
+
+  @override
+  Future<BookReadingRanking?> getClassBookReadingRanking(int classId) async {
+    final spots =
+        await _getReadingSpots('app/book_readed_ranking/classroom/$classId');
+    final ranking = BookReadingRanking(
+      id: classId,
+      type: RankingType.$class,
+      spots: spots,
+    );
+
+    save<BookReadingRanking>(ranking, '${RankingType.$class.name}$classId')
+        .ignore();
+
+    return ranking;
+  }
+
+  @override
+  Future<BookReadingRanking?> getCountryBookReadingRanking(int schoolId) async {
+    final spots =
+        await _getReadingSpots('app/book_readed_ranking/country/$schoolId');
+    final ranking = BookReadingRanking(
+      id: schoolId,
+      type: RankingType.country,
+      spots: spots,
+    );
+
+    save<BookReadingRanking>(ranking, '${RankingType.country.name}$schoolId')
+        .ignore();
+
+    return ranking;
+  }
+
+  @override
+  Future<BookReadingRanking?> getGlobalBookReadingRanking() async {
+    final spots = await _getReadingSpots('app/book_readed_ranking/all');
+    final ranking = BookReadingRanking(
+      type: RankingType.global,
+      spots: spots,
+    );
+
+    save<BookReadingRanking>(ranking, RankingType.global.name).ignore();
+
+    return ranking;
+  }
+
+  @override
+  Future<BookReadingRanking?> getSchoolBookReadingRanking(int schoolId) async {
+    final spots =
+        await _getReadingSpots('app/book_readed_ranking/school/$schoolId');
+    final ranking = BookReadingRanking(
+      id: schoolId,
+      type: RankingType.school,
+      spots: spots,
+    );
+
+    save<BookReadingRanking>(ranking, '${RankingType.school.name}$schoolId')
+        .ignore();
+
+    return ranking;
+  }
+
+  @override
+  Future<BookReadingRanking?> getStateBookReadingRanking(int schoolId) async {
+    final spots =
+        await _getReadingSpots('app/book_readed_ranking/state/$schoolId');
+    final ranking = BookReadingRanking(
+      id: schoolId,
+      type: RankingType.state,
+      spots: spots,
+    );
+
+    save<BookReadingRanking>(ranking, '${RankingType.state.name}$schoolId')
+        .ignore();
+
+    return ranking;
+  }
+
   Future<List<BookRankingSpot>> _getSpots(
     String endpoint, [
     int? id,
@@ -110,40 +203,19 @@ class OnlineBookRankingRepository extends BookRankingRepository {
         .then((list) => _rankify(list).map(BookRankingSpot.fromJson).toList());
   }
 
-  @override
-  Future<BookReadingRanking?> getCityBookReadingRanking(int schoolId) {
-    // TODO: implement getCityBookReadingRanking
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<BookReadingRanking?> getClassBookReadingRanking(int classId) {
-    // TODO: implement getClassBookReadingRanking
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<BookReadingRanking?> getCountryBookReadingRanking(int schoolId) {
-    // TODO: implement getCountryBookReadingRanking
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<BookReadingRanking?> getGlobalBookReadingRanking() {
-    // TODO: implement getGlobalBookReadingRanking
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<BookReadingRanking?> getSchoolBookReadingRanking(int schoolId) {
-    // TODO: implement getSchoolBookReadingRanking
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<BookReadingRanking?> getStateBookReadingRanking(int schoolId) {
-    // TODO: implement getStateBookReadingRanking
-    throw UnimplementedError();
+  Future<List<BookReadingRankingSpot>> _getReadingSpots(
+    String endpoint, [
+    int? id,
+  ]) {
+    return ref
+        .read(restApiProvider)
+        .get('$endpoint${id == null ? '' : '/$id'}')
+        .then((response) => (response as List).cast<Json>())
+        .then(
+          (list) => _rankifyReading(list)
+              .map(BookReadingRankingSpot.fromJson)
+              .toList(),
+        );
   }
 }
 
@@ -236,6 +308,21 @@ abstract class BookRankingRepository extends Repository with OfflinePersister {
     for (final spot in spots) {
       if (double.parse(spot['rating_avg'] as String) < max) {
         max = double.parse(spot['rating_avg'] as String);
+        rank = rank + 1;
+      }
+      spot['rank'] = rank;
+    }
+
+    return spots;
+  }
+
+  List<Json> _rankifyReading(List<Json> spots) {
+    var rank = 1;
+    var max = spots.firstOrNull?['total'] as int;
+
+    for (final spot in spots) {
+      if (spot['total'] as int < max) {
+        max = spot['total'] as int;
         rank = rank + 1;
       }
       spot['rank'] = rank;

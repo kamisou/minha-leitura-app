@@ -16,6 +16,7 @@ import 'package:reading/classes/domain/models/class.dart';
 import 'package:reading/profile/domain/models/user.dart';
 import 'package:reading/profile/domain/models/user_profile.dart';
 import 'package:reading/ranking/domain/models/book_ranking.dart';
+import 'package:reading/ranking/domain/models/book_reading_ranking.dart';
 import 'package:reading/ranking/domain/models/ranking.dart';
 import 'package:reading/shared/infrastructure/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -56,7 +57,9 @@ class HiveDatabase extends Database {
       ..registerAdapter(RankingSpotAdapter())
       ..registerAdapter(SchoolAdapter())
       ..registerAdapter(BookRankingAdapter())
-      ..registerAdapter(BookRankingSpotAdapter());
+      ..registerAdapter(BookRankingSpotAdapter())
+      ..registerAdapter(BookReadingRankingAdapter())
+      ..registerAdapter(BookReadingRankingSpotAdapter());
   }
 
   @override

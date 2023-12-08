@@ -21,9 +21,8 @@ class BookReadingRanking with _$BookReadingRanking {
 class BookReadingRankingSpot with _$BookReadingRankingSpot {
   const factory BookReadingRankingSpot({
     @HiveField(0) required int rank,
-    @HiveField(1) required int position,
-    @HiveField(2) required String title,
-    @HiveField(3) required int readings,
+    @HiveField(1) required String title,
+    @HiveField(2) required int total,
   }) = _BookReadingRankingSpot;
 
   factory BookReadingRankingSpot.fromJson(Json json) =>
