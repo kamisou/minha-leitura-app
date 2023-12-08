@@ -25,7 +25,15 @@ class TokenRepository extends _$TokenRepository {
 
   /// persists token info (access token, refresh token, associated user)
   Future<void> saveTokenData(Token token) {
-    return ref.read(encryptedDatabaseProvider).insert<Token>(token);
+    return ref.read(databaseProvider).insert<Token>(token);
+  }
+
+  /// gets the specified token data
+  Future<Token?> getToken(String accessToken) {
+    return ref
+        .read(databaseProvider)
+        .getWhere<Token>((value) => value.accessToken == accessToken)
+        .then((value) => value.firstOrNull);
   }
 
   /// deletes the currently auth token and its persisted data
@@ -37,7 +45,7 @@ class TokenRepository extends _$TokenRepository {
     await Future.wait([
       secureStorage.delete('current_token'),
       ref
-          .read(encryptedDatabaseProvider) //
+          .read(databaseProvider) //
           .removeWhere<Token>(
             (token) => token.accessToken == currentToken,
             (token) => token.key,

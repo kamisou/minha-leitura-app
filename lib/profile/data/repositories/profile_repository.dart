@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:reading/authentication/data/repositories/token_repository.dart';
-import 'package:reading/authentication/domain/domain/token.dart';
 import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/profile/data/dtos/password_change_dto.dart';
 import 'package:reading/profile/data/dtos/profile_change_dto.dart';
@@ -31,9 +30,7 @@ class OnlineProfileRepository extends ProfileRepository {
         .get('app/student')
         .then((response) => UserProfile.fromJson(response as Json));
 
-    await ref
-        .read(encryptedDatabaseProvider)
-        .update<UserProfile>(profile, profile.id);
+    await ref.read(databaseProvider).update<UserProfile>(profile, profile.id);
 
     return profile;
   }
@@ -46,7 +43,7 @@ class OnlineProfileRepository extends ProfileRepository {
         .then((response) => UserProfile.fromJson(response as Json));
 
     ref
-        .read(encryptedDatabaseProvider)
+        .read(databaseProvider)
         .update<UserProfile>(profile, profile.id)
         .ignore();
 
@@ -76,17 +73,21 @@ class OfflineProfileRepository extends ProfileRepository {
   Future<UserProfile> getMyProfile() async {
     final accessToken = ref.read(tokenRepositoryProvider).requireValue;
 
-    final tokens = await ref
-        .read(encryptedDatabaseProvider)
-        .getWhere<Token>((token) => token.accessToken == accessToken);
+    if (accessToken == null) {
+      throw const UnauthorizedException();
+    }
 
-    if (tokens.isEmpty) {
+    final token = await ref
+        .read(tokenRepositoryProvider.notifier) //
+        .getToken(accessToken);
+
+    if (token == null) {
       throw const UnauthorizedException();
     }
 
     final users = await ref
-        .read(encryptedDatabaseProvider)
-        .getWhere<UserProfile>((user) => user.id == tokens.first.userId);
+        .read(databaseProvider)
+        .getWhere<UserProfile>((user) => user.id == token.userId);
 
     if (users.isEmpty) {
       throw const UnauthorizedException();
