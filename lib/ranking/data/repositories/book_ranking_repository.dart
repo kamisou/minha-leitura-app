@@ -1,4 +1,5 @@
 import 'package:reading/ranking/domain/models/book_ranking.dart';
+import 'package:reading/ranking/domain/models/book_reading_ranking.dart';
 import 'package:reading/ranking/domain/models/ranking.dart';
 import 'package:reading/shared/data/cached/connection_status.dart';
 import 'package:reading/shared/data/repository.dart';
@@ -108,6 +109,42 @@ class OnlineBookRankingRepository extends BookRankingRepository {
         .then((response) => (response as List).cast<Json>())
         .then((list) => _rankify(list).map(BookRankingSpot.fromJson).toList());
   }
+
+  @override
+  Future<BookReadingRanking?> getCityBookReadingRanking(int schoolId) {
+    // TODO: implement getCityBookReadingRanking
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<BookReadingRanking?> getClassBookReadingRanking(int classId) {
+    // TODO: implement getClassBookReadingRanking
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<BookReadingRanking?> getCountryBookReadingRanking(int schoolId) {
+    // TODO: implement getCountryBookReadingRanking
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<BookReadingRanking?> getGlobalBookReadingRanking() {
+    // TODO: implement getGlobalBookReadingRanking
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<BookReadingRanking?> getSchoolBookReadingRanking(int schoolId) {
+    // TODO: implement getSchoolBookReadingRanking
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<BookReadingRanking?> getStateBookReadingRanking(int schoolId) {
+    // TODO: implement getStateBookReadingRanking
+    throw UnimplementedError();
+  }
 }
 
 class OfflineBookRankingRepository extends BookRankingRepository {
@@ -143,10 +180,46 @@ class OfflineBookRankingRepository extends BookRankingRepository {
     return _getRanking(RankingType.global);
   }
 
+  @override
+  Future<BookReadingRanking?> getCityBookReadingRanking(int schoolId) {
+    return _getReadingRanking(RankingType.city, schoolId);
+  }
+
+  @override
+  Future<BookReadingRanking?> getClassBookReadingRanking(int classId) {
+    return _getReadingRanking(RankingType.$class, classId);
+  }
+
+  @override
+  Future<BookReadingRanking?> getCountryBookReadingRanking(int schoolId) {
+    return _getReadingRanking(RankingType.country, schoolId);
+  }
+
+  @override
+  Future<BookReadingRanking?> getGlobalBookReadingRanking() {
+    return _getReadingRanking(RankingType.global);
+  }
+
+  @override
+  Future<BookReadingRanking?> getSchoolBookReadingRanking(int schoolId) {
+    return _getReadingRanking(RankingType.school, schoolId);
+  }
+
+  @override
+  Future<BookReadingRanking?> getStateBookReadingRanking(int schoolId) {
+    return _getReadingRanking(RankingType.state, schoolId);
+  }
+
   Future<BookRanking?> _getRanking(RankingType type, [int? id]) {
     return ref
         .read(databaseProvider)
         .getById<BookRanking>('${type.name}${id ?? ''}');
+  }
+
+  Future<BookReadingRanking?> _getReadingRanking(RankingType type, [int? id]) {
+    return ref
+        .read(databaseProvider)
+        .getById<BookReadingRanking>('${type.name}${id ?? ''}');
   }
 }
 
@@ -177,4 +250,10 @@ abstract class BookRankingRepository extends Repository with OfflinePersister {
   Future<BookRanking?> getStateBookRanking(int schoolId);
   Future<BookRanking?> getCountryBookRanking(int schoolId);
   Future<BookRanking?> getGlobalBookRanking();
+  Future<BookReadingRanking?> getClassBookReadingRanking(int classId);
+  Future<BookReadingRanking?> getSchoolBookReadingRanking(int schoolId);
+  Future<BookReadingRanking?> getCityBookReadingRanking(int schoolId);
+  Future<BookReadingRanking?> getStateBookReadingRanking(int schoolId);
+  Future<BookReadingRanking?> getCountryBookReadingRanking(int schoolId);
+  Future<BookReadingRanking?> getGlobalBookReadingRanking();
 }
