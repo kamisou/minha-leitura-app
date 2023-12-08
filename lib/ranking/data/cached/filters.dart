@@ -1,6 +1,6 @@
 import 'package:reading/classes/data/cached/classes.dart';
 import 'package:reading/classes/domain/models/class.dart';
-import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
+import 'package:reading/ranking/domain/models/ranking.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'filters.g.dart';

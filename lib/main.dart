@@ -9,6 +9,7 @@ import 'package:reading/authentication/data/repositories/token_repository.dart';
 import 'package:reading/intro/data/repositories/intro_repository.dart';
 import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/routes.dart';
+import 'package:reading/shared/data/synchronizer.dart';
 import 'package:reading/shared/infrastructure/connection_status.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/debugger.dart';
@@ -35,7 +36,6 @@ Future<ProviderContainer> initRiverpod() async {
   final container = ProviderContainer();
 
   try {
-    // services
     container.read(debuggerProvider);
 
     await Future.wait([
@@ -46,8 +46,9 @@ Future<ProviderContainer> initRiverpod() async {
       container.read(introRepositoryProvider.future),
     ]);
 
-    // session
     await container.read(profileProvider.future);
+
+    container.read(synchronizerProvider).syncAll().ignore();
   } catch (error, stackTrace) {
     log(
       'initialization failed:',

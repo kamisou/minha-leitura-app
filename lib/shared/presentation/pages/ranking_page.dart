@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reading/ranking/data/cached/ranking.dart';
 import 'package:reading/ranking/data/dtos/ranking_filter_dto.dart';
+import 'package:reading/ranking/domain/models/ranking.dart';
 import 'package:reading/ranking/presentation/dialogs/ranking_filter_dialog.dart';
 import 'package:reading/shared/presentation/hooks/use_asyncvalue_listener.dart';
 import 'package:reading/shared/presentation/hooks/use_filter_name.dart';
@@ -81,94 +82,101 @@ class RankingPage extends HookConsumerWidget {
                           ),
                           const SizedBox(height: 16),
                           if (data?.spots.isNotEmpty ?? false)
-                            Table(
-                              defaultVerticalAlignment:
-                                  TableCellVerticalAlignment.middle,
-                              columnWidths: const {
-                                0: FixedColumnWidth(72),
-                                2: FixedColumnWidth(64),
-                              },
-                              children: [
-                                TableRow(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorExtension
-                                        ?.gray[300],
-                                  ),
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 8,
-                                        bottom: 8,
-                                        left: 8,
-                                      ),
-                                      child: Text(
-                                        'Posição',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                      ),
-                                    ),
-                                    Text(
-                                      'Aluno',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 8),
-                                      child: Text(
-                                        'Páginas',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                for (final (i, spot) in data!.spots.indexed)
+                            Container(
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Table(
+                                defaultVerticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                columnWidths: const {
+                                  0: FixedColumnWidth(72),
+                                  2: FixedColumnWidth(64),
+                                },
+                                children: [
                                   TableRow(
                                     decoration: BoxDecoration(
-                                      color: i.isEven
-                                          ? Theme.of(context)
-                                              .colorExtension
-                                              ?.gray[150]
-                                          : null,
+                                      color: Theme.of(context)
+                                          .colorExtension
+                                          ?.gray[300],
                                     ),
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 8,
+                                        padding: const EdgeInsets.only(
+                                          top: 8,
+                                          bottom: 8,
+                                          left: 8,
                                         ),
                                         child: Text(
-                                          '${i + 1}',
-                                          textAlign: TextAlign.center,
+                                          'Posição',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                         ),
                                       ),
                                       Text(
-                                        spot.user,
-                                        overflow: TextOverflow.ellipsis,
+                                        'Aluno',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w700,
+                                            ),
                                       ),
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(right: 8),
                                         child: Text(
-                                          '${spot.pages}',
-                                          textAlign: TextAlign.end,
+                                          'Páginas',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                         ),
                                       ),
                                     ],
                                   ),
-                              ],
+                                  for (final (i, entry) in data!.spots.indexed)
+                                    TableRow(
+                                      decoration: BoxDecoration(
+                                        color: i.isEven
+                                            ? Theme.of(context)
+                                                .colorExtension
+                                                ?.gray[150]
+                                            : null,
+                                      ),
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 8,
+                                          ),
+                                          child: Text(
+                                            '${entry.rank}',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Text(
+                                          entry.user,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 8),
+                                          child: Text(
+                                            '${entry.pages}',
+                                            textAlign: TextAlign.end,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
                             )
                           else
                             Text(

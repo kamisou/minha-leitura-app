@@ -20,9 +20,13 @@ class OnlineRankingRepository extends RankingRepository {
   @override
   Future<Ranking?> getClassRanking(int classId) async {
     final spots = await _getSpots('app/ranking/classroom/$classId');
-    final ranking = RankingClass(spots: spots);
+    final ranking = Ranking(
+      id: classId,
+      type: RankingType.$class,
+      spots: spots,
+    );
 
-    save<RankingClass>(ranking, classId).ignore();
+    save<Ranking>(ranking, '${RankingType.$class.name}$classId').ignore();
 
     return ranking;
   }
@@ -30,9 +34,13 @@ class OnlineRankingRepository extends RankingRepository {
   @override
   Future<Ranking?> getSchoolRanking(int schoolId) async {
     final spots = await _getSpots('app/ranking/school/$schoolId');
-    final ranking = RankingSchool(spots: spots);
+    final ranking = Ranking(
+      id: schoolId,
+      type: RankingType.school,
+      spots: spots,
+    );
 
-    save<RankingSchool>(ranking, schoolId).ignore();
+    save<Ranking>(ranking, '${RankingType.school.name}$schoolId').ignore();
 
     return ranking;
   }
@@ -40,9 +48,9 @@ class OnlineRankingRepository extends RankingRepository {
   @override
   Future<Ranking?> getCityRanking(int schoolId) async {
     final spots = await _getSpots('app/ranking/city/$schoolId');
-    final ranking = RankingCity(spots: spots);
+    final ranking = Ranking(id: schoolId, type: RankingType.city, spots: spots);
 
-    save<RankingCity>(ranking, schoolId).ignore();
+    save<Ranking>(ranking, '${RankingType.city.name}$schoolId').ignore();
 
     return ranking;
   }
@@ -50,9 +58,13 @@ class OnlineRankingRepository extends RankingRepository {
   @override
   Future<Ranking?> getStateRanking(int schoolId) async {
     final spots = await _getSpots('app/ranking/state/$schoolId');
-    final ranking = RankingState(spots: spots);
+    final ranking = Ranking(
+      id: schoolId,
+      type: RankingType.state,
+      spots: spots,
+    );
 
-    save<RankingState>(ranking, schoolId).ignore();
+    save<Ranking>(ranking, '${RankingType.state.name}$schoolId').ignore();
 
     return ranking;
   }
@@ -60,9 +72,13 @@ class OnlineRankingRepository extends RankingRepository {
   @override
   Future<Ranking?> getCountryRanking(int schoolId) async {
     final spots = await _getSpots('app/ranking/country/$schoolId');
-    final ranking = RankingCountry(spots: spots);
+    final ranking = Ranking(
+      id: schoolId,
+      type: RankingType.country,
+      spots: spots,
+    );
 
-    save<RankingCountry>(ranking, schoolId).ignore();
+    save<Ranking>(ranking, '${RankingType.country.name}$schoolId').ignore();
 
     return ranking;
   }
@@ -70,9 +86,9 @@ class OnlineRankingRepository extends RankingRepository {
   @override
   Future<Ranking?> getGlobalRanking() async {
     final spots = await _getSpots('app/ranking/all');
-    final ranking = RankingGlobal(spots: spots);
+    final ranking = Ranking(spots: spots, type: RankingType.global);
 
-    save<RankingGlobal>(ranking, 1).ignore();
+    save<Ranking>(ranking, RankingType.global.name).ignore();
 
     return ranking;
   }
@@ -82,7 +98,7 @@ class OnlineRankingRepository extends RankingRepository {
         .read(restApiProvider)
         .get('$endpoint${id == null ? '' : '/$id'}')
         .then((response) => (response as List).cast<Json>())
-        .then((list) => list.map(RankingSpot.fromJson).toList());
+        .then((list) => _rankify(list).map(RankingSpot.fromJson).toList());
   }
 }
 
@@ -91,40 +107,58 @@ class OfflineRankingRepository extends RankingRepository {
 
   @override
   Future<Ranking?> getCityRanking(int schoolId) {
-    return ref.read(databaseProvider).getById<RankingCity>(schoolId);
+    return _getRanking(RankingType.city, schoolId);
   }
 
   @override
   Future<Ranking?> getClassRanking(int classId) {
-    return ref.read(databaseProvider).getById<RankingClass>(classId);
+    return _getRanking(RankingType.$class, classId);
   }
 
   @override
   Future<Ranking?> getCountryRanking(int schoolId) {
-    return ref.read(databaseProvider).getById<RankingCountry>(schoolId);
+    return _getRanking(RankingType.country, schoolId);
   }
 
   @override
   Future<Ranking?> getSchoolRanking(int schoolId) {
-    return ref.read(databaseProvider).getById<RankingSchool>(schoolId);
+    return _getRanking(RankingType.school, schoolId);
   }
 
   @override
   Future<Ranking?> getStateRanking(int schoolId) {
-    return ref.read(databaseProvider).getById<RankingState>(schoolId);
+    return _getRanking(RankingType.state, schoolId);
   }
 
   @override
   Future<Ranking?> getGlobalRanking() {
+    return _getRanking(RankingType.global);
+  }
+
+  Future<Ranking?> _getRanking(RankingType type, [int? id]) {
     return ref
         .read(databaseProvider)
-        .getAll<RankingGlobal>()
-        .then((value) => value.firstOrNull);
+        .getById<Ranking>('${type.name}${id ?? ''}');
   }
 }
 
 abstract class RankingRepository extends Repository with OfflinePersister {
   const RankingRepository(super.ref);
+
+  List<Json> _rankify(List<Json> spots) {
+    var rank = 1;
+    var max = (spots.firstOrNull?['total_pages_readed'] as int?) ?? 0;
+
+    for (final spot in spots) {
+      if ((spot['total_pages_readed'] as int) < max) {
+        max = spot['total_pages_readed'] as int;
+        rank = rank + 1;
+      }
+      spot['rank'] = rank;
+    }
+
+    return spots;
+  }
 
   Future<Ranking?> getClassRanking(int classId);
   Future<Ranking?> getSchoolRanking(int schoolId);

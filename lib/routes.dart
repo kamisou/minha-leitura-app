@@ -8,8 +8,8 @@ import 'package:reading/classes/presentation/screens/classes_screen.dart';
 import 'package:reading/classes/presentation/screens/join_class_screen.dart';
 import 'package:reading/intro/data/cached/intro_seen.dart';
 import 'package:reading/intro/presentation/screens/intro_screen.dart';
-import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/profile/presentation/screens/profile_screen.dart';
+import 'package:reading/shared/data/cached/authenticated.dart';
 import 'package:reading/shared/presentation/screens/home_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -23,13 +23,8 @@ Raw<GoRouter> router(RouterRef ref) {
       GoRoute(
         builder: (context, state) => const HomeScreen(),
         path: '/',
-        redirect: (context, state) {
-          final profile = ref.read(profileProvider).valueOrNull;
-
-          return profile == null //
-              ? '/login'
-              : null;
-        },
+        redirect: (context, state) =>
+            !ref.read(isAuthenticatedProvider) ? '/login' : null,
         routes: [
           GoRoute(
             path: 'book',

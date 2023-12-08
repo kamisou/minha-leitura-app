@@ -7,6 +7,8 @@ part 'connection_status.g.dart';
 
 @Riverpod(keepAlive: true)
 class ConnectionStatus extends _$ConnectionStatus {
+  final List<void Function(bool)> _callbacks = [];
+
   @override
   Future<bool> build() {
     final connectivity = Connectivity();
@@ -20,10 +22,23 @@ class ConnectionStatus extends _$ConnectionStatus {
     return connectivity.checkConnectivity().then(_isConnected);
   }
 
+  void subscribe(void Function(bool connected) callback) {
+    _callbacks.add(callback);
+  }
+
+  void unsubscribe(void Function(bool connected) callback) {
+    _callbacks.remove(callback);
+  }
+
   void _onConnectivityChanged(ConnectivityResult result) {
     state = AsyncData(_isConnected(result));
+
+    for (final callback in _callbacks) {
+      callback.call(state.requireValue);
+    }
+
     log(
-      'Connection ${state.value! ? '' : 'un'}available',
+      'Connection ${state.requireValue ? '' : 'un'}available',
       name: 'ConnectionStatus',
     );
   }

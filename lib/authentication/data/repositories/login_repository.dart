@@ -8,6 +8,7 @@ import 'package:reading/profile/data/cached/profile.dart';
 import 'package:reading/profile/domain/value_objects/email.dart';
 import 'package:reading/shared/data/cached/connection_status.dart';
 import 'package:reading/shared/data/repository.dart';
+import 'package:reading/shared/data/synchronizer.dart';
 import 'package:reading/shared/exceptions/repository_exception.dart';
 import 'package:reading/shared/infrastructure/database.dart';
 import 'package:reading/shared/infrastructure/rest_api.dart';
@@ -40,7 +41,9 @@ class OnlineLoginRepository extends LoginRepository {
     final token =
         Token(accessToken: tokenData.accessToken, userId: profile!.id);
 
-    return tokenRepo.saveTokenData(token);
+    await tokenRepo.saveTokenData(token);
+
+    ref.read(synchronizerProvider).syncAll().ignore();
   }
 
   @override
@@ -58,7 +61,9 @@ class OnlineLoginRepository extends LoginRepository {
     final token =
         Token(accessToken: tokenData.accessToken, userId: profile!.id);
 
-    return tokenRepo.saveTokenData(token);
+    await tokenRepo.saveTokenData(token);
+
+    ref.read(synchronizerProvider).syncAll().ignore();
   }
 
   @override
