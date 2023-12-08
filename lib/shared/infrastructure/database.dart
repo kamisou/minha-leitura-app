@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:hive_flutter/hive_flutter.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart' as path_helper;
 import 'package:path_provider/path_provider.dart';
 import 'package:reading/achievements/domain/models/achievement.dart';
 import 'package:reading/authentication/domain/domain/token.dart';
@@ -18,7 +19,6 @@ import 'package:reading/profile/domain/models/user_profile.dart';
 import 'package:reading/ranking/domain/models/book_ranking.dart';
 import 'package:reading/ranking/domain/models/book_reading_ranking.dart';
 import 'package:reading/ranking/domain/models/ranking.dart';
-import 'package:reading/shared/infrastructure/secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'database.g.dart';
@@ -26,11 +26,6 @@ part 'database.g.dart';
 @riverpod
 Database database(DatabaseRef ref) {
   return const HiveDatabase();
-}
-
-@riverpod
-Database encryptedDatabase(EncryptedDatabaseRef ref) {
-  return EncryptedHiveDatabase(ref.read(secureStorageProvider));
 }
 
 class HiveDatabase extends Database {
@@ -172,7 +167,7 @@ class HiveDatabase extends Database {
     log('wiping Hive database', name: 'Database');
 
     final appDocs = await getApplicationDocumentsDirectory();
-    final hive = Directory('${appDocs.path}/hive');
+    final hive = Directory(path_helper.join(appDocs.path, 'hive'));
 
     await hive.delete(recursive: true);
   }
@@ -185,33 +180,6 @@ class HiveDatabase extends Database {
     }
 
     return Hive.openBox<T>(boxName);
-  }
-}
-
-class EncryptedHiveDatabase extends HiveDatabase {
-  const EncryptedHiveDatabase(this.secureStorage);
-
-  final SecureStorage secureStorage;
-
-  @override
-  Future<Box<T>> _getBox<T>() async {
-    var key = await secureStorage.read('hive_key');
-
-    if (key == null) {
-      final newKey = base64Encode(Hive.generateSecureKey());
-      await secureStorage.write('hive_key', newKey);
-      key = newKey;
-    }
-
-    final cipher = HiveAesCipher(base64Decode(key));
-
-    final boxName = T.toString();
-
-    if (Hive.isBoxOpen(boxName)) {
-      return Hive.box(boxName);
-    }
-
-    return Hive.openBox<T>(boxName, encryptionCipher: cipher);
   }
 }
 
