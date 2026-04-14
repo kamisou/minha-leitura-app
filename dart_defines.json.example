@@ -1,0 +1,4 @@
+{
+  "API_URL_DEBUG": "http://localhost:5000/api/",
+  "API_URL": "https://your-production-server.com/api/"
+}
